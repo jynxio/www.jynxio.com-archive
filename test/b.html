@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 id="常用命令">常用命令</h1>
+    <pre><code class="language-js"># npm
+npm -v                          // 查询版本
+npm install --global npm@latest // 升级版本：最新稳定版
+npm install --global npm@next   // 升级版本：最新测试版
+npm config get [key]
+npm config get prefix
+npm config get cache
+npm config set key=value
+npm config set prefix=&quot;D:\nodejs\node_global&quot;
+npm config set cache=&quot;D:\nodejs\node_cache&quot;
+
+# 源
+npm config get registry                                   // 查询源
+npm config set registry=&quot;https://registry.npmmirror.com&quot;  // 换源
+
+# 包
+npm install [--global] --save-prod &lt;packagename[@tag|version]&gt; // 下载生产包
+npm install [--global] --save-dev &lt;packagename[@tag|version]&gt;  // 下载开发包
+npm uninstall [--global] &lt;packagename&gt;                         // 卸载包
+npm undate [--global] &lt;packagename&gt;                            // 升级包
+
+# 查看项目依赖
+npm [--all] ls
+
+# 查看包
+npm view &lt;packagename&gt; [&lt;key&gt;]  // 查看包的字段信息
+npm view &lt;packagename&gt; version  // 查看包的最新版本
+npm view &lt;packagename&gt; versions // 查看包的所有版本
+</code></pre>
+    <h1 id="更新">更新</h1>
+    <p>​ 安装 node.js 时，推荐使用最新的 LTS 的安装包，因为它内置了全局的 npm 。</p>
+    <blockquote>
+        <p>注：我不确定其它版本的 node.js 安装包是否也会内置 npm，所以无论你最终使用了哪个版本的安装包，都最好在安装完成后检查一下是否有 npm 。</p>
+    </blockquote>
+    <p>​ 执行下述命令，可以查询本机的 npm 版本号：</p>
+    <pre><code>npm -v
+</code></pre>
+    <p>​ 执行下述命令，可以查询 npm 的最新版本号：</p>
+    <pre><code>npm view npm version
+</code></pre>
+    <p>​ 执行下述命令，可以将本机的 npm 更新至最新稳定版：</p>
+    <pre><code>npm install -g npm@latest
+</code></pre>
+    <p>​ 执行下述命令，可以将本机的 npm 更新至最新测试版：</p>
+    <pre><code>npm install -g npm@next
+</code></pre>
+    <h1 id="公共包">公共包</h1>
+    <blockquote>
+        <p>注：</p>
+        <ol>
+            <li>npm 的公共注册表是一个存储所有 JS 包的数据库；</li>
+            <li>npm 的公共命名空间记录了所有公共包的名称，且公共命名空间下的每个命名都必须是独一无二的；</li>
+        </ol>
+    </blockquote>
+    <p>​ 我们可以创建并发布公共包（public packages）以供他人或自己使用，公共包分为 2 类：</p>
+    <ul>
+        <li>
+            <p>Unscoped：
+                将一个包发布在公共注册表中，这个包的名称将会占据公共命名空间的一个命名，可以通过包名直接下载该包。
+                譬如，Babel 6 在全局注册表发布的 2 个包：</p>
+            <pre><code>core-js
+regenerator-runtime
+</code></pre>
+        </li>
+        <li>
+            <p>Scoped ：
+                将一个或多个包发布在公共注册表中，这一个或多个包只会只会占据公共命名空间的一个名称，这相当于把公共命名空间的一个命名当作一个新的命名空间，这一个或多个包的名称都被记录在新命名空间下，新命名空间就相当于一个域（scoped）。
+                将一系列相关的包都发布在同一个名命名空间下，可以凸显这一系列包的联系，也节省了公共命名空间，还避免了与其它公共包发生命名冲突或被恶意抢注命名。
+                譬如， Babel 7 将所有的包都发布在一个名为 <code>babel</code> 的域下，这些包都具有 <code>@babel/</code> 的前缀：</p>
+            <pre><code>@babel/cli
+@babel/core
+@babel/preset-env
+</code></pre>
+        </li>
+    </ul>
+    <h1 id="私有包">私有包</h1>
+    <p>​ 私有包仅为付费用户与组织用户提供，本文不介绍。</p>
+    <h1 id="创建-packagejson">创建 package.json</h1>
+    <p>​ package.json 文件用于描述项目的依赖情况和项目的版本情况。</p>
+    <p>​ package.json 文件必须包含属性 <code>name</code> 和 <code>version</code> ：</p>
+    <ul>
+        <li><code>name</code> ：用于描述包名的字符串。只使用小写，只能使用一个词，不能使用空格，可以使用 <code>-</code> 和 <code>_</code> ；</li>
+        <li><code>version</code> ：用于描述版本的字符串。版本控制必须遵循《语义化版本控制规范》；</li>
+    </ul>
+    <pre><code class="language-json">{
+    &quot;name&quot;: &quot;my_package&quot;,
+    &quot;version&quot;: &quot;1.0.0&quot;
+}
+</code></pre>
+    <blockquote>
+        <p>注：这两个字段是必需的，但不是强制的，许多的包和项目都没有这两个字段，这不是良好的实践。</p>
+    </blockquote>
+    <p>​ 执行下述命令，将以问卷调查的形式来创建一个 package.json 文件，文件会被保存在当前文件夹内：</p>
+    <pre><code>npm init
+</code></pre>
+    <p>​ 执行下述命令，将创建一个具有默认值的 package.json 文件，默认值提取自当前文件夹的信息，文件被保存在当前文件夹内：</p>
+    <pre><code>npm init --yes
+</code></pre>
+    <pre><code>npm init -y
+</code></pre>
+    <h1 id="安装本地包">安装本地包</h1>
+    <p>​ 执行下述命令，将会下载指定的 unscoped 包，并将其存储在当前文件夹下的 node_modules 文件夹内（若没有 node_modules 文件夹，则会自动创建一个）。</p>
+    <pre><code>npm install &lt;packagename&gt;
+</code></pre>
+    <p>​ 执行下述命令，将会下载指定的 scoped 包，并将其存储在当前文件夹下的 node_modules 文件夹内（若没有 node_modules 文件夹，则会自动创建一个）。</p>
+    <pre><code>npm install &lt;@scopename/packagename&gt;
+</code></pre>
+    <p>​ 执行下述命令，将会根据本地文件夹下的 package.json 文件的信息，来下载所有的指定包（包括 unscoped 包和 scoped 包） ，并将其存储到当前文件夹下的 node_modules 文件夹内（若没有
+        node_modules 文件夹，则会自动创建一个）。</p>
+    <pre><code>npm install
+</code></pre>
+    <blockquote>
+        <p>注：</p>
+        <p>对于 <code>npm install packagename</code> 和 <code>npm install @scepename/packagename</code> ：</p>
+        <ol>
+            <li>如果当前文件夹下，没有 package.json 文件，则会下载最新版的指定包；</li>
+            <li>如果当前文件夹下，存在 package.json 文件，且 package.json 文件没有声明指定包，则会下载最新版的指定包；</li>
+            <li>如果当前文件夹下，存在 package.json 文件，且 package.json 文件声明了指定包，则会根据声明信息来下载满足某条件（见《包的更新规则》）的最新版的指定包；</li>
+        </ol>
+        <p>对于 <code>npm install</code> ：</p>
+        <ol>
+            <li>如果当前文件夹下，没有 package.json 文件，就不会下载任何包；</li>
+            <li>如果当前文件夹下，存在 package.json 文件，就会根据 package.json 文件的信息来下载所有的指定包，所有指定包的版本满足某条件（见《包的更新规则》）。</li>
+        </ol>
+    </blockquote>
+    <p>​ 执行下述命令，将会下载指定版本的指定包（包括 unscoped 包和 scoped 包），并将其存储到当前文件夹下的 node_modules 文件夹内（若没有 node_modules 文件夹，则会自动创建一个）。
+    </p>
+    <pre><code>npm install &lt;packagename@version&gt;
+</code></pre>
+    <pre><code>npm install &lt;@scopename/packagename@version&gt;
+</code></pre>
+    <p>​ 譬如：</p>
+    <pre><code>npm install --save-dev @babel/core@7.0.0
+</code></pre>
+    <h1 id="安装全局包">安装全局包</h1>
+    <p>​ 见《 npm install 》</p>
+    <h1 id="更新本地包">更新本地包</h1>
+    <p>​ 见《 npm update 》。</p>
+    <h1 id="更新全局包">更新全局包</h1>
+    <p>​ 见《 npm update 》。</p>
+    <h1 id="包的更新规则">包的更新规则</h1>
+    <p>​ 命令 <code>npm install</code> 和命令 <code>npm update</code>
+        都可以对包进行更新，不过它们的具体行为有不少差异，详见《安装本地宝》、《安装全局包》、《更新本地包》、《更新全局包》。</p>
+    <p>​ 包的更新行为取决于包在 <code>package.json</code> 文件中的声明方式，主要有 3 种声明方式：</p>
+    <ul>
+        <li>精确的版本号，如 <code>1.0.0</code></li>
+        <li>脱字符版本号，如 <code>^1.0.0</code></li>
+        <li>波浪号版本号，如 <code>~1.0.0</code></li>
+    </ul>
+    <p>​ 若包在 <code>package.json</code> 文件中被声明为 <code>^非零号版本</code> ，则包的更新行为表现为：在主版本号不变的前提下，更新至最新版；</p>
+    <p>​ 若包在 <code>package.json</code> 文件中被声明为 <code>~非零号版本</code> ，则包的更新行为表现为：在主版本号和次版本号都不变的前提下，更新至最新版；</p>
+    <p>​ 若包在 <code>package.json</code> 文件中被声明为 <code>零号或非零号版本</code> ，则包的更新行为表现为：无法更新，版本号锁死；</p>
+    <p>​ 若包在 <code>package.json</code> 文件中被声明为 <code>^零号版本</code> ，则包的更新行为表现为：在主版本号和次版本号都不变的前提下，更新至最新版；</p>
+    <blockquote>
+        <p>注：</p>
+        <ol>
+            <li>零号版本代表 <code>0.y.z</code> ，非零号版本代表 <code>&gt;=1.0.0</code> 。</li>
+            <li>若包未被 <code>package.json</code> 文件声明，则包会更新至最新版。</li>
+        </ol>
+    </blockquote>
+    <h1 id="源管理">源管理</h1>
+    <p>​ 执行下述命令，可以查询 npm 的下载源：</p>
+    <pre><code>npm config get registry
+</code></pre>
+    <p>​ 执行下述命令，可以修改 npm 的下载源，此后 npm 将从此新源下载所有包（既包括本地宝，也包括全局宝）：</p>
+    <pre><code>npm config set registry 新源地址
+</code></pre>
+    <p>​ 国内网络环境下，淘宝源的下载速度比官方源（原始源）的更快，下文将描述如何换至淘宝源：</p>
+    <pre><code>&gt; npm config get registry
+
+打印
+https://registry.npmjs.org
+
+&gt; npm config set registry https://registry.npm.taobao.org
+&gt; npm config get registry
+
+打印
+https://registry.npm.taobao.org
+</code></pre>
+    <blockquote>
+        <p>注：淘宝源的更新频率为 10 分钟。</p>
+    </blockquote>
+    <h1 id="文件结构">文件结构</h1>
+    <p>​ 该节使用的所有例子都假定：① 本机使用 Windows 系统；② node.js 被安装至 <code>D:\nodejs</code> 文件夹中；③ 在 <code>E:\web</code> 文件夹中打开命令行 ；
+    </p>
+    <p><strong>prefix：</strong></p>
+    <p>​ 是指 <code>node_modules</code> 文件夹的父文件夹。对于本地环境，它是打开命令行窗口的那个文件夹。对于全局环境，它是 <code>npm</code> 的安装文件夹。比如：</p>
+    <ol>
+        <li>本地环境的 <code>prefix</code> 就是 <code>E:\web</code> ；</li>
+        <li>全局环境的 <code>prefix</code> 就是 <code>D:\nodejs\node_modules\npm</code> ；</li>
+    </ol>
+    <p><strong>root：</strong></p>
+    <p>​ 是指 <code>node_modules</code> 文件夹。</p>
+    <p><strong>executables：</strong></p>
+    <p>​ 是指存储可执行程序的文件夹，比如：</p>
+    <ul>
+        <li>本地环境的 <code>executables</code> 就是 <code>E:\web\node_modules\.bin</code> ；</li>
+        <li>全局环境的 <code>executables</code> 就是 <code>D:\nodejs\node_modules\npm\bin</code></li>
+    </ul>
+    <h1 id="npm-shrinkwrapjson">npm-shrinkwrap.json</h1>
+    <p>​ 该文件由命令 <code>npm shrinkwrap</code> 创建，它等同于 <code>package-lock.json</code> ，不同处是它可以被包含在发布的包中。</p>
+    <p>​ 等待完善 <a
+            href="https://docs.npmjs.com/cli/v7/configuring-npm/npm-shrinkwrap-json">https://docs.npmjs.com/cli/v7/configuring-npm/npm-shrinkwrap-json</a>
+    </p>
+    <h1 id="packagejson">package.json</h1>
+    <p>​ 等待完善 <a
+            href="https://docs.npmjs.com/cli/v7/configuring-npm/package-json">https://docs.npmjs.com/cli/v7/configuring-npm/package-json</a>
+    </p>
+    <h1 id="package-lockjson">package-lock.json</h1>
+    <p>​ 等待完善 <a
+            href="https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json">https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json</a>
+    </p>
+    <h1 id="react">React</h1>
+    <p>​ 创建 React 工程的流程（复制自旧笔记，期待将来完全更新它）：</p>
+    <ol>
+        <li>进入工程文件夹</li>
+        <li><code>npx create-react-app firstReactApp</code> </li>
+        <li><code>cd firstReactApp</code> </li>
+        <li><code>npm start</code> 开始使用</li>
+        <li><code>npm run build</code> 打包</li>
+    </ol>
+    <h1 id="所有命令">所有命令</h1>
+    <ul>
+        <li>[√] ：你将会用到该命令，你学习了该命令</li>
+        <li>[×] ：你不会用到该命令，你未学习该命令</li>
+        <li>[~] ：你将会用到该命令，你未学习该命令</li>
+        <li>[?] ：完全未知</li>
+    </ul>
+    <h2 id="√-npm">[√] npm</h2>
+    <p>​ npm 是 node.js 运行时的包管理工具，用于发布、查询、安装、卸载、更新包。</p>
+    <p>​ npm 命令有 2 种模式：本地模式、全局模式。npm 命令会默认使用本地模式，若想使用全局模式，则需要使用 <code>-g</code> 或 <code>--global</code> 。</p>
+    <h2 id="√-npm-init">[√] npm init</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 执行该命令将以问卷调查的形式来创建一个 package.json 文件，若该命令具有 <code>--yes</code> 后缀，则会直接创建一个具有默认值得 package.json 得文件。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm init [--yes | -y]
+</code></pre>
+    <p>​ package.json 的默认值如下：</p>
+    <ul>
+        <li><code>name</code> ：当前文件夹的名字</li>
+        <li><code>version</code> ：<code>&quot;1.0.0&quot;</code></li>
+        <li><code>description</code>：<code>&quot;&quot;</code> 或 README.md 文件的第一行的内容</li>
+        <li><code>main</code> ：<code>&quot;index.js&quot;</code></li>
+        <li><code>scripts</code> ：</li>
+        <li><code>keywords</code> ：<code>[]</code></li>
+        <li><code>author</code> ：<code>&quot;&quot;</code></li>
+        <li><code>license</code> ：<code>&quot;ISC&quot;</code></li>
+    </ul>
+    <h2 id="√-npm-install">[√] npm install</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 下载指定包，并下载指定包的依赖包。假如当前目录下存在 <code>npm-shrinkwrap.json</code> 或 <code>package.json</code> 或
+        <code>yarn.lock</code> 中的任意一个文件时，该命令将按照文件的描述信息来执行下载任务。</p>
+    <p>​ 当这 3 个文件同时存在时，只有一个文件会发挥作用，它们的优先级如下：</p>
+    <ol>
+        <li><code>npm-shrinkwrap.json</code> </li>
+        <li><code>package.json</code> </li>
+        <li><code>yarn.lock</code></li>
+    </ol>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm install
+npm install &lt;packagename&gt;
+npm install &lt;packagename@tag&gt;
+npm install &lt;packagename@version&gt;
+</code></pre>
+    <p><strong><code>npm install</code> ：</strong></p>
+    <p>​ 根据 <code>package.json</code> 文件来下载包，并将包存储至当前文件夹下的 <code>node_modules</code> 文件夹内。</p>
+    <p><strong><code>npm install &lt;packagename&gt;</code> ：</strong></p>
+    <p>​ 下载指定包。</p>
+    <p><strong><code>npm install &lt;packagename@tag&gt;</code> ：</strong></p>
+    <p>​ 下载指定标签的指定包。</p>
+    <p><strong><code>npm install &lt;packagename@version&gt;</code> ：</strong></p>
+    <p>​ 下载指定版本的指定包。</p>
+    <p><strong>参数：</strong></p>
+    <p>​ 以下参数可以组合使用。</p>
+    <table>
+        <thead>
+            <tr>
+                <th>参数名</th>
+                <th>简写</th>
+                <th>描述</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>--global</code></td>
+                <td><code>-g</code></td>
+                <td>在全局环境下执行命令（该参数与 <code>--no-save</code> 组合使用时， <code>--no-save</code> 会被忽略）</td>
+            </tr>
+            <tr>
+                <td><code>--save-prod</code></td>
+                <td><code>-P</code></td>
+                <td>下载的包将作为生产包，对应 <code>dependencies</code></td>
+            </tr>
+            <tr>
+                <td><code>--save-dev</code></td>
+                <td><code>-D</code></td>
+                <td>下载的包将作为开发包，对应 <code>devDependencies</code></td>
+            </tr>
+            <tr>
+                <td><code>--save-optional</code></td>
+                <td><code>-O</code></td>
+                <td>下载的包将作为可选包，对应 <code>optionalDependencies</code></td>
+            </tr>
+            <tr>
+                <td><code>--save-exact</code></td>
+                <td><code>-E</code></td>
+                <td>使用精确的版本号（如 <code>1.0.0</code> ），而非脱字符版本号（如 <code>^1.0.0</code> ）</td>
+            </tr>
+            <tr>
+                <td><code>--no-save</code></td>
+                <td></td>
+                <td>不会更新 <code>package.json</code> 、 <code>package-lock.json</code> 、 <code>npm-shrinkwrap.json</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <blockquote>
+        <p>**禁用 <code>--save</code> **：</p>
+        <p>​ 根据官方文档的描述， <code>npm install --save x</code> 和 <code>npm install --save-prod x</code> 的作用是完全一样的，基于下述 2
+            个原因，推荐使用 <code>--save-prod</code> ：</p>
+        <p>① <code>--save-prod</code> 和 <code>--save-dev</code> 的格式一致；</p>
+        <p>② <code>npm install</code> 和 <code>npm uninstall</code> 的 <code>--save</code> 的意义不相同，前者的意义是 ”自动更新相关文件，并将该包标记为
+            dependencies “ ，后者的意义是 “自动更新相关文件“ 。</p>
+        <p>​ 请忘掉 <code>npm install</code> 和 <code>npm uninstall</code> 拥有 --save 参数，只要记住它们都有 <code>--no-save</code>
+            参数就好，这样它们的行为就会更统一：它们都默认会更新相关文件，除非主动指定了 <code>--no-save</code> 参数。</p>
+    </blockquote>
+    <p><strong>示例：</strong></p>
+    <ul>
+        <li>
+            <p>执行下述命令会下载一个包，并将该包作为生产包，自动更新 <code>package.json</code> 文件的 <code>dependencies</code> 字段</p>
+            <pre><code>npm install --save-prod &lt;packagename&gt;
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个包，并将该包作为开发包，自动更新 <code>package.json</code> 文件的 <code>devDependencies</code> 字段</p>
+            <pre><code>npm install --save-dev &lt;packagename&gt;
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个包，并将该包作为可选包，自动更新 <code>package.json</code> 文件的 <code>optionalDependencies</code> 字段</p>
+            <pre><code>npm install --save-optional &lt;packagename&gt;
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个包，并将该包作为生产包，自动更新 <code>package.json</code> 文件的 <code>dependencies</code> 字段</p>
+            <pre><code>npm install --save-prod --save &lt;packagename&gt;
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个包，并将该包作为生产包，不会自动更新 <code>package.json</code> 文件的 <code>dependencies</code> 字段</p>
+            <pre><code>npm install --save-prod --no-save &lt;packagename&gt;
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个包，并将该包作为生产包，自动更新 <code>package.json</code> 文件的 <code>dependencies</code> 字段，并使用精确的版本号。</p>
+            <pre><code>npm install --save-prod --save-exact &lt;packagename&gt;
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个指定标签的包，并将该包作为生产包，自动更新 <code>package.json</code> 文件的 <code>dependencies</code>
+                字段。如果该包没有该标签，则此操作失败。比如</p>
+            <pre><code>npm install @babel/core@latest
+</code></pre>
+        </li>
+        <li>
+            <p>执行下述命令会下载一个指定版本的包，并将该包作为生产包，自动更新 <code>package.json</code> 文件的 <code>dependencies</code>
+                字段。如果该包没有该版本，则此操作失败。比如</p>
+            <pre><code>npm install @babel/core@7.0.0
+</code></pre>
+        </li>
+    </ul>
+    <h2 id="√-npm-uninstall">[√] npm uninstall</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 删除一个包和该包的所有依赖，这个命令会更新 <code>package.json</code> 、 <code>package-lock.json</code> 、
+        <code>npm-shrinkwrap.json</code> 。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm uninstall &lt;packagename&gt;
+</code></pre>
+    <p><strong>参数：</strong></p>
+    <table>
+        <thead>
+            <tr>
+                <th>参数名</th>
+                <th>简称</th>
+                <th>描述</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>--global</code></td>
+                <td><code>-g</code></td>
+                <td>在全局环境下执行命令（该参数与 <code>--no-save</code> 组合使用时， <code>--no-save</code> 会被忽略）</td>
+            </tr>
+            <tr>
+                <td><code>--save</code></td>
+                <td><code>-S</code></td>
+                <td>自动更新 <code>package.json</code> 、 <code>package-lock.json</code> 、 <code>npm-shrinkwrap.json</code>
+                    ，默认启用</td>
+            </tr>
+            <tr>
+                <td><code>--no-save</code></td>
+                <td></td>
+                <td>不会更新 <code>package.json</code> 、 <code>package-lock.json</code> 、 <code>npm-shrinkwrap.json</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h2 id="√-npm-update">[√] npm update</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 遵照《包的更新规则》来更新所有的包或指定的包，它还会补齐缺失的包。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm update               // 更新所有的包
+npm update &lt;packagename&gt; // 更新指定的包
+</code></pre>
+    <p><strong>参数：</strong></p>
+    <ul>
+        <li><code>--global</code> ：简写 <code>-g</code> ，在全局环境下执行命令。</li>
+    </ul>
+    <h2 id="√-npm-ls">[√] npm ls</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 打印所有包的信息。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm ls
+</code></pre>
+    <blockquote>
+        <p>注： <code>npm list</code> 是它的别名。</p>
+    </blockquote>
+    <p><strong>参数：</strong></p>
+    <ul>
+        <li><code>--all</code> ：不仅仅会打印所有包的信息，还会打印所有包的依赖包。</li>
+        <li><code>--json</code> ：打印格式为 json 文件格式。</li>
+    </ul>
+    <h2 id="√-npm-view">[√] npm view</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 打印包的信息。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm view &lt;packagename&gt; [&lt;key&gt;]
+</code></pre>
+    <p><strong>参数：</strong></p>
+    <ul>
+        <li><code>--json</code></li>
+    </ul>
+    <p><strong>示例：</strong></p>
+    <p>​ 执行下述命令，打印一个包的信息。</p>
+    <pre><code>npm view @babel/core
+</code></pre>
+    <p>​ 执行下述命令，打印一个包的最新版本：</p>
+    <pre><code>npm view @babel/core version
+</code></pre>
+    <p>​ 执行下述命令，打印一个包的所有版本：</p>
+    <pre><code>npm view @babel/core versions
+</code></pre>
+    <p>​ 执行下述命令，打印一个包的生产依赖：</p>
+    <pre><code>npm view @babel/core dependencies
+</code></pre>
+    <h2 id="√-npm-config">[√] npm config</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 管理 npm 的配置。 npm 将配置存储为 <code>.npmrc</code>
+        文件，通过阅读该文件或执行下述命令，就可以观察到配置情况，通过修改该文件或执行下述命令，就可以修改配置。配置文件分为本地环境的配置文件和全局环境的配置文件。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm config set key=value [key=value ...]
+npm config get [key ...]
+npm config delete key [key ...]
+npm config list
+npm config edit
+npm set key=value [key=value ...]
+npm get [key ...]
+</code></pre>
+    <blockquote>
+        <p>注：<code>config</code> 可简写为 <code>c</code></p>
+    </blockquote>
+    <p><strong>SET：</strong></p>
+    <p>​ 以键值对的形式来修改一个或多个参数，若省略了 value ，则会将属性设置为空字符串。</p>
+    <pre><code>npm config set key=value [key=value ...]
+npm set key=value [key=value ...]
+</code></pre>
+    <blockquote>
+        <p>注： <code>npm config set key value</code> 等价于 <code>npm config set key=value</code> ，保留前一种写法是为了向下兼容，不建议使用。</p>
+    </blockquote>
+    <p><strong>GET：</strong></p>
+    <p>​ 查询一个或多个参数，并将查询结果输出至命令行窗口。若只查询一个参数，则输出一个结果；若查询多个参数，则输出多个结果，结果将附带 key 为前缀；若查询零个参数，譬如 <code>npm config get</code>
+        ，则完全等价于 <code>npm config list</code> 。</p>
+    <pre><code>npm config get [key ...]
+npm get [key ...]
+</code></pre>
+    <p><strong>LIST：</strong></p>
+    <p>​ 打印所有配置参数，使用 <code>--json</code> 来显示 JSON 格式的所有配置参数，使用 <code>-l</code> 来显示 JSON 格式的所有默认值的配置参数。</p>
+    <pre><code>npm config list [-l] [--json]
+</code></pre>
+    <p><strong>DELETE：</strong></p>
+    <p>​ 从 <code>.npmrc</code> 文件中删除指定的一个或多个属性。</p>
+    <pre><code>npm config delete key [key ...]
+</code></pre>
+    <p><strong>EDIT：</strong></p>
+    <p>​ 以 <code>.txt</code> 文件格式的形式来打开本地环境或全局环境的 <code>.npmrc</code> 文件。</p>
+    <pre><code>npm config edit [--global | -g]
+</code></pre>
+    <h2 id="√-npm-docs">[√] npm docs</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 在浏览器中打开一个或多个包的使用文档。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm docs packagename
+</code></pre>
+    <h2 id="√-npm-dedupe">[√] npm dedupe</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 减少模块树中的重复。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm dedupe
+</code></pre>
+    <blockquote>
+        <p>注： <code>dedupe</code> 可简写为 <code>ddp</code></p>
+    </blockquote>
+    <p><strong>规则：</strong></p>
+    <p>​ <a href="https://docs.npmjs.com/cli/v7/commands/npm-dedupe#configuration">官方手册</a> 列举了 2 个例子来阐述
+        <code>npm dedupe</code> 是如何减少模块树中的重复的，但是没有直接给出“如何减少模块树中的重复”的清晰定义。所以，本文也以这 2 个例子来阐述 <code>npm dedupe</code> 的用途。
+    </p>
+    <p><strong>示例 1 ：</strong></p>
+    <p>​ 假设，当前模块树的依赖情况如下述所示：</p>
+    <pre><code>a
++-- b &lt;-- depends on c@1.0.x
+|   `-- c@1.0.3
+`-- d &lt;-- depends on c@~1.0.9
+    `-- c@1.0.10
+</code></pre>
+    <p>​ 执行 <code>npm dedupe</code> 后，该模块树的依赖会变成下述所示：</p>
+    <pre><code>a
++-- b
++-- d
+`-- c@1.0.10
+</code></pre>
+    <p><strong>示例 2 ：</strong></p>
+    <p>​ 假设，当前模块树的依赖情况如下述所示：</p>
+    <pre><code>a
++-- b &lt;-- depends on c@1.0.x
++-- c@1.0.3
+`-- d &lt;-- depends on c@1.x
+    `-- c@1.9.9
+</code></pre>
+    <p>​ 执行 <code>npm dedupe</code> 后，该模块树的依赖会变成下述所示：</p>
+    <pre><code>a
++-- b
++-- d
+`-- c@1.0.3
+</code></pre>
+    <h2 id="√-npm-bin">[√] npm bin</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ npm 默认将可执行程序安装在名为 <code>.bin</code> 的文件夹内，该命令用于打印 <code>.bin</code>
+        文件夹的地址。若设置了将可执行程序安装至其它文件夹，则该命令将打印该文件夹的地址，该文件夹可以使用任意名字，如第二个示例。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm bin [--global | -g]
+</code></pre>
+    <p><strong>参数：</strong></p>
+    <ul>
+        <li><code>global</code> ：全局模式。 全局模式下将打印全局环境的 bin 文件夹。</li>
+    </ul>
+    <p><strong>示例：</strong></p>
+    <pre><code>&gt; npm bin
+
+打印
+E:\web\note\practice\node_modules\.bin
+</code></pre>
+    <pre><code>&gt; npm --global bin
+
+打印
+D:\nodejs\node_global
+</code></pre>
+    <h2 id="√-npm-pkg">[√] npm pkg</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 修改 <code>package.json</code> 文件（不会改变 <code>node_modules</code> ）。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm pkg get key
+npm pkg set key=value
+npm pkg delete key
+</code></pre>
+    <p>​ 假设一个 <code>package.json</code> 文件的内容如下：</p>
+    <pre><code class="language-json">{
+    &quot;dependencies&quot;: {
+        &quot;@babel/runtime&quot;: &quot;^7.15.4&quot;
+    },
+    &quot;devDependencies&quot;: {
+        &quot;@babel/core&quot;: &quot;^7.15.8&quot;
+    }
+}
+</code></pre>
+    <p>​ 执行下述命令，可以查看 <code>package.json</code> 文件中的某个键的值：</p>
+    <pre><code>&gt; npm pkg get dependencies
+
+打印：
+{
+    &quot;@babel/runtime&quot;: &quot;^7.15.4&quot;
+}
+</code></pre>
+    <pre><code>&gt; npm pkg get dependencies.@babel/runtime
+
+打印：
+&quot;^7.15.4&quot;
+</code></pre>
+    <pre><code>&gt; npm pkg get dependencies devDependencies
+
+打印：
+{
+    &quot;dependencies&quot;: {
+        &quot;babel/runtime&quot;: &quot;^7.15.4&quot;
+    },
+    &quot;devDependencies&quot;: {
+        &quot;@babel/core&quot;: &quot;&amp;7.15.8&quot;
+    }
+}
+</code></pre>
+    <p>​ 执行下述命令，可以修改 <code>package.json</code> 文件中的某个键：</p>
+    <pre><code>&gt; npm pkg set name=&quot;John&quot;
+</code></pre>
+    <blockquote>
+        <p>注： <code>package.json</code> 文件中没有 <code>name</code> 字段，该命令会立即为其创建一个 <code>name</code> 字段，并将
+            <code>&quot;John&quot;</code> 作为字段值。</p>
+    </blockquote>
+    <p>​ 执行下述命令，可以删除 <code>package.json</code> 文件中的某个键：</p>
+    <pre><code>&gt; npm ls
+
+打印：
++-- @babel/runtime@7.15.4
+`-- @babel/core@7.15.8
+
+&gt; npm pkg delete dependencies
+&gt; npm ls
+
+打印：
+`-- @babel/core@7.15.8
+</code></pre>
+    <blockquote>
+        <p>注：该命令只会改变 <code>package.json</code> ，不会改变 <code>node_modules</code> ，因此 <code>@babel/runtime</code> 仍然存在于
+            <code>node_modules</code> 文件中。</p>
+    </blockquote>
+    <h2 id="√-npm-prefix">[√] npm prefix</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 打印 <code>prefix</code> 文件夹（关于 <code>prefix</code> 请查《文件结构》）。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm prefix [--global | -g]
+</code></pre>
+    <h2 id="√-npm-root">[√] npm root</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 打印 <code>root</code> 文件夹（关于 <code>root</code> 请查《文件结构》）。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm root [--global | -g]
+</code></pre>
+    <h2 id="√-npm-shrinkwrap">[√] npm shrinkwrap</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 将 <code>package-lock.json</code> 文件替换为 <code>npm-shrinkwrap.json</code> 文件。</p>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm shrinkwrap
+</code></pre>
+    <h2 id="√-npm-start">[√] npm start</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 执行一个预定义的脚本，该脚本被编写在 <code>package.json</code> 文件中的 <code>scripts</code> 属性中的 <code>start</code> 属性中，譬如：</p>
+    <pre><code class="language-json">{
+    &quot;scripts&quot;: {
+        &quot;start&quot;: &quot;...&quot;
+    }
+}
+</code></pre>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm start [-- &lt;args&gt;]
+</code></pre>
+    <h2 id="√-npm-stop">[√] npm stop</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 执行一个预定义的脚本，该脚本被编写在 <code>package.json</code> 文件中的 <code>scripts</code> 属性中的 <code>stop</code> 属性中，譬如：</p>
+    <pre><code class="language-json">{
+    &quot;scripts&quot;: {
+        &quot;stop&quot;: &quot;...&quot;
+    }
+}
+</code></pre>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm stop [-- &lt;args&gt;]
+</code></pre>
+    <h2 id="√-npm-test">[√] npm test</h2>
+    <p><strong>描述：</strong></p>
+    <p>​ 执行一个预定义的脚本，该脚本被编写在 <code>package.json</code> 文件中的 <code>scripts</code> 属性中的 <code>test</code> 属性中，譬如：</p>
+    <pre><code class="language-json">{
+    &quot;scripts&quot;: {
+        &quot;test&quot;: &quot;...&quot;
+    }
+}
+</code></pre>
+    <p><strong>语法：</strong></p>
+    <pre><code>npm test [-- &lt;args&gt;]
+</code></pre>
+    <h2 id="-npx">[~] npx</h2>
+    <h2 id="-npm-restart">[~] npm restart</h2>
+    <h2 id="-npm-run-script">[~] npm run-script</h2>
+    <h2 id="-npm-set-script">[~] npm set-script</h2>
+    <h2 id="-npm-prune">[~] npm prune</h2>
+    <h2 id="-npm-outdated">[~] npm outdated</h2>
+    <h2 id="-npm-doctor">[~] npm doctor</h2>
+    <h2 id="-npm-ci">[~] npm ci</h2>
+    <p>​ 类似 <code>npm install</code> ，使用该命令可以让下载行为严格遵守 package-lock.json，以保证在任何地方构建的包都完全一致。</p>
+    <h2 id="-npm-explain">[~] npm explain</h2>
+    <h2 id="-npm-cache">[~] npm cache</h2>
+    <p>​ 操纵包缓存。</p>
+    <h2 id="-npm-find-dupes">[~] npm find-dupes</h2>
+    <h2 id="-npm-help">[~] npm help</h2>
+    <h2 id="-npm-help-search">[~] npm help-search</h2>
+    <h2 id="-npm-ci-1">[~] npm ci</h2>
+    <h2 id="-npm-hook">[?] npm hook</h2>
+    <h2 id="×-npm-deprecate">[×] npm deprecate</h2>
+    <p>​ 该命令将某个包标志为弃用状态，并向所有试图安装它的人提供一个弃用警告。</p>
+    <h2 id="×-npm-bugs">[×] npm bugs</h2>
+    <p>​ 报告包的 bug 。</p>
+    <h2 id="×-npm-access">[×] npm access</h2>
+    <p>​ 对发布的包设置访问级别。</p>
+    <h2 id="×-npm-adduser">[×] npm adduser</h2>
+    <p>​ 添加注册表的用户账号。</p>
+    <h2 id="×-npm-audit">[×] npm audit</h2>
+    <h2 id="×-npm-completion">[×] npm completion</h2>
+    <p>​ Tab 补全（不懂）。</p>
+    <h2 id="×-npm-diff">[×] npm diff</h2>
+    <h2 id="×-npm-dist-tag">[×] npm dist-tag</h2>
+    <h2 id="×-npm-edit">[×] npm edit</h2>
+    <h2 id="×-npm-exec">[×] npm exec</h2>
+    <h2 id="×-npm-explore">[×] npm explore</h2>
+    <h2 id="×-npm-fund">[×] npm fund</h2>
+    <h2 id="×-npm-install--ci-test">[×] npm install -ci-test</h2>
+    <h2 id="×-npm-install-test">[×] npm install-test</h2>
+    <h2 id="×-npm-link">[×] npm link</h2>
+    <h2 id="×-npm-logout">[×] npm logout</h2>
+    <h2 id="×-npm-org">[×] npm org</h2>
+    <h2 id="×-npm-owner">[×] npm owner</h2>
+    <h2 id="×-npm-pack">[×] npm pack</h2>
+    <h2 id="×-npm-ping">[×] npm ping</h2>
+    <h2 id="×-npm-profile">[×] npm profile</h2>
+    <h2 id="×-npm-publish">[×] npm publish</h2>
+    <h2 id="×-npm-unpublish">[×] npm unpublish</h2>
+    <h2 id="×--npm-rebuild">[×] npm rebuild</h2>
+    <h2 id="×-npm-repo">[×] npm repo</h2>
+    <h2 id="×-npm-search">[×] npm search</h2>
+    <h2 id="×-npm-star">[×] npm star</h2>
+    <h2 id="×-npm-unstar">[×] npm unstar</h2>
+    <h2 id="×-npm-stars">[×] npm stars</h2>
+    <h2 id="×-npm-team">[×] npm team</h2>
+    <h2 id="×-npm-token">[×] npm token</h2>
+    <h2 id="×-npm-version">[×] npm version</h2>
+    <h2 id="×-npm-whoami">[×] npm whoami</h2>
+
+</body>
+
+</html>
