@@ -2,6 +2,11 @@ const fs = require( "fs" );
 
 const { marked } = require( "marked" );
 
+generate(
+    "./source/其他/字符编码的含义与历史.md",
+    "./pages/其他/字符编码的含义与历史.html"
+);
+
 /**
  * 将md文件转译为html文件。
  * @param {string} input_file - md文件的路径字符串，比如"./a.md"
