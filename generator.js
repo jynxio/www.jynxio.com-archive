@@ -3,8 +3,8 @@ const fs = require( "fs" );
 const { marked } = require( "marked" );
 
 generate(
-    "./source/其他/字符编码的含义与历史.md",
-    "./pages/其他/字符编码的含义与历史.html"
+    "./source/字符编码的含义与历史.md",
+    "./pages/字符编码的含义与历史.html"
 );
 
 /**
@@ -30,6 +30,7 @@ function generate( input_file, output_file ) {
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Document</title>
+                <link rel="stylesheet" href="../style/resize.css">
             </head>
             <body>
                 <article>
