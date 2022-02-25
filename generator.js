@@ -24,7 +24,7 @@ function generate( input_file, output_file ) {
 
         const header = `
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang="zh-CN">
             <head>
                 <meta charset="UTF-8">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">

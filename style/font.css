@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "IBM Plex Mono";
+    src: url("../static/font/IBMPlexMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Noto Sans SC";
+    src: url("../static/font/NotoSansSC-Regular.otf");
+}
