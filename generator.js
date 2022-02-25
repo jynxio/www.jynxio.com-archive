@@ -3,8 +3,8 @@ const fs = require( "fs" );
 const { marked } = require( "marked" );
 
 generate(
-    "./source/字符编码的含义与历史.md",
-    "./pages/字符编码的含义与历史.html"
+    "./source/javascript/继续-数据类型.md",
+    "./pages/继续-数据类型.html"
 );
 
 /**
