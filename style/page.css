@@ -1,20 +1,38 @@
-body {
-    padding: 0 20%;
-    background-color: #0f141a;
-}
-
+html, body,
+header, article, footer,
 h1, h2, h3, h4, h5, h6, p, a, strong,
-blockquote, hr,
 table, thead, tbody, th, tr, td,
+blockquote, hr,
 ol, ul, li,
+pre, code,
 input,
 img {
+    max-width: 100%;
     color: #ffffff;
     font-family: "IBM Plex Mono", "Noto Sans SC";
-    font-size: 1.5vw;
     line-height: 1.65;
 }
 
+header, article, footer {
+    box-sizing: content-box;
+    max-width: 100vmin;
+    padding: 0 calc( ( 100vw - 100vmin ) / 2 + 1.5em );
+}
+
+header, footer {
+    height: 10em;
+    background-color: #151c23;
+}
+
+article {
+    background-color: #0f141a;
+}
+
 pre, code {
+    overflow: scroll;
     font-family: "Fira Code", "Noto Sans SC";
+}
+
+code {
+    display: block;
 }
