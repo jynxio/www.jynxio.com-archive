@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "fontmin": "^0.9.9",
     "marked": "^4.0.12"
   }
 }

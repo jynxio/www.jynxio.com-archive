@@ -26,7 +26,7 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Noto Sans SC" ),
-        url( "/static/font/NotoSansSC-Thin.otf" ) format( "opentype" );
+        url( "/static/font/NotoSansSC-Thin.ttf" ) format( "truetype" );
     unicode-range: U+4E00-9FFF;
 }
 
@@ -36,7 +36,7 @@
     font-weight: bold;
     font-display: swap;
     src: local( "Noto Sans SC" ),
-        url( "/static/font/NotoSansSC-Medium.otf" ) format( "opentype" );
+        url( "/static/font/NotoSansSC-Medium.ttf" ) format( "truetype" );
     unicode-range: U+4E00-9FFF;
 }
 
