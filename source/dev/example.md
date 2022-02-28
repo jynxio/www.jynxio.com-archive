@@ -90,7 +90,7 @@ If no elements are removed, an empty array is returned.
 ##### Example
 
 ```js
-/* Remove zero elements before index 1, and insert "b" */
+/* 插入新元素"b" */
 const array = [ "a", "c", "d" ];
 const removed = array.splice( 1, 0, "b" )
 

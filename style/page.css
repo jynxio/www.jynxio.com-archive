@@ -1,16 +1,32 @@
 html, body,
 header, article, footer,
-h1, h2, h3, h4, h5, h6, p, a, strong,
+h1, h2, h3, h4, h5, h6, p, a, b, strong,
 table, thead, tbody, th, tr, td,
 blockquote, hr,
 ol, ul, li,
 pre, code,
-input,
-img {
+input {
     max-width: 100%;
     color: #ffffff;
-    font-family: "IBM Plex Mono", "Noto Sans SC";
+    font-family: "IBM Plex Serif", "Noto Serif SC";
+    font-style: normal;
+    font-weight: normal;
     line-height: 1.65;
+}
+
+b, strong {
+    font-weight: bold;
+}
+
+pre {
+    font-style: normal;
+    font-weight: normal;
+}
+
+code {
+    font-family: "Fira Code", "Noto Serif SC";
+    font-style: inherit;
+    font-weight: inherit;
 }
 
 header, article, footer {
@@ -28,9 +44,8 @@ article {
     background-color: #0f141a;
 }
 
-pre, code {
-    overflow: scroll;
-    font-family: "Fira Code", "Noto Sans SC";
+pre {
+    overflow: auto;
 }
 
 code {
