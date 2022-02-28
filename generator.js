@@ -2,10 +2,12 @@ const fs = require( "fs" );
 
 const { marked } = require( "marked" );
 
-generate(
-    "./source/dev/example.md",
-    "./pages/example.html"
-);
+const Fontmin = require( "fontmin" );
+
+const input_path = "./source/dev/example.md";
+const output_path = "./pages/example.html";
+
+generate( input_path, output_path );
 
 /**
  * 将md文件转译为html文件。
@@ -61,8 +63,20 @@ function generate( input_file, output_file ) {
         `;
         const html_string = html_header_string + html_body_string + html_footer_string;
 
+        /* 提取标签中的字符串 */
+        // TODO
+
         /* 生成html文件 */
-        fs.writeFile( output_file, html_string, _ => console.log( "大功告成！" ) );
+        fs.writeFile( output_file, html_string, _ => console.log( "Done" ) );
 
     } );
 }
+
+// TODO
+/**
+ * 根据输入的字体文件来创建一个新的字体文件，
+ * @param {string} input - 待处理的字体文件的路径。
+ * @param {string} output - 结果文件夹的路径，生成的字体文件将会存储在该文件夹中。
+ * @param {string} characters - 字符子集。
+ */
+function optimizeFont( input, output, characters ) {}
