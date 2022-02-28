@@ -4,51 +4,50 @@ const { marked } = require( "marked" );
 
 const Fontmin = require( "fontmin" );
 
-const input_path = "./source/dev/example.md";
-const output_path = "./pages/example.html";
-
-generate( input_path, output_path );
+/* ---------------------------------------------------------------------------- */
+translateMdToHtml( "./source/dev/example.md", "./pages/example.html" );
 
 /**
  * 将md文件转译为html文件。
- * @param {string} input_file - md文件的路径字符串，比如"./a.md"
- * @param {string} output_file - 输出文件的路径字符串，比如"./a.html"
+ * @param {string} input - md文件的路径，比如"./a.md"。
+ * @param {string} output - 输出文件的保存路径，比如"./a.html"。
  */
-function generate( input_file, output_file ) {
+function translateMdToHtml( input, output ) {
 
-    let markdown_string = "";
+    /* 读取md文件 */
+    let md = "";
+    const reader = fs.createReadStream( input );
 
-    const reader_stream = fs.createReadStream( input_file );
+    reader.setEncoding( "UTF8" );
+    reader.on( "data", chunk => md += chunk );
+    reader.on( "end", onEnd );
 
-    reader_stream.setEncoding( "UTF8" );
-    reader_stream.on( "data", chunk => markdown_string += chunk );
-    reader_stream.on( "end", _ => {
+    function onEnd() {
 
-        /* 生成html字符串 */
-        let html_body_string;
+        let body = marked.parse( md );
 
-        html_body_string = marked.parse( markdown_string );
+        /* 剔除<h2 id="typora-root-url-*">标签，这是typora的生成图像路径功能产生的副作用 */
+        const extra_token = `<h2 id="typora-root-url-`;
+        const is_exit = body.includes( extra_token );
 
-        /* 剔除<h2 id="typora-root-url-*">标签 */
-        const its_index = html_body_string.indexOf( `<h2 id="typora-root-url-`, 0 );
+        if ( is_exit ) {
 
-        if ( its_index !== -1 ) {
+            const index = body.indexOf( extra_token );
+            const begin = body.indexOf( "</h2>", index ) + 6;
 
-            const slice_from_here = html_body_string.indexOf( `</h2>`, its_index ) + 6;
-
-            html_body_string = html_body_string.slice( slice_from_here );
+            body = body.slice( begin );
 
         }
 
-        /* 合并 */
-        const html_header_string = `
+        /* 生成html字符串 */
+        const header = `
             <!DOCTYPE html>
             <html lang="zh-CN">
             <head>
                 <meta charset="UTF-8">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
+                <title></title>
                 <link rel="stylesheet" href="/style/font.css">
                 <link rel="stylesheet" href="/style/resize.css">
                 <link rel="stylesheet" href="/style/page.css">
@@ -56,27 +55,51 @@ function generate( input_file, output_file ) {
             <body>
                 <article>
         `;
-        const html_footer_string = `
+        const footer = `
                 </article>
             </body>
             </html>
         `;
-        const html_string = html_header_string + html_body_string + html_footer_string;
-
-        /* 提取标签中的字符串 */
-        // TODO
+        const html = header + body + footer;
 
         /* 生成html文件 */
-        fs.writeFile( output_file, html_string, _ => console.log( "Done" ) );
+        fs.writeFile( output, html, _ => {} );
 
-    } );
+        /* 精简字体文件 */
+        const mini_font_path = "./static/font/mini";
+
+        optimizeFont( "./static/font/IBMPlexSerif-ExtraLight.ttf", mini_font_path, body );
+        optimizeFont( "./static/font/NotoSansSC-Thin.ttf", mini_font_path, body );
+
+        // TODO 精简加粗的字体
+
+    }
+
 }
 
-// TODO
 /**
- * 根据输入的字体文件来创建一个新的字体文件，
- * @param {string} input - 待处理的字体文件的路径。
+ * 缩减字体文件所包含的字符集，使其只包含characters的字符集，该放放会创建新的字体文件（woff2），
+ * 该方法不会修改原字体文件。
+ * @param {string} input - 待优化的字体文件的路径（ttf格式）。
  * @param {string} output - 结果文件夹的路径，生成的字体文件将会存储在该文件夹中。
  * @param {string} characters - 字符子集。
  */
-function optimizeFont( input, output, characters ) {}
+function optimizeFont( input, output, characters ) {
+
+    const fontmin = new Fontmin()
+        .src( input )
+        .use( Fontmin.glyph( { text: characters } ) )
+        .use( Fontmin.ttf2woff2() )
+        .dest( output );
+
+    fontmin.run( ( error, files, stream ) => {
+
+        if ( error ) {
+
+            throw error;
+
+        }
+
+    } );
+
+}
