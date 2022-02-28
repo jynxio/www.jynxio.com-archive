@@ -8,9 +8,7 @@ pre, code,
 input {
     max-width: 100%;
     color: #ffffff;
-    font-family: "IBM Plex Serif", "Noto Serif SC";
-    font-style: normal;
-    font-weight: normal;
+    font-family: "IBM Plex Serif", "Noto Sans SC";
     line-height: 1.65;
 }
 
@@ -19,14 +17,11 @@ b, strong {
 }
 
 pre {
-    font-style: normal;
     font-weight: normal;
 }
 
 code {
-    font-family: "Fira Code", "Noto Serif SC";
-    font-style: inherit;
-    font-weight: inherit;
+    font-family: "Fira Code", "Noto Sans SC";
 }
 
 header, article, footer {

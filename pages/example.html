@@ -102,7 +102,8 @@ splice( start, deleteCount, item1, item2, itemN );
                 <p>If negative, it will begin that many elements from the end of the array. (In this case, the origin
                     <code>-1</code>, meaning <code>-n</code> is the index of the <code>n</code>th last element, and is
                     therefore equivalent to the index of <code>array.length - n</code>.) If <code>start</code> is
-                    <code>negative infinity</code>, it will begin from index <code>0</code>.</p>
+                    <code>negative infinity</code>, it will begin from index <code>0</code>.
+                </p>
             </li>
             <li>
                 <p><code>deleteCount</code> <strong><code>Optional</code></strong></p>
@@ -111,7 +112,8 @@ splice( start, deleteCount, item1, item2, itemN );
                     <code>array.length - start</code> (that is, if it is equal to or greater than the number of elements
                     left in the array, starting at <code>start</code>), then all the elements from <code>start</code> to
                     the end of the array will be deleted. However, it must not be omitted if there is any
-                    <code>item1</code> parameter.</p>
+                    <code>item1</code> parameter.
+                </p>
                 <p>If <code>deleteCount</code> is <code>0</code> or negative, no elements are removed. In this case, you
                     should specify at least one new element (see below).</p>
             </li>

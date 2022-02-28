@@ -5,7 +5,7 @@
     font-weight: normal;
     font-display: swap;
     src: local( "IBM Plex Serif" ),
-         url( "/static/font/ibm-plex-serif/IBMPlexSerif-Bold.ttf" ) format( "truetype" );
+        url( "/static/font/IBMPlexSerif-ExtraLight.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }
 
@@ -15,28 +15,28 @@
     font-weight: bold;
     font-display: swap;
     src: local( "IBM Plex Serif" ),
-         url( "/static/font/IBMPlexSerif-SemiBold.ttf" ) format( "truetype" );
+        url( "/static/font/IBMPlexSerif-Medium.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }
 
 /* Chinese */
 @font-face {
-    font-family: "Noto Serif SC";
+    font-family: "Noto Sans SC";
     font-style: normal;
     font-weight: normal;
     font-display: swap;
-    src: local( "Noto Serif SC" ),
-         url( "/static/font/noto-sans-sc/NotoSansSC-Thin.otf" ) format( "opentype" );
+    src: local( "Noto Sans SC" ),
+        url( "/static/font/NotoSansSC-Thin.otf" ) format( "opentype" );
     unicode-range: U+4E00-9FFF;
 }
 
 @font-face {
-    font-family: "Noto Serif SC";
+    font-family: "Noto Sans SC";
     font-style: normal;
     font-weight: bold;
     font-display: swap;
-    src: local( "Noto Serif SC" ),
-         url( "/static/font/noto-sans-sc/NotoSansSC-Bold.otf" ) format( "opentype" );
+    src: local( "Noto Sans SC" ),
+        url( "/static/font/NotoSansSC-Medium.otf" ) format( "opentype" );
     unicode-range: U+4E00-9FFF;
 }
 
@@ -47,6 +47,6 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Fira Code" ),
-         url( "/static/font/FiraCode-Light.ttf" ) format( "truetype" );
+        url( "/static/font/FiraCode-Regular.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }

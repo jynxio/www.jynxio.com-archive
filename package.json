@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "font-spider": "^1.3.5",
     "marked": "^4.0.12"
   }
 }
