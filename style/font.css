@@ -26,6 +26,7 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Noto Sans SC" ),
+        url( "/static/font/test-NotoSansSC-Thin.woff2" ) format( "woff2" ),
         url( "/static/font/NotoSansSC-Thin.ttf" ) format( "truetype" );
     unicode-range: U+4E00-9FFF;
 }

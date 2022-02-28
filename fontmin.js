@@ -5,7 +5,7 @@ const input = "./static/font/NotoSansSC-Thin.ttf";
 /* 文件夹路径，生成结果将会存储在该文件夹中 */
 const output = "./static/fontmin-test";
 /* 字符子集 */
-const character_set = "撒丢将坎坎坷坷奶茶妹过来第一次它那丝粗奥申委开车慢点开伤口";
+const character_set = "我们将对他们";
 
 const fontmin = new Fontmin()
     .src( input )
