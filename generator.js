@@ -67,11 +67,18 @@ function translateMdToHtml( input, output ) {
 
         /* 精简字体文件 */
         const mini_font_path = "./static/font/mini";
+        const font_zh_thin_path = "./static/font/NotoSansSC-Thin.ttf";
+        const font_zh_bold_path = "./static/font/NotoSansSC-Medium.ttf";
+        const font_en_thin_path = "./static/font/IBMPlexSerif-ExtraLight.ttf";
+        const font_en_bold_path = "./static/font/IBMPlexSerif-Medium.ttf";
+        const font_core_path = "./static/font/FiraCode-Regular.ttf";
+        const all_character_set = extractText( html );
 
-        optimizeFont( "./static/font/IBMPlexSerif-ExtraLight.ttf", mini_font_path, body );
-        optimizeFont( "./static/font/NotoSansSC-Thin.ttf", mini_font_path, body );
-
-        // TODO 精简加粗的字体
+        optimizeFont( font_zh_thin_path, mini_font_path, all_character_set );
+        optimizeFont( font_zh_bold_path, mini_font_path, all_character_set );
+        optimizeFont( font_en_thin_path, mini_font_path, all_character_set );
+        optimizeFont( font_en_bold_path, mini_font_path, all_character_set );
+        optimizeFont( font_core_path, mini_font_path, all_character_set );
 
     }
 
@@ -101,5 +108,30 @@ function optimizeFont( input, output, characters ) {
         }
 
     } );
+
+}
+
+/**
+ * 从html文件中提取出所有标签的内容，然后合并成一个字符串，最后返回这个字符串。
+ * @param {string} input - html文件的内容，是一串字符串。
+ * @returns {string} - 一个字符串，它包含了html文件中的所有标签的内容。
+ */
+function extractText( input ) {
+
+    let output = "";
+    let starting_index = 0;
+
+    input.match( /<!?\/?[a-z][a-z0-9]*[^>]*>/ig ).forEach( token => {
+
+        const endding_index = input.indexOf( token, starting_index );
+        const next_starting_index = endding_index + token.length;
+        const snippet = input.slice( starting_index, endding_index );
+
+        output += snippet;
+        starting_index = next_starting_index;
+
+    } );
+
+    return output;
 
 }
