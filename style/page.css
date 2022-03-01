@@ -1,5 +1,6 @@
+/* 字体 */
 html, body,
-header, article, footer,
+header, main, footer, article, nav
 h1, h2, h3, h4, h5, h6, p, a, b, strong,
 table, thead, tbody, th, tr, td,
 blockquote, hr,
@@ -24,9 +25,39 @@ code {
     font-family: "Fira Code", "Noto Sans SC";
 }
 
-header, article, footer {
-    box-sizing: content-box;
-    max-width: 100vmin;
+h1, h2 {
+    font-size: 3em;
+}
+
+h1 {
+    font-size: bold;
+}
+
+h3, h4 {
+    font-size: 2.25em;
+}
+
+h3 {
+    font-size: bold;
+}
+
+h5, h6 {
+    font-size: 1.5em;
+    color: red;
+}
+
+h5 {
+    font-size: bold;
+    color: blue;
+}
+
+/* 布局 */
+body {
+    background-color: #151c23;
+    overflow-x: hidden;
+}
+
+header, main, footer {
     padding: 0 calc( ( 100vw - 100vmin ) / 2 + 1.5em );
 }
 
@@ -35,7 +66,7 @@ header, footer {
     background-color: #151c23;
 }
 
-article {
+main {
     background-color: #0f141a;
 }
 

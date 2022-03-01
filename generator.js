@@ -53,10 +53,16 @@ function translateMdToHtml( input, output ) {
                 <link rel="stylesheet" href="/style/page.css">
             </head>
             <body>
-                <article>
+                <header></header>
+                <main>
+                    <nav></nav>
+                    <article>
         `;
         const footer = `
-                </article>
+                    </article>
+                    <nav></nav>
+                </main>
+                <footer></footer>
             </body>
             </html>
         `;

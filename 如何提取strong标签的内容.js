@@ -119,7 +119,7 @@ console.log( array );   // output: [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot;
 </html>
 `;
 
-const characters_set = extractText( html, [ "code" ] );
+const characters_set = extractText( html, [ "a" ] );
 
 console.log( characters_set );
 
@@ -149,7 +149,8 @@ function extractText( input, node_names ) {
         debugger;
         const starting_index = input.indexOf( tokens[ i ], from_index ) + tokens[ i ].length;
         const endding_index = input.indexOf( tokens[ i + 1 ], from_index );
-        const snippet = removeTokenFromString( input.slice( starting_index, endding_index ) );
+        const slice = input.slice( starting_index, endding_index );
+        const snippet = removeTokenFromString( slice );
 
         output += snippet;
         from_index = endding_index;
