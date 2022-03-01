@@ -39,6 +39,6 @@ article {
     background-color: #0f141a;
 }
 
-pre {
+pre, code {
     overflow: auto;
 }
