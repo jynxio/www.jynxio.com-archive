@@ -10,15 +10,15 @@ typora-root-url: ../../../blob
 
 下表罗列了所有的原始类型。
 
-| 原始类型    | 示例                           |
-| ----------- | ------------------------------ |
-| `Number`    | `const n = 1;`                 |
-| `String`    | `const s = "Hello World";`     |
-| `Boolean`   | `const b = true;`              |
-| `Undefined` | `const u = undefined;`         |
-| `Null`      | `const n = null;`              |
-| `Symbol`    | `const s = Symbol( 1 );`       |
-| `BigInt`    | `const b = 9007199254740991n;` |
+| 原始类型  | 示例                |
+| --------- | ------------------- |
+| Number    | `1`                 |
+| String    | `""`                |
+| Boolean   | `true`              |
+| Null      | `null`              |
+| Undefined | `undefined`         |
+| Symbol    | `Symbol( "" )`      |
+| BigInt    | `9007199254740991n` |
 
 引用类型只有一种，那就是 `Object` 。
 
@@ -28,9 +28,14 @@ typora-root-url: ../../../blob
 
 JavaScript 中有许多 **标准内置对象**，比如 **可索引的集合对象** 有：
 
-- `Array`
-- `Int8Array`
-- `Unit8Array`
+- 基本对象
+- 数字和日期对象
+- 可索引的集合对象
+  - `Array`
+  - `Int8Array`
+  - `Unit8Array`
+  - ......
+
 - ......
 
 ### Array
@@ -103,4 +108,3 @@ console.log( array );   // output: [ "a", "b", "c", "d" ]
 ![example](/static/page-image-hosting/example.png)
 
 > Image from [Cool Backgrounds](https://coolbackgrounds.io/).
->

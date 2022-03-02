@@ -1,4 +1,5 @@
 /* 字体 */
+/* ------------------------------------------------------------------------------------------------- */
 html, body,
 header, main, footer, article, nav
 h1, h2, h3, h4, h5, h6, p, a, b, strong,
@@ -26,8 +27,9 @@ code {
     font-family: "Fira Code", "Noto Sans SC";
 }
 
+/* 标题 */
+/* ------------------------------------------------------------------------------------------------- */
 h1 {
-    /* color: #5773ff; */
     font-size: 3rem;
     font-weight: bold;
     text-align: center;
@@ -59,15 +61,8 @@ h5, h6 {
     font-weight: normal;
 }
 
-a, a > * {
-    color: #5773ff;
-}
-
-strong, strong > * {
-    color: #5773ff;
-}
-
 /* 布局 */
+/* ------------------------------------------------------------------------------------------------- */
 body {
     background-color: #151c23;
     overflow-x: hidden;
@@ -90,6 +85,14 @@ article {
     padding: 8rem 2rem;
 }
 
+a, a > * {
+    color: #5d72f6;
+}
+
+strong, strong > * {
+    color: #5d72f6;
+}
+
 pre {
     overflow: auto;
     padding: 1rem 2rem;
@@ -100,13 +103,12 @@ pre {
 code {
     padding: 0 0.5rem;
     border-radius: 0.2rem;
-    background-color: #1f262e;
+    background-color: #151f28;
 }
 
 pre > code {
     padding: 0;
     border-radius: 0;
-    background-color: transparent;
 }
 
 img {
@@ -116,15 +118,62 @@ img {
 }
 
 blockquote {
-    padding: 1rem 2rem;
+    padding: 0.65rem 1rem;
     border-radius: 0.2rem;
-    background-color: #182635;
+    border-left: 0.25rem solid #5d72f6;
+    background-color: #151f28;
 }
 
-table, thead, tbody, tr {
-    display: block;
+blockquote * {
+    font-size: 0.8rem;
 }
 
-table, thead, tbody, tr, th, td {
-    border: 1px solid red;
+/* 表格 */
+/* ------------------------------------------------------------------------------------------------- */
+table {
+    table-layout: fixed;
+    width: 100%;
+    margin: 0.75rem 0;
+    border-top: 0.25rem solid #151f28;
+    border-bottom: 0.25rem solid #151f28;
+    border-collapse: collapse;
+}
+
+table * {
+    line-height: 2.2;
+}
+
+table > thead {
+    border-bottom: 0.1rem solid #151f28;
+}
+
+th {
+    font-weight: bold;
+    text-align: left;
+    letter-spacing: 0.2rem;
+}
+
+tr > th:first-child,
+tr > td:first-child {
+    padding-left: 2rem;
+}
+
+tr > th:last-child,
+tr > td:last-child {
+    padding-right: 2rem;
+}
+
+/* 列表 */
+/* ------------------------------------------------------------------------------------------------- */
+li {
+    margin-left: 2rem;
+}
+
+li::before {
+    content: "";
+    float: left;
+    width: 0.2rem;
+    height: 0.2rem;
+    background-color: #5d72f6;
+    line-height: 1;
 }
