@@ -1,12 +1,12 @@
 ---
-typora-root-url: ../../../blob
+typora-root-url: ../../../blob 
 ---
 
-# MDN Web Docs
+# 数据类型与标准内置对象
 
-> Article excerpted from [**MDN**](https://developer.mozilla.org/).
+## 数据类型
 
-[ECMAScript](https://tc39.es/ecma262/)规定了 8 种基本的数据类型，其中有 7 种是**原始类型**，1 种是**引用类型**。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。
+[ECMAScript](https://tc39.es/ecma262/) 规定了 8 种基本的数据类型，其中有 7 种是 **原始类型**，1 种是 **引用类型**。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。
 
 下表罗列了所有的原始类型。
 
@@ -24,7 +24,9 @@ typora-root-url: ../../../blob
 
 ## 标准内置对象
 
-JavaScript 中有许多**标准内置对象**，比如**可索引的集合对象**有：
+> Excerpted from [**MDN Web Docs**](https://developer.mozilla.org/).
+
+JavaScript 中有许多 **标准内置对象**，比如 **可索引的集合对象** 有：
 
 - `Array`
 - `Int8Array`
@@ -44,7 +46,7 @@ JavaScript 的 `Array` 对象是用于构造数组的全局对象，数组是类
 
 #### Array.prototype.splice
 
-The `splice()` method changes the contents of an array by removing or replacing existing elements and/or adding new elements [in place](https://en.wikipedia.org/wiki/In-place_algorithm). To access part of an array without modifying it, see [`slice()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice).
+The `splice()` method changes the contents of an array by removing or replacing existing elements and/or adding new elements [in place](https://en.wikipedia.org/wiki/In-place_algorithm). To access part of an array without modifying it, see [slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice).
 
 ##### Syntax
 
@@ -98,10 +100,7 @@ console.log( removed ); // output: []
 console.log( array );   // output: [ "a", "b", "c", "d" ]
 ```
 
-![mozilla-logo](/static/page-image-hosting/mozilla-logo.png)
+![example](/static/page-image-hosting/example.png)
 
-------
-
-
-
-# Next topic...
+> Image from [Cool Backgrounds](https://coolbackgrounds.io/).
+>

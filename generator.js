@@ -79,13 +79,13 @@ function translateMdToHtml( input, output ) {
         const font_en_bold_path = "./static/font/IBMPlexSerif-Medium.ttf";
         const font_core_path = "./static/font/FiraCode-Regular.ttf";
         const all_character_set = extractText( html );
-        const strong_character_set = extractText( html, [ "strong", "b" ] );
+        // const strong_character_set = extractText( html, [ "strong", "b" ] );
         const code_character_set = extractText( html, [ "code" ] );
 
         optimizeFont( font_zh_thin_path, mini_font_path, all_character_set );
         optimizeFont( font_en_thin_path, mini_font_path, all_character_set );
-        optimizeFont( font_zh_bold_path, mini_font_path, strong_character_set );
-        optimizeFont( font_en_bold_path, mini_font_path, strong_character_set );
+        optimizeFont( font_zh_bold_path, mini_font_path, all_character_set );
+        optimizeFont( font_en_bold_path, mini_font_path, all_character_set );
         optimizeFont( font_core_path, mini_font_path, code_character_set );
 
     }

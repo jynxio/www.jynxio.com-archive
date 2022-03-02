@@ -10,7 +10,8 @@ input {
     max-width: 100%;
     color: #ffffff;
     font-family: "IBM Plex Serif", "Noto Sans SC";
-    line-height: 1.65;
+    font-size: 18px;
+    line-height: 1.8;
 }
 
 b, strong {
@@ -25,30 +26,45 @@ code {
     font-family: "Fira Code", "Noto Sans SC";
 }
 
-h1, h2 {
-    font-size: 3em;
-}
-
 h1 {
-    font-size: bold;
+    /* color: #5773ff; */
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 6rem;
 }
 
-h3, h4 {
-    font-size: 2.25em;
+h2, h3, h4, h5, h6 {
+    color: #ffe100;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-top: 1.5rem;
 }
 
 h3 {
-    font-size: bold;
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+h4 {
+    font-size: 1rem;
 }
 
 h5, h6 {
-    font-size: 1.5em;
-    color: red;
+    font-size: 1rem;
+    font-weight: normal;
 }
 
-h5 {
-    font-size: bold;
-    color: blue;
+a, a > * {
+    color: #5773ff;
+}
+
+strong, strong > * {
+    color: #5773ff;
 }
 
 /* 布局 */
@@ -58,11 +74,11 @@ body {
 }
 
 header, main, footer {
-    padding: 0 calc( ( 100vw - 100vmin ) / 2 + 1.5em );
+    padding: 0 calc( ( 100vw - 100vmin ) / 2 );
 }
 
 header, footer {
-    height: 10em;
+    height: 10rem;
     background-color: #151c23;
 }
 
@@ -70,6 +86,45 @@ main {
     background-color: #0f141a;
 }
 
-pre, code {
+article {
+    padding: 8rem 2rem;
+}
+
+pre {
     overflow: auto;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    background-color: #151f28;
+}
+
+code {
+    padding: 0 0.5rem;
+    border-radius: 0.2rem;
+    background-color: #1f262e;
+}
+
+pre > code {
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+}
+
+img {
+    max-width: 100%;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+}
+
+blockquote {
+    padding: 1rem 2rem;
+    border-radius: 0.2rem;
+    background-color: #182635;
+}
+
+table, thead, tbody, tr {
+    display: block;
+}
+
+table, thead, tbody, tr, th, td {
+    border: 1px solid red;
 }
