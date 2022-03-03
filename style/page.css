@@ -1,3 +1,12 @@
+/* 全局变量 */
+/* ------------------------------------------------------------------------------------------------- */
+:root {
+    --text-color: #f2f5f7;
+    --heading-color: #ffe100;
+    --body-color: #151c23;
+    --article-width: 80vmin;
+}
+
 /* 字体 */
 /* ------------------------------------------------------------------------------------------------- */
 html, body,
@@ -9,11 +18,10 @@ ol, ul, li,
 pre, code,
 input {
     max-width: 100%;
-    color: #ffffff;
+    color: var( --text-color );
     font-family: "IBM Plex Serif", "Noto Sans SC";
     font-size: 17px;
     line-height: 1.5;
-    word-break: break-all;
 }
 
 b, strong {
@@ -37,7 +45,7 @@ h1 {
 }
 
 h2, h3, h4, h5, h6 {
-    color: #ffe100;
+    color: var( --heading-color );
     font-weight: bold;
 }
 
@@ -54,7 +62,6 @@ h4 {
 }
 
 h5, h6 {
-    font-size: 1rem;
     font-weight: normal;
 }
 
@@ -65,12 +72,11 @@ h1, h2, h3, h4, h5, h6, p, pre, ul, ol, table, img, blockquote, hr {
 /* 布局 */
 /* ------------------------------------------------------------------------------------------------- */
 body {
-    background-color: #151c23;
-    overflow-x: hidden;
+    background-color: var( --body-color );
 }
 
 header, main, footer {
-    padding: 0 calc( ( 100vw - 100vmin ) / 2 );
+    padding: 0 calc( ( 100vw - var( --article-width ) ) / 2 );
 }
 
 header, footer {
@@ -194,6 +200,9 @@ ol > li::before {
     font-weight: bold;
     content: counter( index )".";
     float: left;
-    margin-left: -1.5rem;
+    /* display: inline-block; */
+    /* margin-left: -1.5rem; */
     color: #5d72f6;
+    background-color: red;
+    line-height: 2;
 }
