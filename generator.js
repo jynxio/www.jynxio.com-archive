@@ -77,7 +77,7 @@ function translateMdToHtml( input, output ) {
         const font_zh_bold_path = "./static/font/NotoSansSC-Medium.ttf";
         const font_en_thin_path = "./static/font/IBMPlexSerif-ExtraLight.ttf";
         const font_en_bold_path = "./static/font/IBMPlexSerif-Medium.ttf";
-        const font_core_path = "./static/font/FiraCode-Regular.ttf";
+        const font_code_path = "./static/font/FiraCode-Light.ttf";
         const all_character_set = extractText( html );
         // const strong_character_set = extractText( html, [ "strong", "b" ] );
         const code_character_set = extractText( html, [ "code" ] );
@@ -86,7 +86,7 @@ function translateMdToHtml( input, output ) {
         optimizeFont( font_en_thin_path, mini_font_path, all_character_set );
         optimizeFont( font_zh_bold_path, mini_font_path, all_character_set );
         optimizeFont( font_en_bold_path, mini_font_path, all_character_set );
-        optimizeFont( font_core_path, mini_font_path, code_character_set );
+        optimizeFont( font_code_path, mini_font_path, code_character_set );
 
     }
 

@@ -51,7 +51,7 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Fira Code" ),
-        url( "/static/font/mini/FiraCode-Regular.woff2" ) format( "woff2" ),
-        url( "/static/font/mini/FiraCode-Regular.ttf" ) format( "truetype" );
+        url( "/static/font/mini/FiraCode-Light.woff2" ) format( "woff2" ),
+        url( "/static/font/mini/FiraCode-Light.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }

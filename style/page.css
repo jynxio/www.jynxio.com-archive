@@ -11,8 +11,9 @@ input {
     max-width: 100%;
     color: #ffffff;
     font-family: "IBM Plex Serif", "Noto Sans SC";
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 17px;
+    line-height: 1.5;
+    word-break: break-all;
 }
 
 b, strong {
@@ -27,14 +28,12 @@ code {
     font-family: "Fira Code", "Noto Sans SC";
 }
 
-/* 标题 */
+/* 标题与段落 */
 /* ------------------------------------------------------------------------------------------------- */
 h1 {
     font-size: 3rem;
     font-weight: bold;
     text-align: center;
-    line-height: 1;
-    margin-bottom: 6rem;
 }
 
 h2, h3, h4, h5, h6 {
@@ -44,12 +43,10 @@ h2, h3, h4, h5, h6 {
 
 h2 {
     font-size: 2rem;
-    margin-top: 1.5rem;
 }
 
 h3 {
     font-size: 1.5rem;
-    margin-top: 0.5rem;
 }
 
 h4 {
@@ -59,6 +56,10 @@ h4 {
 h5, h6 {
     font-size: 1rem;
     font-weight: normal;
+}
+
+h1, h2, h3, h4, h5, h6, p, pre, ul, ol, table, img, blockquote, hr {
+    margin-bottom: 1rem;
 }
 
 /* 布局 */
@@ -82,7 +83,7 @@ main {
 }
 
 article {
-    padding: 8rem 2rem;
+    padding: 5rem 2rem;
 }
 
 a, a > * {
@@ -97,13 +98,13 @@ pre {
     overflow: auto;
     padding: 1rem 2rem;
     border-radius: 0.5rem;
-    background-color: #151f28;
+    background-color: #182635;
 }
 
 code {
     padding: 0 0.5rem;
     border-radius: 0.2rem;
-    background-color: #151f28;
+    background-color: #182635;
 }
 
 pre > code {
@@ -112,16 +113,16 @@ pre > code {
 }
 
 img {
+    display: block;
     max-width: 100%;
-    margin: 1rem 0;
     border-radius: 0.5rem;
 }
 
 blockquote {
-    padding: 0.65rem 1rem;
+    padding: 1rem 1rem 1px 1rem;
     border-radius: 0.2rem;
     border-left: 0.25rem solid #5d72f6;
-    background-color: #151f28;
+    background-color: #182635;
 }
 
 blockquote * {
@@ -133,18 +134,17 @@ blockquote * {
 table {
     table-layout: fixed;
     width: 100%;
-    margin: 0.75rem 0;
-    border-top: 0.25rem solid #151f28;
-    border-bottom: 0.25rem solid #151f28;
+    border-top: 0.2rem solid #182635;
+    border-bottom: 0.2rem solid #182635;
     border-collapse: collapse;
 }
 
 table * {
-    line-height: 2.2;
+    line-height: 2;
 }
 
 table > thead {
-    border-bottom: 0.1rem solid #151f28;
+    border-bottom: 1px solid #182635;
 }
 
 th {
@@ -169,11 +169,31 @@ li {
     margin-left: 2rem;
 }
 
-li::before {
+ul > li::before {
     content: "";
     float: left;
-    width: 0.2rem;
-    height: 0.2rem;
+    width: 0.3rem;
+    height: 0.3rem;
+    border: 1px solid #5d72f6;
+    border-radius: 999rem;
+    margin: calc( ( 1.5rem - 0.3rem ) / 2 ) 0;
+    margin-left: -1rem;
     background-color: #5d72f6;
-    line-height: 1;
+}
+
+ol {
+    counter-reset: index;
+}
+
+ol > li {
+    counter-increment: index;
+}
+
+ol > li::before {
+    font-family: math;
+    font-weight: bold;
+    content: counter( index )".";
+    float: left;
+    margin-left: -1.5rem;
+    color: #5d72f6;
 }
