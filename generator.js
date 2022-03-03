@@ -4,6 +4,8 @@ const { marked } = require( "marked" );
 
 const Fontmin = require( "fontmin" );
 
+const { v4: uuidv4 } = require( "uuid" );
+
 /* ---------------------------------------------------------------------------- */
 translateMdToHtml( "./source/dev/example.md", "./pages/example.html" );
 
@@ -24,10 +26,32 @@ function translateMdToHtml( input, output ) {
 
     function onEnd() {
 
+        /* 配置marked */
+        const renderer = {
+            checkbox: is_checked => {
+
+                const id = uuidv4();
+                const checked = is_checked ? "checked" : "";
+
+                return `
+                    <span  class="checklabel">
+                        <input id=${ id } ${ checked } type="checkbox">
+                        <label for=${ id }></label>
+                    </span>
+                `;
+
+            },
+        };
+
+        marked.use( {
+            renderer,
+            headerIds: false,
+        } );
+
         let body = marked.parse( md );
 
         /* 剔除<h2 id="typora-root-url-*">标签，这是typora的生成图像路径功能产生的副作用 */
-        const extra_token = `<h2 id="typora-root-url-`;
+        const extra_token = `<h2>typora-root-url:`;
         const is_exit = body.includes( extra_token );
 
         if ( is_exit ) {
@@ -126,7 +150,7 @@ function optimizeFont( input, output, characters ) {
  *                               否则返回结果将只包含指定标签的内容。注意，1.不能输入自闭合标签；2.标签名称不区分大小写。
  * @returns {string} - 一个字符串，它包含了html文件中的所有标签的内容。
  */
- function extractText( input, nodes ) {
+function extractText( input, nodes ) {
 
     if ( !Array.isArray( nodes ) ) return core( input );
 

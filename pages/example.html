@@ -15,8 +15,8 @@
                 <main>
                     <nav></nav>
                     <article>
-        <h1 id="数据类型与标准内置对象">数据类型与标准内置对象</h1>
-<h2 id="数据类型">数据类型</h2>
+        <h1>数据类型与标准内置对象</h1>
+<h2>数据类型</h2>
 <p><a href="https://tc39.es/ecma262/">ECMAScript</a> 规定了 8 种基本的数据类型，其中有 7 种是 <strong>原始类型</strong>，1 种是 <strong>引用类型</strong>。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。</p>
 <p>下表罗列了所有的原始类型。</p>
 <table>
@@ -56,7 +56,7 @@
 </tr>
 </tbody></table>
 <p>引用类型只有一种，那就是 <code>Object</code> 。</p>
-<h2 id="标准内置对象">标准内置对象</h2>
+<h2>标准内置对象</h2>
 <blockquote>
 <p>Excerpted from <a href="https://developer.mozilla.org/"><strong>MDN Web Docs</strong></a>.</p>
 </blockquote>
@@ -77,25 +77,55 @@
 <li><p>......</p>
 </li>
 </ul>
-<h3 id="array">Array</h3>
+<h3>Array</h3>
 <p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
 <ul>
-<li><input checked="" disabled="" type="checkbox"> Chrome</li>
-<li><input checked="" disabled="" type="checkbox"> Edge</li>
-<li><input checked="" disabled="" type="checkbox"> FireFox</li>
-<li><input disabled="" type="checkbox"> Internet Explore</li>
-<li><input checked="" disabled="" type="checkbox"> Opera</li>
-<li><input checked="" disabled="" type="checkbox"> Safari</li>
+<li>
+                    <span  class="checklabel">
+                        <input id=c103e0b0-006e-4d2e-a50c-338224864307 checked type="checkbox">
+                        <label for=c103e0b0-006e-4d2e-a50c-338224864307></label>
+                    </span>
+                Chrome</li>
+<li>
+                    <span  class="checklabel">
+                        <input id=dfe4d3c2-75e1-4c76-b655-ecc3c0cd9ccb checked type="checkbox">
+                        <label for=dfe4d3c2-75e1-4c76-b655-ecc3c0cd9ccb></label>
+                    </span>
+                Edge</li>
+<li>
+                    <span  class="checklabel">
+                        <input id=755c3c2e-501c-463f-b4ea-caac2f8ea55e checked type="checkbox">
+                        <label for=755c3c2e-501c-463f-b4ea-caac2f8ea55e></label>
+                    </span>
+                FireFox</li>
+<li>
+                    <span  class="checklabel">
+                        <input id=6c40c0e4-106d-4fe1-ab90-59c741d4e88f  type="checkbox">
+                        <label for=6c40c0e4-106d-4fe1-ab90-59c741d4e88f></label>
+                    </span>
+                Internet Explore</li>
+<li>
+                    <span  class="checklabel">
+                        <input id=5d554ac2-6352-4604-962f-b619c8761c8e checked type="checkbox">
+                        <label for=5d554ac2-6352-4604-962f-b619c8761c8e></label>
+                    </span>
+                Opera</li>
+<li>
+                    <span  class="checklabel">
+                        <input id=1a030e7b-f263-430d-a9f7-a56a0d4664d4 checked type="checkbox">
+                        <label for=1a030e7b-f263-430d-a9f7-a56a0d4664d4></label>
+                    </span>
+                Safari</li>
 </ul>
-<h4 id="arrayprototypesplice">Array.prototype.splice</h4>
+<h4>Array.prototype.splice</h4>
 <p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
-<h5 id="syntax">Syntax</h5>
+<h5>Syntax</h5>
 <pre><code class="language-js">splice( start );
 splice( start, deleteCount );
 splice( start, deleteCount, item1 );
 splice( start, deleteCount, item1, item2, itemN );
 </code></pre>
-<h6 id="parameters">Parameters</h6>
+<h6>Parameters</h6>
 <ol>
 <li><p><code>start</code></p>
 <p>The index at which to start changing the array.</p>
@@ -112,11 +142,11 @@ splice( start, deleteCount, item1, item2, itemN );
 <p>If you do not specify any elements, <code>splice()</code> will only remove elements from the array.</p>
 </li>
 </ol>
-<h6 id="return-value">Return value</h6>
+<h6>Return value</h6>
 <p>An array containing the deleted elements.</p>
 <p>If only one element is removed, an array of one element is returned.</p>
 <p>If no elements are removed, an empty array is returned.</p>
-<h5 id="example">Example</h5>
+<h5>Example</h5>
 <pre><code class="language-js">/* 插入新元素&quot;b&quot; */
 const array = [ &quot;a&quot;, &quot;c&quot;, &quot;d&quot; ];
 const removed = array.splice( 1, 0, &quot;b&quot; )
