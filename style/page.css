@@ -4,7 +4,6 @@
     --text-color: #f2f5f7;
     --heading-color: #ffe100;
     --body-color: #151c23;
-    --header-footer-color: #151c23;
     --main-color: #0f141a;
     --focus-color: #5d72f6;
     --code-color: #182635;
@@ -93,7 +92,7 @@ header, main, footer {
 
 header, footer {
     height: 10rem;
-    background-color: var( --header-footer-color );
+    background-color: var( --body-color );
 }
 
 main {
@@ -189,7 +188,7 @@ li {
     margin-left: 2rem;
 }
 
-ul > li::before {
+ul > li:not(.checkli)::before { /* 无序列表 */
     --side-length: 0.2rem;
     content: "";
     float: left;
@@ -202,13 +201,11 @@ ul > li::before {
     background-color: var( --focus-color );
 }
 
-
-
 ol {
     counter-reset: index;
 }
 
-ol > li::before {
+ol > li::before { /* 有序列表 */
     counter-increment: index;
     content: counter( index, lower-alpha )".";
     float: left;
@@ -218,35 +215,24 @@ ol > li::before {
     font-weight: bold;
 }
 
-span.checklabel {
+ul > li > input[type="checkbox"] { /* 任务列表 */
+    display: none;
+}
+
+ul > li > input[type="checkbox"] + label {
     --side-length: calc( var( --line-height ) * 1rem );
-    display: inline-block;
-    position: relative;
+    --side-thickness: calc( var( --side-length ) * 0.165 );
+    float: left;
     width: var( --side-length );
     height: var( --side-length );
+    border: var( --side-thickness ) solid var( --focus-color );
+    margin-left: -1rem;
+    border-radius: 999rem;
+    font-size: 2rem;
+    text-align: center;
     vertical-align: bottom;
+    transform: scale( 50% );
 }
 
-span.checklabel > input,
-span.checklabel > label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    border: none;
-}
-
-span.checklabel > input {
-    visibility: hidden;
-}
-
-span.checklabel > input + label {
-    background-color: gray;
-}
-
-span.checklabel > input:checked + label {
-    background-color: red;
+ul > li > input[type="checkbox"]:checked + label {
 }

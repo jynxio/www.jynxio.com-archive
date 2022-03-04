@@ -33,12 +33,15 @@ function translateMdToHtml( input, output ) {
                 const id = uuidv4();
                 const checked = is_checked ? "checked" : "";
 
-                return `
-                    <span  class="checklabel">
-                        <input id=${ id } ${ checked } type="checkbox">
-                        <label for=${ id }></label>
-                    </span>
-                `;
+                return `<input id=${ id } ${ checked } type="checkbox"><label for=${ id }></label>`;
+
+            },
+            listitem: ( text_content, is_checkbox, is_checked ) => {
+
+                return ( is_checkbox
+                    ? `<li class="checkli">${ text_content }</li>`
+                    : `<li>${ text_content }</li>`
+                );
 
             },
         };

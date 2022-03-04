@@ -63,60 +63,16 @@
 <p>JavaScript 中有许多 <strong>标准内置对象</strong>，比如 <strong>可索引的集合对象</strong> 有：</p>
 <ul>
 <li><p>基本对象</p>
-</li>
-<li><p>数字和日期对象</p>
-</li>
-<li><p>可索引的集合对象</p>
+</li><li><p>数字和日期对象</p>
+</li><li><p>可索引的集合对象</p>
 <ul>
-<li><code>Array</code></li>
-<li><code>Int8Array</code></li>
-<li><code>Unit8Array</code></li>
-<li>......</li>
-</ul>
-</li>
-<li><p>......</p>
-</li>
-</ul>
+<li><code>Array</code></li><li><code>Int8Array</code></li><li><code>Unit8Array</code></li><li>......</li></ul>
+</li><li><p>......</p>
+</li></ul>
 <h3>Array</h3>
 <p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
 <ul>
-<li>
-                    <span  class="checklabel">
-                        <input id=c103e0b0-006e-4d2e-a50c-338224864307 checked type="checkbox">
-                        <label for=c103e0b0-006e-4d2e-a50c-338224864307></label>
-                    </span>
-                Chrome</li>
-<li>
-                    <span  class="checklabel">
-                        <input id=dfe4d3c2-75e1-4c76-b655-ecc3c0cd9ccb checked type="checkbox">
-                        <label for=dfe4d3c2-75e1-4c76-b655-ecc3c0cd9ccb></label>
-                    </span>
-                Edge</li>
-<li>
-                    <span  class="checklabel">
-                        <input id=755c3c2e-501c-463f-b4ea-caac2f8ea55e checked type="checkbox">
-                        <label for=755c3c2e-501c-463f-b4ea-caac2f8ea55e></label>
-                    </span>
-                FireFox</li>
-<li>
-                    <span  class="checklabel">
-                        <input id=6c40c0e4-106d-4fe1-ab90-59c741d4e88f  type="checkbox">
-                        <label for=6c40c0e4-106d-4fe1-ab90-59c741d4e88f></label>
-                    </span>
-                Internet Explore</li>
-<li>
-                    <span  class="checklabel">
-                        <input id=5d554ac2-6352-4604-962f-b619c8761c8e checked type="checkbox">
-                        <label for=5d554ac2-6352-4604-962f-b619c8761c8e></label>
-                    </span>
-                Opera</li>
-<li>
-                    <span  class="checklabel">
-                        <input id=1a030e7b-f263-430d-a9f7-a56a0d4664d4 checked type="checkbox">
-                        <label for=1a030e7b-f263-430d-a9f7-a56a0d4664d4></label>
-                    </span>
-                Safari</li>
-</ul>
+<li class="checkli"><input id=f6e46916-5632-4fd8-9abf-d0f08452b95c checked type="checkbox"><label for=f6e46916-5632-4fd8-9abf-d0f08452b95c>√</label>Chrome</li><li class="checkli"><input id=1620604e-bdab-4087-b52b-93f2f301ba3e checked type="checkbox"><label for=1620604e-bdab-4087-b52b-93f2f301ba3e></label>Edge</li><li class="checkli"><input id=2e5220c9-12cb-47c7-8eb9-d36e75aba1cd checked type="checkbox"><label for=2e5220c9-12cb-47c7-8eb9-d36e75aba1cd></label>FireFox</li><li class="checkli"><input id=3597d6de-9391-4fd0-872a-c3a151d8bba8  type="checkbox"><label for=3597d6de-9391-4fd0-872a-c3a151d8bba8></label>Internet Explore</li><li class="checkli"><input id=fcdb468c-0e3a-45ca-9b39-8ec6902fb4e0 checked type="checkbox"><label for=fcdb468c-0e3a-45ca-9b39-8ec6902fb4e0></label>Opera</li><li class="checkli"><input id=4d3006a8-cb48-4bc1-be45-eb457eb0dfea checked type="checkbox"><label for=4d3006a8-cb48-4bc1-be45-eb457eb0dfea></label>Safari</li></ul>
 <h4>Array.prototype.splice</h4>
 <p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
 <h5>Syntax</h5>
@@ -131,17 +87,14 @@ splice( start, deleteCount, item1, item2, itemN );
 <p>The index at which to start changing the array.</p>
 <p>If greater than the length of the array, <code>start</code> will be set to the length of the array. In this case, no element will be deleted but the method will behave as an adding function, adding as many elements as items provided.</p>
 <p>If negative, it will begin that many elements from the end of the array. (In this case, the origin <code>-1</code>, meaning <code>-n</code> is the index of the <code>n</code>th last element, and is therefore equivalent to the index of <code>array.length - n</code>.) If <code>start</code> is <code>negative infinity</code>, it will begin from index <code>0</code>.</p>
-</li>
-<li><p><code>deleteCount</code>(<strong>Optional</strong>)</p>
+</li><li><p><code>deleteCount</code>(<strong>Optional</strong>)</p>
 <p>An integer indicating the number of elements in the array to remove from <code>start</code>.</p>
 <p>If <code>deleteCount</code> is omitted, or if its value is equal to or larger than <code>array.length - start</code> (that is, if it is equal to or greater than the number of elements left in the array, starting at <code>start</code>), then all the elements from <code>start</code> to the end of the array will be deleted. However, it must not be omitted if there is any <code>item1</code> parameter.</p>
 <p>If <code>deleteCount</code> is <code>0</code> or negative, no elements are removed. In this case, you should specify at least one new element (see below).</p>
-</li>
-<li><p><code>item1, item2, ...</code>(<strong>Optional</strong>)</p>
+</li><li><p><code>item1, item2, ...</code>(<strong>Optional</strong>)</p>
 <p>The elements to add to the array, beginning from <code>start</code>.</p>
 <p>If you do not specify any elements, <code>splice()</code> will only remove elements from the array.</p>
-</li>
-</ol>
+</li></ol>
 <h6>Return value</h6>
 <p>An array containing the deleted elements.</p>
 <p>If only one element is removed, an array of one element is returned.</p>
