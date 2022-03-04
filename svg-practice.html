@@ -21,10 +21,31 @@
 </head>
 <body>
     <svg width="100px" height="100px" version="1.1">
+        <defs>
+            <filter id="shadow" x="0" y="0" width="200%" height="200%">
+                <feOffset result="offOut" in="SourceAlpha" dx="20" dy="20" />
+                <feGaussianBlur result="blurOut" in="offOut" stdDeviation="10" />
+                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+            </filter>
+        </defs>
         <path
             d="
+                M25 55
+                L50 80
+                L100 20
                 M50 50
             "
+            fill="transparent"
+            stroke="#5d72f6"
+            stroke-width="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            filter="url(#shadow)"
+        />
+        <circle
+            cx="50"
+            cy="50"
+            r="35"
             fill="transparent"
             stroke="#5d72f6"
             stroke-width="10"
