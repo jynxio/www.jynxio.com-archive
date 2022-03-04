@@ -199,7 +199,7 @@ ul > li:not(.check-li)::before {
     --thickness: calc( var( --icon-side-length ) * 0.25 );
     --padding: calc( ( var( --icon-side-length ) - var( --thickness ) ) / 2 );
     content: "";
-    float: left;
+    float: left; // TODO
     width: var( --thickness );
     height: var( --thickness );
     padding: var( --padding );
