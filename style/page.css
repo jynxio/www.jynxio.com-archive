@@ -7,7 +7,7 @@
     --main-color: #0f141a;
     --focus-color: #5d72f6;
     --code-color: #182635;
-    --article-width: 80vmin;
+    --article-width: 90vmin;
     --line-height: 1.5;
 }
 
@@ -26,6 +26,7 @@ input {
     font-family: "IBM Plex Serif", "Noto Sans SC";
     font-size: 17px;
     line-height: var( --line-height );
+    overflow-wrap: break-word;
 }
 
 b, strong {
@@ -113,7 +114,10 @@ strong, strong > * {
 
 pre {
     overflow: auto;
-    padding: 1rem 2rem;
+    border-top: 1rem solid var( --code-color );
+    border-right: 2rem solid var( --code-color );
+    border-bottom: 1rem solid var( --code-color );
+    border-left: 2rem solid var( --code-color );
     border-radius: 0.5rem;
     background-color: var( --code-color );
 }
@@ -185,54 +189,76 @@ tr > td:last-child {
 /* 列表 */
 /* ------------------------------------------------------------------------------------------------- */
 li {
+    --icon-side-length: calc( var( --line-height ) * 1rem );
+    --icon-margin-left: calc( var( --icon-side-length ) * -1 );
     margin-left: 2rem;
 }
 
-ul > li:not(.checkli)::before { /* 无序列表 */
-    --side-length: 0.2rem;
+/* 无序列表 */
+ul > li:not(.check-li)::before {
+    --thickness: calc( var( --icon-side-length ) * 0.25 );
+    --padding: calc( ( var( --icon-side-length ) - var( --thickness ) ) / 2 );
     content: "";
     float: left;
-    width: var( --side-length );
-    height: var( --side-length );
-    border: 1px solid var( --focus-color );
+    width: var( --thickness );
+    height: var( --thickness );
+    padding: var( --padding );
     border-radius: 999rem;
-    margin: calc( ( var( --line-height ) * 1rem - var( --side-length ) ) / 2 ) 0;
-    margin-left: -1rem;
+    margin-left: var( --icon-margin-left );
     background-color: var( --focus-color );
+    /* transform: scale( 25% ); */
 }
 
 ol {
     counter-reset: index;
 }
 
-ol > li::before { /* 有序列表 */
+/* 有序列表 */
+ol > li::before {
     counter-increment: index;
     content: counter( index, lower-alpha )".";
     float: left;
-    margin-left: -1.5rem;
+    width: var( --icon-side-length );
+    height: var( --icon-side-length );
+    margin-left: var( --icon-margin-left );
     color: var( --focus-color );
     font-family: monospace;
     font-weight: bold;
+    text-align: center;
+    line-height: var( --icon-side-length );
 }
 
-ul > li > input[type="checkbox"] { /* 任务列表 */
+/* 任务列表 */
+ul > li > input[type="checkbox"] {
     display: none;
 }
 
 ul > li > input[type="checkbox"] + label {
-    --side-length: calc( var( --line-height ) * 1rem );
-    --side-thickness: calc( var( --side-length ) * 0.165 );
     float: left;
-    width: var( --side-length );
-    height: var( --side-length );
-    border: var( --side-thickness ) solid var( --focus-color );
-    margin-left: -1rem;
-    border-radius: 999rem;
-    font-size: 2rem;
-    text-align: center;
-    vertical-align: bottom;
-    transform: scale( 50% );
+    width: var( --icon-side-length );
+    height: var( --icon-side-length );
+    margin-left: var( --icon-margin-left );
+    transform: scale( 60% );
 }
 
-ul > li > input[type="checkbox"]:checked + label {
+ul > li > input[type="checkbox"] + label:hover {
+    cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+ul > li > input[type="checkbox"] + label > svg {
+    color: var( --code-color );
+}
+
+ul > li > input[type="checkbox"]:checked + label > svg {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    color: var( --focus-color );
 }
