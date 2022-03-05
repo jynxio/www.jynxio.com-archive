@@ -28,6 +28,13 @@ function translateMdToHtml( input, output ) {
 
         /* 配置marked */
         const renderer = {
+            heading: ( content, level ) => {
+
+                if ( content.search( /typora-root-url:/ ) > -1 ) return "";
+
+                return `<h${ level }>${ content }</h${ level }>`;
+
+            },
             checkbox: is_checked => {
 
                 const id = uuidv4();
@@ -38,14 +45,15 @@ function translateMdToHtml( input, output ) {
                 return `<input id=${ id } ${ checked } type="checkbox"><label for=${ id }>${ checkbox_svg_square }</label>`;
 
             },
-            listitem: ( text_content, is_checkbox, is_checked ) => {
+            listitem: ( content, is_checkbox, is_checked ) => {
 
                 return ( is_checkbox
-                    ? `<li class="check-li">${ text_content }</li>`
-                    : `<li>${ text_content }</li>`
+                    ? `<li class="check-li">${ content }</li>`
+                    : `<li>${ content }</li>`
                 );
 
             },
+            hr: _ => "", // 禁用分割线。
         };
 
         marked.use( {
@@ -54,19 +62,6 @@ function translateMdToHtml( input, output ) {
         } );
 
         let body = marked.parse( md );
-
-        /* 剔除<h2 id="typora-root-url-*">标签，这是typora的生成图像路径功能产生的副作用 */
-        const extra_token = `<h2>typora-root-url:`;
-        const is_exit = body.includes( extra_token );
-
-        if ( is_exit ) {
-
-            const index = body.indexOf( extra_token );
-            const begin = body.indexOf( "</h2>", index ) + 6;
-
-            body = body.slice( begin );
-
-        }
 
         /* 生成html字符串 */
         const header = `

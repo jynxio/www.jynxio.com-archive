@@ -24,7 +24,7 @@ input {
     max-width: 100%;
     color: var( --text-color );
     font-family: "IBM Plex Serif", "Noto Sans SC";
-    font-size: 17px;
+    font-size: 17px; // TODO
     line-height: var( --line-height );
     overflow-wrap: break-word;
 }
@@ -51,9 +51,11 @@ code {
 /* 标题与段落 */
 /* ------------------------------------------------------------------------------------------------- */
 h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
+    color: var( --text-color );
+    letter-spacing: 0.5rem;
 }
 
 h2, h3, h4, h5, h6 {
@@ -196,17 +198,15 @@ li {
 
 /* 无序列表 */
 ul > li:not(.check-li)::before {
-    --thickness: calc( var( --icon-side-length ) * 0.25 );
-    --padding: calc( ( var( --icon-side-length ) - var( --thickness ) ) / 2 );
     content: "";
     float: left;
-    width: var( --thickness );
-    height: var( --thickness );
+    width: var( --icon-side-length );
+    height: var( --icon-side-length );
     padding: var( --padding );
     border-radius: 999rem;
     margin-left: var( --icon-margin-left );
     background-color: var( --focus-color );
-    /* transform: scale( 25% ); */ // TODO
+    transform: scale( 0.25 );
 }
 
 ol {
@@ -238,7 +238,7 @@ ul > li > input[type="checkbox"] + label {
     width: var( --icon-side-length );
     height: var( --icon-side-length );
     margin-left: var( --icon-margin-left );
-    transform: scale( 60% );
+    transform: scale( 0.6 );
 }
 
 ul > li > input[type="checkbox"] + label:hover {
