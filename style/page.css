@@ -199,14 +199,14 @@ ul > li:not(.check-li)::before {
     --thickness: calc( var( --icon-side-length ) * 0.25 );
     --padding: calc( ( var( --icon-side-length ) - var( --thickness ) ) / 2 );
     content: "";
-    float: left; // TODO
+    float: left;
     width: var( --thickness );
     height: var( --thickness );
     padding: var( --padding );
     border-radius: 999rem;
     margin-left: var( --icon-margin-left );
     background-color: var( --focus-color );
-    /* transform: scale( 25% ); */
+    /* transform: scale( 25% ); */ // TODO
 }
 
 ol {
