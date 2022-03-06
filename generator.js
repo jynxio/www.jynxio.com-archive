@@ -39,8 +39,8 @@ function translateMdToHtml( input, output ) {
 
                 const id = uuidv4();
                 const checked = is_checked ? "checked" : "";
-                const checkbox_svg_circle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-                const checkbox_svg_square = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
+                const checkbox_svg_circle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+                const checkbox_svg_square = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
 
                 return `<input id=${ id } ${ checked } type="checkbox"><label for=${ id }>${ checkbox_svg_square }</label>`;
 
@@ -77,16 +77,12 @@ function translateMdToHtml( input, output ) {
                 <link rel="stylesheet" href="/style/page.css">
             </head>
             <body>
-                <header></header>
-                <main>
-                    <nav></nav>
-                    <article>
+                    <nav id="home">HOME PAGE<svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg></nav>
+                    <nav id="catalog"></nav>
+                    <main>
         `;
         const footer = `
-                    </article>
-                    <nav></nav>
-                </main>
-                <footer></footer>
+                    </main>
             </body>
             </html>
         `;

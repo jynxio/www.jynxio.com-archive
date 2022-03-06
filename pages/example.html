@@ -11,10 +11,9 @@
                 <link rel="stylesheet" href="/style/page.css">
             </head>
             <body>
-                <header></header>
-                <main>
-                    <nav></nav>
-                    <article>
+                    <nav id="home">HOME PAGE<svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg></nav>
+                    <nav id="catalog"></nav>
+                    <main>
         <h1>数据类型与标准内置对象</h1><h2>数据类型</h2><p><a href="https://tc39.es/ecma262/">ECMAScript</a> 规定了 8 种基本的数据类型，其中有 7 种是 <strong>原始类型</strong>，1 种是 <strong>引用类型</strong>。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。</p>
 <p>下表罗列了所有的原始类型。</p>
 <table>
@@ -59,16 +58,12 @@
 </blockquote>
 <p>JavaScript 中有许多 <strong>标准内置对象</strong>，比如 <strong>可索引的集合对象</strong> 有：</p>
 <ul>
-<li><p>基本对象</p>
-</li><li><p>数字和日期对象</p>
-</li><li><p>可索引的集合对象</p>
-<ul>
+<li>基本对象</li><li>数字和日期对象</li><li>可索引的集合对象<ul>
 <li><code>Array</code></li><li><code>Int8Array</code></li><li><code>Unit8Array</code></li><li>......</li></ul>
-</li><li><p>......</p>
-</li></ul>
+</li><li>......</li></ul>
 <h3>Array</h3><p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
 <ul>
-<li class="check-li"><input id=f8588e99-4081-4a11-9740-4e15fe9d097a checked type="checkbox"><label for=f8588e99-4081-4a11-9740-4e15fe9d097a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Chrome</li><li class="check-li"><input id=4f78d38e-8ab0-4b99-99c2-0c64b8563602 checked type="checkbox"><label for=4f78d38e-8ab0-4b99-99c2-0c64b8563602><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Edge</li><li class="check-li"><input id=e7e4bb64-e220-43a5-929c-d78b85e6fa26 checked type="checkbox"><label for=e7e4bb64-e220-43a5-929c-d78b85e6fa26><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>FireFox</li><li class="check-li"><input id=1a826ed4-b3b8-4528-a3aa-f78d09048dbb  type="checkbox"><label for=1a826ed4-b3b8-4528-a3aa-f78d09048dbb><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Internet Explore</li><li class="check-li"><input id=456de174-20b2-4ef8-be38-6df6ad3b1d6c checked type="checkbox"><label for=456de174-20b2-4ef8-be38-6df6ad3b1d6c><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Opera</li><li class="check-li"><input id=0b333378-6e4e-4747-af74-b0a0c4fb17ef checked type="checkbox"><label for=0b333378-6e4e-4747-af74-b0a0c4fb17ef><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Safari</li></ul>
+<li class="check-li"><input id=539b6189-3583-4b01-a2a6-969de563849a checked type="checkbox"><label for=539b6189-3583-4b01-a2a6-969de563849a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Chrome</li><li class="check-li"><input id=2531b1b8-328b-4b23-8f09-4017c50f3501 checked type="checkbox"><label for=2531b1b8-328b-4b23-8f09-4017c50f3501><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Edge</li><li class="check-li"><input id=2afe5104-a71c-45ba-9cac-d8ea1fdcc35c checked type="checkbox"><label for=2afe5104-a71c-45ba-9cac-d8ea1fdcc35c><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>FireFox</li><li class="check-li"><input id=525cd0e2-ad9c-4962-aaa9-934b20f4b137  type="checkbox"><label for=525cd0e2-ad9c-4962-aaa9-934b20f4b137><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Internet Explore</li><li class="check-li"><input id=5a89da40-7660-4957-a615-8bde3e1db51d checked type="checkbox"><label for=5a89da40-7660-4957-a615-8bde3e1db51d><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Opera</li><li class="check-li"><input id=f0abb8d8-6da9-4597-a728-4eba4c1b59c8 checked type="checkbox"><label for=f0abb8d8-6da9-4597-a728-4eba4c1b59c8><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Safari</li></ul>
 <h4>Array.prototype.splice</h4><p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
 <h5>Syntax</h5><pre><code class="language-js">splice( start );
 splice( start, deleteCount );
@@ -84,6 +79,10 @@ splice( start, deleteCount, item1, item2, itemN );
 <p>An integer indicating the number of elements in the array to remove from <code>start</code>.</p>
 <p>If <code>deleteCount</code> is omitted, or if its value is equal to or larger than <code>array.length - start</code> (that is, if it is equal to or greater than the number of elements left in the array, starting at <code>start</code>), then all the elements from <code>start</code> to the end of the array will be deleted. However, it must not be omitted if there is any <code>item1</code> parameter.</p>
 <p>If <code>deleteCount</code> is <code>0</code> or negative, no elements are removed. In this case, you should specify at least one new element (see below).</p>
+<ol>
+<li>2.1</li><li>2.2</li><li>2.3<ol>
+<li>2.3.1</li><li>2.3.2</li><li>2.3.3</li></ol>
+</li></ol>
 </li><li><p><code>item1, item2, ...</code>(<strong>Optional</strong>)</p>
 <p>The elements to add to the array, beginning from <code>start</code>.</p>
 <p>If you do not specify any elements, <code>splice()</code> will only remove elements from the array.</p>
@@ -103,10 +102,7 @@ console.log( array );   // output: [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot;
 <p>Image from <a href="https://coolbackgrounds.io/">Cool Backgrounds</a>.</p>
 </blockquote>
 
-                    </article>
-                    <nav></nav>
-                </main>
-                <footer></footer>
+                    </main>
             </body>
             </html>
         

@@ -1,66 +1,98 @@
-/* 全局变量 */
+/* 变量 */
 /* ------------------------------------------------------------------------------------------------- */
 :root {
+    --background--color: #101419;
+    --code-background-color: #182635;
+    --h23456-color: #ffe100;
     --text-color: #f2f5f7;
-    --heading-color: #ffe100;
-    --body-color: #151c23;
-    --main-color: #0f141a;
     --focus-color: #5d72f6;
-    --code-color: #182635;
-    --article-width: 90vmin;
+    --main-width: 100vmin;
     --line-height: 1.5;
 }
 
 /* 字体 */
 /* ------------------------------------------------------------------------------------------------- */
-html, body,
-header, main, footer, article, nav
+html, body, main, nav,
 h1, h2, h3, h4, h5, h6, p, a, b, strong,
 table, thead, tbody, th, tr, td,
-blockquote, hr,
+blockquote,
 ol, ul, li,
 pre, code,
 input {
     max-width: 100%;
     color: var( --text-color );
     font-family: "IBM Plex Serif", "Noto Sans SC";
-    font-size: 17px; // TODO
     line-height: var( --line-height );
     overflow-wrap: break-word;
 }
 
-b, strong {
+svg {
+    line-height: 1;
+}
+
+/* 布局 */
+/* ------------------------------------------------------------------------------------------------- */
+body, main {
+    background-color: var( --background--color );
+}
+
+main {
+    width: var( --main-width );
+    padding: 5rem 1rem 2.5rem 1rem;
+    margin: 0 auto;
+}
+
+nav {
+    position: fixed;
+    top: 50%;
+}
+
+nav#home {
+    left: calc( ( 50vw - var( --main-width ) / 2 ) / 2 );
+    color: var( --focus-color );
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    transform: translate( -50%, -50% );
+    transition: opacity 100ms ease-out;
+    opacity: 0.2;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+nav#home > svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+nav#home:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+nav#catalog {
+    right: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p, pre, ul, ol, table, img, blockquote {
+    margin-bottom: 1rem;
+}
+
+/* 标题 */
+/* ------------------------------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+    color: var( --h23456-color );
     font-weight: bold;
 }
 
-pre {
-    font-weight: normal;
-}
-
-code {
-    font-family: "Fira Code", "Noto Sans SC";
-}
-
-::selection {
-    color: var( --text-color );
-    background-color: var( --focus-color );
-}
-
-
-
-/* 标题与段落 */
-/* ------------------------------------------------------------------------------------------------- */
 h1 {
     font-size: 2.5rem;
-    font-weight: bold;
     text-align: center;
     color: var( --text-color );
     letter-spacing: 0.5rem;
-}
-
-h2, h3, h4, h5, h6 {
-    color: var( --heading-color );
-    font-weight: bold;
 }
 
 h2 {
@@ -76,58 +108,28 @@ h4 {
 }
 
 h5, h6 {
+    font-size: 1rem;
     font-weight: normal;
 }
 
-h1, h2, h3, h4, h5, h6, p, pre, ul, ol, table, img, blockquote, hr {
-    margin-bottom: 1rem;
-}
-
-/* 布局 */
+/* 代码块 */
 /* ------------------------------------------------------------------------------------------------- */
-body {
-    background-color: var( --body-color );
-}
-
-header, main, footer {
-    padding: 0 calc( ( 100vw - var( --article-width ) ) / 2 );
-}
-
-header, footer {
-    height: 10rem;
-    background-color: var( --body-color );
-}
-
-main {
-    background-color: var( --main-color );
-}
-
-article {
-    padding: 5rem 2rem;
-}
-
-a, a > * {
-    color: var( --focus-color );
-}
-
-strong, strong > * {
-    color: var( --focus-color );
-}
-
 pre {
     overflow: auto;
-    border-top: 1rem solid var( --code-color );
-    border-right: 2rem solid var( --code-color );
-    border-bottom: 1rem solid var( --code-color );
-    border-left: 2rem solid var( --code-color );
+    border-top: 1rem solid var( --code-background-color );
+    border-right: 2rem solid var( --code-background-color );
+    border-bottom: 1rem solid var( --code-background-color );
+    border-left: 2rem solid var( --code-background-color );
     border-radius: 0.5rem;
-    background-color: var( --code-color );
+    background-color: var( --code-background-color );
+    font-weight: normal;
 }
 
 code {
     padding: 0 0.5rem;
     border-radius: 0.2rem;
-    background-color: var( --code-color );
+    background-color: var( --code-background-color );
+    font-family: "Fira Code", "Noto Sans SC";
 }
 
 pre > code {
@@ -135,21 +137,46 @@ pre > code {
     border-radius: 0;
 }
 
-img {
-    display: block;
-    max-width: 100%;
-    border-radius: 0.5rem;
+/* 超链接与粗体 */
+/* ------------------------------------------------------------------------------------------------- */
+a, a > *,
+b, b > *,
+strong, strong > * {
+    color: var( --focus-color );
 }
 
+b, strong {
+    font-weight: bold;
+}
+
+/* 引用块 */
+/* ------------------------------------------------------------------------------------------------- */
 blockquote {
     padding: 1rem 1rem 1px 1rem;
     border-radius: 0.25rem;
     border-left: 0.35rem solid var( --focus-color );
-    background-color: var( --code-color );
+    background-color: var( --code-background-color );
+    font-size: 0.8rem;
 }
 
 blockquote * {
     font-size: 0.8rem;
+}
+
+/* 图像 */
+/* ------------------------------------------------------------------------------------------------- */
+img {
+    display: block;
+    max-width: 100%;
+    border-radius: 0.5rem;
+    margin: 0 auto;
+}
+
+/* 选中 */
+/* ------------------------------------------------------------------------------------------------- */
+::selection {
+    color: var( --text-color );
+    background-color: var( --focus-color );
 }
 
 /* 表格 */
@@ -159,8 +186,8 @@ table {
     --thin-border: calc( var( --bold-border ) / 4 );
     table-layout: fixed;
     width: 100%;
-    border-top: var( --bold-border ) solid var( --code-color );
-    border-bottom: var( --bold-border ) solid var( --code-color );
+    border-top: var( --bold-border ) solid var( --code-background-color );
+    border-bottom: var( --bold-border ) solid var( --code-background-color );
     border-collapse: collapse;
 }
 
@@ -169,7 +196,7 @@ table * {
 }
 
 table > thead {
-    border-bottom: var( --thin-border ) solid var( --code-color );
+    border-bottom: var( --thin-border ) solid var( --code-background-color );
 }
 
 th {
@@ -191,41 +218,43 @@ tr > td:last-child {
 /* 列表 */
 /* ------------------------------------------------------------------------------------------------- */
 li {
-    --icon-side-length: calc( var( --line-height ) * 1rem );
-    --icon-margin-left: calc( var( --icon-side-length ) * -1 );
+    position: relative;
     margin-left: 2rem;
 }
 
 /* 无序列表 */
 ul > li:not(.check-li)::before {
+    --side-length: calc( 1rem * var( --line-height ) * 0.25 );
     content: "";
-    float: left;
-    width: var( --icon-side-length );
-    height: var( --icon-side-length );
-    padding: var( --padding );
+    position: absolute;
+    top: calc( 1rem * var( --line-height ) / 2 );
+    left: 0;
+    width: var( --side-length );
+    height: var( --side-length );
+    margin-left: -0.5rem;
     border-radius: 999rem;
-    margin-left: var( --icon-margin-left );
     background-color: var( --focus-color );
-    transform: scale( 0.25 );
+    transform: translate( -100%, -50% );
 }
 
+/* 有序列表 */
 ol {
     counter-reset: index;
 }
 
-/* 有序列表 */
 ol > li::before {
+    --height: calc( 1rem * var( --line-height ) );
     counter-increment: index;
-    content: counter( index, lower-alpha )".";
-    float: left;
-    width: var( --icon-side-length );
-    height: var( --icon-side-length );
-    margin-left: var( --icon-margin-left );
+    content: counters( index, "." ) ".";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: var( --height );
+    margin-left: -0.5rem;
     color: var( --focus-color );
-    font-family: monospace;
     font-weight: bold;
-    text-align: center;
-    line-height: var( --icon-side-length );
+    line-height: var( --height );
+    transform: translateX( -100% );
 }
 
 /* 任务列表 */
@@ -234,26 +263,33 @@ ul > li > input[type="checkbox"] {
 }
 
 ul > li > input[type="checkbox"] + label {
-    float: left;
-    width: var( --icon-side-length );
-    height: var( --icon-side-length );
-    margin-left: var( --icon-margin-left );
-    transform: scale( 0.6 );
-}
-
-ul > li > input[type="checkbox"] + label:hover {
-    cursor: pointer;
+    --side-length: calc( 1rem * var( --line-height ) * 0.6 );
+    position: absolute;
+    top: calc( 1rem * var( --line-height ) / 2 );
+    left: 0;
+    width: var( --side-length );
+    height: var( --side-length );
+    margin-left: -0.5rem;
+    line-height: 1;
+    opacity: 0.2;
+    transform: translate( -100%, -50% );
+    transition: opacity 100ms ease-out;
     user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
 }
 
-ul > li > input[type="checkbox"] + label > svg {
-    color: var( --code-color );
+ul > li > input[type="checkbox"] + label:hover {
+    opacity: 0.4;
+    cursor: pointer;
 }
 
-ul > li > input[type="checkbox"]:checked + label > svg {
+ul > li > input[type="checkbox"]:checked + label {
+    opacity: 1;
+}
+
+ul > li > input[type="checkbox"] + label > svg {
     width: 100%;
     height: 100%;
     padding: 0;
