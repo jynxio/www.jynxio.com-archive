@@ -77,7 +77,7 @@ nav#catalog {
     right: 0;
 }
 
-h1, h2, h3, h4, h5, h6, p, pre, ul, ol, table, img, blockquote {
+h1, h2, h3, h4, h5, h6, p, pre, ul, ol, li, table, img, blockquote {
     margin-bottom: 1rem;
 }
 
