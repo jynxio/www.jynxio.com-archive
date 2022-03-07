@@ -1,20 +1,36 @@
 
             <!DOCTYPE html>
             <html lang="zh-CN">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title></title>
-                <link rel="stylesheet" href="/style/font.css">
-                <link rel="stylesheet" href="/style/resize.css">
-                <link rel="stylesheet" href="/style/page.css">
-            </head>
-            <body>
-                    <nav id="home">HOME PAGE<svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg></nav>
-                    <nav id="catalog"><div class="catalog-caption">IN THIS ARTICLE</div><div class="catalog-row level-1">数据类型</div><div class="catalog-row level-1">标准内置对象</div><div class="catalog-row level-2">Array</div><div class="catalog-row level-3">Array.prototype.splice</div><div class="catalog-row level-4">Syntax</div><div class="catalog-row level-5">Parameters</div><div class="catalog-row level-5">Return value</div><div class="catalog-row level-4">Example</div></nav>
-                    <main>
-        <h1>数据类型与标准内置对象</h1><h2>数据类型</h2><p><a href="https://tc39.es/ecma262/">ECMAScript</a> 规定了 8 种基本的数据类型，其中有 7 种是 <strong>原始类型</strong>，1 种是 <strong>引用类型</strong>。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。</p>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Sample Document</title>
+                    <link rel="stylesheet" href="/style/resize.css">
+                    <link rel="stylesheet" href="/style/font.css">
+                    <link rel="stylesheet" href="/style/article-page.css">
+                </head>
+                <body>
+                    <section id="sidebar">
+                        <nav class="home-button">
+                            <p>HOME PAGE</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
+                        </nav>
+                        <nav class="catalog-content">
+                            <p>IN THIS ARTICLE</p>
+                            <p data-level="1"><a href="#8c77db0f-4d17-4c26-99f4-2759ce720f21">数据类型</a></p><p data-level="1"><a href="#5ce41547-04a6-4d9d-b34b-70f7c046b131">标准内置对象</a></p><p data-level="2"><a href="#7bd7c11a-e5ae-4403-b662-006896e72ef4">Array</a></p><p data-level="3"><a href="#8bce625a-0023-4370-838a-a4979f6aa6e0">Array.prototype.splice</a></p><p data-level="4"><a href="#3940c6ec-8b96-4599-bb09-d3d7ba6285fa">Syntax</a></p><p data-level="5"><a href="#0e182358-c0ad-4d62-96e1-fb98271c8f20">Parameters</a></p><p data-level="5"><a href="#f6f4bd2d-b950-453a-b71d-fe550b7ab455">Return value</a></p><p data-level="4"><a href="#b4247fa8-6567-490f-a888-dfdb83638ff2">Example</a></p>
+                        </nav>
+                    </section>
+                    <section id="bottombar">
+                        <nav class="home-button"></nav>
+                        <nav class="title-mark"></nav>
+                        <nav class="catalog-button"></nav>
+                        <nav class="catalog-content">
+                            <p>IN THIS ARTICLE</p>
+                            <p data-level="1"><a href="#8c77db0f-4d17-4c26-99f4-2759ce720f21">数据类型</a></p><p data-level="1"><a href="#5ce41547-04a6-4d9d-b34b-70f7c046b131">标准内置对象</a></p><p data-level="2"><a href="#7bd7c11a-e5ae-4403-b662-006896e72ef4">Array</a></p><p data-level="3"><a href="#8bce625a-0023-4370-838a-a4979f6aa6e0">Array.prototype.splice</a></p><p data-level="4"><a href="#3940c6ec-8b96-4599-bb09-d3d7ba6285fa">Syntax</a></p><p data-level="5"><a href="#0e182358-c0ad-4d62-96e1-fb98271c8f20">Parameters</a></p><p data-level="5"><a href="#f6f4bd2d-b950-453a-b71d-fe550b7ab455">Return value</a></p><p data-level="4"><a href="#b4247fa8-6567-490f-a888-dfdb83638ff2">Example</a></p>
+                        </nav>
+                    </section>
+                    <article><h1>数据类型与标准内置对象</h1><h2 id="8c77db0f-4d17-4c26-99f4-2759ce720f21">数据类型</h2><p><a href="https://tc39.es/ecma262/">ECMAScript</a> 规定了 8 种基本的数据类型，其中有 7 种是 <strong>原始类型</strong>，1 种是 <strong>引用类型</strong>。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。</p>
 <p>下表罗列了所有的原始类型。</p>
 <table>
 <thead>
@@ -53,7 +69,7 @@
 </tr>
 </tbody></table>
 <p>引用类型只有一种，那就是 <code>Object</code> 。</p>
-<h2>标准内置对象</h2><blockquote>
+<h2 id="5ce41547-04a6-4d9d-b34b-70f7c046b131">标准内置对象</h2><blockquote>
 <p>Excerpted from <a href="https://developer.mozilla.org/"><strong>MDN Web Docs</strong></a>.</p>
 </blockquote>
 <p>JavaScript 中有许多 <strong>标准内置对象</strong>，比如 <strong>可索引的集合对象</strong> 有：</p>
@@ -61,16 +77,16 @@
 <li>基本对象</li><li>数字和日期对象</li><li>可索引的集合对象<ul>
 <li><code>Array</code></li><li><code>Int8Array</code></li><li><code>Unit8Array</code></li><li>......</li></ul>
 </li><li>......</li></ul>
-<h3>Array</h3><p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
+<h3 id="7bd7c11a-e5ae-4403-b662-006896e72ef4">Array</h3><p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
 <ul>
-<li class="check-li"><input id=0415665d-0e4b-418a-9431-6d17fd73fc99 checked type="checkbox"><label for=0415665d-0e4b-418a-9431-6d17fd73fc99><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Chrome</li><li class="check-li"><input id=2db5cd49-ba47-4bae-8f2e-6f1966f62ccc checked type="checkbox"><label for=2db5cd49-ba47-4bae-8f2e-6f1966f62ccc><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Edge</li><li class="check-li"><input id=0e8bcb11-dd7d-428c-9a92-83035f53da89 checked type="checkbox"><label for=0e8bcb11-dd7d-428c-9a92-83035f53da89><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>FireFox</li><li class="check-li"><input id=6b26e0d2-9990-4d7c-9386-380b79cc315a  type="checkbox"><label for=6b26e0d2-9990-4d7c-9386-380b79cc315a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Internet Explore</li><li class="check-li"><input id=bff183e1-6edc-4aaa-bb27-13450d3fd815 checked type="checkbox"><label for=bff183e1-6edc-4aaa-bb27-13450d3fd815><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Opera</li><li class="check-li"><input id=47b9bb02-050f-4fe5-b2ee-9d7eb3fb106b checked type="checkbox"><label for=47b9bb02-050f-4fe5-b2ee-9d7eb3fb106b><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Safari</li></ul>
-<h4>Array.prototype.splice</h4><p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
-<h5>Syntax</h5><pre><code class="language-js">splice( start );
+<li class="check-li"><input id=0b1014e5-e5af-4ac8-aec1-7ba80abb97f6 checked type="checkbox"><label for=0b1014e5-e5af-4ac8-aec1-7ba80abb97f6><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Chrome</li><li class="check-li"><input id=1ea4f704-cbdc-419b-87c4-58af84643330 checked type="checkbox"><label for=1ea4f704-cbdc-419b-87c4-58af84643330><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Edge</li><li class="check-li"><input id=68379514-eebf-4b60-91e1-3998420152ab checked type="checkbox"><label for=68379514-eebf-4b60-91e1-3998420152ab><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>FireFox</li><li class="check-li"><input id=fac166e4-9798-4819-a551-14a227487c78  type="checkbox"><label for=fac166e4-9798-4819-a551-14a227487c78><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Internet Explore</li><li class="check-li"><input id=1e1e0888-768e-4d60-bbc6-35f9594bdc5f checked type="checkbox"><label for=1e1e0888-768e-4d60-bbc6-35f9594bdc5f><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Opera</li><li class="check-li"><input id=a1ec3777-82ef-4f20-9daa-37905efbf65f checked type="checkbox"><label for=a1ec3777-82ef-4f20-9daa-37905efbf65f><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Safari</li></ul>
+<h4 id="8bce625a-0023-4370-838a-a4979f6aa6e0">Array.prototype.splice</h4><p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
+<h5 id="3940c6ec-8b96-4599-bb09-d3d7ba6285fa">Syntax</h5><pre><code class="language-js">splice( start );
 splice( start, deleteCount );
 splice( start, deleteCount, item1 );
 splice( start, deleteCount, item1, item2, itemN );
 </code></pre>
-<h6>Parameters</h6><ol>
+<h6 id="0e182358-c0ad-4d62-96e1-fb98271c8f20">Parameters</h6><ol>
 <li><p><code>start</code></p>
 <p>The index at which to start changing the array.</p>
 <p>If greater than the length of the array, <code>start</code> will be set to the length of the array. In this case, no element will be deleted but the method will behave as an adding function, adding as many elements as items provided.</p>
@@ -87,10 +103,10 @@ splice( start, deleteCount, item1, item2, itemN );
 <p>The elements to add to the array, beginning from <code>start</code>.</p>
 <p>If you do not specify any elements, <code>splice()</code> will only remove elements from the array.</p>
 </li></ol>
-<h6>Return value</h6><p>An array containing the deleted elements.</p>
+<h6 id="f6f4bd2d-b950-453a-b71d-fe550b7ab455">Return value</h6><p>An array containing the deleted elements.</p>
 <p>If only one element is removed, an array of one element is returned.</p>
 <p>If no elements are removed, an empty array is returned.</p>
-<h5>Example</h5><pre><code class="language-js">/* 插入新元素&quot;b&quot; */
+<h5 id="b4247fa8-6567-490f-a888-dfdb83638ff2">Example</h5><pre><code class="language-js">/* 插入新元素&quot;b&quot; */
 const array = [ &quot;a&quot;, &quot;c&quot;, &quot;d&quot; ];
 const removed = array.splice( 1, 0, &quot;b&quot; )
 
@@ -101,8 +117,7 @@ console.log( array );   // output: [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot;
 <blockquote>
 <p>Image from <a href="https://coolbackgrounds.io/">Cool Backgrounds</a>.</p>
 </blockquote>
-
-                    </main>
-            </body>
+</article>
+                </body>
             </html>
         

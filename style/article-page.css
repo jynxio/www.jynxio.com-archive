@@ -9,7 +9,7 @@
 }
 
 :root {
-    --article-main: 100vmin;
+    --article-width: 100vmin;
     --line-height: 1.5;       /* 大部分字符的行高 */
     --border-radius: 0.25rem; /* 块元素的圆滑值 */
 }
@@ -18,7 +18,7 @@
 /* ------------------------------------------------------------------------------------------------- */
 html, body,
 article, section, nav,
-h1, h2, h3, h4, h5, h6, p, div,
+h1, h2, h3, h4, h5, h6, p,
 table, thead, tbody, th, tr, td,
 ol, ul, li,
 a, strong,
@@ -29,6 +29,10 @@ blockquote {
     font-family: "IBM Plex Serif", "Noto Sans SC";
     line-height: var( --line-height );
     overflow-wrap: break-word;
+}
+
+html, body, article {
+    background-color: var( --black );
 }
 
 img {
@@ -54,7 +58,7 @@ svg {
 }
 
 /* 制造段落感 */
-h1, h2, h3, h4, h5, h6, p
+h1, h2, h3, h4, h5, h6, p,
 table,
 ul, ol, li,
 pre,
@@ -69,6 +73,150 @@ img {
     background-color: var( --purple );
 }
 
+/* 主栏 */
+/* ------------------------------------------------------------------------------------------------- */
+article {
+    width: var( --article-width );
+    padding: 6rem 1rem 3rem 1rem;
+    margin: 0 auto;
+}
+
+/* Home栏&catalog栏 */
+/* ------------------------------------------------------------------------------------------------- */
+/* 侧栏样式 */
+section#sidebar {
+    /* TODO */
+    /* display: none; */
+}
+
+section#sidebar > nav {
+    position: fixed;
+    top: 50%;
+}
+
+section#sidebar > nav.home-button {
+    left: calc( ( 100vw - var( --article-width ) ) / 4 );
+    color: var( --purple );
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    word-spacing: 0.2em;
+    transform: translate( -50%, -50% );
+    transition: opacity 100ms ease-out;
+    opacity: 0.2;
+    cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+section#sidebar > nav.home-button:hover {
+    opacity: 1;
+}
+
+section#sidebar > nav.home-button > p {
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    font: inherit;
+    line-height: inherit;
+}
+
+section#sidebar > nav.home-button > svg {
+    width: 100%;
+    height: auto;
+}
+
+section#sidebar > nav.catalog-content {
+    right: calc( ( 100vw - var( --article-width ) ) / 4 );
+    transform: translate( 50%, -50% );
+    opacity: 0.1;
+    transition: opacity 100ms ease-out;
+}
+
+section#sidebar > nav.catalog-content:hover {
+    opacity: 1;
+}
+
+section#sidebar > nav.catalog-content * {
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    color: inherit;
+    font: inherit;
+    line-height: 2.5;
+    text-decoration: none;
+}
+
+section#sidebar > nav.catalog-content > p:first-child {
+    margin-bottom: 0.5rem;
+    color: var( --purple );
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    word-spacing: 0.2em;
+}
+
+section#sidebar > nav.catalog-content > p + p {
+    padding-right: 1em;
+    border-left: 0.2em solid var( --purple );
+    border-top-right-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    background-color: transparent;
+    font-size: 0.8rem;
+    transition: border-left-color 100ms ease-out,
+                background-color 100ms ease-out,
+                color 100ms ease-out;
+    cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+section#sidebar > nav.catalog-content > p + p > a {
+    display: block;
+}
+
+section#sidebar > nav.catalog-content > p + p:hover {
+    border-left-color: var( --purple );
+    background-color: var( --grey );
+    color: var( --purple );
+}
+
+section#sidebar > nav.catalog-content > p + p[data-level="1"] {
+    padding-left: 1em;
+}
+
+section#sidebar > nav.catalog-content > p + p[data-level="2"] {
+    padding-left: 2em;
+}
+
+section#sidebar > nav.catalog-content > p + p[data-level="3"] {
+    padding-left: 3em;
+}
+
+section#sidebar > nav.catalog-content > p + p[data-level="4"] {
+    padding-left: 4em;
+}
+
+section#sidebar > nav.catalog-content > p + p[data-level="5"] {
+    padding-left: 5em;
+}
+
+/* 底栏样式 */
+section#bottombar {
+    display: none;
+}
+/* TODO */
+/* TODO */
+/* TODO */
+/* TODO */
+
 /* 标题 */
 /* ------------------------------------------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6 {
@@ -80,7 +228,8 @@ h1 {
     color: var( --white );
     font-size: 2.5rem;
     text-align: center;
-    letter-spacing: 0.5rem;
+    letter-spacing: 0.1em;
+    word-spacing: 0.2em;
 }
 
 h2 {
@@ -103,7 +252,7 @@ h5, h6 {
 /* 代码 */
 /* ------------------------------------------------------------------------------------------------- */
 code {
-    padding: 0 0.5em;
+    padding: 0 0.5rem;
     border-radius: 0.2em;
     background-color: var( --grey );
     font-family: "Fira Code", "Noto Sans SC";
@@ -144,6 +293,9 @@ blockquote * {
 a,
 a * {
     color: var( --purple );
+    text-decoration-line: underline;
+    text-decoration-color: var( --purple );
+    text-decoration-style: wavy;
 }
 
 /* 粗体 */
@@ -179,7 +331,8 @@ thead {
 th {
     font-weight: bold;
     text-align: left;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
+    word-spacing: 0.2em;
 }
 
 th:first-child,
@@ -194,7 +347,87 @@ td:last-child {
 
 /* 列表 */
 /* ------------------------------------------------------------------------------------------------- */
-// TODO
+li {
+    position: relative;
+    margin-left: 2rem;
+}
+
+/* 无序列表 */
+ul > li:not(.check-li)::before {
+    --length: calc( 1rem * var( --line-height ) * 0.25 );
+    content: "";
+    position: absolute;
+    top: calc( 1rem * var( --line-height ) / 2 );
+    left: 0;
+    width: var( --length );
+    height: var( --length );
+    margin-left: -0.5rem;
+    border-radius: 999rem;
+    background-color: var( --purple );
+    transform: translate( -100%, -50% );
+}
+
+/* 有序列表 */
+ol {
+    counter-reset: index;
+}
+
+ol > li::before {
+    --height: calc( 1rem * var( --line-height ) );
+    counter-increment: index;
+    content: counters( index, "." ) ".";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: var( --height );
+    margin-left: -0.5rem;
+    color: var( --purple );
+    font-weight: bold;
+    line-height: var( --height );
+    transform: translateX( -100% );
+}
+
+/* 任务列表 */
+ul > li > input[type="checkbox"] {
+    display: none;
+}
+
+ul > li > input[type="checkbox"] + label {
+    --length: calc( 1rem * var( --line-height ) * 0.6 );
+    position: absolute;
+    top: calc( 1rem * var( --line-height ) / 2 );
+    left: 0;
+    width: var( --length );
+    height: var( --length );
+    margin-left: -0.5rem;
+    line-height: 1;
+    opacity: 0.2;
+    transform: translate( -100%, -50% );
+    transition: opacity 100ms ease-out;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+ul > li > input[type="checkbox"] + label:hover {
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+ul > li > input[type="checkbox"]:checked + label {
+    opacity: 1;
+}
+
+ul > li > input[type="checkbox"] + label > svg {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    color: var( --purple );
+}
 
 /* 主栏 */
 /* ------------------------------------------------------------------------------------------------- */
@@ -203,11 +436,3 @@ td:last-child {
 
 /*  */
 /* ------------------------------------------------------------------------------------------------- */
-
-
-
-
-/*  */
-/* ------------------------------------------------------------------------------------------------- */
-
-

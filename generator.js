@@ -39,10 +39,10 @@ function main( input, output ) {
                 if ( level === 1 ) return `<h1>${ content }</h1>`;
 
                 const id = uuidv4();
-                const li = `<li data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></li>`; // TODO CSS中使用attr()来控制缩进
+                const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
                 const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
 
-                catalog_content += li;
+                catalog_content += p;
 
                 return h;
 
@@ -69,6 +69,8 @@ function main( input, output ) {
 
         marked.use( { renderer, headerIds: false } );
 
+        const article_template = marked.parse( md );
+
         /* 生成html模板 */
         const html_template = `
             <!DOCTYPE html>
@@ -84,22 +86,25 @@ function main( input, output ) {
                 </head>
                 <body>
                     <section id="sidebar">
-                        <nav id="home-button">
+                        <nav class="home-button">
                             <p>HOME PAGE</p>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
                         </nav>
-                        <nav id="catalog-content">
-                            <h1>IN THIS ARTICLE</h1>
-                            <ul></ul>
+                        <nav class="catalog-content">
+                            <p>IN THIS ARTICLE</p>
+                            ${ catalog_content }
                         </nav>
                     </section>
                     <section id="bottombar">
-                        <nav id="home-button"></nav>
-                        <nav id="title-mark"></nav>
-                        <nav id="catalog-button"></nav>
-                        <nav id="catalog-content">${ catalog_content }</nav>
+                        <nav class="home-button"></nav>
+                        <nav class="title-mark"></nav>
+                        <nav class="catalog-button"></nav>
+                        <nav class="catalog-content">
+                            <p>IN THIS ARTICLE</p>
+                            ${ catalog_content }
+                        </nav>
                     </section>
-                    <article>${ marked.parse( md ) }</article>
+                    <article>${ article_template }</article>
                 </body>
             </html>
         `;
@@ -114,7 +119,7 @@ function main( input, output ) {
         const font_en_thin_path = "./static/font/IBMPlexSerif-ExtraLight.ttf";
         const font_en_bold_path = "./static/font/IBMPlexSerif-Medium.ttf";
         const font_code_path = "./static/font/FiraCode-Light.ttf";
-        const all_character_set = extractText( html );
+        const all_character_set = extractText( html_template );
         // const strong_character_set = extractText( html, [ "strong", "b" ] ); // 暂不按需提取加粗字符
         // const code_character_set = extractText( html, [ "code" ] );          // 暂不按需提取代码字符
 
