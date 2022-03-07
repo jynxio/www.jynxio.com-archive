@@ -6,19 +6,18 @@ const { v4: uuidv4 } = require( "uuid" );
 
 const Fontmin = require( "fontmin" );
 
-/* ------------------------------------------------------------------------------------------------------------ */
-main( "./source/dev/example.md", "./pages/example.html" );
+/* ---------------------------------------------------------------------------- */
+translateMdToHtml( "./source/dev/example.md", "./pages/example.html" );
 
 /**
  * 将md文件转译为html文件。
  * @param {string} input - md文件的路径，比如"./a.md"。
  * @param {string} output - 输出文件的保存路径，比如"./a.html"。
  */
-function main( input, output ) {
+function translateMdToHtml( input, output ) {
 
     /* 读取md文件 */
     let md = "";
-
     const reader = fs.createReadStream( input );
 
     reader.setEncoding( "UTF8" );
@@ -27,34 +26,27 @@ function main( input, output ) {
 
     function onEnd() {
 
-        let catalog_content = "";
+        let catalog = `<div class="catalog-caption">IN THIS ARTICLE</div>`;
 
         /* 配置marked */
         const renderer = {
-            hr: _ => "", // 禁用分割线。
             heading: ( content, level ) => {
 
-                if ( content.search( /typora-root-url:/ ) > -1 ) return ""; // 剔除typora的图床地址元素。
+                if ( content.search( /typora-root-url:/ ) > -1 ) return "";
 
-                if ( level === 1 ) return `<h1>${ content }</h1>`;
+                if ( level > 1 ) catalog += `<div class="catalog-row level-${ level - 1 }">${ content }</div>`;
 
-                const id = uuidv4();
-                const li = `<li data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></li>`; // TODO CSS中使用attr()来控制缩进
-                const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
-
-                catalog_content += li;
-
-                return h;
+                return `<h${ level }>${ content }</h${ level }>`;
 
             },
             checkbox: is_checked => {
 
                 const id = uuidv4();
-                const checked_attribute = is_checked ? "checked" : "";
-                const checkbox_icon_circle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-                const checkbox_icon_square = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
+                const checked = is_checked ? "checked" : "";
+                const checkbox_svg_circle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+                const checkbox_svg_square = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
 
-                return `<input id=${ id } ${ checked_attribute } type="checkbox"><label for=${ id }>${ checkbox_icon_square }</label>`;
+                return `<input id=${ id } ${ checked } type="checkbox"><label for=${ id }>${ checkbox_svg_square }</label>`;
 
             },
             listitem: ( content, is_checkbox, is_checked ) => {
@@ -65,49 +57,45 @@ function main( input, output ) {
                 );
 
             },
+            hr: _ => "", // 禁用分割线。
         };
 
-        marked.use( { renderer, headerIds: false } );
+        marked.use( {
+            renderer,
+            headerIds: false,
+        } );
 
-        /* 生成html模板 */
-        const html_template = `
+        let body = marked.parse( md );
+
+        /* 生成html字符串 */
+        const header = `
             <!DOCTYPE html>
             <html lang="zh-CN">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Sample Document</title>
-                    <link rel="stylesheet" href="/style/resize.css">
-                    <link rel="stylesheet" href="/style/font.css">
-                    <link rel="stylesheet" href="/style/article-page.css">
-                </head>
-                <body>
-                    <section id="sidebar">
-                        <nav id="home-button">
-                            <p>HOME PAGE</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
-                        </nav>
-                        <nav id="catalog-content">
-                            <h1>IN THIS ARTICLE</h1>
-                            <ul></ul>
-                        </nav>
-                    </section>
-                    <section id="bottombar">
-                        <nav id="home-button"></nav>
-                        <nav id="title-mark"></nav>
-                        <nav id="catalog-button"></nav>
-                        <nav id="catalog-content">${ catalog_content }</nav>
-                    </section>
-                    <article>${ marked.parse( md ) }</article>
-                </body>
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title></title>
+                <link rel="stylesheet" href="/style/font.css">
+                <link rel="stylesheet" href="/style/resize.css">
+                <link rel="stylesheet" href="/style/page.css">
+            </head>
+            <body>
+                    <nav id="home">HOME PAGE<svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg></nav>
+                    <nav id="catalog">${ catalog }</nav>
+                    <main>
+        `;
+        const footer = `
+                    </main>
+            </body>
             </html>
         `;
+        const html = header + body + footer;
 
         /* 生成html文件 */
-        fs.writeFile( output, html_template, _ => {} );
+        fs.writeFile( output, html, _ => {} );
 
-        /* 按需生成字体文件 */
+        /* 精简字体文件 */
         const mini_font_path = "./static/font/mini";
         const font_zh_thin_path = "./static/font/NotoSansSC-Thin.ttf";
         const font_zh_bold_path = "./static/font/NotoSansSC-Medium.ttf";
@@ -115,14 +103,14 @@ function main( input, output ) {
         const font_en_bold_path = "./static/font/IBMPlexSerif-Medium.ttf";
         const font_code_path = "./static/font/FiraCode-Light.ttf";
         const all_character_set = extractText( html );
-        // const strong_character_set = extractText( html, [ "strong", "b" ] ); // 暂不按需提取加粗字符
-        // const code_character_set = extractText( html, [ "code" ] );          // 暂不按需提取代码字符
+        // const strong_character_set = extractText( html, [ "strong", "b" ] );
+        const code_character_set = extractText( html, [ "code" ] );
 
         optimizeFont( font_zh_thin_path, mini_font_path, all_character_set );
         optimizeFont( font_en_thin_path, mini_font_path, all_character_set );
         optimizeFont( font_zh_bold_path, mini_font_path, all_character_set );
         optimizeFont( font_en_bold_path, mini_font_path, all_character_set );
-        optimizeFont( font_code_path, mini_font_path, all_character_set );
+        optimizeFont( font_code_path, mini_font_path, code_character_set );
 
     }
 

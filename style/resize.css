@@ -12,8 +12,8 @@ figure, figcaption, footer, header, hgroup,
 menu,main, nav, output, ruby, section, summary,
 time, mark, audio, video {
     box-sizing: border-box;
-    margin: 0;
     padding: 0;
+    margin: 0;
     border: none;
     outline: none;
     font: inherit;
@@ -21,8 +21,17 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
+article, section, nav {
+    display: block;
+}
+
 ol, ul {
     list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 blockquote, q {
@@ -33,9 +42,4 @@ blockquote:before, blockquote:after,
 q:before, q:after {
     content: "";
     content: none;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
 }

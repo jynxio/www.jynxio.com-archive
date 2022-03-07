@@ -222,7 +222,7 @@ b, strong {
 /* 引用块 */
 /* ------------------------------------------------------------------------------------------------- */
 blockquote {
-    padding: 1rem 1rem 1px 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     border-left: 0.35rem solid var( --focus-color );
     background-color: var( --code-background-color );

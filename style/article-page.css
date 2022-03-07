@@ -1,0 +1,213 @@
+/* 全局变量 */
+/* ------------------------------------------------------------------------------------------------- */
+:root {
+    --black: #101419;
+    --grey: #182635;
+    --yellow: #ffe100;
+    --purple: #5d72f6;
+    --white: #f2f5f7;
+}
+
+:root {
+    --article-main: 100vmin;
+    --line-height: 1.5;       /* 大部分字符的行高 */
+    --border-radius: 0.25rem; /* 块元素的圆滑值 */
+}
+
+/* 重置：仅设定使用到的元素。 */
+/* ------------------------------------------------------------------------------------------------- */
+html, body,
+article, section, nav,
+h1, h2, h3, h4, h5, h6, p, div,
+table, thead, tbody, th, tr, td,
+ol, ul, li,
+a, strong,
+pre, code,
+blockquote {
+    max-width: 100%;
+    color: var( --white );
+    font-family: "IBM Plex Serif", "Noto Sans SC";
+    line-height: var( --line-height );
+    overflow-wrap: break-word;
+}
+
+img {
+    box-sizing: border-box;
+    display: block;
+    max-width: 100%;
+    padding: 0;
+    margin: 0 auto;
+    border: none;
+    outline: none;
+    border-radius: var( --border-radius );
+    line-height: 1;
+}
+
+svg {
+    box-sizing: border-box;
+    display: block;
+    padding: 0;
+    margin: 0 auto;
+    border: none;
+    outline: none;
+    line-height: 1;
+}
+
+/* 制造段落感 */
+h1, h2, h3, h4, h5, h6, p
+table,
+ul, ol, li,
+pre,
+blockquote,
+img {
+    margin: 1rem 0;
+}
+
+/* 选中样式 */
+::selection {
+    color: var( --white );
+    background-color: var( --purple );
+}
+
+/* 标题 */
+/* ------------------------------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+    color: var( --yellow );
+    font-weight: bold;
+}
+
+h1 {
+    color: var( --white );
+    font-size: 2.5rem;
+    text-align: center;
+    letter-spacing: 0.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1rem;
+}
+
+h5, h6 {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+/* 代码 */
+/* ------------------------------------------------------------------------------------------------- */
+code {
+    padding: 0 0.5em;
+    border-radius: 0.2em;
+    background-color: var( --grey );
+    font-family: "Fira Code", "Noto Sans SC";
+}
+
+pre > code {
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+}
+
+pre {
+    overflow: auto;
+    border-top: 1rem solid var( --grey );
+    border-right: 2rem solid var( --grey );
+    border-bottom: 1rem solid var( --grey );
+    border-left: 2rem solid var( --grey );
+    border-radius: var( --border-radius );
+    background-color: var( --grey );
+}
+
+/* 引用块 */
+/* ------------------------------------------------------------------------------------------------- */
+blockquote {
+    padding: 0.5rem 1rem;
+    border-left: 0.35rem solid var( --purple );
+    border-radius: var( --border-radius );
+    background-color: var( --grey );
+    font-size: 0.8rem;
+}
+
+blockquote * {
+    font-size: 0.8rem;
+}
+
+/* 锚 */
+/* ------------------------------------------------------------------------------------------------- */
+a,
+a * {
+    color: var( --purple );
+}
+
+/* 粗体 */
+/* ------------------------------------------------------------------------------------------------- */
+strong,
+strong * {
+    color: var( --purple );
+    font-weight: bold;
+}
+
+/* 表格 */
+/* ------------------------------------------------------------------------------------------------- */
+table {
+    --bold: 0.25rem;
+    --thin: calc( var( --bold ) / 4 );
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-top: var( --bold ) solid var( --grey );
+    border-bottom: var( --bold ) solid var( --grey );
+}
+
+table * {
+    line-height: 2;
+}
+
+thead {
+    border-bottom: var( --thin ) solid var( --grey );
+}
+
+th {
+    font-weight: bold;
+    text-align: left;
+    letter-spacing: 0.2em;
+}
+
+th:first-child,
+td:first-child {
+    padding-left: 2rem;
+}
+
+th:last-child,
+td:last-child {
+    padding-right: 2rem;
+}
+
+/* 列表 */
+/* ------------------------------------------------------------------------------------------------- */
+// TODO
+
+/* 主栏 */
+/* ------------------------------------------------------------------------------------------------- */
+/* 侧栏 */
+/* ------------------------------------------------------------------------------------------------- */
+
+/*  */
+/* ------------------------------------------------------------------------------------------------- */
+
+
+
+
+/*  */
+/* ------------------------------------------------------------------------------------------------- */
+
+
