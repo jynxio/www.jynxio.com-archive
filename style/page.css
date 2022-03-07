@@ -30,7 +30,7 @@ svg {
     line-height: 1;
 }
 
-/* 布局 */
+/* 主栏 */
 /* ------------------------------------------------------------------------------------------------- */
 body, main {
     background-color: var( --background--color );
@@ -42,17 +42,21 @@ main {
     margin: 0 auto;
 }
 
+/* 侧栏 */
+/* ------------------------------------------------------------------------------------------------- */
 nav {
     position: fixed;
     top: 50%;
 }
 
+/*  */
 nav#home {
     left: calc( ( 50vw - var( --main-width ) / 2 ) / 2 );
     color: var( --focus-color );
     font-size: 1.5rem;
     font-weight: bold;
     line-height: 1;
+    letter-spacing: 0.1em;
     transform: translate( -50%, -50% );
     transition: opacity 100ms ease-out;
     opacity: 0.2;
@@ -73,10 +77,76 @@ nav#home:hover {
     opacity: 1;
 }
 
+/*  */
 nav#catalog {
-    right: 0;
+    right: calc( ( 50vw - var( --main-width ) / 2 ) / 2 );
+    transform: translate( 50%, -50% );
+    opacity: 0.1;
+    transition: opacity 100ms ease-out;
 }
 
+nav#catalog:hover {
+    opacity: 1;
+}
+
+nav#catalog > div {
+    max-width: 15rem;
+    line-height: 2;
+}
+
+nav#catalog > div.catalog-caption {
+    margin-bottom: 0.5em;
+    color: var( --focus-color );
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+nav#catalog > div.catalog-row {
+    padding-right: 1em;
+    border-left: 0.2em solid var( --code-background-color );
+    border-top-right-radius: 0.25em;
+    border-bottom-right-radius: 0.25em;
+    background-color: transparent;
+    font-size: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    transition: border-left-color 100ms ease-out,
+                background-color 100ms ease-out,
+                color 100ms ease-out;
+}
+
+nav#catalog > div.catalog-row:hover {
+    border-left-color: var( --focus-color );
+    background-color: var( --code-background-color );
+    color: var( --focus-color );
+}
+
+nav#catalog > div.catalog-row.level-1 {
+    padding-left: 1em;
+}
+
+nav#catalog > div.catalog-row.level-2 {
+    padding-left: 2em;
+}
+
+nav#catalog > div.catalog-row.level-3 {
+    padding-left: 3em;
+}
+
+nav#catalog > div.catalog-row.level-4 {
+    padding-left: 4em;
+}
+
+nav#catalog > div.catalog-row.level-5 {
+    padding-left: 5em;
+}
+
+/* 段落感 */
+/* ------------------------------------------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6, p, pre, ul, ol, li, table, img, blockquote {
     margin: 1rem 0;
 }

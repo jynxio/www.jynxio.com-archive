@@ -26,11 +26,15 @@ function translateMdToHtml( input, output ) {
 
     function onEnd() {
 
+        let catalog = `<div class="catalog-caption">IN THIS ARTICLE</div>`;
+
         /* 配置marked */
         const renderer = {
             heading: ( content, level ) => {
 
                 if ( content.search( /typora-root-url:/ ) > -1 ) return "";
+
+                if ( level > 1 ) catalog += `<div class="catalog-row level-${ level - 1 }">${ content }</div>`;
 
                 return `<h${ level }>${ content }</h${ level }>`;
 
@@ -78,7 +82,7 @@ function translateMdToHtml( input, output ) {
             </head>
             <body>
                     <nav id="home">HOME PAGE<svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg></nav>
-                    <nav id="catalog"></nav>
+                    <nav id="catalog">${ catalog }</nav>
                     <main>
         `;
         const footer = `
