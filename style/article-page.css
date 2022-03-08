@@ -85,13 +85,13 @@ article {
 /* ------------------------------------------------------------------------------------------------- */
 /* 侧栏样式 */
 section#sidebar {
-    /* TODO */
-    /* display: none; */
+    visibility: hidden;
 }
 
 section#sidebar > nav {
     position: fixed;
     top: 50%;
+    border: 2rem solid transparent;
 }
 
 section#sidebar > nav.home-button {
@@ -212,10 +212,6 @@ section#sidebar > nav.catalog-content > p + p[data-level="5"] {
 section#bottombar {
     display: none;
 }
-/* TODO */
-/* TODO */
-/* TODO */
-/* TODO */
 
 /* 标题 */
 /* ------------------------------------------------------------------------------------------------- */

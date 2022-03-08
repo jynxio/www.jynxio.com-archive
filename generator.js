@@ -105,6 +105,7 @@ function main( input, output ) {
                         </nav>
                     </section>
                     <article>${ article_template }</article>
+                    <script src="/style/article-page.js"></script>
                 </body>
             </html>
         `;
