@@ -1,4 +1,4 @@
-/*  */
+/* 定义常量。 */
 const sidebar = document.getElementById( "sidebar" );
 const sidebar_homebutton = sidebar.getElementsByClassName( "home-button" )[ 0 ];
 const sidebar_catalogcontent = sidebar.getElementsByClassName( "catalog-content" )[ 0 ];
@@ -13,8 +13,12 @@ const {
     height: sidebar_catalogcontent_height,
 } = sidebar_catalogcontent.getBoundingClientRect();
 
-/*  */
-function f() {
+/* 根据页面宽高来确定该使用sidebar还是bottombar。 */
+switchBar();
+
+window.addEventListener( "resize", _ => switchBar() );
+
+function switchBar() {
 
     const viewport_width = innerWidth;
     const viewport_height = innerHeight;
@@ -43,13 +47,3 @@ function f() {
     sidebar.style.visibility = "visible";
 
 }
-
-/*  */
-f();
-
-window.addEventListener( "resize", _ => {
-
-    f();
-
-} );
-

@@ -10,15 +10,12 @@ const Fontmin = require( "fontmin" );
 main( "./source/dev/example.md", "./pages/example.html" );
 
 /**
- * 将md文件转译为html文件。
  * @param {string} input - md文件的路径，比如"./a.md"。
  * @param {string} output - 输出文件的保存路径，比如"./a.html"。
  */
 function main( input, output ) {
 
-    /* 读取md文件 */
     let md = "";
-
     const reader = fs.createReadStream( input );
 
     reader.setEncoding( "UTF8" );
@@ -27,9 +24,9 @@ function main( input, output ) {
 
     function onEnd() {
 
+        /* 生成html模板 */
         let catalog_content = "";
 
-        /* 配置marked */
         const renderer = {
             hr: _ => "", // 禁用分割线。
             heading: ( content, level ) => {
@@ -70,8 +67,6 @@ function main( input, output ) {
         marked.use( { renderer, headerIds: false } );
 
         const article_template = marked.parse( md );
-
-        /* 生成html模板 */
         const html_template = `
             <!DOCTYPE html>
             <html lang="zh-CN">
