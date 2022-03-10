@@ -212,18 +212,9 @@ section#sidebar > nav.catalog-content > p + p > a {
     display: block;
 }
 
-section#sidebar > nav.catalog-content > p + p > a:link {
-    color: var( --white );
-}
-
-section#sidebar > nav.catalog-content > p + p > a:visited {
-    color: var( --white );
-}
-
-section#sidebar > nav.catalog-content > p + p > a:hover {
-    color: var( --white );
-}
-
+section#sidebar > nav.catalog-content > p + p > a:link,
+section#sidebar > nav.catalog-content > p + p > a:visited,
+section#sidebar > nav.catalog-content > p + p > a:hover,
 section#sidebar > nav.catalog-content > p + p > a:active {
     color: var( --white );
 }
@@ -256,7 +247,44 @@ section#sidebar > nav.catalog-content > p + p[data-level="5"] {
 
 /* 底栏样式 */
 section#bottombar {
-    display: none;
+    /* display: none; */
+}
+
+section#bottombar > nav.catalog-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    padding: 1rem;
+    border-radius: var( --border-radius );
+    box-shadow: 0 0 2rem var( --purple );
+    transform: translate( -50%, -50% );
+    backdrop-filter: brightness( 80% ) blur( 0.5rem );
+    -webkit-backdrop-filter: brightness( 80% ) blur( 0.5rem );
+}
+
+body {
+    /* filter: brightness( 0% ); */
+}
+
+section#bottombar > nav.catalog-content * {
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    color: inherit;
+    font: inherit;
+    line-height: 2.5;
+    text-decoration: none;
+}
+
+section#bottombar > nav.catalog-content > p:first-child {
+    margin-bottom: 0.5rem;
+    color: var( --purple );
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    word-spacing: 0.2em;
 }
 
 /* 标题 */

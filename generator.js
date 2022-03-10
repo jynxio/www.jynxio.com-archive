@@ -93,7 +93,6 @@ function main( input, output ) {
                     <section id="bottombar">
                         <nav class="home-button"></nav>
                         <nav class="title-mark"></nav>
-                        <nav class="catalog-button"></nav>
                         <nav class="catalog-content">
                             <p>IN THIS ARTICLE</p>
                             ${ catalog_content }
