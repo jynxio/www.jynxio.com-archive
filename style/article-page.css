@@ -131,7 +131,6 @@ section#sidebar > nav.home-button {
     font-weight: bold;
     line-height: 1;
     letter-spacing: 0.1em;
-    word-spacing: 0.2em;
     transform: translate( -50%, -50% );
     transition: opacity 100ms ease-out;
     opacity: 0.2;
@@ -245,47 +244,45 @@ section#sidebar > nav.catalog-content > p + p[data-level="5"] {
     padding-left: 5em;
 }
 
-/* 底栏样式 */
-section#bottombar {
+/* 顶栏样式 */
+section#topbar {
     /* display: none; */
 }
 
-section#bottombar > nav.catalog-content {
+section#topbar > nav.home-button {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     z-index: 1;
-    padding: 1rem;
-    border-radius: var( --border-radius );
-    box-shadow: 0 0 2rem var( --purple );
-    transform: translate( -50%, -50% );
-    backdrop-filter: brightness( 80% ) blur( 0.5rem );
-    -webkit-backdrop-filter: brightness( 80% ) blur( 0.5rem );
+    width: 100%;
+    border-bottom: 1px solid var( --grey );
+    backdrop-filter: blur( 0.65rem );
+    -webkit-backdrop-filter: blur( 0.65rem );
 }
 
-body {
-    /* filter: brightness( 0% ); */
-}
-
-section#bottombar > nav.catalog-content * {
-    padding: 0;
-    margin: 0;
+section#topbar > nav.home-button > button {
+    float: right;
+    padding: 0.5em 1em;
+    margin: 1rem;
     border: none;
-    outline: none;
-    color: inherit;
-    font: inherit;
-    line-height: 2.5;
-    text-decoration: none;
+    border-radius: var( --border-radius );
+    background-color: var( --purple );
+    color: var( --grey );
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    opacity: 0.2;
+    transition: opacity 100ms ease-out;
+    cursor: pointer;
 }
 
-section#bottombar > nav.catalog-content > p:first-child {
-    margin-bottom: 0.5rem;
-    color: var( --purple );
-    font-size: 1.2rem;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    word-spacing: 0.2em;
+section#topbar > nav.home-button > button:hover,
+section#topbar > nav.home-button > button:active {
+    opacity: 1;
 }
+
+/* TODO 按钮动画 */
 
 /* 标题 */
 /* ------------------------------------------------------------------------------------------------- */

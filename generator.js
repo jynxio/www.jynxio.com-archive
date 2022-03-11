@@ -82,7 +82,7 @@ function main( input, output ) {
                 <body>
                     <section id="sidebar">
                         <nav class="home-button">
-                            <p>HOME PAGE</p>
+                            <p>HOMEPAGE</p>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
                         </nav>
                         <nav class="catalog-content">
@@ -90,12 +90,9 @@ function main( input, output ) {
                             ${ catalog_content }
                         </nav>
                     </section>
-                    <section id="bottombar">
-                        <nav class="home-button"></nav>
-                        <nav class="title-mark"></nav>
-                        <nav class="catalog-content">
-                            <p>IN THIS ARTICLE</p>
-                            ${ catalog_content }
+                    <section id="topbar">
+                        <nav class="home-button">
+                            <button>HOMEPAGE</button>
                         </nav>
                     </section>
                     <article>${ article_template }</article>
