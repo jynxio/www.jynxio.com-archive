@@ -121,7 +121,6 @@ section#sidebar {
 section#sidebar > nav {
     position: fixed;
     top: 50%;
-    border: 2rem solid transparent;
 }
 
 section#sidebar > nav.home-button {
@@ -150,6 +149,7 @@ section#sidebar > nav.home-button > p {
     margin: 0;
     border: none;
     outline: none;
+    color: var( --white );
     font: inherit;
     line-height: inherit;
 }
@@ -246,7 +246,7 @@ section#sidebar > nav.catalog-content > p + p[data-level="5"] {
 
 /* 顶栏样式 */
 section#topbar {
-    /* display: none; */
+    display: none;
 }
 
 section#topbar > nav.home-button {
@@ -263,7 +263,7 @@ section#topbar > nav.home-button {
 section#topbar > nav.home-button > button {
     float: right;
     padding: 0.5em 1em;
-    margin: 1rem;
+    margin: 1rem 2rem 1rem 0;
     border: none;
     border-radius: var( --border-radius );
     background-color: var( --purple );
