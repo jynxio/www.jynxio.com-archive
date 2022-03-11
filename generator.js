@@ -33,7 +33,14 @@ function main( input, output ) {
 
                 if ( content.search( /typora-root-url:/ ) > -1 ) return ""; // 剔除typora的图床地址元素。
 
-                if ( level === 1 ) return `<h1>${ content }</h1>`;
+                if ( level === 1 ) {
+
+                    const h = `<h1>${ content }</h1>`;
+                    const p = `<p id="last-updated">Last Updated: ${ getDate() }</p>`;
+
+                    return ( h + p );
+
+                }
 
                 const id = uuidv4();
                 const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
@@ -215,5 +222,25 @@ function extractText( input, nodes ) {
         return output;
 
     }
+
+}
+
+/**
+ * 获取当前时刻的日期。
+ * @returns {string} - 当前时刻的日期字符串，格式为dd/mm/yyyy。
+ */
+function getDate() {
+
+    const date = new Date();
+
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+
+    const yyyy = y + "";
+    const mm = ( m < 10 ? "0" : "" ) + m;
+    const dd = ( d < 10 ? "0" : "" ) + d;
+
+    return ( dd + "/" + mm + "/" + yyyy );
 
 }

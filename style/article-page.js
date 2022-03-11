@@ -1,4 +1,3 @@
-/* 定义常量。 */
 const sidebar = document.getElementById( "sidebar" );
 const sidebar_homebutton = sidebar.getElementsByClassName( "home-button" )[ 0 ];
 const sidebar_catalogcontent = sidebar.getElementsByClassName( "catalog-content" )[ 0 ];
@@ -15,13 +14,16 @@ const {
     height: sidebar_catalogcontent_height,
 } = sidebar_catalogcontent.getBoundingClientRect();
 
-/* 根据页面宽高来确定该使用sidebar还是bottombar。 */
 switchBar();
 
 window.addEventListener( "resize", _ => switchBar() );
 
+/**
+ * 若页面的宽度与高度足矣容纳边栏，则显示边栏，否则显示顶栏。
+ */
 function switchBar() {
 
+    /* 计算页面的宽高是否足以容纳边栏 */
     const viewport_width = innerWidth;
     const viewport_height = innerHeight;
 
@@ -30,6 +32,7 @@ function switchBar() {
     const is_wide_enough = ( viewport_width - article_width ) / 2 >= Math.max( sidebar_homebutton_width, sidebar_catalogcontent_width );
     const is_tall_enough = viewport_height >= Math.max( sidebar_homebutton_height, sidebar_catalogcontent_height );
 
+    /* 显示边栏 */
     if ( is_wide_enough && is_tall_enough ) {
 
         sidebar.style.display = "";
@@ -41,6 +44,7 @@ function switchBar() {
 
     }
 
+    /* 显示顶栏 */
     sidebar.style.display = "none";
     sidebar.style.visibility = "hidden";
 
