@@ -1,9 +1,12 @@
 {
-  "devDependencies": {
-    "fontmin": "^0.9.9",
-    "marked": "^4.0.12"
-  },
-  "dependencies": {
-    "uuid": "^8.3.2"
-  }
+    "scripts": {
+        "test": "node ./generator/index.js"
+    },
+    "devDependencies": {
+        "fontmin": "^0.9.9",
+        "marked": "^4.0.12"
+    },
+    "dependencies": {
+        "uuid": "^8.3.2"
+    }
 }

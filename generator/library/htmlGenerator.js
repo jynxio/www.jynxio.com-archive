@@ -1,29 +1,28 @@
 const fs = require( "fs" );
+
 const { marked } = require( "marked" );
+
 const { v4: uuidv4 } = require( "uuid" );
+
+/* ---------------------------------------------------------------------------------------------------------- */
 
 /**
  * 将一个markdown文件转译为html文件。
  * @param {string} input_path - markdown文件的路径，比如"../../markdown/javascript/a.md"。
  * @param {string} output_path - html文件的路径，比如"../../page/javascript/a.html"。
  */
-export default function( input_path, output_path ) {
-
-    const i = input_path;
-    const o = output_path;
+function htmlGenerator( input_path, output_path ) {
 
     let markdown_content = "";
+    let catalog_content = "";
 
-    const reader = fs.createReadStream( i );
+    const reader = fs.createReadStream( input_path );
 
     reader.setEncoding( "UTF8" );
     reader.on( "data", chunk => markdown_content += chunk );
     reader.on( "end", onEnd );
 
-    // 能不能把onEnd移动到函数以外？？？
     function onEnd() {
-
-        let catalog_content = "";
 
         marked.use( {
 
@@ -42,6 +41,44 @@ export default function( input_path, output_path ) {
             },
 
         } );
+
+        const article_content = marked.parse( markdown_content );
+
+        const html_content = `
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Sample Document</title>
+                    <link rel="stylesheet" href="/style/all/resize.css">
+                    <link rel="stylesheet" href="/style/all/font.css">
+                    <link rel="stylesheet" href="/style/page/page.css">
+                </head>
+                <body>
+                    <section id="sidebar">
+                        <nav class="home-button">
+                            <p>HOMEPAGE</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
+                        </nav>
+                        <nav class="catalog-content">
+                            <p>IN THIS ARTICLE</p>
+                            ${ catalog_content }
+                        </nav>
+                    </section>
+                    <section id="topbar">
+                        <nav class="home-button">
+                            <button>HOMEPAGE</button>
+                        </nav>
+                    </section>
+                    <article>${ article_content }</article>
+                    <script src="/style/page/page.js"></script>
+                </body>
+            </html>
+        `;
+
+        fs.writeFile( output_path, html_content, _ => {} );
 
     }
 
@@ -101,4 +138,26 @@ export default function( input_path, output_path ) {
 
     }
 
+    /**
+     * 获取当前时刻的日期。
+     * @returns {string} - 当前时刻的日期字符串，格式为dd/mm/yyyy。
+     */
+    function getDate() {
+
+        const date = new Date();
+
+        const y = date.getFullYear();
+        const m = date.getMonth() + 1;
+        const d = date.getDate();
+
+        const yyyy = y + "";
+        const mm = ( m < 10 ? "0" : "" ) + m;
+        const dd = ( d < 10 ? "0" : "" ) + d;
+
+        return ( dd + "/" + mm + "/" + yyyy );
+
+    }
+
 }
+
+module.exports = htmlGenerator;
