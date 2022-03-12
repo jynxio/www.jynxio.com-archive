@@ -43,8 +43,9 @@ img {
     box-sizing: border-box;
     display: block;
     max-width: 100%;
+    height: auto;
     padding: 0;
-    margin: 0 auto;
+    margin: 1rem auto;
     border: none;
     outline: none;
     border-radius: var( --border-radius );
@@ -66,8 +67,7 @@ h1, h2, h3, h4, h5, h6, p,
 table,
 ul, ol, li,
 pre,
-blockquote,
-img {
+blockquote {
     margin: 1rem 0;
 }
 
@@ -317,9 +317,8 @@ h5, h6 {
 /* 日期 */
 /* ------------------------------------------------------------------------------------------------- */
 p#last-updated {
-    /* font-weight: bold; */
+    color: var( --white );
     text-align: right;
-    opacity: 0.2;
 }
 
 /* 代码 */

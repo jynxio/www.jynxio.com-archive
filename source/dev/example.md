@@ -111,6 +111,6 @@ console.log( removed ); // output: []
 console.log( array );   // output: [ "a", "b", "c", "d" ]
 ```
 
-![example](/static/page-image-hosting/programmer.png)
+![example](/static/page-image-hosting/squares.png)
 
-> Image from [Cool Backgrounds](https://coolbackgrounds.io/).
+> Image from [simpledesktops](http://simpledesktops.com/).
