@@ -1,23 +1,23 @@
-
-function extractCharacters( html_content, tag_names ) {}
-
 /**
- * 从html文件中提取出所有或指定标签的内容，然后合并成一段新的字符串，最后返回这段新的字符串。
- * @param {string} input - html文件的内容，是一串字符串。注意，html文件的标签名称不区分大小写。
- * @param {Array} [node_names] - 一个数组，它包含了零至多个标签的名称，比如["h1", "p"]。缺省时，返回结果将包含所有标签的内容，
- *                               否则返回结果将只包含指定标签的内容。注意，1.不能输入自闭合标签；2.标签名称不区分大小写。
- * @returns {string} - 一个字符串，它包含了html文件中的所有标签的内容。
+ * 从html string中提取出所有标签的内容，然后合并成一段字符串，最后返回这段字符串。
+ * @param {string} input - html string（是指字符串形式的html文件的内容），html string中的标签名是不区分大小写的。
+ * htmlGenerator方法返回的Promise即代表一个html string。
+ * @param {Array} [nodes<string>] - （可选）一个包含零至多个标签名称的数组，比如["code", "strong"]。缺省时，该方法会
+ * 提取出所有标签的内容，否则将只提取指定标签的内容。注意：1.不能输入自闭和的标签，比如img（因为该方法无法处理它们）；2.标签的名称不
+ * 区分大小写。
+ * @returns {string} - 整合了标签内容的字符串。
  */
-function extractText( input, nodes ) {
+function extractCharacters( input, nodes ) {
 
-    if ( !Array.isArray( nodes ) ) return core( input );
+    if ( ! nodes ) return core( input );
 
-    if ( !nodes.length ) return "";
+    if ( ! nodes.length ) return "";
 
     const regexp = new RegExp( `</?(${ nodes.join( "|" ) })(>|(\\s*>)|(\\s[^>]*>))`, "ig" );
+
     const tags = input.match( regexp );
 
-    if ( !tags ) return "";
+    if ( ! tags ) return "";
 
     let output = "";
     let from_index_in_tags = 0;
@@ -46,7 +46,7 @@ function extractText( input, nodes ) {
 
         const tags = input.match( /<!?\/?[a-z][a-z0-9]*[^>]*>/ig );
 
-        if ( !tags ) return "";
+        if ( ! tags ) return "";
 
         let output = "";
         let from_index = 0;

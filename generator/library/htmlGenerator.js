@@ -14,7 +14,7 @@ let h1_content = "";
  * （异步）将markdown转译为html，自动生成的html文件存储在output_path处。
  * @param {string} input_path - markdown文件的路径，比如"./test.md"。
  * @param {string} output_path - html文件的路径，比如"./test.html"。
- * @returns {Promise} - Promise代表html文件的内容（字符串）。
+ * @returns {Promise} - Promise代表html string（是指字符串形式的html文件的内容）。
  */
 function htmlGenerator( input_path, output_path ) {
 
