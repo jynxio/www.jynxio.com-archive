@@ -328,6 +328,7 @@ code {
     border-radius: 0.2em;
     background-color: var( --grey );
     font-family: "Fira Code", "Noto Sans SC";
+    font-weight: normal;
 }
 
 pre > code {

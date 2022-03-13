@@ -5,7 +5,7 @@
                     <meta charset="UTF-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Sample Document</title>
+                    <title>数据类型与标准内置对象</title>
                     <link rel="stylesheet" href="/style/all/resize.css">
                     <link rel="stylesheet" href="/style/all/font.css">
                     <link rel="stylesheet" href="/style/page/page.css">
@@ -18,7 +18,7 @@
                         </nav>
                         <nav class="catalog-content">
                             <p>IN THIS ARTICLE</p>
-                            <p data-level="1"><a href="#7f49f6d0-b1de-46f8-b02b-9b4e10a709b1">数据类型</a></p><p data-level="1"><a href="#9c9b043c-18e1-4426-96c5-b42646cc9429">标准内置对象</a></p><p data-level="2"><a href="#c68822dd-9196-4e52-b078-d2024f18fc03">Array</a></p><p data-level="3"><a href="#63f9e733-ed80-4418-8655-406d65d46523">Array.prototype.splice</a></p><p data-level="4"><a href="#0f1f39a5-5e36-41ac-bf3e-009c1450ce03">Syntax</a></p><p data-level="5"><a href="#239b7b24-a78a-4144-b8ff-fbed785d786b">Parameters</a></p><p data-level="5"><a href="#8c57dbaf-3428-4498-bdde-719a91ab99a9">Return value</a></p><p data-level="4"><a href="#295f7809-ffb1-4503-b1f8-beddfb8139f2">Example</a></p>
+                            <p data-level="1"><a href="#92fb6814-c515-4c64-9838-a97147f7946e">数据类型</a></p><p data-level="1"><a href="#c4e84735-428f-4490-90fc-d9a224117dc9">标准内置对象</a></p><p data-level="2"><a href="#a8efd23f-b500-400d-87fe-cd98c2355328">Array</a></p><p data-level="3"><a href="#54f630c8-16a7-4c10-9d6c-079f0dc9c179">Array.prototype.splice</a></p><p data-level="4"><a href="#5eb29e55-4ca2-42a8-9626-dd2d05222f3d">Syntax</a></p><p data-level="5"><a href="#3955619b-320f-4ddf-bdea-beb795581304">Parameters</a></p><p data-level="5"><a href="#3e73833a-ea26-4d79-b1c6-5283a57166fa">Return value</a></p><p data-level="4"><a href="#b800bbce-a704-4159-b33f-2e2cce266cd5">Example</a></p>
                         </nav>
                     </section>
                     <section id="topbar">
@@ -26,7 +26,7 @@
                             <button>HOMEPAGE</button>
                         </nav>
                     </section>
-                    <article><h1>数据类型与标准内置对象</h1><p id="last-updated">Last Updated: 13/03/2022</p><h2 id="7f49f6d0-b1de-46f8-b02b-9b4e10a709b1">数据类型</h2><p><a href="https://tc39.es/ecma262/">ECMAScript</a> 规定了 8 种基本的数据类型，其中有 7 种是 <strong>原始类型</strong>，1 种是 <strong>引用类型</strong>。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。</p>
+                    <article><h1>数据类型与标准内置对象</h1><p id="last-updated">Last Updated: 13/03/2022</p><h2 id="92fb6814-c515-4c64-9838-a97147f7946e">数据类型</h2><p><a href="https://tc39.es/ecma262/">ECMAScript</a> 规定了 8 种基本的数据类型，其中有 7 种是 <strong>原始类型</strong>，1 种是 <strong>引用类型</strong>。在这里，我们将对他们进行大体的介绍，在下一章中，我们将详细讨论它们。</p>
 <p>下表罗列了所有的原始类型。</p>
 <table>
 <thead>
@@ -65,7 +65,7 @@
 </tr>
 </tbody></table>
 <p>引用类型只有一种，那就是 <code>Object</code> 。</p>
-<h2 id="9c9b043c-18e1-4426-96c5-b42646cc9429">标准内置对象</h2><blockquote>
+<h2 id="c4e84735-428f-4490-90fc-d9a224117dc9">标准内置对象</h2><blockquote>
 <p>Excerpted from <a href="https://developer.mozilla.org/"><strong>MDN Web Docs</strong></a>.</p>
 </blockquote>
 <p>JavaScript 中有许多 <strong>标准内置对象</strong>，比如 <strong>可索引的集合对象</strong> 有：</p>
@@ -73,16 +73,16 @@
 <li>基本对象</li><li>数字和日期对象</li><li>可索引的集合对象<ul>
 <li><code>Array</code></li><li><code>Int8Array</code></li><li><code>Unit8Array</code></li><li>......</li></ul>
 </li><li>......</li></ul>
-<h3 id="c68822dd-9196-4e52-b078-d2024f18fc03">Array</h3><p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
+<h3 id="a8efd23f-b500-400d-87fe-cd98c2355328">Array</h3><p>JavaScript 的 <code>Array</code> 对象是用于构造数组的全局对象，数组是类似于列表的高阶对象。下列任务列表罗列的 <code>Array.prototype.at</code> 方法在 PC 浏览器中的兼容性情况。</p>
 <ul>
-<li class="check-li"><input id=83b3b0b9-3ea5-45ec-b12d-8c92f11d9032 checked type="checkbox"><label for=83b3b0b9-3ea5-45ec-b12d-8c92f11d9032><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Chrome</li><li class="check-li"><input id=9704aad7-1511-4e88-875a-da41c09248d4 checked type="checkbox"><label for=9704aad7-1511-4e88-875a-da41c09248d4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Edge</li><li class="check-li"><input id=7c4dafdc-8a7d-4f43-94f9-43559f4e922a checked type="checkbox"><label for=7c4dafdc-8a7d-4f43-94f9-43559f4e922a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>FireFox</li><li class="check-li"><input id=9ce395de-56ef-4361-99f3-01060572e4fe  type="checkbox"><label for=9ce395de-56ef-4361-99f3-01060572e4fe><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Internet Explore</li><li class="check-li"><input id=1275bc6e-03b8-418c-89b0-0b100a499061 checked type="checkbox"><label for=1275bc6e-03b8-418c-89b0-0b100a499061><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Opera</li><li class="check-li"><input id=01d5c4d9-db43-45c8-b274-8a795a5f1535 checked type="checkbox"><label for=01d5c4d9-db43-45c8-b274-8a795a5f1535><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Safari</li></ul>
-<h4 id="63f9e733-ed80-4418-8655-406d65d46523">Array.prototype.splice</h4><p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
-<h5 id="0f1f39a5-5e36-41ac-bf3e-009c1450ce03">Syntax</h5><pre><code class="language-js">splice( start );
+<li class="check-li"><input id=cd2066c6-aea0-4adb-9b99-ceae1a8f5b2c checked type="checkbox"><label for=cd2066c6-aea0-4adb-9b99-ceae1a8f5b2c><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Chrome</li><li class="check-li"><input id=b3d49cc4-1481-4055-b95b-ff33fdfe1c55 checked type="checkbox"><label for=b3d49cc4-1481-4055-b95b-ff33fdfe1c55><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Edge</li><li class="check-li"><input id=1b12b0f4-dc1b-4eb8-b7c2-d490512f021e checked type="checkbox"><label for=1b12b0f4-dc1b-4eb8-b7c2-d490512f021e><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>FireFox</li><li class="check-li"><input id=b14d375e-d1da-4ae2-9f87-50c37ab021e1  type="checkbox"><label for=b14d375e-d1da-4ae2-9f87-50c37ab021e1><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Internet Explore</li><li class="check-li"><input id=9a0c805d-591e-44d7-87ca-e3b4bd8f31d3 checked type="checkbox"><label for=9a0c805d-591e-44d7-87ca-e3b4bd8f31d3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Opera</li><li class="check-li"><input id=05208bb4-3a88-4c23-bb0f-feb5a444c767 checked type="checkbox"><label for=05208bb4-3a88-4c23-bb0f-feb5a444c767><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></label>Safari</li></ul>
+<h4 id="54f630c8-16a7-4c10-9d6c-079f0dc9c179">Array.prototype.splice</h4><p>The <code>splice()</code> method changes the contents of an array by removing or replacing existing elements and/or adding new elements <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in place</a>. To access part of an array without modifying it, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice">slice()</a>.</p>
+<h5 id="5eb29e55-4ca2-42a8-9626-dd2d05222f3d">Syntax</h5><pre><code class="language-js">splice( start );
 splice( start, deleteCount );
 splice( start, deleteCount, item1 );
 splice( start, deleteCount, item1, item2, itemN );
 </code></pre>
-<h6 id="239b7b24-a78a-4144-b8ff-fbed785d786b">Parameters</h6><ol>
+<h6 id="3955619b-320f-4ddf-bdea-beb795581304">Parameters</h6><ol>
 <li><p><code>start</code></p>
 <p>The index at which to start changing the array.</p>
 <p>If greater than the length of the array, <code>start</code> will be set to the length of the array. In this case, no element will be deleted but the method will behave as an adding function, adding as many elements as items provided.</p>
@@ -99,10 +99,10 @@ splice( start, deleteCount, item1, item2, itemN );
 <p>The elements to add to the array, beginning from <code>start</code>.</p>
 <p>If you do not specify any elements, <code>splice()</code> will only remove elements from the array.</p>
 </li></ol>
-<h6 id="8c57dbaf-3428-4498-bdde-719a91ab99a9">Return value</h6><p>An array containing the deleted elements.</p>
+<h6 id="3e73833a-ea26-4d79-b1c6-5283a57166fa">Return value</h6><p>An array containing the deleted elements.</p>
 <p>If only one element is removed, an array of one element is returned.</p>
 <p>If no elements are removed, an empty array is returned.</p>
-<h5 id="295f7809-ffb1-4503-b1f8-beddfb8139f2">Example</h5><pre><code class="language-js">/* 插入新元素&quot;b&quot; */
+<h5 id="b800bbce-a704-4159-b33f-2e2cce266cd5">Example</h5><pre><code class="language-js">/* 插入新元素&quot;b&quot; */
 const array = [ &quot;a&quot;, &quot;c&quot;, &quot;d&quot; ];
 const removed = array.splice( 1, 0, &quot;b&quot; )
 
