@@ -66,3 +66,5 @@ function extractCharacters( input, nodes ) {
     }
 
 }
+
+module.exports = extractCharacters;
