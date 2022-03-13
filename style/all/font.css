@@ -5,8 +5,8 @@
     font-weight: normal;
     font-display: swap;
     src: local( "IBM Plex Serif" ),
-        url( "/static/font/mini/IBMPlexSerif-ExtraLight.woff2" ) format( "woff2" ),
-        url( "/static/font/mini/IBMPlexSerif-ExtraLight.ttf" ) format( "truetype" );
+        url( "/static/font/condensed-font/IBMPlexSerif-ExtraLight.woff2" ) format( "woff2" ),
+        url( "/static/font/condensed-font/IBMPlexSerif-ExtraLight.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }
 
@@ -16,8 +16,8 @@
     font-weight: bold;
     font-display: swap;
     src: local( "IBM Plex Serif" ),
-        url( "/static/font/mini/IBMPlexSerif-Medium.woff2" ) format( "woff2" ),
-        url( "/static/font/mini/IBMPlexSerif-Medium.ttf" ) format( "truetype" );
+        url( "/static/font/condensed-font/IBMPlexSerif-Medium.woff2" ) format( "woff2" ),
+        url( "/static/font/condensed-font/IBMPlexSerif-Medium.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }
 
@@ -28,8 +28,8 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Noto Sans SC" ),
-        url( "/static/font/mini/NotoSansSC-Thin.woff2" ) format( "woff2" ),
-        url( "/static/font/mini/NotoSansSC-Thin.ttf" ) format( "truetype" );
+        url( "/static/font/condensed-font/NotoSansSC-Thin.woff2" ) format( "woff2" ),
+        url( "/static/font/condensed-font/NotoSansSC-Thin.ttf" ) format( "truetype" );
     unicode-range: U+4E00-9FFF;
 }
 
@@ -39,8 +39,8 @@
     font-weight: bold;
     font-display: swap;
     src: local( "Noto Sans SC" ),
-        url( "/static/font/mini/NotoSansSC-Medium.woff2" ) format( "woff2" ),
-        url( "/static/font/mini/NotoSansSC-Medium.ttf" ) format( "truetype" );
+        url( "/static/font/condensed-font/NotoSansSC-Medium.woff2" ) format( "woff2" ),
+        url( "/static/font/condensed-font/NotoSansSC-Medium.ttf" ) format( "truetype" );
     unicode-range: U+4E00-9FFF;
 }
 
@@ -51,7 +51,7 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Fira Code" ),
-        url( "/static/font/mini/FiraCode-Light.woff2" ) format( "woff2" ),
-        url( "/static/font/mini/FiraCode-Light.ttf" ) format( "truetype" );
+        url( "/static/font/condensed-font/FiraCode-Light.woff2" ) format( "woff2" ),
+        url( "/static/font/condensed-font/FiraCode-Light.ttf" ) format( "truetype" );
     unicode-range: U+00-024F;
 }

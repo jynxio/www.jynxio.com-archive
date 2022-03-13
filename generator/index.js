@@ -2,7 +2,16 @@ const htmlGenerator = require( "./library/htmlGenerator" );
 
 /* ---------------------------------------------------------------------------------------------------------- */
 
-const input = "./markdown/test/test.md";
-const output = "./page/test/test.html";
+main();
 
-htmlGenerator( input, output );
+async function main() {
+
+    const input = "./markdown/test/test.md";
+    const output = "./page/test/test.html";
+
+    const html_content = await htmlGenerator( input, output );
+
+    console.log( "👌" );
+    console.log( html_content );
+
+}

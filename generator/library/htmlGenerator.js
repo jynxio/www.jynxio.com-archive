@@ -11,77 +11,85 @@ let catalog_content = "";
 let h1_content = "";
 
 /**
- * 将一个markdown文件转译为html文件。
- * @param {string} input_path - markdown文件的路径，比如"../../markdown/javascript/a.md"。
- * @param {string} output_path - html文件的路径，比如"../../page/javascript/a.html"。
+ * （异步）将markdown转译为html，自动生成的html文件存储在output_path处。
+ * @param {string} input_path - markdown文件的路径，比如"./test.md"。
+ * @param {string} output_path - html文件的路径，比如"./test.html"。
+ * @returns {Promise} - Promise代表html文件的内容（字符串）。
  */
 function htmlGenerator( input_path, output_path ) {
 
-    const reader = fs.createReadStream( input_path );
+    return new Promise( resolve => {
 
-    reader.setEncoding( "UTF8" );
-    reader.on( "data", chunk => markdown_content += chunk );
-    reader.on( "end", onEnd );
+        const reader = fs.createReadStream( input_path, { encoding: "utf8" } );
 
-}
+        reader.on( "data", chunk => markdown_content += chunk );
+        reader.on( "end", onEnd );
 
-function onEnd() {
+        function onEnd() {
 
-    marked.use( {
+            marked.use( {
 
-        headerIds: false,
+                headerIds: false,
 
-        renderer: {
+                renderer: {
 
-            hr: parseHr,
+                    hr: parseHr,
 
-            heading: parseH123456,
+                    heading: parseH123456,
 
-            checkbox: parseCheckboxInput,
+                    checkbox: parseCheckboxInput,
 
-            listitem: parseLi,
+                    listitem: parseLi,
 
-        },
+                },
+
+            } );
+
+            const article_content = marked.parse( markdown_content );
+
+            const html_content = `
+                <!DOCTYPE html>
+                <html lang="zh-CN">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${ h1_content }</title>
+                        <link rel="stylesheet" href="/style/all/resize.css">
+                        <link rel="stylesheet" href="/style/all/font.css">
+                        <link rel="stylesheet" href="/style/page/page.css">
+                    </head>
+                    <body>
+                        <section id="sidebar">
+                            <nav class="home-button">
+                                <p>HOMEPAGE</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
+                            </nav>
+                            <nav class="catalog-content">
+                                <p>IN THIS ARTICLE</p>
+                                ${ catalog_content }
+                            </nav>
+                        </section>
+                        <section id="topbar">
+                            <nav class="home-button">
+                                <button>HOMEPAGE</button>
+                            </nav>
+                        </section>
+                        <article>${ article_content }</article>
+                        <script src="/style/page/page.js"></script>
+                    </body>
+                </html>
+            `;
+
+            fs.writeFile( output_path, html_content, _ => {} );
+
+            markdown_content = catalog_content = h1_content = "";
+
+            resolve( html_content );
+
+        }
 
     } );
-
-    const article_content = marked.parse( markdown_content );
-
-    const html_content = `
-        <!DOCTYPE html>
-        <html lang="zh-CN">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${ h1_content }</title>
-                <link rel="stylesheet" href="/style/all/resize.css">
-                <link rel="stylesheet" href="/style/all/font.css">
-                <link rel="stylesheet" href="/style/page/page.css">
-            </head>
-            <body>
-                <section id="sidebar">
-                    <nav class="home-button">
-                        <p>HOMEPAGE</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="3" viewBox="0 0 24 3" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="23.5 0.5, 0.5 0.5, 2.5 2.5"></polyline></svg>
-                    </nav>
-                    <nav class="catalog-content">
-                        <p>IN THIS ARTICLE</p>
-                        ${ catalog_content }
-                    </nav>
-                </section>
-                <section id="topbar">
-                    <nav class="home-button">
-                        <button>HOMEPAGE</button>
-                    </nav>
-                </section>
-                <article>${ article_content }</article>
-                <script src="/style/page/page.js"></script>
-            </body>
-        </html>
-    `;
-
-    fs.writeFile( output_path, html_content, _ => {} );
 
 }
 
