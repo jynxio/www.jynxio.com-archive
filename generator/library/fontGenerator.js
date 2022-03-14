@@ -1,3 +1,6 @@
+// TODO 下一步：提取指定unicode范围内的字符集，来生成更小的字体文件。
+//      为了完成这个任务，我开启了font-filter项目。
+
 /**
  * 从html string中提取出所有标签的内容，然后合并成一段字符串，最后返回这段字符串。
  * @param {string} input - html string（是指字符串形式的html文件的内容），html string中的标签名是不区分大小写的。
