@@ -1,7 +1,18 @@
 {
+    "scripts": {
+
+        "publish": "node ./publisher/index.js"
+
+    },
+
     "devDependencies": {
-        "fontknife": "^0.1.1",
+
+        "fontcaster": "^0.2.0",
+
         "marked": "^4.0.12",
+
         "uuid": "^8.3.2"
+
     }
+
 }
