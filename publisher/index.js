@@ -1,3 +1,3 @@
-const castFont = require( "./fontcaster/index" );
+const castFont = require( "./font-caster/index" );
 
 castFont();

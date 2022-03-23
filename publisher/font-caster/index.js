@@ -1,4 +1,4 @@
-const fontcaster = require( "fontcaster" );
+const fontcaster = require( "font-caster" );
 
 async function castFont() {
 
@@ -42,7 +42,7 @@ async function castFont() {
 
     }
 
-    const subset_information = subset_response.information;
+    // const subset_information = subset_response.information;
 
     // console.log( subset_information.successfulCharacters  );
     // console.log( subset_information.successfulUnicodes  );

@@ -1,18 +1,12 @@
 {
     "scripts": {
-
-        "publish": "node ./publisher/index.js"
-
+        "build-page": "node ./publisher/index.js"
     },
-
     "devDependencies": {
-
-        "fontcaster": "^0.3.1",
-
         "marked": "^4.0.12",
-
         "uuid": "^8.3.2"
-
+    },
+    "dependencies": {
+        "font-caster": "^0.1.0"
     }
-
 }
