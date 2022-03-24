@@ -4,25 +4,25 @@ const { marked } = require( "marked" );
 
 const { v4: uuidv4 } = require( "uuid" );
 
-/* ---------------------------------------------------------------------------------------------------------- */
 
-let markdown_content = "";
-let catalog_content = "";
-let h1_content = "";
+let _markdown_content = "";
+let _catalog_content = "";
+let _h1_content = "";
 
 /**
- * （异步）将markdown转译为html，自动生成的html文件存储在output_path处。
- * @param {string} input_path - markdown文件的路径，比如"./test.md"。
+ * （异步）根据md文件来生成html文件。
+ * @param {string} input_path - md文件的路径，比如"./test.md"。
  * @param {string} output_path - html文件的路径，比如"./test.html"。
- * @returns {Promise} - Promise代表html string（是指字符串形式的html文件的内容）。
+ * @returns {Promise} - Promise代表是否生成成功。若成功，则返回{success: true, content}对象，生成的html文件将存储在
+ * output_path路径下，其中content代表该html文件的内容。该方法暂未处理失败的情况，也不确定失败情况下是否会创建html文件。
  */
-function htmlGenerator( input_path, output_path ) {
+function createHtmlFile( input_path, output_path ) {
 
     return new Promise( resolve => {
 
         const reader = fs.createReadStream( input_path, { encoding: "utf8" } );
 
-        reader.on( "data", chunk => markdown_content += chunk );
+        reader.on( "data", chunk => _markdown_content += chunk );
         reader.on( "end", onEnd );
 
         function onEnd() {
@@ -45,7 +45,7 @@ function htmlGenerator( input_path, output_path ) {
 
             } );
 
-            const article_content = marked.parse( markdown_content );
+            const article_content = marked.parse( _markdown_content );
 
             const html_content = `
                 <!DOCTYPE html>
@@ -54,7 +54,7 @@ function htmlGenerator( input_path, output_path ) {
                         <meta charset="UTF-8">
                         <meta http-equiv="X-UA-Compatible" content="IE=edge">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>${ h1_content }</title>
+                        <title>${ _h1_content }</title>
                         <link rel="stylesheet" href="/style/all/resize.css">
                         <link rel="stylesheet" href="/style/all/font.css">
                         <link rel="stylesheet" href="/style/page/page.css">
@@ -67,7 +67,7 @@ function htmlGenerator( input_path, output_path ) {
                             </nav>
                             <nav class="catalog-content">
                                 <p>IN THIS ARTICLE</p>
-                                ${ catalog_content }
+                                ${ _catalog_content }
                             </nav>
                         </section>
                         <section id="topbar">
@@ -83,9 +83,9 @@ function htmlGenerator( input_path, output_path ) {
 
             fs.writeFile( output_path, html_content, _ => {} );
 
-            markdown_content = catalog_content = h1_content = "";
+            _markdown_content = _catalog_content = _h1_content = "";
 
-            resolve( html_content );
+            resolve( { success: true, content: html_content } );
 
         }
 
@@ -111,7 +111,7 @@ function parseH123456( content, level ) {
 
         const p = `<p id="last-updated">Last Updated: ${ getDate() }</p>`;
 
-        h1_content = content;
+        _h1_content = content;
 
         return ( h + p );
 
@@ -124,7 +124,7 @@ function parseH123456( content, level ) {
 
     const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
 
-    catalog_content += p;
+    _catalog_content += p;
 
     return h;
 
@@ -171,4 +171,4 @@ function getDate() {
 
 }
 
-module.exports = htmlGenerator;
+module.exports = createHtmlFile;

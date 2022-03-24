@@ -12,28 +12,16 @@ const fontcaster = require( "font-caster" );
  * 若存在同名文件，则该方法会覆盖同名文件。
  * @returns { Promise } - Promise代表是否子集化成功，若成功则返回{success: true}对象，否则返回{success: false, error}对象。
  */
-async function castFont( html_files_path, txt_file_path,  origin_font_path, subset_font_path ) {
+async function createFontFile( html_files_path, txt_file_path,  origin_font_path, subset_font_path ) {
 
     /* Read all html files and txt file. */
     const read_html_response = await fontcaster.read( html_files_path, false );
 
-    if ( ! read_html_response.success ) {
-
-        console.error( "Read Error: ", read_html_response.error );
-
-        return { success: false, error: read_html_response.error };
-
-    }
+    if ( ! read_html_response.success ) return { success: false, error: read_html_response.error };
 
     const read_txt_response = await fontcaster.read( txt_file_path, true );
 
-    if ( ! read_txt_response.success ) {
-
-        console.error( "Read Error: ", read_txt_response.error );
-
-        return { success: false, error: read_txt_response.error };
-
-    }
+    if ( ! read_txt_response.success ) return { success: false, error: read_txt_response.error };
 
     /* Create character set. */
     let characters = fontcaster.convert( read_txt_response.files[ 0 ].content );
@@ -55,13 +43,7 @@ async function castFont( html_files_path, txt_file_path,  origin_font_path, subs
     /* Subset font file. */
     const subset_response = await fontcaster.subset( characters, origin_font_path, subset_font_path );
 
-    if ( ! subset_response.success ) {
-
-        console.error( "Subset error: ", subset_response.error );
-
-        return { success: false, error: subset_response.error };
-
-    }
+    if ( ! subset_response.success ) return { success: false, error: subset_response.error };
 
     /* Print information about subset. */
     const print_subset_information_options = {
@@ -135,4 +117,4 @@ async function castFont( html_files_path, txt_file_path,  origin_font_path, subs
 
 }
 
-module.exports = castFont;
+module.exports = createFontFile;
