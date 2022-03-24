@@ -1,8 +1,5 @@
 const fontcaster = require( "font-caster" );
 
-// BUG: read空文本时会产生bug。
-// BUG: convert 会有这个bug吗？
-
 /**
  * 字体子集化。
  * @param { string } html_files_path - 一个html文本的路径，或存储零至多个html文本的目录的路径，比如"./page/example.html"或"./page"。
@@ -17,21 +14,31 @@ const fontcaster = require( "font-caster" );
  */
 async function castFont( html_files_path, txt_file_path,  origin_font_path, subset_font_path ) {
 
-    /* Read all html files. */
-    const read_response = await fontcaster.read( html_files_path );
+    /* Read all html files and txt file. */
+    const read_html_response = await fontcaster.read( html_files_path, false );
 
-    if ( ! read_response.success ) {
+    if ( ! read_html_response.success ) {
 
-        console.error( "Read Error: ", read_response.error );
+        console.error( "Read Error: ", read_html_response.error );
 
-        return { success: false, error: read_response.error };
+        return { success: false, error: read_html_response.error };
 
     }
 
-    /* Extract characters. */
-    let characters = "";
+    const read_txt_response = await fontcaster.read( txt_file_path, true );
 
-    for ( const file of read_response.files ) {
+    if ( ! read_txt_response.success ) {
+
+        console.error( "Read Error: ", read_txt_response.error );
+
+        return { success: false, error: read_txt_response.error };
+
+    }
+
+    /* Create character set. */
+    let characters = fontcaster.convert( read_txt_response.files[ 0 ].content );
+
+    for ( const file of read_html_response.files ) {
 
         const { name, type, content } = file;
 
@@ -76,6 +83,11 @@ async function castFont( html_files_path, txt_file_path,  origin_font_path, subs
     };
 
     printInformationAboutSubset( subset_response.information, print_subset_information_options );
+
+    /* Write character set to txt file. */
+    const unicodes = fontcaster.convert( characters );
+
+    fontcaster.write( unicodes, txt_file_path );
 
     /* The end. */
     return { success: true };

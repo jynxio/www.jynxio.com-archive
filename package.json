@@ -7,6 +7,6 @@
         "uuid": "^8.3.2"
     },
     "dependencies": {
-        "font-caster": "^0.1.0"
+        "font-caster": "^0.1.2"
     }
 }
