@@ -28,6 +28,8 @@ async function castFont() {
 
     }
 
+    characters = fontcaster.deduplication( characters );
+
     /* Subset font file. */
     const origin_font_path = "./static/font/noto-sans-sc-v24-chinese-simplified-regular.woff";
     const subset_font_path = "./static/font/noto-sans-sc-v24-chinese-simplified-regular-subset.woff";
@@ -42,15 +44,38 @@ async function castFont() {
 
     }
 
-    // const subset_information = subset_response.information;
-
-    // console.log( subset_information.successfulCharacters  );
-    // console.log( subset_information.successfulUnicodes  );
-    // console.log( subset_information.failedCharacters  );
-    // console.log( subset_information.failedUnicodes  );
+    printSubsetInformation( subset_response.information );
 
     /* Output characters. */
-    // TODO
+    const write_response = await fontcaster.write( fontcaster.convert( characters ), "./static/font/character-set.txt" );
+
+    if ( ! write_response.success ) {
+
+        console.error( "WRITE ERROR: " + write_response.error );
+
+        return;
+
+    }
+
+}
+
+function printSubsetInformation( info ) {
+
+    const success_unicodes = info.successfulUnicodes;
+    const success_characters = info.successfulCharacters;
+
+    const failed_unicodes = info.failedUnicodes;
+    const failed_characters = info.failedCharacters;
+
+    const number_success = success_unicodes.length;
+    const number_failed = failed_unicodes.length;
+    const number_total = number_success + number_failed;
+
+    console.warn( "------------------------ SUBSET INFORMATION ------------------------" );
+    console.warn( "Total            : " + number_total );
+    console.warn( "Number of success: " + number_success );
+    console.warn( "Number of failed : " + number_failed );
+    console.warn( "------------------------ SUBSET INFORMATION ------------------------" );
 
 }
 
