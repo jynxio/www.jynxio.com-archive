@@ -4,20 +4,23 @@ const createHtmlFile = require( "./html/index" );
 
 const CHARACTER_SET_PATH = "./static/font/character-set.txt";
 
-const ORIGIN_FONT_SC_REGULAR_PATH = "./static/font/noto-sans-sc-v24-chinese-simplified-regular.woff";
-const SUBSET_FONT_SC_REGULAR_PATH = "./static/font/noto-sans-sc-v24-chinese-simplified-regular-subset.woff";
+const ORIGIN_FONT_PATH_EN_400 = "./static/font/origin-ibmplexsans-400.woff";
+const ORIGIN_FONT_PATH_EN_700 = "./static/font/origin-ibmplexsans-700.woff";
+const ORIGIN_FONT_PATH_ZH_400 = "./static/font/origin-notosans-400.woff";
+const ORIGIN_FONT_PATH_ZH_700 = "./static/font/origin-notosans-700.woff";
+const ORIGIN_FONT_PATH_CO_400 = "./static/font/origin-firacode-400.woff";
 
-const ORIGIN_FONT_SC_BOLD_PATH = "";
-const SUBSET_FONT_SC_BOLD_PATH = "";
+const SUBSET_FONT_PATH_EN_400 = "./static/font/subset-ibmplexsans-400.woff";
+const SUBSET_FONT_PATH_EN_700 = "./static/font/subset-ibmplexsans-700.woff";
+const SUBSET_FONT_PATH_ZH_400 = "./static/font/subset-notosans-400.woff";
+const SUBSET_FONT_PATH_ZH_700 = "./static/font/subset-notosans-700.woff";
+const SUBSET_FONT_PATH_CO_400 = "./static/font/subset-firacode-400.woff";
 
-const ORIGIN_FONT_EN_REGULAR_PATH = "";
-const SUBSET_FONT_EN_REGULAR_PATH = "";
-
-const ORIGIN_FONT_EN_BOLD_PATH = "";
-const SUBSET_FONT_EN_BOLD_PATH = "";
-
-const ORIGIN_FONT_CODE_REGULAR_PATH = "";
-const SUBSET_FONT_CODE_REGULAR_PATH = "";
+const UNICODES_PATH_EN_400 = "./static/font/unicodes-en-400.txt";
+const UNICODES_PATH_EN_700 = "./static/font/unicodes-en-700.txt";
+const UNICODES_PATH_ZH_400 = "./static/font/unicodes-zh-400.txt";
+const UNICODES_PATH_ZH_700 = "./static/font/unicodes-zh-700.txt";
+const UNICODES_PATH_CO_400 = "./static/font/unicodes-co-400.txt";
 
 // TODO 继续创建完这个自动增量生成html和字体文件的流水线。
 

@@ -1,5 +1,23 @@
 const fontcaster = require( "font-caster" );
 
+async function subsetFont(
+
+    html_path,
+
+    unicodes_path,
+
+    origin_font_path,
+
+    subset_font_path,
+
+    tagnames,
+
+) {
+
+// TODO 一次性将subset多种字体文件。
+
+}
+
 /**
  * 字体子集化。
  * @param { string } html_files_path - 一个html文本的路径，或存储零至多个html文本的目录的路径，比如"./page/example.html"或"./page"。
