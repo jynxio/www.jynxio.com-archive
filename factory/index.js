@@ -22,12 +22,8 @@ const UNICODES_PATH_ZH_400 = "./static/font/unicodes-zh-400.txt";
 const UNICODES_PATH_ZH_700 = "./static/font/unicodes-zh-700.txt";
 const UNICODES_PATH_CO_400 = "./static/font/unicodes-co-400.txt";
 
-// TODO 继续创建完这个自动增量生成html和字体文件的流水线。
-
-main();
-
 /**
- * 
+ *
  * @param { string } input_path - md文件的路径，比如"./test.md"。
  * @param { string } output_path - html文件的路径，比如"./test.html"。
  * @returns { Promise } - Promise代表是否执行成功，若成功则返回{success: true}对象，否则返回{success: false, error}对象。
@@ -46,29 +42,5 @@ async function main( input_path, output_path ) {
     }
 
     const html_content = html_response.content;
-
-}
-
-
-async function f2() {
-
-    const html_files_path = "./page";
-    const txt_file_path = "./static/font/character-set.txt";
-    const origin_font_path = "./static/font/noto-sans-sc-v24-chinese-simplified-regular.woff";
-    const subset_font_path = "./static/font/noto-sans-sc-v24-chinese-simplified-regular-subset.woff"
-
-    createFontFile( html_files_path, txt_file_path, origin_font_path, subset_font_path ).then( response => {
-
-        if ( ! response.success ) {
-
-            console.error( response.error );
-
-            return { success: false, error: response.error };
-
-        }
-
-        return { success: true };
-
-    } );
 
 }
