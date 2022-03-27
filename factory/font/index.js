@@ -1,5 +1,7 @@
 const fontcaster = require( "font-caster" );
 
+const readlineSync = require( "readline-sync" );
+
 /**
  * =====================================================================
  * Usage: 通过更改下述常量来控制函数的行为。
@@ -35,13 +37,20 @@ const UNICODES_PATH_CO_400 = "./static/font/unicodes-co-400.txt";
 
 async function subsetFontFromOneHtml() {
 
-    /* Start */
-    console.log( "======================= Start =======================" );
-    console.log( "处理函数：subsetFontFromOneHtml" );
-    console.log( "处理目标：", NEW_HTML_PATH );
+    /* Insurance */
+    const password = `subsetFontFromOneHtml( ${ NEW_HTML_PATH } )`;
+    const command = readlineSync.question( `🟢 Please type ${ password } to confirm: \n` );
+
+    if ( command !== password ) {
+
+        console.log( "🔴 The command is wrong" );
+
+        return;
+
+    }
 
     /* Subset en-400 */
-    console.log( "开始处理：en-400" );
+    console.log( "🟢 Subsetting EN-400" );
 
     const r_en_400 = await subsetFontCore(
 
@@ -59,16 +68,14 @@ async function subsetFontFromOneHtml() {
 
     if ( ! r_en_400.success ) {
 
-        console.error( "处理失败：", r_en_400.error );
+        console.error( "🔴 Error: ", r_en_400.error );
 
         return;
 
     }
 
-    console.log( "处理完成：" );
-
     /* Subset en-700 */
-    console.log( "开始处理：en-700" );
+    console.log( "🟢 Subsetting EN-700" );
 
     const r_en_700 = await subsetFontCore(
 
@@ -86,16 +93,14 @@ async function subsetFontFromOneHtml() {
 
     if ( ! r_en_700.success ) {
 
-        console.error( "处理失败：", r_en_700.error );
+        console.error( "🔴 Error: ", r_en_700.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
     /* Subset zh-400 */
-    console.log( "开始处理：zh-400" );
+    console.log( "🟢 Subsetting ZH-400" );
 
     const r_zh_400 = await subsetFontCore(
 
@@ -113,16 +118,14 @@ async function subsetFontFromOneHtml() {
 
     if ( ! r_zh_400.success ) {
 
-        console.error( "处理失败：", r_zh_400.error );
+        console.error( "🔴 Error: ", r_zh_400.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
     /* Subset zh-700 */
-    console.log( "开始处理：zh-700" );
+    console.log( "🟢 Subsetting ZH-700" );
 
     const r_zh_700 = await subsetFontCore(
 
@@ -140,16 +143,14 @@ async function subsetFontFromOneHtml() {
 
     if ( ! r_zh_700.success ) {
 
-        console.error( "处理失败：", r_zh_700.error );
+        console.error( "🔴 Error: ", r_zh_700.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
     /* Subset co-400 */
-    console.log( "开始处理：co-400" );
+    console.log( "🟢 Subsetting CO-400" );
 
     const r_co_400 = await subsetFontCore(
 
@@ -167,25 +168,29 @@ async function subsetFontFromOneHtml() {
 
     if ( ! r_co_400.success ) {
 
-        console.error( "处理失败：", r_co_400.error );
+        console.error( "🔴 Error: ", r_co_400.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
-    /* Finish */
-    console.log( "======================= Finish =======================" );
+    console.log( "🟢 Done" );
 
 }
 
 async function subsetFontFromAllHtml() {
 
-    /* Start */
-    console.log( "======================= Start =======================" );
-    console.log( "处理函数：subsetFontFromAllHtml" );
-    console.log( "处理目标：", ALL_HTML_PATH );
+    /* Insurance */
+    const password = `subsetFontFromAllHtml( ${ ALL_HTML_PATH } )`;
+    const command = readlineSync.question( `🟢 Please type ${ password } to confirm: \n` );
+
+    if ( command !== password ) {
+
+        console.log( "🔴 The command is wrong" );
+
+        return;
+
+    }
 
     /* Clear unicodes txt file */
     let is_clear_success = true;
@@ -206,14 +211,14 @@ async function subsetFontFromAllHtml() {
 
         is_clear_success = false;
 
-        console.error( "处理失败：", r_c.error );
+        console.error( "🔴 Error: ", r_c.error );
 
     } );
 
     if ( ! is_clear_success ) return;
 
     /* Subset en-400 */
-    console.log( "开始处理：en-400" );
+    console.log( "🟢 Subsetting EN-400" );
 
     const r_en_400 = await subsetFontCore(
 
@@ -231,16 +236,14 @@ async function subsetFontFromAllHtml() {
 
     if ( ! r_en_400.success ) {
 
-        console.error( "处理失败 ", r_en_400.error );
+        console.error( "🔴 Error: ", r_en_400.error );
 
         return;
 
     }
 
-    console.log( "处理完成：" );
-
     /* Subset en-700 */
-    console.log( "开始处理：en-700" );
+    console.log( "🟢 Subsetting EN-700" );
 
     const r_en_700 = await subsetFontCore(
 
@@ -258,16 +261,14 @@ async function subsetFontFromAllHtml() {
 
     if ( ! r_en_700.success ) {
 
-        console.error( "处理失败：", r_en_700.error );
+        console.error( "🔴 Error: ", r_en_700.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
     /* Subset zh-400 */
-    console.log( "开始处理：zh-400" );
+    console.log( "🟢 Subsetting ZH-400" );
 
     const r_zh_400 = await subsetFontCore(
 
@@ -285,16 +286,14 @@ async function subsetFontFromAllHtml() {
 
     if ( ! r_zh_400.success ) {
 
-        console.error( "处理失败：", r_zh_400.error );
+        console.error( "🔴 Error: ", r_zh_400.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
     /* Subset zh-700 */
-    console.log( "开始处理：zh-700" );
+    console.log( "🟢 Subsetting ZH-700" );
 
     const r_zh_700 = await subsetFontCore(
 
@@ -312,16 +311,14 @@ async function subsetFontFromAllHtml() {
 
     if ( ! r_zh_700.success ) {
 
-        console.error( "处理失败：", r_zh_700.error );
+        console.error( "🔴 Error: ", r_zh_700.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
     /* Subset co-400 */
-    console.log( "开始处理：co-400" );
+    console.log( "🟢 Subsetting CO-400" );
 
     const r_co_400 = await subsetFontCore(
 
@@ -339,16 +336,13 @@ async function subsetFontFromAllHtml() {
 
     if ( ! r_co_400.success ) {
 
-        console.error( "处理失败：", r_co_400.error );
+        console.error( "🔴 Error: ：", r_co_400.error );
 
         return;
 
     }
 
-    console.log( "处理完成" );
-
-    /* Finish */
-    console.log( "======================= Finish =======================" );
+    console.log( "🟢 Done" );
 
 }
 

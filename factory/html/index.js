@@ -1,5 +1,7 @@
 const fs = require( "fs" );
 
+const readlineSync = require( "readline-sync" );
+
 const { marked } = require( "marked" );
 
 const { v4: createUuid } = require( "uuid" );
@@ -18,28 +20,24 @@ const NEW_HTML_PATH = "./page/example.html";
 
 async function createHtmlFromOneMd() {
 
-    /* Start */
-    console.log( "======================= Start =======================" );
-    console.log( "处理函数：createHtmlFromOneMd" );
-    console.log( "处理目标：", NEW_MD_PATH );
+    /* Insurance */
+    const password = `createHtmlFromOneMd( ${ NEW_MD_PATH }, ${ NEW_HTML_PATH } )`;
+    const command = readlineSync.question( `🟢 Please type ${ password } to confirm: \n` );
 
-    /* Create html file */
-    console.log( "开始处理" );
+    if ( command !== password ) {
 
-    const response  =await createHtmlCore( NEW_MD_PATH, NEW_HTML_PATH );
-
-    if ( ! response.success ) {
-
-        console.error( "处理失败：", response.error );
+        console.log( "🔴 The command is wrong" );
 
         return;
 
     }
 
-    console.log( "处理完成" );
+    /* Create html file */
+    const response  = await createHtmlCore( NEW_MD_PATH, NEW_HTML_PATH );
 
-    /* Finish */
-    console.log( "======================= Finish =======================" );
+    response.success
+    ? console.log( "🟢 Done" )
+    : console.error( "🔴 Error: ", response.error );
 
 }
 
