@@ -13,18 +13,18 @@ const NEW_HTML_PATH = "./page/example.html";
 const ALL_HTML_PATH = "./page";
 
 /* 原始的字体文件的路径。 */
-const ORIGIN_FONT_PATH_EN_400 = "./static/font/origin-en-400.woff";
-const ORIGIN_FONT_PATH_EN_700 = "./static/font/origin-en-700.woff";
+const ORIGIN_FONT_PATH_EN_400 = "./static/font/origin-en-400.ttf";
+const ORIGIN_FONT_PATH_EN_700 = "./static/font/origin-en-700.ttf";
 const ORIGIN_FONT_PATH_ZH_400 = "./static/font/origin-zh-400.woff";
 const ORIGIN_FONT_PATH_ZH_700 = "./static/font/origin-zh-700.woff";
-const ORIGIN_FONT_PATH_CO_400 = "./static/font/origin-co-400.woff";
+const ORIGIN_FONT_PATH_CO_400 = "./static/font/origin-co-400.ttf";
 
 /* 子集化的字体文件的路径。 */
-const SUBSET_FONT_PATH_EN_400 = "./static/font/subset-en-400.woff";
-const SUBSET_FONT_PATH_EN_700 = "./static/font/subset-en-700.woff";
+const SUBSET_FONT_PATH_EN_400 = "./static/font/subset-en-400.ttf";
+const SUBSET_FONT_PATH_EN_700 = "./static/font/subset-en-700.ttf";
 const SUBSET_FONT_PATH_ZH_400 = "./static/font/subset-zh-400.woff";
 const SUBSET_FONT_PATH_ZH_700 = "./static/font/subset-zh-700.woff";
-const SUBSET_FONT_PATH_CO_400 = "./static/font/subset-co-400.woff";
+const SUBSET_FONT_PATH_CO_400 = "./static/font/subset-co-400.ttf";
 
 /* unicode文本的路径。 */
 const UNICODES_PATH_EN_400 = "./static/font/unicodes-en-400.txt";
@@ -59,7 +59,7 @@ async function subsetFontFromOneHtml() {
 
     if ( ! r_en_400.success ) {
 
-        console.error( "处理失败 ", r_en_400.error );
+        console.error( "处理失败：", r_en_400.error );
 
         return;
 
@@ -80,7 +80,7 @@ async function subsetFontFromOneHtml() {
 
         SUBSET_FONT_PATH_EN_700,
 
-        undefined,
+        [ "h1", "h2", "h3", "h4", "strong" ],
 
     );
 
@@ -134,7 +134,7 @@ async function subsetFontFromOneHtml() {
 
         SUBSET_FONT_PATH_ZH_700,
 
-        undefined,
+        [ "h1", "h2", "h3", "h4", "strong" ],
 
     );
 
@@ -190,27 +190,23 @@ async function subsetFontFromAllHtml() {
     /* Clear unicodes txt file */
     let is_clear_success = true;
 
-    [
+    const r_cs = await Promise.all( [
 
-        UNICODES_PATH_EN_400,
+        fontcaster.write( "", UNICODES_PATH_EN_400 ),
+        fontcaster.write( "", UNICODES_PATH_EN_700 ),
+        fontcaster.write( "", UNICODES_PATH_ZH_400 ),
+        fontcaster.write( "", UNICODES_PATH_ZH_700 ),
+        fontcaster.write( "", UNICODES_PATH_CO_400 ),
 
-        UNICODES_PATH_EN_700,
+    ] );
 
-        UNICODES_PATH_ZH_400,
+    r_cs.forEach( r_c => {
 
-        UNICODES_PATH_ZH_700,
-
-        UNICODES_PATH_CO_400,
-
-    ].map( path => {
-
-        const r = await fontcaster.write( "", path )
-
-        if ( r.success ) return;
+        if ( r_c.success ) return;
 
         is_clear_success = false;
 
-        console.error( "处理失败：", r.error );
+        console.error( "处理失败：", r_c.error );
 
     } );
 
@@ -256,7 +252,7 @@ async function subsetFontFromAllHtml() {
 
         SUBSET_FONT_PATH_EN_700,
 
-        undefined,
+        [ "h1", "h2", "h3", "h4", "strong" ],
 
     );
 
@@ -310,7 +306,7 @@ async function subsetFontFromAllHtml() {
 
         SUBSET_FONT_PATH_ZH_700,
 
-        undefined,
+        [ "h1", "h2", "h3", "h4", "strong" ],
 
     );
 
@@ -426,7 +422,7 @@ async function subsetFontCore(
 
         const unicodes = fontcaster.convert( characters );
 
-        const response = fontcaster.write( unicodes, unicode_path );
+        const response = await fontcaster.write( unicodes, unicode_path );
 
         if ( ! response.success ) return { success: false, error: response.error };
 

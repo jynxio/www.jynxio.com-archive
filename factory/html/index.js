@@ -93,9 +93,9 @@ function createHtmlCore( input_path, output_path ) {
                         <meta http-equiv="X-UA-Compatible" content="IE=edge">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <title>${ h1_content }</title>
-                        <link rel="stylesheet" href="/style/all/resize.css">
-                        <link rel="stylesheet" href="/style/all/font.css">
-                        <link rel="stylesheet" href="/style/page/page.css">
+                        <link rel="stylesheet" href="/style/reset.css">
+                        <link rel="stylesheet" href="/style/font.css">
+                        <link rel="stylesheet" href="/style/page.css">
                     </head>
                     <body>
                         <section id="sidebar">
@@ -114,7 +114,7 @@ function createHtmlCore( input_path, output_path ) {
                             </nav>
                         </section>
                         <article>${ article_content }</article>
-                        <script src="/style/page/page.js"></script>
+                        <script src="/style/page.js"></script>
                     </body>
                 </html>
             `;

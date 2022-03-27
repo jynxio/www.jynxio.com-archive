@@ -111,6 +111,6 @@ console.log( removed ); // output: []
 console.log( array );   // output: [ "a", "b", "c", "d" ]
 ```
 
-![example](/static/image-hosting/test.png)
+![example](/static/image/example.png)
 
 > Image from [simpledesktops](http://simpledesktops.com/).
