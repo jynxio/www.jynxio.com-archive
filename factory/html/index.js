@@ -4,17 +4,16 @@ const { marked } = require( "marked" );
 
 const { v4: uuidv4 } = require( "uuid" );
 
-
 let _markdown_content = "";
 let _catalog_content = "";
 let _h1_content = "";
 
 /**
- * （异步）根据md文件来生成html文件。
- * @param {string} input_path - md文件的路径，比如"./test.md"。
- * @param {string} output_path - html文件的路径，比如"./test.html"。
- * @returns {Promise} - Promise代表是否生成成功。若成功，则返回{success: true, content}对象，生成的html文件将存储在
- * output_path路径下，其中content代表该html文件的内容。该方法暂未处理失败的情况，也不确定失败情况下是否会创建html文件。
+ * （异步）基于md文件来生成html文件。
+ * @param { string } input_path - md文件的路径，比如"./index.md"。
+ * @param { string } output_path - 生成的html文件的存储路径，比如"./index.html"。
+ * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
+ * {success: true, content}对象，content代表html的内容。
  */
 function createHtmlFile( input_path, output_path ) {
 

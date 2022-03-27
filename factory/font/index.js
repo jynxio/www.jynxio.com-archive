@@ -1,9 +1,359 @@
 const fontcaster = require( "font-caster" );
 
-// TODO 重写了字体子集化的函数！下一步是什么呢？
+/* Usage: 通过更改下述常量来控制字体子集化的行为。 */
+
+/* 新增的html文件的路径。 */
+const NEW_HTML_PATH = "./page/example.html";
+
+/* 所有html文件的路径。 */
+const ALL_HTML_PATH = "./page";
+
+/* 原始的字体文件的路径。 */
+const ORIGIN_FONT_PATH_EN_400 = "./static/font/origin-en-400.woff";
+const ORIGIN_FONT_PATH_EN_700 = "./static/font/origin-en-700.woff";
+const ORIGIN_FONT_PATH_ZH_400 = "./static/font/origin-zh-400.woff";
+const ORIGIN_FONT_PATH_ZH_700 = "./static/font/origin-zh-700.woff";
+const ORIGIN_FONT_PATH_CO_400 = "./static/font/origin-co-400.woff";
+
+/* 子集化的字体文件的路径。 */
+const SUBSET_FONT_PATH_EN_400 = "./static/font/subset-en-400.woff";
+const SUBSET_FONT_PATH_EN_700 = "./static/font/subset-en-700.woff";
+const SUBSET_FONT_PATH_ZH_400 = "./static/font/subset-zh-400.woff";
+const SUBSET_FONT_PATH_ZH_700 = "./static/font/subset-zh-700.woff";
+const SUBSET_FONT_PATH_CO_400 = "./static/font/subset-co-400.woff";
+
+/* unicode文本的路径。 */
+const UNICODES_PATH_EN_400 = "./static/font/unicodes-en-400.txt";
+const UNICODES_PATH_EN_700 = "./static/font/unicodes-en-700.txt";
+const UNICODES_PATH_ZH_400 = "./static/font/unicodes-zh-400.txt";
+const UNICODES_PATH_ZH_700 = "./static/font/unicodes-zh-700.txt";
+const UNICODES_PATH_CO_400 = "./static/font/unicodes-co-400.txt";
+
+async function subsetFontFromOneHtml() {
+
+    /* Start */
+    console.log( "======================= Start =======================" );
+    console.log( "处理函数：subsetFontFromOneHtml" );
+    console.log( "处理目标：", NEW_HTML_PATH );
+
+    /* Subset en-400 */
+    console.log( "开始处理：en-400" );
+
+    const r_en_400 = await createFontFile(
+
+        NEW_HTML_PATH,
+
+        UNICODES_PATH_EN_400,
+
+        ORIGIN_FONT_PATH_EN_400,
+
+        SUBSET_FONT_PATH_EN_400,
+
+        undefined,
+
+    );
+
+    if ( ! r_en_400.success ) {
+
+        console.error( "处理失败 ", r_en_400.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成：" );
+
+    /* Subset en-700 */
+    console.log( "开始处理：en-700" );
+
+    const r_en_700 = await createFontFile(
+
+        NEW_HTML_PATH,
+
+        UNICODES_PATH_EN_700,
+
+        ORIGIN_FONT_PATH_EN_700,
+
+        SUBSET_FONT_PATH_EN_700,
+
+        undefined,
+
+    );
+
+    if ( ! r_en_700.success ) {
+
+        console.error( "处理失败：", r_en_700.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Subset zh-400 */
+    console.log( "开始处理：zh-400" );
+
+    const r_zh_400 = await createFontFile(
+
+        NEW_HTML_PATH,
+
+        UNICODES_PATH_ZH_400,
+
+        ORIGIN_FONT_PATH_ZH_400,
+
+        SUBSET_FONT_PATH_ZH_400,
+
+        undefined,
+
+    );
+
+    if ( ! r_zh_400.success ) {
+
+        console.error( "处理失败：", r_zh_400.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Subset zh-700 */
+    console.log( "开始处理：zh-700" );
+
+    const r_zh_700 = await createFontFile(
+
+        NEW_HTML_PATH,
+
+        UNICODES_PATH_ZH_700,
+
+        ORIGIN_FONT_PATH_ZH_700,
+
+        SUBSET_FONT_PATH_ZH_700,
+
+        undefined,
+
+    );
+
+    if ( ! r_zh_700.success ) {
+
+        console.error( "处理失败：", r_zh_700.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Subset co-400 */
+    console.log( "开始处理：co-400" );
+
+    const r_co_400 = await createFontFile(
+
+        NEW_HTML_PATH,
+
+        UNICODES_PATH_CO_400,
+
+        ORIGIN_FONT_PATH_CO_400,
+
+        SUBSET_FONT_PATH_CO_400,
+
+        [ "code", "pre" ],
+
+    );
+
+    if ( ! r_co_400.success ) {
+
+        console.error( "处理失败：", r_co_400.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Finish */
+    console.log( "======================= Finish =======================" );
+
+}
+
+async function subsetFontFromAllHtml() {
+
+    /* Start */
+    console.log( "======================= Start =======================" );
+    console.log( "处理函数：subsetFontFromAllHtml" );
+    console.log( "处理目标：", ALL_HTML_PATH );
+
+    /* Clear unicodes txt file */
+    let is_clear_success = true;
+
+    [
+
+        UNICODES_PATH_EN_400,
+
+        UNICODES_PATH_EN_700,
+
+        UNICODES_PATH_ZH_400,
+
+        UNICODES_PATH_ZH_700,
+
+        UNICODES_PATH_CO_400,
+
+    ].map( path => {
+
+        const r = await fontcaster.write( "", path )
+
+        if ( r.success ) return;
+
+        is_clear_success = false;
+
+        console.error( "处理失败：", r.error );
+
+    } );
+
+    if ( ! is_clear_success ) return;
+
+    /* Subset en-400 */
+    console.log( "开始处理：en-400" );
+
+    const r_en_400 = await createFontFile(
+
+        ALL_HTML_PATH,
+
+        UNICODES_PATH_EN_400,
+
+        ORIGIN_FONT_PATH_EN_400,
+
+        SUBSET_FONT_PATH_EN_400,
+
+        undefined,
+
+    );
+
+    if ( ! r_en_400.success ) {
+
+        console.error( "处理失败 ", r_en_400.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成：" );
+
+    /* Subset en-700 */
+    console.log( "开始处理：en-700" );
+
+    const r_en_700 = await createFontFile(
+
+        ALL_HTML_PATH,
+
+        UNICODES_PATH_EN_700,
+
+        ORIGIN_FONT_PATH_EN_700,
+
+        SUBSET_FONT_PATH_EN_700,
+
+        undefined,
+
+    );
+
+    if ( ! r_en_700.success ) {
+
+        console.error( "处理失败：", r_en_700.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Subset zh-400 */
+    console.log( "开始处理：zh-400" );
+
+    const r_zh_400 = await createFontFile(
+
+        ALL_HTML_PATH,
+
+        UNICODES_PATH_ZH_400,
+
+        ORIGIN_FONT_PATH_ZH_400,
+
+        SUBSET_FONT_PATH_ZH_400,
+
+        undefined,
+
+    );
+
+    if ( ! r_zh_400.success ) {
+
+        console.error( "处理失败：", r_zh_400.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Subset zh-700 */
+    console.log( "开始处理：zh-700" );
+
+    const r_zh_700 = await createFontFile(
+
+        ALL_HTML_PATH,
+
+        UNICODES_PATH_ZH_700,
+
+        ORIGIN_FONT_PATH_ZH_700,
+
+        SUBSET_FONT_PATH_ZH_700,
+
+        undefined,
+
+    );
+
+    if ( ! r_zh_700.success ) {
+
+        console.error( "处理失败：", r_zh_700.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Subset co-400 */
+    console.log( "开始处理：co-400" );
+
+    const r_co_400 = await createFontFile(
+
+        ALL_HTML_PATH,
+
+        UNICODES_PATH_CO_400,
+
+        ORIGIN_FONT_PATH_CO_400,
+
+        SUBSET_FONT_PATH_CO_400,
+
+        [ "code", "pre" ],
+
+    );
+
+    if ( ! r_co_400.success ) {
+
+        console.error( "处理失败：", r_co_400.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Finish */
+    console.log( "======================= Finish =======================" );
+
+}
 
 /**
- * 字体子集化。
+ * （异步）字体子集化。
  * @param { string } html_path - html文件的路径（如"./page/index.html"），或文件夹的路径（如"./page"）。若
  * 入参是html文件的路径，则将基于该html文件来进行字体子集化；若入参是文件夹的路径，则将基于该文件夹内的所有的html文件
  * 来进行字体子集化。
@@ -16,10 +366,10 @@ const fontcaster = require( "font-caster" );
  * @param { undefined | Array<string> } tagnames - 若入参是undefined，则会提取所有的html文件的所有的标签的
  * 内容来进行字体子集化；若入参是["p", "a"]，则会提取所有的html文件的所有的h1标签和a标签的内容来进行字体子集化，同理
  * 类推其他标签。注意：1.不能输入自闭合标签；2.不区分标签名的大小写。
- * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象，若成功，则返回
+ * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
  * {success, true, information}对象，参考subset API。
  */
-async function subsetFont(
+async function createFontFile(
 
     html_path,
 
@@ -90,121 +440,5 @@ async function subsetFont(
     }
 
 }
-/**
- * 字体子集化。
- * @param { string } html_files_path - 一个html文本的路径，或存储零至多个html文本的目录的路径，比如"./page/example.html"或"./page"。
- * @param { string } txt_file_path - txt文本的路径，比如"./static/font/character-set.txt"。txt文本的内容是以逗号分隔的unicode（基
- * 于十进制）。该方法将使用txt字符集与html字符集的并集（自动进行字符去重）来进行字体子集化，最后并集将以逗号分隔的unicode的形式覆写回txt文本中。
- * 如果你是第一次进行字体子集化，请提供空的txt文本。如果你是第二次进行字体子集化，请提供上一次子集化所产生的txt文本，这样本次子集化所产生的字体文件
- * 将包含两次子集化的字符集。
- * @param { string } origin_font_path - 原始的字体文件的路径，比如 "./origin.otf"，也支持 ttf、woff。该方法不会改变原始的字体文件。
- * @param { string } subset_font_path - 生成的字体文件的路径，比如 "./sunset.otf"，生成的字体文件的格式必须与生原始的字体文件的格式一致。
- * 若存在同名文件，则该方法会覆盖同名文件。
- * @returns { Promise } - Promise代表是否子集化成功，若成功则返回{success: true}对象，否则返回{success: false, error}对象。
- */
-async function createFontFile( html_files_path, txt_file_path,  origin_font_path, subset_font_path ) {
 
-    /* Read all html files and txt file. */
-    const read_html_response = await fontcaster.read( html_files_path, false );
-
-    if ( ! read_html_response.success ) return { success: false, error: read_html_response.error };
-
-    const read_txt_response = await fontcaster.read( txt_file_path, true );
-
-    if ( ! read_txt_response.success ) return { success: false, error: read_txt_response.error };
-
-    /* Create character set. */
-    let characters = fontcaster.convert( read_txt_response.files[ 0 ].content );
-
-    for ( const file of read_html_response.files ) {
-
-        const { name, type, content } = file;
-
-        if ( name === ".DS_Store" ) continue;
-
-        if ( type !== "html" ) continue;
-
-        characters += fontcaster.deduplication( fontcaster.parseHtml( content ) );
-
-    }
-
-    characters = fontcaster.deduplication( characters );
-
-    /* Subset font file. */
-    const subset_response = await fontcaster.subset( characters, origin_font_path, subset_font_path );
-
-    if ( ! subset_response.success ) return { success: false, error: subset_response.error };
-
-    /* Print information about subset. */
-    const print_subset_information_options = {
-
-        printTotalNumber: true,
-
-        printSuccessfulNumber: true,
-
-        printFailedNumber: true,
-
-        printSuccessfulUnicodes: false,
-
-        printSuccessfulCharacters: false,
-
-        printFailedUnicodes: false,
-
-        printFailedCharacters: false,
-
-    };
-
-    printInformationAboutSubset( subset_response.information, print_subset_information_options );
-
-    /* Write character set to txt file. */
-    const unicodes = fontcaster.convert( characters );
-
-    fontcaster.write( unicodes, txt_file_path );
-
-    /* The end. */
-    return { success: true };
-
-    function printInformationAboutSubset( information, {
-
-        printTotalNumber = true,
-
-        printSuccessfulNumber = true,
-
-        printFailedNumber = true,
-
-        printSuccessfulUnicodes = false,
-
-        printSuccessfulCharacters = false,
-
-        printFailedUnicodes = false,
-
-        printFailedCharacters = false,
-
-    } = {} ) {
-
-        const successful_unicodes = information.successfulUnicodes;
-        const successful_characters = information.successfulCharacters
-
-        const failed_unicodes = information.failedUnicodes;
-        const failed_characters = information.failedCharacters;
-
-        const successful_number = successful_unicodes.length;
-        const failed_number = failed_unicodes.length;
-
-        const total_number = successful_number + failed_number;
-
-        console.log( "--------------------------- Subset Information ---------------------------"  );
-        printTotalNumber          && console.log( "Total number:          ", total_number          );
-        printSuccessfulNumber     && console.log( "Successful number:     ", successful_number     );
-        printFailedNumber         && console.log( "Failed number:         ", failed_number         );
-        printSuccessfulUnicodes   && console.log( "Successful unicodes:   ", successful_unicodes   );
-        printSuccessfulCharacters && console.log( "Successful characters: ", successful_characters );
-        printFailedUnicodes       && console.log( "Failed unicodes:       ", failed_unicodes       );
-        printFailedCharacters     && console.log( "Failed characters:     ", failed_characters     );
-        console.log( "--------------------------- Subset Information ---------------------------"  );
-
-    }
-
-}
-
-module.exports = createFontFile;
+module.exports = { subsetFontFromOneHtml, subsetFontFromAllHtml };

@@ -2,33 +2,6 @@ const createFontFile = require( "./font/index" );
 
 const createHtmlFile = require( "./html/index" );
 
-/* 新增的html文件的路径 */
-const NEW_HTML_PATH = "./page/example.html";
-
-/* 所有html文件的路径 */
-const ALL_HTML_PATH = "./page";
-
-/* 原始的字体文件的路径 */
-const ORIGIN_FONT_PATH_EN_400 = "./static/font/origin-ibmplexsans-400.woff";
-const ORIGIN_FONT_PATH_EN_700 = "./static/font/origin-ibmplexsans-700.woff";
-const ORIGIN_FONT_PATH_ZH_400 = "./static/font/origin-notosans-400.woff";
-const ORIGIN_FONT_PATH_ZH_700 = "./static/font/origin-notosans-700.woff";
-const ORIGIN_FONT_PATH_CO_400 = "./static/font/origin-firacode-400.woff";
-
-/* 子集化的字体文件的路径 */
-const SUBSET_FONT_PATH_EN_400 = "./static/font/subset-ibmplexsans-400.woff";
-const SUBSET_FONT_PATH_EN_700 = "./static/font/subset-ibmplexsans-700.woff";
-const SUBSET_FONT_PATH_ZH_400 = "./static/font/subset-notosans-400.woff";
-const SUBSET_FONT_PATH_ZH_700 = "./static/font/subset-notosans-700.woff";
-const SUBSET_FONT_PATH_CO_400 = "./static/font/subset-firacode-400.woff";
-
-/* unicode文本的路径 */
-const UNICODES_PATH_EN_400 = "./static/font/unicodes-en-400.txt";
-const UNICODES_PATH_EN_700 = "./static/font/unicodes-en-700.txt";
-const UNICODES_PATH_ZH_400 = "./static/font/unicodes-zh-400.txt";
-const UNICODES_PATH_ZH_700 = "./static/font/unicodes-zh-700.txt";
-const UNICODES_PATH_CO_400 = "./static/font/unicodes-co-400.txt";
-
 /**
  *
  * @param { string } input_path - md文件的路径，比如"./test.md"。
