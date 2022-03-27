@@ -1,6 +1,7 @@
 {
     "scripts": {
-        "build-page": "node ./publisher/index.js"
+        "subset-font": "node ./factory/subsetFont.js",
+        "create-html": "node ./factory/createHtml.js"
     },
     "devDependencies": {
         "marked": "^4.0.12",

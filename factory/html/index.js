@@ -2,11 +2,46 @@ const fs = require( "fs" );
 
 const { marked } = require( "marked" );
 
-const { v4: uuidv4 } = require( "uuid" );
+const { v4: createUuid } = require( "uuid" );
 
-let _markdown_content = "";
-let _catalog_content = "";
-let _h1_content = "";
+/**
+ * =====================================================================
+ * Usage: 通过更改下述常量来控制函数的行为。
+ * =====================================================================
+ */
+
+/* 新增的md文件的路径。 */
+const NEW_MD_PATH = "./note/example.md";
+
+/* 新增的html文件的路径 */
+const NEW_HTML_PATH = "./page/example.html";
+
+async function createHtmlFromOneMd() {
+
+    /* Start */
+    console.log( "======================= Start =======================" );
+    console.log( "处理函数：createHtmlFromOneMd" );
+    console.log( "处理目标：", NEW_MD_PATH );
+
+    /* Create html file */
+    console.log( "开始处理" );
+
+    const response  =await createHtmlCore( NEW_MD_PATH, NEW_HTML_PATH );
+
+    if ( ! response.success ) {
+
+        console.error( "处理失败：", response.error );
+
+        return;
+
+    }
+
+    console.log( "处理完成" );
+
+    /* Finish */
+    console.log( "======================= Finish =======================" );
+
+}
 
 /**
  * （异步）基于md文件来生成html文件。
@@ -15,13 +50,17 @@ let _h1_content = "";
  * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
  * {success: true, content}对象，content代表html的内容。
  */
-function createHtmlFile( input_path, output_path ) {
+function createHtmlCore( input_path, output_path ) {
+
+    let markdown_content = "";
+    let catalog_content = "";
+    let h1_content = "";
 
     return new Promise( resolve => {
 
         const reader = fs.createReadStream( input_path, { encoding: "utf8" } );
 
-        reader.on( "data", chunk => _markdown_content += chunk );
+        reader.on( "data", chunk => markdown_content += chunk );
         reader.on( "end", onEnd );
 
         function onEnd() {
@@ -44,7 +83,7 @@ function createHtmlFile( input_path, output_path ) {
 
             } );
 
-            const article_content = marked.parse( _markdown_content );
+            const article_content = marked.parse( markdown_content );
 
             const html_content = `
                 <!DOCTYPE html>
@@ -53,7 +92,7 @@ function createHtmlFile( input_path, output_path ) {
                         <meta charset="UTF-8">
                         <meta http-equiv="X-UA-Compatible" content="IE=edge">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>${ _h1_content }</title>
+                        <title>${ h1_content }</title>
                         <link rel="stylesheet" href="/style/all/resize.css">
                         <link rel="stylesheet" href="/style/all/font.css">
                         <link rel="stylesheet" href="/style/page/page.css">
@@ -66,7 +105,7 @@ function createHtmlFile( input_path, output_path ) {
                             </nav>
                             <nav class="catalog-content">
                                 <p>IN THIS ARTICLE</p>
-                                ${ _catalog_content }
+                                ${ catalog_content }
                             </nav>
                         </section>
                         <section id="topbar">
@@ -82,7 +121,7 @@ function createHtmlFile( input_path, output_path ) {
 
             fs.writeFile( output_path, html_content, _ => {} );
 
-            _markdown_content = _catalog_content = _h1_content = "";
+            markdown_content = catalog_content = h1_content = "";
 
             resolve( { success: true, content: html_content } );
 
@@ -90,84 +129,85 @@ function createHtmlFile( input_path, output_path ) {
 
     } );
 
-}
 
-function parseHr() {
+    function parseHr() {
 
-    return "";
-
-}
-
-function parseH123456( content, level ) {
-
-    /* 若Typora设置了图床地址，则会注入下述内容的h2，该语句旨在于剔除该h2。 */
-    if ( content.search( /typora-root-url:/ ) > -1 ) return "";
-
-    /* 处理h1。 */
-    if ( level === 1 ) {
-
-        const h = `<h1>${ content }</h1>`;
-
-        const p = `<p id="last-updated">Last Updated: ${ getDate() }</p>`;
-
-        _h1_content = content;
-
-        return ( h + p );
+        return "";
 
     }
 
-    /* 处理h23456。 */
-    const id = uuidv4();
+    function parseH123456( content, level ) {
 
-    const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
+        /* 若Typora设置了图床地址，则会注入下述内容的h2，该语句旨在于剔除该h2。 */
+        if ( content.search( /typora-root-url:/ ) > -1 ) return "";
 
-    const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
+        /* 处理h1。 */
+        if ( level === 1 ) {
 
-    _catalog_content += p;
+            const h = `<h1>${ content }</h1>`;
 
-    return h;
+            const p = `<p id="last-updated">Last Updated: ${ getDate() }</p>`;
+
+            h1_content = content;
+
+            return ( h + p );
+
+        }
+
+        /* 处理h23456。 */
+        const id = createUuid();
+
+        const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
+
+        const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
+
+        catalog_content += p;
+
+        return h;
+
+    }
+
+    function parseCheckboxInput( is_checked ) {
+
+        const id = createUuid();
+
+        const checked_property = is_checked ? "checked" : "";
+
+        const icon_circle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        const icon_square = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
+
+        return `<input id=${ id } ${ checked_property } type="checkbox"><label for=${ id }>${ icon_square }</label>`;
+
+    }
+
+    function parseLi( content, is_checkbox, is_checked ) {
+
+        const li = is_checkbox ? `<li class="check-li">${ content }</li>` : `<li>${ content }</li>`;
+
+        return li;
+
+    }
+
+    /**
+     * 获取当前时刻的日期。
+     * @returns {string} - 当前时刻的日期字符串，格式为dd/mm/yyyy。
+     */
+    function getDate() {
+
+        const date = new Date();
+
+        const y = date.getFullYear();
+        const m = date.getMonth() + 1;
+        const d = date.getDate();
+
+        const yyyy = y + "";
+        const mm = ( m < 10 ? "0" : "" ) + m;
+        const dd = ( d < 10 ? "0" : "" ) + d;
+
+        return ( dd + "/" + mm + "/" + yyyy );
+
+    }
 
 }
 
-function parseCheckboxInput( is_checked ) {
-
-    const id = uuidv4();
-
-    const checked_property = is_checked ? "checked" : "";
-
-    const icon_circle = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-    const icon_square = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`;
-
-    return `<input id=${ id } ${ checked_property } type="checkbox"><label for=${ id }>${ icon_square }</label>`;
-
-}
-
-function parseLi( content, is_checkbox, is_checked ) {
-
-    const li = is_checkbox ? `<li class="check-li">${ content }</li>` : `<li>${ content }</li>`;
-
-    return li;
-
-}
-
-/**
- * 获取当前时刻的日期。
- * @returns {string} - 当前时刻的日期字符串，格式为dd/mm/yyyy。
- */
-function getDate() {
-
-    const date = new Date();
-
-    const y = date.getFullYear();
-    const m = date.getMonth() + 1;
-    const d = date.getDate();
-
-    const yyyy = y + "";
-    const mm = ( m < 10 ? "0" : "" ) + m;
-    const dd = ( d < 10 ? "0" : "" ) + d;
-
-    return ( dd + "/" + mm + "/" + yyyy );
-
-}
-
-module.exports = createHtmlFile;
+module.exports = { createHtmlFromOneMd };

@@ -1,6 +1,10 @@
 const fontcaster = require( "font-caster" );
 
-/* Usage: 通过更改下述常量来控制字体子集化的行为。 */
+/**
+ * =====================================================================
+ * Usage: 通过更改下述常量来控制函数的行为。
+ * =====================================================================
+ */
 
 /* 新增的html文件的路径。 */
 const NEW_HTML_PATH = "./page/example.html";
@@ -39,7 +43,7 @@ async function subsetFontFromOneHtml() {
     /* Subset en-400 */
     console.log( "开始处理：en-400" );
 
-    const r_en_400 = await createFontFile(
+    const r_en_400 = await subsetFontCore(
 
         NEW_HTML_PATH,
 
@@ -66,7 +70,7 @@ async function subsetFontFromOneHtml() {
     /* Subset en-700 */
     console.log( "开始处理：en-700" );
 
-    const r_en_700 = await createFontFile(
+    const r_en_700 = await subsetFontCore(
 
         NEW_HTML_PATH,
 
@@ -93,7 +97,7 @@ async function subsetFontFromOneHtml() {
     /* Subset zh-400 */
     console.log( "开始处理：zh-400" );
 
-    const r_zh_400 = await createFontFile(
+    const r_zh_400 = await subsetFontCore(
 
         NEW_HTML_PATH,
 
@@ -120,7 +124,7 @@ async function subsetFontFromOneHtml() {
     /* Subset zh-700 */
     console.log( "开始处理：zh-700" );
 
-    const r_zh_700 = await createFontFile(
+    const r_zh_700 = await subsetFontCore(
 
         NEW_HTML_PATH,
 
@@ -147,7 +151,7 @@ async function subsetFontFromOneHtml() {
     /* Subset co-400 */
     console.log( "开始处理：co-400" );
 
-    const r_co_400 = await createFontFile(
+    const r_co_400 = await subsetFontCore(
 
         NEW_HTML_PATH,
 
@@ -215,7 +219,7 @@ async function subsetFontFromAllHtml() {
     /* Subset en-400 */
     console.log( "开始处理：en-400" );
 
-    const r_en_400 = await createFontFile(
+    const r_en_400 = await subsetFontCore(
 
         ALL_HTML_PATH,
 
@@ -242,7 +246,7 @@ async function subsetFontFromAllHtml() {
     /* Subset en-700 */
     console.log( "开始处理：en-700" );
 
-    const r_en_700 = await createFontFile(
+    const r_en_700 = await subsetFontCore(
 
         ALL_HTML_PATH,
 
@@ -269,7 +273,7 @@ async function subsetFontFromAllHtml() {
     /* Subset zh-400 */
     console.log( "开始处理：zh-400" );
 
-    const r_zh_400 = await createFontFile(
+    const r_zh_400 = await subsetFontCore(
 
         ALL_HTML_PATH,
 
@@ -296,7 +300,7 @@ async function subsetFontFromAllHtml() {
     /* Subset zh-700 */
     console.log( "开始处理：zh-700" );
 
-    const r_zh_700 = await createFontFile(
+    const r_zh_700 = await subsetFontCore(
 
         ALL_HTML_PATH,
 
@@ -323,7 +327,7 @@ async function subsetFontFromAllHtml() {
     /* Subset co-400 */
     console.log( "开始处理：co-400" );
 
-    const r_co_400 = await createFontFile(
+    const r_co_400 = await subsetFontCore(
 
         ALL_HTML_PATH,
 
@@ -369,7 +373,7 @@ async function subsetFontFromAllHtml() {
  * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
  * {success, true, information}对象，参考subset API。
  */
-async function createFontFile(
+async function subsetFontCore(
 
     html_path,
 
