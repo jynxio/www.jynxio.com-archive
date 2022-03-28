@@ -17,7 +17,7 @@
 /* 重置：仅设定使用到的元素。 */
 /* ------------------------------------------------------------------------------------------------- */
 html, body,
-article, section, nav,
+header, aside, article,
 h1, h2, h3, h4, h5, h6, p,
 table, thead, tbody, th, tr, td,
 ol, ul, li,
@@ -103,74 +103,57 @@ pre::-webkit-scrollbar {
     display: none;
 }
 
-/* 主栏 */
+/* Header */
 /* ------------------------------------------------------------------------------------------------- */
-article {
-    width: var( --article-width );
-    padding: 6rem 1rem 3rem 1rem;
-    margin: 0 auto;
-}
-
-/* Home栏&catalog栏 */
-/* ------------------------------------------------------------------------------------------------- */
-/* 侧栏样式 */
-section#sidebar {
-    visibility: hidden;
-}
-
-section#sidebar > nav {
+header {
     position: fixed;
-    top: 50%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    border-bottom: 1px solid var( --grey );
+    backdrop-filter: blur( 0.65rem );
+    -webkit-backdrop-filter: blur( 0.65rem );
 }
 
-section#sidebar > nav.home-button {
-    left: calc( ( 100vw - var( --article-width ) ) / 4 );
-    color: var( --purple );
-    font-size: 1.5rem;
+header > button {
+    float: right;
+    padding: 0.5em 1em;
+    margin: 1rem 2rem;
+    border: none;
+    border-radius: var( --border-radius );
+    background-color: var( --purple );
+    color: var( --grey );
+    font-size: 1.1rem;
     font-weight: bold;
     line-height: 1;
     letter-spacing: 0.1em;
-    transform: translate( -50%, -50% );
-    transition: opacity 100ms ease-out;
     opacity: 0.2;
+    transition: opacity 100ms ease-out;
     cursor: pointer;
-    user-select: none;
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
 }
 
-section#sidebar > nav.home-button:hover {
+header > button:hover,
+header > button:active {
     opacity: 1;
 }
 
-section#sidebar > nav.home-button > p {
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
-    color: var( --white );
-    font: inherit;
-    line-height: inherit;
-}
-
-section#sidebar > nav.home-button > svg {
-    width: 100%;
-    height: auto;
-}
-
-section#sidebar > nav.catalog-content {
+/* Aside */
+/* ------------------------------------------------------------------------------------------------- */
+aside {
+    position: fixed;
+    top: 50%;
     right: calc( ( 100vw - var( --article-width ) ) / 4 );
     transform: translate( 50%, -50% );
     opacity: 0.1;
     transition: opacity 100ms ease-out;
 }
 
-section#sidebar > nav.catalog-content:hover {
+aside:hover {
     opacity: 1;
 }
 
-section#sidebar > nav.catalog-content * {
+aside * {
     padding: 0;
     margin: 0;
     border: none;
@@ -178,10 +161,11 @@ section#sidebar > nav.catalog-content * {
     color: inherit;
     font: inherit;
     line-height: 2.5;
-    text-decoration: none;
+    text-decoration-line: none !important;
 }
 
-section#sidebar > nav.catalog-content > p:first-child {
+aside > p:first-child > a {
+    display: block;
     margin-bottom: 0.5rem;
     color: var( --purple );
     font-size: 1.2rem;
@@ -190,7 +174,7 @@ section#sidebar > nav.catalog-content > p:first-child {
     word-spacing: 0.2em;
 }
 
-section#sidebar > nav.catalog-content > p + p {
+aside > p + p {
     padding-right: 1em;
     border-left: 0.35em solid var( --purple );
     border-top-right-radius: 0.2em;
@@ -207,79 +191,49 @@ section#sidebar > nav.catalog-content > p + p {
     -moz-user-select: none;
 }
 
-section#sidebar > nav.catalog-content > p + p > a {
+aside > p + p > a {
     display: block;
 }
 
-section#sidebar > nav.catalog-content > p + p > a:link,
-section#sidebar > nav.catalog-content > p + p > a:visited,
-section#sidebar > nav.catalog-content > p + p > a:hover,
-section#sidebar > nav.catalog-content > p + p > a:active {
+aside > p + p > a:link,
+aside > p + p > a:visited,
+aside > p + p > a:hover,
+aside > p + p > a:active {
     color: var( --white );
 }
 
-section#sidebar > nav.catalog-content > p + p:hover {
+aside > p + p:hover {
     border-left-color: var( --purple );
     background-color: var( --grey );
     color: var( --purple );
 }
 
-section#sidebar > nav.catalog-content > p + p[data-level="1"] {
+aside > p + p[data-level="1"] {
     padding-left: 1em;
 }
 
-section#sidebar > nav.catalog-content > p + p[data-level="2"] {
+aside > p + p[data-level="2"] {
     padding-left: 2em;
 }
 
-section#sidebar > nav.catalog-content > p + p[data-level="3"] {
+aside > p + p[data-level="3"] {
     padding-left: 3em;
 }
 
-section#sidebar > nav.catalog-content > p + p[data-level="4"] {
+aside > p + p[data-level="4"] {
     padding-left: 4em;
 }
 
-section#sidebar > nav.catalog-content > p + p[data-level="5"] {
+aside > p + p[data-level="5"] {
     padding-left: 5em;
 }
 
-/* 顶栏样式 */
-section#topbar {
-    display: none;
-}
-
-section#topbar > nav.home-button {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    width: 100%;
-    border-bottom: 1px solid var( --grey );
-    backdrop-filter: blur( 0.65rem );
-    -webkit-backdrop-filter: blur( 0.65rem );
-}
-
-section#topbar > nav.home-button > button {
-    float: right;
-    padding: 0.5em 1em;
-    margin: 1rem 2rem 1rem 0;
-    border: none;
-    border-radius: var( --border-radius );
-    background-color: var( --purple );
-    color: var( --grey );
-    font-size: 1.1rem;
-    font-weight: bold;
-    line-height: 1;
-    letter-spacing: 0.1em;
-    opacity: 0.2;
-    transition: opacity 100ms ease-out;
-    cursor: pointer;
-}
-
-section#topbar > nav.home-button > button:hover,
-section#topbar > nav.home-button > button:active {
-    opacity: 1;
+/* Article */
+/* ------------------------------------------------------------------------------------------------- */
+article {
+    width: var( --article-width );
+    padding: 6rem 1rem 3rem 1rem;
+    margin: 0 auto;
 }
 
 /* 标题 */
