@@ -308,11 +308,7 @@ blockquote {
     border-left: 0.35rem solid var( --purple );
     border-radius: var( --border-radius );
     background-color: var( --grey );
-    font-size: 0.8rem;
-}
-
-blockquote * {
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 /* 锚 */
