@@ -7,22 +7,31 @@ const { marked } = require( "marked" );
 const { v4: createUuid } = require( "uuid" );
 
 /**
- * =====================================================================
- * Usage: 通过更改下述常量来控制函数的行为。
- * =====================================================================
+ * -----------------------------------------------------------------------------------------------
+ * Interface: 通过修改下述常量来操控createHtmlFromOneMd的行为。
+ * -----------------------------------------------------------------------------------------------
  */
 
-/* 新增的md文件的路径。 */
-const NEW_MD_PATH = "./note/example.md";
+/* 待转译的md文件的路径，比如"./index.md"。 */
+const MD_PATH = "./markdown/example.md";
 
-/* 新增的html文件的路径 */
-const NEW_HTML_PATH = "./page/example.html";
+/* 生成的html文件的路径，比如"./index.html"。 */
+const HTML_PATH = "./page/example.html";
 
+/**
+ * -----------------------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------------------------
+ */
+
+/**
+ * （异步）基于md文件来生成html文件，md文件来自MD_PATH，生成的html存储在HTML_PATH，该方法不会改变md文件。
+ * @returns { Promise } - Promise代表undefined。
+ */
 async function createHtmlFromOneMd() {
 
     /* Insurance */
-    const password = `createHtmlFromOneMd( ${ NEW_MD_PATH }, ${ NEW_HTML_PATH } )`;
-    const command = readlineSync.question( `🟢 Please type ${ password } to confirm: \n` );
+    const password = `create html from one md: ${ MD_PATH }, ${ HTML_PATH }`;
+    const command = readlineSync.question( `🟢 Please type "${ password }" to confirm: \n` );
 
     if ( command !== password ) {
 
@@ -33,7 +42,7 @@ async function createHtmlFromOneMd() {
     }
 
     /* Create html file */
-    const response  = await createHtmlCore( NEW_MD_PATH, NEW_HTML_PATH );
+    const response  = await createHtmlCore( MD_PATH, HTML_PATH );
 
     response.success
     ? console.log( "🟢 Done" )

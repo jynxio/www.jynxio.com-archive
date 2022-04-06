@@ -3,13 +3,13 @@ const fontcaster = require( "font-caster" );
 const readlineSync = require( "readline-sync" );
 
 /**
- * =====================================================================
- * Usage: 通过更改下述常量来控制函数的行为。
- * =====================================================================
+ * -----------------------------------------------------------------------------------------------
+ * Interface: 通过修改下述常量来操控subsetFontFromOneHtml和subsetFontFromAllHtml的行为。
+ * -----------------------------------------------------------------------------------------------
  */
 
-/* 新增的html文件的路径。 */
-const NEW_HTML_PATH = "./page/example.html";
+/* 一个html文件的路径。 */
+const ONE_HTML_PATH = "./page/example.html";
 
 /* 所有html文件的路径。 */
 const ALL_HTML_PATH = "./page";
@@ -35,11 +35,20 @@ const UNICODES_PATH_ZH_400 = "./static/font/unicodes-zh-400.txt";
 const UNICODES_PATH_ZH_700 = "./static/font/unicodes-zh-700.txt";
 const UNICODES_PATH_CO_400 = "./static/font/unicodes-co-400.txt";
 
+/**
+ * -----------------------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------------------------
+ */
+
+/**
+ * （异步）基于一个html文件来进行字体子集化。
+ * @returns { Promise } - Promise代表undefined。
+ */
 async function subsetFontFromOneHtml() {
 
     /* Insurance */
-    const password = `subsetFontFromOneHtml( ${ NEW_HTML_PATH } )`;
-    const command = readlineSync.question( `🟢 Please type ${ password } to confirm: \n` );
+    const password = `subset font from one html: ${ ONE_HTML_PATH }`;
+    const command = readlineSync.question( `🟢 Please type "${ password }" to confirm: \n` );
 
     if ( command !== password ) {
 
@@ -54,7 +63,7 @@ async function subsetFontFromOneHtml() {
 
     const r_en_400 = await subsetFontCore(
 
-        NEW_HTML_PATH,
+        ONE_HTML_PATH,
 
         UNICODES_PATH_EN_400,
 
@@ -79,7 +88,7 @@ async function subsetFontFromOneHtml() {
 
     const r_en_700 = await subsetFontCore(
 
-        NEW_HTML_PATH,
+        ONE_HTML_PATH,
 
         UNICODES_PATH_EN_700,
 
@@ -104,7 +113,7 @@ async function subsetFontFromOneHtml() {
 
     const r_zh_400 = await subsetFontCore(
 
-        NEW_HTML_PATH,
+        ONE_HTML_PATH,
 
         UNICODES_PATH_ZH_400,
 
@@ -129,7 +138,7 @@ async function subsetFontFromOneHtml() {
 
     const r_zh_700 = await subsetFontCore(
 
-        NEW_HTML_PATH,
+        ONE_HTML_PATH,
 
         UNICODES_PATH_ZH_700,
 
@@ -154,7 +163,7 @@ async function subsetFontFromOneHtml() {
 
     const r_co_400 = await subsetFontCore(
 
-        NEW_HTML_PATH,
+        ONE_HTML_PATH,
 
         UNICODES_PATH_CO_400,
 
@@ -178,11 +187,15 @@ async function subsetFontFromOneHtml() {
 
 }
 
+/**
+ * （异步）基于所有html文件来进行字体子集化。
+ * @returns { Promise } - Promise代表undefined。
+ */
 async function subsetFontFromAllHtml() {
 
     /* Insurance */
-    const password = `subsetFontFromAllHtml( ${ ALL_HTML_PATH } )`;
-    const command = readlineSync.question( `🟢 Please type ${ password } to confirm: \n` );
+    const password = `subset font from all html: ${ ALL_HTML_PATH }`;
+    const command = readlineSync.question( `🟢 Please type "${ password }" to confirm: \n` );
 
     if ( command !== password ) {
 

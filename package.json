@@ -4,8 +4,8 @@
         "develop-homepage": "webpack serve --config ./style/home/source/webpack-dev.js",
         "build-homepage": "webpack --config ./style/home/source/webpack-prod.js",
         "subset-font": "node ./factory/subsetFont.js",
-        "create-html": "node ./factory/createHtml.js"
-    }, // TODO
+        "create-page": "node ./factory/createPage.js"
+    },
     "devDependencies": {
         "css-loader": "^6.7.1",
         "css-minimizer-webpack-plugin": "^3.4.1",
