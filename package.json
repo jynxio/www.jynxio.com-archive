@@ -1,24 +1,25 @@
 {
     "private": true,
     "scripts": {
-        "develop-homepage": "webpack serve --config ./style/home/source/webpack-dev.js",
-        "build-homepage": "webpack --config ./style/home/source/webpack-prod.js",
+        "devlop-homepage": "webpack serve --config ./webpack/home/development.js",
+        "pack-homepage": "webpack --config ./webpack/home/production.js",
         "subset-font": "node ./factory/subsetFont.js",
         "create-page": "node ./factory/createPage.js"
     },
     "devDependencies": {
         "css-loader": "^6.7.1",
         "css-minimizer-webpack-plugin": "^3.4.1",
+        "marked": "^4.0.12",
         "style-loader": "^3.3.1",
+        "uuid": "^8.3.2",
         "webpack": "^5.71.0",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.8.0",
-        "webpack-merge": "^5.8.0",
-        "marked": "^4.0.12",
-        "uuid": "^8.3.2"
+        "webpack-merge": "^5.8.0"
     },
     "dependencies": {
         "font-caster": "^0.1.5",
-        "readline-sync": "^1.4.10"
+        "readline-sync": "^1.4.10",
+        "three": "^0.139.2"
     }
 }

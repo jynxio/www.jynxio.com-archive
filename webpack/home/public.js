@@ -1,7 +1,7 @@
 const path = require( "path" );
 
 module.exports = {
-    entry: "/style/home/source/index.js",
+    entry: "./factory/home/index.js",
     module: {
         rules: [
             {
@@ -27,7 +27,7 @@ module.exports = {
     },
     output: {
         filename: "index.js",
-        path: path.resolve( __dirname, "/style/home" ),
+        path: path.resolve( __dirname, "../../style/home" ),
         clean: false,    // 清除生成目录。
         pathinfo: false, // 提升构建性能：通过禁止为bundle生成模块的路径信息，以提高垃圾回收的性能，从而提高构建性能。
     },
