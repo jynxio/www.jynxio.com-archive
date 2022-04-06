@@ -1,12 +1,24 @@
 const path = require( "path" );
+const HtmlWebpackPlugin = require( "html-webpack-plugin" );
+const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 
 module.exports = {
     entry: "./factory/home/index.js",
+    plugins: [
+        new HtmlWebpackPlugin( {
+            title: "Homepage",
+            filename: "index.html",
+            template: "/index.html"
+        } ),
+        // new MiniCssExtractPlugin( {
+        //     filename: "index.css",
+        // } ),
+    ],
     module: {
         rules: [
             {
                 test: /\.css$/i,
-                use: [ "style-loader", "css-loader" ],
+                use: [ MiniCssExtractPlugin.loader, "css-loader" ],
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -27,7 +39,7 @@ module.exports = {
     },
     output: {
         filename: "index.js",
-        path: path.resolve( __dirname, "../../style/home" ),
+        path: path.resolve( __dirname, "../../test" ), // TODO
         clean: false,    // 清除生成目录。
         pathinfo: false, // 提升构建性能：通过禁止为bundle生成模块的路径信息，以提高垃圾回收的性能，从而提高构建性能。
     },

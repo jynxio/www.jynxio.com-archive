@@ -10,8 +10,6 @@ module.exports = merge( common, {
         compress: false, // gzip压缩
         server: "http",
         port: 8346,
-        open: {
-            target: [ "./index.html" ],
-        },
+        open: false,
     },
 } );

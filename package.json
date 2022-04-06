@@ -2,14 +2,15 @@
     "private": true,
     "scripts": {
         "devlop-homepage": "webpack serve --config ./webpack/home/development.js",
-        "pack-homepage": "webpack --config ./webpack/home/production.js",
         "subset-font": "node ./factory/subsetFont.js",
         "create-page": "node ./factory/createPage.js"
     },
     "devDependencies": {
         "css-loader": "^6.7.1",
         "css-minimizer-webpack-plugin": "^3.4.1",
+        "html-webpack-plugin": "^5.5.0",
         "marked": "^4.0.12",
+        "mini-css-extract-plugin": "^2.6.0",
         "style-loader": "^3.3.1",
         "uuid": "^8.3.2",
         "webpack": "^5.71.0",
