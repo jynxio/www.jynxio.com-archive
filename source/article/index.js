@@ -37,25 +37,4 @@ function canYouDisplayAside() {
     /* 显示/隐藏 */
     aside.style.display = is_width_enough && is_height_enough ? "block" : "none";
 
-
-
-
-
-
-
-
-
-
-    // TODO bug：
-    // TODO 1.开发环境下的图片加载失败。
-    // TODO 2.aside显隐不正常，过窄环境下也会显示。
-
-
-
-
-
-
-
-
 }
-
