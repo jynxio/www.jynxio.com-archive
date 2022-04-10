@@ -1,3 +1,1 @@
-# Personal Homepage
-
-(🔨Building...)
+# Jynxio's personal site

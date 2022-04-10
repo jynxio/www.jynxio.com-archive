@@ -1,0 +1,1 @@
+(()=>{"use strict";const e=document.querySelector("aside");function n(){const{width:n,height:t}=e.getBoundingClientRect(),i=innerWidth,d=innerHeight,o=(i-Math.min(i,d))/2>=n,s=d>=t;e.style.display=o&&s?"block":"none"}window.addEventListener("load",(e=>{n(),window.addEventListener("resize",(e=>n()))}))})();
