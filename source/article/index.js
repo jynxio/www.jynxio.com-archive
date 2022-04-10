@@ -3,11 +3,18 @@ import "/style/public/font.css";
 import "/style/article/index.css";
 
 const aside = document.querySelector( "aside" );
+let aside_width;
+let aside_height;
 
 window.addEventListener( "load", _ => {
 
-    canYouDisplayAside();
+    const { width, height } = aside.getBoundingClientRect();
 
+    aside_width = width;
+    aside_height = height;
+
+    canYouDisplayAside();
+    aside.style.visibility = "visible";
     window.addEventListener( "resize", _ => canYouDisplayAside() );
 
 } );
@@ -16,12 +23,6 @@ window.addEventListener( "load", _ => {
  * 若页面的尺寸足够容纳aside，则显示aside，否则隐藏aside。
  */
 function canYouDisplayAside() {
-
-    /* aside的尺寸 */
-    const {
-        width: aside_width,
-        height: aside_height,
-    } = aside.getBoundingClientRect();
 
     /* 页面的尺寸 */
     const viewport_width = window.innerWidth;

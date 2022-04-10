@@ -141,6 +141,7 @@ header > button:active {
 /* Aside */
 /* ------------------------------------------------------------------------------------------------- */
 aside {
+    visibility: hidden;
     position: fixed;
     top: 50%;
     right: calc( ( 100vw - var( --article-width ) ) / 4 );
