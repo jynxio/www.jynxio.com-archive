@@ -16,7 +16,7 @@ renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
 
 /* Camera */
 const aspect = window.innerWidth / window.innerHeight;
-const camera = new OrthographicCamera( - 1, 1, 1 * aspect, - 1 * aspect, 0.1, 5 );
+const camera = new OrthographicCamera( - 1 * aspect, 1 * aspect, 1, - 1, 0.1, 5 );
 
 camera.position.set( 0, 0, 1 );
 
@@ -28,9 +28,12 @@ const material = new RawShaderMaterial( {
     vertexShader: vertex_shader,
     fragmentShader: fragment_shader,
     uniforms,
+    wireframe: false,
 } );
-const geometry = new PlaneGeometry( 2, 2 * aspect, 128, 128 );
+const geometry = new PlaneGeometry( 2, 2, 1, 1 );
 const mesh = new Mesh( geometry, material );
+
+mesh.scale.set( 1 * aspect, 1, 1 );
 
 /* Scene */
 const scene = new Scene();
@@ -59,9 +62,11 @@ window.addEventListener( "resize", _ => {
 
     const aspect = window.innerWidth / window.innerHeight;
 
-    camera.top = 1 * aspect;
-    camera.bottom = - 1 * aspect;
+    camera.left = - 1 * aspect;
+    camera.right = 1 * aspect;
     camera.updateProjectionMatrix();
+
+    mesh.scale.set( 1 * aspect, 1, 1 );
 
 } );
 
