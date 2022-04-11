@@ -30,6 +30,7 @@ const material = new RawShaderMaterial( {
     fragmentShader: fragment_shader,
     uniforms,
     wireframe: false,
+    transparent: true,
 } );
 const geometry = new PlaneGeometry( 2, 2, 1, 1 );
 const mesh = new Mesh( geometry, material );

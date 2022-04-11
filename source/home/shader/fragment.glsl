@@ -1,3 +1,5 @@
+#define PI 3.1415926535897932384626433832795
+
 precision mediump float;
 
 varying vec2 vUv;
@@ -7,9 +9,15 @@ varying vec2 vCursor;
 vec4 myWarping( vec2 uv, float time ) {
 
     float d = distance( uv, vCursor );
-    // float decay = clamp( 0.1 / distance_to_cursor, 0.0, 1.0 );
 
-    uv -= d * 0.1;
+    d = clamp( 0.1 - d, 0.0, 0.1 );
+    d = sin( d * 10.0 * PI ) * 0.1;
+
+    uv += ( uv - vCursor ) * d;
+
+    // uv += d;
+    // TODO 从这里开始。
+
     time /= 5.0;
 
     for ( float i = 1.0; i < 10.0; i++ ) {
@@ -30,9 +38,11 @@ vec4 myWarping( vec2 uv, float time ) {
     // yellow: 255, 225, 0   => 1.000, 0.882, 0.000
     // purple: 93 , 114, 246 => 0.365, 0.447, 0.965
     // white : 242, 245, 247 => 0.949, 0.961, 0.969
+    // green : 0  , 123, 123 => 0.000, 0.502, 0.502
 
     vec3 color1 = vec3( 0.063, 0.078, 0.098 );
     vec3 color2 = vec3( 0.365, 0.447, 0.965 );
+    vec3 color3 = vec3( 0.000, 0.502, 0.502 );
     vec3 mixedColor = mix( color1, color2, strength );
 
     return vec4( mixedColor, 1.0 );
