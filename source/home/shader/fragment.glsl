@@ -11,12 +11,11 @@ vec4 myWarping( vec2 uv, float time ) {
     float d = distance( uv, vCursor );
 
     d = clamp( 0.1 - d, 0.0, 0.1 );
-    d = sin( d * 10.0 * PI ) * 0.1;
-
-    uv += ( uv - vCursor ) * d;
+    d = sin( d * 10.0 * PI ) * 0.1; // 0 ~ 0.1 ~ 0
+    uv += ( uv - vCursor ) / ( uv - vCursor ) * d;
 
     // uv += d;
-    // TODO 从这里开始。
+    // TODO 从这里开始。 ?? 为啥不行？
 
     time /= 5.0;
 
