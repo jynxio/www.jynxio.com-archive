@@ -5,8 +5,17 @@ precision mediump float;
 varying vec2 vUv;
 varying float vTime;
 varying vec2 vCursor;
+varying vec2 vResolution;
 
-vec4 myWarping( vec2 uv, float time ) {
+vec4 warp( vec2 uv, float time ) {
+
+    vec2 myStep = vec2( 1.0 ) / vResolution;
+
+    float rowTag = step( 0.5, mod( floor( uv.x / myStep.x ), 2.0 ) );
+    float colTag = step( 0.5, mod( floor( uv.y / myStep.y ), 2.0 ) );
+
+    if ( rowTag == 1.0 && colTag == 1.0 ) return vec4( vec3( 0.0 ), 1.0 ); // 单行单列
+    if ( rowTag == 0.0 && colTag == 0.0 ) return vec4( vec3( 0.0 ), 1.0 ); // 双行双列
 
     time /= 10.0;
 
@@ -37,6 +46,6 @@ vec4 myWarping( vec2 uv, float time ) {
 
 void main() {
 
-    gl_FragColor = myWarping( vUv, vTime );
+    gl_FragColor = warp( vUv, vTime );
 
 }

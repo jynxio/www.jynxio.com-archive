@@ -24,7 +24,7 @@ camera.position.set( 0, 0, 1 );
 const uniforms = {
     uTime: { value: 0 },
     uCursor: { value: new Vector2( 0.5, 0.5 ) },
-    decay: { value: 1 },
+    uResolution: { value: new Vector2( window.innerWidth, window.innerHeight ) },
 };
 const material = new RawShaderMaterial( {
     vertexShader: vertex_shader,
@@ -68,6 +68,7 @@ window.addEventListener( "resize", _ => {
     camera.updateProjectionMatrix();
 
     mesh.scale.set( 1 * aspect, 1, 1 );
+    uniforms.uResolution.value.set( window.innerWidth, window.innerHeight );
 
 } );
 
