@@ -24,6 +24,7 @@ camera.position.set( 0, 0, 1 );
 const uniforms = {
     uTime: { value: 0 },
     uCursor: { value: new Vector2( 0.5, 0.5 ) },
+    decay: { value: 1 },
 };
 const material = new RawShaderMaterial( {
     vertexShader: vertex_shader,
