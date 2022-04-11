@@ -10,12 +10,26 @@ varying vec2 vResolution;
 vec4 warp( vec2 uv, float time ) {
 
     vec2 myStep = vec2( 1.0 ) / vResolution;
+    float colTag = mod( floor( uv.x / myStep.x ), 2.0 );
+    float colTag2 = mod( floor( uv.x / myStep.x ), 4.0 );
 
-    float rowTag = step( 0.5, mod( floor( uv.x / myStep.x ), 2.0 ) );
-    float colTag = step( 0.5, mod( floor( uv.y / myStep.y ), 2.0 ) );
+    if ( colTag2 == 3.0 ) { // 每四列
 
-    if ( rowTag == 1.0 && colTag == 1.0 ) return vec4( vec3( 0.0 ), 1.0 ); // 单行单列
-    if ( rowTag == 0.0 && colTag == 0.0 ) return vec4( vec3( 0.0 ), 1.0 ); // 双行双列
+        uv.y -= myStep.y * 2.0;
+
+    }
+
+    if ( colTag == 1.0 ) { // 偶数列
+
+        float rowTag = mod( floor( uv.y / myStep.y ), 4.0 ); // 每四行
+
+        if ( rowTag != 0.0 ) {
+
+            return vec4( vec3( 0.0 ), 1.0 );
+
+        }
+
+    }
 
     time /= 10.0;
 
