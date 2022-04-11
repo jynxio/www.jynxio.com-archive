@@ -5,7 +5,7 @@ import "/style/home/index.css";
 import vertex_shader from "./shader/vertex.glsl";
 import fragment_shader from "./shader/fragment.glsl";
 
-import { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, RawShaderMaterial, Mesh, Clock } from "three";
+import { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, RawShaderMaterial, Mesh, Clock, Vector2 } from "three";
 
 /* Renderer */
 const canvas = document.querySelector( "canvas" );
@@ -23,6 +23,7 @@ camera.position.set( 0, 0, 1 );
 /* Mesh */
 const uniforms = {
     uTime: { value: 0 },
+    uCursor: { value: new Vector2( 0.5, 0.5 ) },
 };
 const material = new RawShaderMaterial( {
     vertexShader: vertex_shader,
@@ -55,8 +56,6 @@ renderer.setAnimationLoop( _ => {
 /* Resize */
 window.addEventListener( "resize", _ => {
 
-    // TODO 需要resize mesh，如果只是用scale，则会导致mesh的网格孔径不统一。
-
     renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
     renderer.setSize( window.innerWidth, window.innerHeight);
 
@@ -70,3 +69,11 @@ window.addEventListener( "resize", _ => {
 
 } );
 
+window.addEventListener( "mousemove", event => {
+
+    const x = event.clientX / window.innerWidth;
+    const y = 1 - event.clientY / window.innerHeight;
+
+    uniforms.uCursor.value.set( x, y );
+
+} );
