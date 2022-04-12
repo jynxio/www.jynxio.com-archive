@@ -6,7 +6,8 @@
     --yellow: #ffe100;
     --purple: #5d72f6;
     --white: #f2f5f7;
-    --green: #377e7f
+    --green: #377e7f;
+    --pink: #ea3373;
 }
 
 :root {
@@ -67,7 +68,7 @@ section#cover > h1 {
     position: absolute;
     left: 50%;
     top: 50%;
-    background: linear-gradient( 145deg, var( --green ), var( --purple ) );
+    background: linear-gradient( 45deg, var( --purple ), var( --green ), var( --pink ) );
     background-clip: text;
     -webkit-background-clip: text;
     color: var( --black );
