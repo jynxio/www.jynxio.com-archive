@@ -320,7 +320,7 @@ async function subsetBaseOnMultipleHtml( path ) {
  * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
  * {success, true, information}对象，参考subset API。
  */
- async function subsetCore(
+async function subsetCore(
 
     html_path,
 

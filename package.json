@@ -21,7 +21,8 @@
         "start": "webpack serve --config ./webpack/dev.js",
         "build": "webpack  --config ./webpack/prod.js",
         "translate": "node ./generator/article/index.js",
-        "subset": "node ./generator/font/index.js"
+        "subset": "node ./generator/font/index.js",
+        "subset-jynxio": "node ./generator/font/subsetJynxio.js"
     },
     "dependencies": {
         "three": "^0.139.2"

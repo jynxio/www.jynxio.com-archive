@@ -1,5 +1,6 @@
 import "/style/public/reset.css";
 import "/style/public/font.css";
+import "/style/home/font.css";
 import "/style/home/index.css";
 
 import vertex_shader from "./shader/vertex.glsl";
