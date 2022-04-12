@@ -79,12 +79,14 @@ section#cover > h1 {
     transform: translate( -50%, -50% );
 }
 
+/* TODO */
+
 section#cover > nav {
     display: flex;
     position: absolute;
     bottom: 0;
     left: 50%;
-    width: 24rem;
+    width: 12rem;
     margin: 2rem auto;
     transform: translateX( -50% );
     /* background-color: pink; */
