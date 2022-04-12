@@ -27,11 +27,11 @@ const uniforms = {
     uResolution: { value: new Vector2( window.innerWidth, window.innerHeight ) },
 };
 const material = new RawShaderMaterial( {
+    wireframe: false,
+    transparent: true,
     vertexShader: vertex_shader,
     fragmentShader: fragment_shader,
     uniforms,
-    wireframe: false,
-    transparent: true,
 } );
 const geometry = new PlaneGeometry( 2, 2, 1, 1 );
 const mesh = new Mesh( geometry, material );

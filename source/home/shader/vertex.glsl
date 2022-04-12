@@ -22,10 +22,6 @@ void main() {
     vCursor = uCursor;
     vResolution = uResolution;
 
-    vec4 modelPosition = modelMatrix * vec4( position, 1.0 );
-    vec4 viewPosition = viewMatrix * modelPosition;
-    vec4 projectionPosition = projectionMatrix * viewPosition;
-
-    gl_Position = projectionPosition;
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
 
 }

@@ -9,27 +9,28 @@ varying vec2 vResolution;
 
 vec4 warp( vec2 uv, float time ) {
 
-    vec2 myStep = vec2( 1.0 ) / vResolution;
-    float colTag = mod( floor( uv.x / myStep.x ), 2.0 );
-    float colTag2 = mod( floor( uv.x / myStep.x ), 4.0 );
-
-    if ( colTag2 == 3.0 ) { // 每四列
-
-        uv.y -= myStep.y * 2.0;
-
-    }
-
-    if ( colTag == 1.0 ) { // 偶数列
-
-        float rowTag = mod( floor( uv.y / myStep.y ), 4.0 ); // 每四行
-
-        if ( rowTag != 0.0 ) {
-
-            return vec4( vec3( 0.0 ), 1.0 );
-
-        }
-
-    }
+    vec2 pixelStep = vec2( 1.0 ) / vResolution;
+    vec2 pixelIndex = floor( uv / pixelStep ); // 0, 1, 2, 3, ...
+    vec2 pixelIndex4 = mod( pixelIndex, 4.0 ); // 0, 1, 2, 3, 0, 1, 2, 3, ..., 0, 1, 2, 3
+    mat4 pattern = mat4(
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 1.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        1.0, 1.0, 0.0, 1.0
+    );
+    vec4 row = vec4(
+        step( 0.0, 0.5 - pixelIndex4.y ),
+        step( 0.0, pixelIndex4.y - 0.5 ) * step( 0.0, 1.5 - pixelIndex4.y ),
+        step( 0.0, pixelIndex4.y - 1.5 ) * step( 0.0, 2.5 - pixelIndex4.y ),
+        step( 0.0, pixelIndex4.y - 2.5 )
+    ); // 取y行
+    vec4 col = vec4(
+        step( 0.0, 0.5 - pixelIndex4.x ),
+        step( 0.0, pixelIndex4.x - 0.5 ) * step( 0.0, 1.5 - pixelIndex4.x ),
+        step( 0.0, pixelIndex4.x - 1.5 ) * step( 0.0, 2.5 - pixelIndex4.x ),
+        step( 0.0, pixelIndex4.x - 2.5 )
+    ); // 取x列
+    float strength = length( col * pattern * row );
 
     time /= 10.0;
 
@@ -54,7 +55,7 @@ vec4 warp( vec2 uv, float time ) {
     mixedColor = mix( mixedColor, greenColor, ratio );
     mixedColor = mix( blackColor, mixedColor, ratio );
 
-    return vec4( mixedColor, 1.0 );
+    return vec4( mixedColor * strength, 1.0 );
 
 }
 

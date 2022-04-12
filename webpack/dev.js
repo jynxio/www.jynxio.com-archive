@@ -9,7 +9,7 @@ module.exports = merge( public, {
         static: "./",     // 静态资源的起寻地址（项目根目录）
         compress: false,  // gzip压缩
         server: "http",
-        port: 8080,
+        port: 8086,
         open: false,
     },
 } );
