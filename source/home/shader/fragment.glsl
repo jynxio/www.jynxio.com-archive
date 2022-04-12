@@ -1,5 +1,3 @@
-#define PI 3.1415926535897932384626433832795
-
 precision mediump float;
 
 varying vec2 vUv;
@@ -18,18 +16,18 @@ vec4 warp( vec2 uv, float time ) {
         0.0, 1.0, 0.0, 1.0,
         1.0, 1.0, 0.0, 1.0
     );
-    vec4 row = vec4(
+    vec4 row = vec4( // 取y行
         step( 0.0, 0.5 - pixelIndex4.y ),
         step( 0.0, pixelIndex4.y - 0.5 ) * step( 0.0, 1.5 - pixelIndex4.y ),
         step( 0.0, pixelIndex4.y - 1.5 ) * step( 0.0, 2.5 - pixelIndex4.y ),
         step( 0.0, pixelIndex4.y - 2.5 )
-    ); // 取y行
-    vec4 col = vec4(
+    );
+    vec4 col = vec4( // 取x列
         step( 0.0, 0.5 - pixelIndex4.x ),
         step( 0.0, pixelIndex4.x - 0.5 ) * step( 0.0, 1.5 - pixelIndex4.x ),
         step( 0.0, pixelIndex4.x - 1.5 ) * step( 0.0, 2.5 - pixelIndex4.x ),
         step( 0.0, pixelIndex4.x - 2.5 )
-    ); // 取x列
+    );
     float strength = length( col * pattern * row );
 
     time /= 10.0;

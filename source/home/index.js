@@ -5,11 +5,21 @@ import "/style/home/index.css";
 import vertex_shader from "./shader/vertex.glsl";
 import fragment_shader from "./shader/fragment.glsl";
 
-import { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, RawShaderMaterial, Mesh, Clock, Vector2 } from "three";
+import {
+    WebGLRenderer,
+    Scene,
+    OrthographicCamera,
+    PlaneGeometry,
+    RawShaderMaterial,
+    MeshBasicMaterial,
+    Mesh,
+    Clock,
+    Vector2,
+} from "three";
 
 /* Renderer */
 const canvas = document.querySelector( "canvas" );
-const renderer = new WebGLRenderer( { canvas, antialias: window.devicePixelRatio < 2 } );
+const renderer = new WebGLRenderer( { canvas, antialias: window.devicePixelRatio < 2, antialias: false } );
 
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
@@ -28,7 +38,7 @@ const uniforms = {
 };
 const material = new RawShaderMaterial( {
     wireframe: false,
-    transparent: true,
+    transparent: false,
     vertexShader: vertex_shader,
     fragmentShader: fragment_shader,
     uniforms,

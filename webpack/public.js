@@ -46,6 +46,13 @@ module.exports = {
                 },
             },
             {
+                test: /\.json$/i,
+                type: "asset/resource",
+                generator: {
+                    filename: "static/json/[hash][ext][query]",
+                },
+            },
+            {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
                 type: "asset/resource",
                 generator: {

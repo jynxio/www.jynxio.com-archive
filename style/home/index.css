@@ -6,6 +6,7 @@
     --yellow: #ffe100;
     --purple: #5d72f6;
     --white: #f2f5f7;
+    --green: #377e7f
 }
 
 :root {
@@ -24,6 +25,10 @@ button {
     font-family: "IBM Plex Sans", "Noto Sans SC";
     line-height: var( --line-height );
     overflow-wrap: break-word;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 html {
@@ -62,11 +67,13 @@ section#cover > h1 {
     position: absolute;
     left: 50%;
     top: 50%;
-    font-size: 8rem;
-    font-weight: bold;
-    letter-spacing: 0.1em;
+    background: linear-gradient( 45deg, var( --green ), var( --purple ) );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: var( --black );
+    font-size: 10rem;
+    -webkit-text-stroke: 3px transparent;
     transform: translate( -50%, -50% );
-    /* background-color: pink; */
 }
 
 section#cover > nav {
