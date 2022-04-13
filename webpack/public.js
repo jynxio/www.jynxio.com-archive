@@ -27,6 +27,11 @@ module.exports = {
             template: "./template/article/test/test.html",
             chunks: [ "article" ],
         } ),
+        new HtmlWebpackPlugin( {
+            filename: "code-structure.html",
+            template: "./template/article/javascript/code-structure.html",
+            chunks: [ "article" ],
+        } ),
     ],
     module: {
         rules: [
