@@ -21,7 +21,7 @@
 html, body,
 section, nav,
 h1, p,
-button {
+button, span {
     color: var( --white );
     font-family: "IBM Plex Sans", "Noto Sans SC";
     line-height: var( --line-height );
@@ -40,14 +40,6 @@ html, body {
     background-color: var( --black );
 }
 
-section, canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
 canvas {
     display: block;
 }
@@ -55,20 +47,22 @@ canvas {
 /* Canvas */
 /* ------------------------------------------------------------------------------------------------- */
 canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 0;
+    width: 100%;
+    height: 100%;
 }
 
-/* Section: cover */
+/* H1 */
 /* ------------------------------------------------------------------------------------------------- */
-section#cover {
-    z-index: 1;
-}
-
-section#cover > h1 {
-    position: absolute;
+h1 {
+    position: fixed;
     left: 50%;
     top: 50%;
-    background: linear-gradient( 45deg, var( --purple ), var( --green ), var( --pink ) );
+    z-index: 1;
+    background-image: linear-gradient( 45deg, var( --purple ), var( --green ), var( --pink ) );
     background-clip: text;
     -webkit-background-clip: text;
     color: var( --black );
@@ -80,51 +74,62 @@ section#cover > h1 {
     transform: translate( -50%, -50% );
 }
 
-/* TODO */
-
-section#cover > nav {
-    display: flex;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 12rem;
-    margin: 2rem auto;
-    transform: translateX( -50% );
-    /* background-color: pink; */
-}
-
-section#cover > nav > button {
-    flex-basis: 1rem;
-    flex-grow: 1;
-    padding: 0;
-    margin: 0 0.65rem;
-    border: 1px solid var( --white );
-    outline: none;
-    background-color: transparent;
-    line-height: 2;
-    text-align: center;
-    vertical-align: bottom;
-    cursor: pointer;
-    letter-spacing: 0.1em;
-    backdrop-filter: blur( 0.65rem );
-    -webkit-backdrop-filter: blur( 0.65rem );
-}
-
-section#cover > nav > button:hover {
-    color: var( --yellow );
-    border-color: var( --yellow );
-}
-
-/* Section: idea */
+/* Nav */
 /* ------------------------------------------------------------------------------------------------- */
-section#idea {
-    display: none;
-    z-index: 2;
-}
-
-/* Section: article */
-/* ------------------------------------------------------------------------------------------------- */
-section#article {
-    display: none;
+nav {
+    --length: 1.6rem;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    position: fixed;
+    right: 0;
+    top: 50%;
     z-index: 3;
+    width: var( --length );
+    height: var( --length );
+    transform: translate( -100%, -50% );
+    cursor: pointer;
+}
+
+nav > span {
+    --thickness: 1px;
+    --space: calc( ( var( --length ) - var(--thickness) ) / 2 );
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: var( --space ) 0;
+    background-image: linear-gradient( 90deg, var( --purple ), var( --green ) );
+    background-blend-mode: multiply;
+    background-clip: content-box;
+    transition: transform 100ms ease-out;
+}
+
+nav > span:first-child {
+    transform: translateY( calc( -3 * var( --thickness ) ) );
+}
+
+nav > span:last-child {
+    transform: translateY( calc( 3 * var( --thickness ) ) );
+}
+
+/* Catalog */
+/* ------------------------------------------------------------------------------------------------- */
+section#catalog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background-color: var( --black );
+    /* opacity: 0; */
+    transform: translateX( -100% );
+    transition: transform 2000ms ease-out, opacity 600ms ease-out;
+    /* TODO */
+    border: 20px solid;
+    border-image: linear-gradient( to bottom, var( --purple ), var( --green ), var( --pink ) ) 30px;
+    /* border-right-width: 10px; */
+    /* border-right-style: solid; */
+    /* border-image: linear-gradient( 0deg, var( --purple ), var( --green ), var( --pink ) ) 30px; */
 }

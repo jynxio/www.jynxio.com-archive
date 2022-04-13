@@ -1,3 +1,5 @@
+import "/source/home/nav.js";
+
 import "/style/public/reset.css";
 import "/style/public/font.css";
 import "/style/home/font.css";
