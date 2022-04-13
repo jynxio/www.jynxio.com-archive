@@ -1,1 +1,0 @@
-# Jynxio's personal site
