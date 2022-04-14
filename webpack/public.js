@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         article: "./source/article/index.js",
         home: "./source/home/index.js",
+        testFont: "./source/home/testFont.js",
     },
     output: {
         path: path.resolve( __dirname, "../dist" ),
@@ -32,6 +33,11 @@ module.exports = {
             template: "./template/article/javascript/code-structure.html",
             chunks: [ "article" ],
         } ),
+        new HtmlWebpackPlugin( {
+            filename: "test-font.html",
+            template: "./template/home/index.html",
+            chunks: [ "testFont" ],
+        } ),
     ],
     module: {
         rules: [
@@ -52,10 +58,7 @@ module.exports = {
             },
             {
                 test: /\.json$/i,
-                type: "asset/resource",
-                generator: {
-                    filename: "static/json/[hash][ext][query]",
-                },
+                type: "asset/source",
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,

@@ -1,5 +1,3 @@
-import "/source/home/nav.js";
-
 import "/style/public/reset.css";
 import "/style/public/font.css";
 import "/style/home/font.css";
@@ -8,21 +6,19 @@ import "/style/home/index.css";
 import vertex_shader from "./shader/vertex.glsl";
 import fragment_shader from "./shader/fragment.glsl";
 
-import {
-    WebGLRenderer,
-    Scene,
-    OrthographicCamera,
-    PlaneGeometry,
-    RawShaderMaterial,
-    MeshBasicMaterial,
-    Mesh,
-    Clock,
-    Vector2,
-} from "three";
+import "/source/home/nav.js";
+import { WebGLRenderer } from "three";
+import { Scene } from "three";
+import { OrthographicCamera } from "three";
+import { PlaneGeometry } from "three";
+import { RawShaderMaterial } from "three";
+import { Mesh } from "three";
+import { Clock } from "three";
+import { Vector2 } from "three";
 
 /* Renderer */
 const canvas = document.querySelector( "canvas" );
-const renderer = new WebGLRenderer( { canvas, antialias: window.devicePixelRatio < 2, antialias: false } );
+const renderer = new WebGLRenderer( { canvas, antialias: window.devicePixelRatio < 2 } );
 
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
