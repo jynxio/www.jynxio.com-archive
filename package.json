@@ -12,6 +12,7 @@
         "readline-sync": "^1.4.10",
         "style-loader": "^3.3.1",
         "uuid": "^8.3.2",
+        "vercel": "^24.1.0",
         "webpack": "^5.72.0",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.8.1",
@@ -22,7 +23,8 @@
         "build": "webpack  --config ./webpack/prod.js",
         "translate": "node ./generator/article/index.js",
         "subset": "node ./generator/font/index.js",
-        "subset-jynxio": "node ./generator/font/subsetJynxio.js"
+        "subset-jynxio": "node ./generator/font/subsetJynxio.js",
+        "deploy": "vercel --prod"
     },
     "dependencies": {
         "three": "^0.139.2"
