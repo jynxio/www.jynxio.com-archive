@@ -3,54 +3,29 @@ import "/style/public/font.css";
 import "/style/home/font.css";
 import "/style/home/index.css";
 
-import vertex_shader from "./shader/vertex.glsl";
-import fragment_shader from "./shader/fragment.glsl";
-
-import "/source/home/nav.js";
+import Wave from "./Wave";
+import FontOutline from "./FontOutline";
 import { WebGLRenderer } from "three";
-import { Scene } from "three";
 import { OrthographicCamera } from "three";
-import { PlaneGeometry } from "three";
-import { RawShaderMaterial } from "three";
-import { Mesh } from "three";
+import { Scene } from "three";
 import { Clock } from "three";
-import { Vector2 } from "three";
 
-/* Renderer */
+/* Base */
+const size = [ window.innerWidth, window.innerHeight ];
 const canvas = document.querySelector( "canvas" );
 const renderer = new WebGLRenderer( { canvas, antialias: window.devicePixelRatio < 2 } );
 
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( ... size );
 renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
 
-/* Camera */
-const aspect = window.innerWidth / window.innerHeight;
-const camera = new OrthographicCamera( - 1 * aspect, 1 * aspect, 1, - 1, 0.1, 5 );
-
-camera.position.set( 0, 0, 1 );
-
-/* Mesh */
-const uniforms = {
-    uTime: { value: 0 },
-    uCursor: { value: new Vector2( 0.5, 0.5 ) },
-    uResolution: { value: new Vector2( window.innerWidth, window.innerHeight ) },
-};
-const material = new RawShaderMaterial( {
-    wireframe: false,
-    transparent: false,
-    vertexShader: vertex_shader,
-    fragmentShader: fragment_shader,
-    uniforms,
-} );
-const geometry = new PlaneGeometry( 2, 2, 1, 1 );
-const mesh = new Mesh( geometry, material );
-
-mesh.scale.set( 1 * aspect, 1, 1 );
-
-/* Scene */
 const scene = new Scene();
+const camera = new OrthographicCamera( - size[ 0 ] / 2, size[ 0 ] / 2, size[ 1 ] / 2, - size[ 1 ] / 2, 0.1, 10 );
 
-scene.add( camera, mesh );
+/* Wave */
+const wave = new Wave( ... size );
+
+wave.setPosition( 0, 0, - 2 );
+scene.add( wave.getMesh() );
 
 /* Animate */
 const clock = new Clock();
@@ -59,7 +34,8 @@ renderer.setAnimationLoop( _ => {
 
     const elapsed_time = clock.getElapsedTime();
 
-    material.uniforms.uTime.value = elapsed_time;
+    wave.setTime( elapsed_time );
+
     renderer.render( scene, camera );
 
 } );
@@ -67,25 +43,18 @@ renderer.setAnimationLoop( _ => {
 /* Resize */
 window.addEventListener( "resize", _ => {
 
+    const size = [ window.innerWidth, window.innerHeight ];
+
+    renderer.setSize( ... size );
     renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
-    renderer.setSize( window.innerWidth, window.innerHeight);
 
-    const aspect = window.innerWidth / window.innerHeight;
-
-    camera.left = - 1 * aspect;
-    camera.right = 1 * aspect;
+    camera.left = - size[ 0 ] / 2;
+    camera.right = size[ 0 ] / 2;
+    camera.top = size[ 1 ] / 2;
+    camera.bottom = - size[ 1 ] / 2;
     camera.updateProjectionMatrix();
 
-    mesh.scale.set( 1 * aspect, 1, 1 );
-    uniforms.uResolution.value.set( window.innerWidth, window.innerHeight );
-
-} );
-
-window.addEventListener( "mousemove", event => {
-
-    const x = event.clientX / window.innerWidth;
-    const y = 1 - event.clientY / window.innerHeight;
-
-    uniforms.uCursor.value.set( x, y );
+    wave.setSize( ... size );
+    wave.setResolution( ... size );
 
 } );

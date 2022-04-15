@@ -2,7 +2,6 @@ precision mediump float;
 
 varying vec2 vUv;
 varying float vTime;
-varying vec2 vCursor;
 varying vec2 vResolution;
 
 vec4 warp( vec2 uv, float time ) {

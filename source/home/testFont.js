@@ -4,6 +4,7 @@ import data from "/static/json/jynxio-700.json";
 import * as three from "three";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import FontOutline from "./FontOutline";
 
 const renderer = new three.WebGLRenderer( { antialias: true } );
 
@@ -76,8 +77,9 @@ for ( let i = 0; i < shapes.length; i ++ ) {
 	}
 
 }
-
+console.log( shapes );
 shapes.push.apply( shapes, holeShapes );
+// shapes.push( ...holeShapes );
 
 const lineText = new three.Object3D();
 
@@ -95,7 +97,12 @@ for ( let i = 0; i < shapes.length; i ++ ) {
 
 }
 
-scene.add( lineText );
+/****************************************/
+scene.add( new FontOutline( "JYNXIO", 100 ) );
+scene.add( new three.Mesh( new three.BoxGeometry(), new three.MeshBasicMaterial( { color: 0xff0000 } ) ) );
+/****************************************/
+
+// scene.add( lineText );
 
 const controls = new OrbitControls( camera, renderer.domElement );
 
