@@ -25,7 +25,13 @@ const camera = new OrthographicCamera( - size[ 0 ] / 2, size[ 0 ] / 2, size[ 1 ]
 const wave = new Wave( ... size );
 
 wave.setPosition( 0, 0, - 2 );
-scene.add( wave.getMesh() );
+scene.add( wave.get() );
+
+/* Font outline */
+const font_outline = new FontOutline( "JYN\nXIO", 100 );
+
+font_outline.setPosition( 0, 0, - 1 );
+scene.add( font_outline.get() );
 
 /* Animate */
 const clock = new Clock();

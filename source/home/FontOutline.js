@@ -9,9 +9,12 @@ import { DoubleSide as double_side } from "three";
 import { Box3 } from "three";
 import { Vector3 } from "three";
 
+// TODO line-height
+// TODO color line: webgl_lines_colors
+
 const font = new FontLoader().parse( JSON.parse( data ) );
 const material = new LineBasicMaterial( {
-    color: 0x000000,
+    color: 0xffffff,
     side: double_side,
     linewidth: 1,
     linecap: "round",
@@ -79,9 +82,21 @@ export default class FontOutline {
      * 获取Group实例。
      * @returns { Object } - Group实例。
      */
-    getFontOutline() {
+    get() {
 
         return this._fontOutline;
+
+    }
+
+    /**
+     * 设置位置。
+     * @param { number } x - x坐标。
+     * @param { number } y - y坐标。
+     * @param { number } z - z坐标。
+     */
+    setPosition( x, y, z ) {
+
+        this.get().position.set( x, y, z );
 
     }
 

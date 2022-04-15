@@ -39,7 +39,7 @@ export default class Wave {
      * 获取Mesh实例。
      * @returns { Object } - Mesh实例。
      */
-    getMesh() {
+    get() {
 
         return this._mesh;
 
@@ -52,7 +52,7 @@ export default class Wave {
      */
     setSize( width, height ) {
 
-        this.getMesh().scale.set( width, height, 1 );
+        this.get().scale.set( width, height, 1 );
 
     }
 
@@ -64,7 +64,7 @@ export default class Wave {
      */
     setPosition( x, y, z ) {
 
-        this.getMesh().position.set( x, y, z );
+        this.get().position.set( x, y, z );
 
     }
 
@@ -74,7 +74,7 @@ export default class Wave {
      */
     setTime( time ) {
 
-        this.getMesh().material.uniforms.uTime.value = time;
+        this.get().material.uniforms.uTime.value = time;
 
     }
 
@@ -85,7 +85,7 @@ export default class Wave {
      */
     setResolution( x, y ) {
 
-        this.getMesh().material.uniforms.uResolution.value.set( x, y );
+        this.get().material.uniforms.uResolution.value.set( x, y );
 
     }
 
