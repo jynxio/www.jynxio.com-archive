@@ -10,7 +10,6 @@ import { Box3 } from "three";
 import { Vector3 } from "three";
 
 // TODO color line: webgl_lines_colors
-// TODO 格网红绿蓝
 
 const font = new FontLoader().parse( JSON.parse( data ) );
 const material = new LineBasicMaterial( {
