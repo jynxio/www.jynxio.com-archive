@@ -9,8 +9,8 @@ import { DoubleSide as double_side } from "three";
 import { Box3 } from "three";
 import { Vector3 } from "three";
 
-// TODO line-height
 // TODO color line: webgl_lines_colors
+// TODO 格网红绿蓝
 
 const font = new FontLoader().parse( JSON.parse( data ) );
 const material = new LineBasicMaterial( {
@@ -27,7 +27,7 @@ const material = new LineBasicMaterial( {
  * @param { Object } material - LineBasicMaterial实例。
  * @returns { Object } - Line实例。
  */
-function Outline( path, material ) {
+function MyLine( path, material ) {
 
     const divisions = 12;
     const points = path.getPoints( divisions );
@@ -38,43 +38,70 @@ function Outline( path, material ) {
 
 }
 
-export default class FontOutline {
+export default class FontLine {
 
     /**
      * 构造字符轮廓线。
      * @param { string } message - 字符串。
-     * @param { number } height - 单个字符的高度。
+     * @param { number } height - 字符的高度，比如100。
+     * @param { number } space - 字符的间距（垂直方向），比如10。
      * @returns { Object } - Group实例，代表字符串的轮廓线。
      */
-    constructor( message, height ) {
+    constructor( message, height, space ) {
 
-        const outlines = new Group();
+        /* 创建轮廓线。 */
+        const lines = new Group();
         const shapes = font.generateShapes( message, height );
 
         shapes.forEach( shape => {
 
-            outlines.add( new Outline( shape, material ) );
+            const line = new MyLine( shape, material );
+
+            lines.add( line );
 
             if ( ! shape.holes ) return;
             if ( ! shape.holes.length ) return;
 
-            shape.holes.forEach( hole => outlines.add( new Outline( hole, material ) ) )
+            shape.holes.forEach( hole => line.add( new MyLine( hole, material ) ) );
 
         } );
 
-        const center = new Box3().setFromObject( outlines ).getCenter( new Vector3() );
+        /* TODO：清空原间距。 */
 
-        outlines.children.forEach( line => {
+        /* 制造间距（垂直方向）。 */
+        const rows = message.split( "\n" );
 
-            const geometry = line.geometry;
+        rows.forEach( ( row, index ) => {
 
-            geometry.translate( - center.x, - center.y, - center.z );
-            geometry.computeBoundingBox();
-            geometry.computeBoundingSphere();
+            const offset = - index * space;
+
+            const from_index = rows.slice( 0, index ).reduce( ( count, string ) => {
+
+                return count + Array.from( string ).length;
+
+            }, 0 )
+            const to_index = from_index + Array.from( row ).length;
+
+            for ( let i = from_index; i < to_index; i++ ) {
+
+                lines.children[ i ].translateY( offset );
+
+            }
 
         } );
 
-        this._fontOutline = outlines;
+        /* 居中。 */
+        const offset = new Box3().setFromObject( lines ).getCenter( new Vector3() );
+
+        lines.children.forEach( line => {
+
+            line.translateX( - offset.x );
+            line.translateY( - offset.y );
+            line.translateZ( - offset.z );
+
+        } );
+
+        this._fontLine = lines;
 
     }
 
@@ -84,7 +111,7 @@ export default class FontOutline {
      */
     get() {
 
-        return this._fontOutline;
+        return this._fontLine;
 
     }
 
