@@ -8,12 +8,16 @@ import { LineBasicMaterial } from "three";
 import { DoubleSide as double_side } from "three";
 import { Box3 } from "three";
 import { Vector3 } from "three";
+import { Float32BufferAttribute } from "three";
+import { Color } from "three";
 
-// TODO color line: webgl_lines_colors
+const COLOR_PINK = 0xea3373;
+const COLOR_GREEN = 0x377e7f;
+const COLOR_PURPLE = 0x5d72f6;
 
 const font = new FontLoader().parse( JSON.parse( data ) );
 const material = new LineBasicMaterial( {
-    color: 0xffffff,
+    vertexColors: true,
     side: double_side,
     linewidth: 1,
     linecap: "round",
@@ -30,7 +34,24 @@ function MyLine( path, material ) {
 
     const divisions = 12;
     const points = path.getPoints( divisions );
+    const colors = [];
+    const color_pink = new Color( COLOR_PINK );
+    const color_green = new Color( COLOR_GREEN );
+    const color_purple = new Color( COLOR_PURPLE );
+
+    for ( let i = 0; i < points.length; i++ ) {
+
+        const strength = i / ( points.length - 1 );
+        const color = new Color().lerpColors( color_purple, color_pink, strength );
+
+        colors.push( color.r, color.g, color.b );
+
+    }
+
     const geometry = new BufferGeometry().setFromPoints( points );
+
+    geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
+
     const line = new Line( geometry, material );
 
     return line;
