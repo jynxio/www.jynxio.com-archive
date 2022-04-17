@@ -41,6 +41,7 @@ function MyLine( path, material ) {
 
     for ( let i = 0; i < points.length; i++ ) {
 
+        // TODO
         const strength = i / ( points.length - 1 );
         const color = new Color().lerpColors( color_purple, color_pink, strength );
 
