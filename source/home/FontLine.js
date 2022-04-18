@@ -8,84 +8,10 @@ import { LineBasicMaterial } from "three";
 import { Box3 } from "three";
 import { Vector3 } from "three";
 import { Float32BufferAttribute } from "three";
-import { Color } from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import { Mesh } from "three";
 import { MeshBasicMaterial } from "three";
 import { DoubleSide as double_side } from "three";
-
-const thin_material = new LineBasicMaterial( {
-    linewidth: 1,
-    linecap: "round",
-    linejoin: "round",
-    vertexColors: true,
-} );
-
-const bold_material = new MeshBasicMaterial( {
-    side: double_side, // 必需
-    vertexColors: true,
-} );
-
-/**
- * 构造细线条。
- * @param { Object } path - Path实例。
- * @param { number } thickness - 线条宽度，该线条的宽度恒定为1。
- * @returns { Object } - Line实例。
- */
-function MyThinLine( path, thickness ) {
-
-    const divisions = 12;
-    const points = path.getPoints( divisions );
-
-    const colors = [];
-    const positions = [];
-
-    for ( let i = 0; i < points.length; i++ ) {
-
-        const vector2 = points[ i ];
-
-        positions.push( vector2.x, vector2.y, 0 );
-        colors.push( Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
-
-    }
-
-    const geometry = new BufferGeometry();
-
-    geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
-    geometry.setAttribute( "position", new Float32BufferAttribute( positions, 3 ) );
-    geometry.computeBoundingBox();
-    geometry.computeBoundingSphere();
-
-    const line = new Line( geometry, thin_material );
-
-    return line;
-
-}
-
-/**
- * 构造粗线条。
- * @param { Object } path - Path实例。
- * @param { number } thickness - 线条宽度。
- * @returns { Object } - Line实例。
- */
-function MyBoldLine( path, thickness ) {
-
-    const divisions = 12;
-    const points = path.getPoints( divisions );
-    const style = SVGLoader.getStrokeStyle( thickness, "rgb(255,255,255)" );
-    const geometry = SVGLoader.pointsToStroke( points, style );
-    const colors = [];
-    let count = geometry.getAttribute( "position" ).count;
-
-    while ( count-- ) colors.push( Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
-
-    geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
-
-    const line = new Mesh( geometry, bold_material );
-
-    return line;
-
-}
 
 export default class FontLine {
 
@@ -158,7 +84,7 @@ export default class FontLine {
     }
 
     /**
-     * 获取Group实例。
+     * 获取实例。
      * @returns { Object } - Group实例。
      */
     get() {
@@ -179,10 +105,88 @@ export default class FontLine {
 
     }
 
+    /**
+     * 缩放至原始大小的value倍。
+     * @param { number } value - 缩放倍数。
+     */
     setScale( value ) {
 
         this.get().scale.set( value, value, value );
 
     }
+
+}
+
+const thin_material = new LineBasicMaterial( {
+    linewidth: 1,
+    linecap: "round",
+    linejoin: "round",
+    vertexColors: true,
+} );
+
+const bold_material = new MeshBasicMaterial( {
+    side: double_side, // 必需
+    vertexColors: true,
+} );
+
+/**
+ * 构造细线条。
+ * @param { Object } path - Path实例。
+ * @param { number } thickness - 线条宽度，该线条的宽度恒定为1。
+ * @returns { Object } - Line实例。
+ */
+function MyThinLine( path, thickness ) {
+
+    const divisions = 12;
+    const points = path.getPoints( divisions );
+
+    const colors = [];
+    const positions = [];
+
+    for ( let i = 0; i < points.length; i++ ) {
+
+        const vector2 = points[ i ];
+
+        positions.push( vector2.x, vector2.y, 0 );
+        colors.push( Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
+
+    }
+
+    const geometry = new BufferGeometry();
+
+    geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
+    geometry.setAttribute( "position", new Float32BufferAttribute( positions, 3 ) );
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+
+    const line = new Line( geometry, thin_material );
+
+    return line;
+
+}
+
+/**
+ * 构造粗线条。
+ * @param { Object } path - Path实例。
+ * @param { number } thickness - 线条宽度。
+ * @returns { Object } - Line实例。
+ */
+function MyBoldLine( path, thickness ) {
+
+    const divisions = 12;
+    const points = path.getPoints( divisions );
+    const style = SVGLoader.getStrokeStyle( thickness, "rgb(255,255,255)" );
+    const geometry = SVGLoader.pointsToStroke( points, style );
+
+    const colors = [];
+    let count = geometry.getAttribute( "position" ).count;
+
+    while ( count-- ) colors.push( Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
+
+    geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
+
+    const line = new Mesh( geometry, bold_material );
+
+    return line;
 
 }

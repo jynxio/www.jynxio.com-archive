@@ -14,7 +14,7 @@ import { Clock } from "three";
 /* Base */
 const size = { x: window.innerWidth, y: window.innerHeight };
 const canvas = document.querySelector( "canvas" );
-const renderer = new WebGLRenderer( { canvas, antialias: window.devicePixelRatio < 2 } );
+const renderer = new WebGLRenderer( { canvas, antialias: true } );
 
 renderer.setSize( size.x, size.y );
 renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
@@ -32,7 +32,7 @@ scene.add( wave.get() );
 const font_message = "JYN\nXIO";
 const font_height = Math.min( size.x, size.y ) * 0.1;
 const font_space = font_height * 0.1;
-const font_thickness = 1;
+const font_thickness = Math.min( window.devicePixelRatio, 2 );
 const font_line = new FontLine( font_message, font_height, font_space, font_thickness );
 
 font_line.setPosition( 0, 0, - 1 );
@@ -40,7 +40,8 @@ scene.add( font_line.get() );
 
 /* Scroll */
 const scroll_length = size.y * 0.1;
-const scroll = new Scroll( scroll_length );
+const scroll_thickness = 1;
+const scroll = new Scroll( scroll_length, scroll_thickness );
 
 scroll.setPosition( 0, - size.y / 2 + scroll_length, - 1 );
 scene.add( scroll.get() );
