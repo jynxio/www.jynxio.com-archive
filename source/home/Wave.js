@@ -1,5 +1,5 @@
-import vertex_shader from "./shader/vertex.glsl";
-import fragment_shader from "./shader/fragment.glsl";
+import vertex_shader from "./shader-wave/vertex.glsl";
+import fragment_shader from "./shader-wave/fragment.glsl";
 
 import { Vector2 } from "three";
 import { RawShaderMaterial } from "three";

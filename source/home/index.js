@@ -32,7 +32,7 @@ scene.add( wave.get() );
 const font_message = "JYN\nXIO";
 const font_height = Math.min( size.x, size.y ) * 0.1;
 const font_space = font_height * 0.1;
-const font_thickness = Math.min( window.devicePixelRatio, 2 );
+const font_thickness = 1;
 const font_line = new FontLine( font_message, font_height, font_space, font_thickness );
 
 font_line.setPosition( 0, 0, - 1 );

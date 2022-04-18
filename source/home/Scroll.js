@@ -1,3 +1,6 @@
+import vertex_shader from "./shader-scroll/vertex.glsl";
+import fragment_shader from "./shader-scroll/fragment.glsl";
+
 import { Line } from "three";
 import { BufferGeometry } from "three";
 import { Vector2 } from "three";
@@ -7,6 +10,9 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import { Mesh } from "three";
 import { MeshBasicMaterial } from "three";
 import { DoubleSide as double_side } from "three";
+import { RawShaderMaterial } from "three";
+import { PlaneGeometry } from "three";
+import { Group } from "three";
 
 export default class Scroll {
 
@@ -18,10 +24,16 @@ export default class Scroll {
      */
     constructor( length, thickness ) {
 
+        const flare = new Flare( length * 1, length * 1 );
+
         const MyLine = thickness === 1 ? MyThinLine : MyBoldLine;
         const line = MyLine( length, thickness );
 
-        this._line = line;
+        const group = new Group();
+
+        group.add( flare, line );
+
+        this._scroll = group;
 
     }
 
@@ -31,7 +43,7 @@ export default class Scroll {
      */
     get() {
 
-        return this._line;
+        return this._scroll;
 
     }
 
@@ -65,7 +77,7 @@ export default class Scroll {
  * @param { number } thickness - 线段的宽度，其宽度恒定为1。
  * @returns { Object } - Line实例。
  */
- function MyThinLine( length, thickness ) {
+function MyThinLine( length, thickness ) {
 
     const positions = [
         0,   length / 2, 0,
@@ -119,5 +131,22 @@ function MyBoldLine( length, thickness ) {
     const line = new Mesh( geometry, material );
 
     return line;
+
+}
+
+function Flare( width, height ) {
+
+    const material = new RawShaderMaterial( {
+        wireframe: false,
+        transparent: true,
+        vertexShader: vertex_shader,
+        fragmentShader: fragment_shader,
+    } );
+    const geometry = new PlaneGeometry( 1, 1, 1, 1 );
+    const mesh = new Mesh( geometry, material );
+
+    mesh.scale.set( width, height, 1 );
+
+    return mesh;
 
 }
