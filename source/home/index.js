@@ -5,6 +5,7 @@ import "/style/home/index.css";
 
 import Wave from "./Wave";
 import FontLine from "./FontLine";
+import Scroll from "./Scroll";
 import { WebGLRenderer } from "three";
 import { OrthographicCamera } from "three";
 import { Scene } from "three";
@@ -19,7 +20,7 @@ renderer.setSize( ... size );
 renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
 
 const scene = new Scene();
-const camera = new OrthographicCamera( - size[ 0 ] / 2, size[ 0 ] / 2, size[ 1 ] / 2, - size[ 1 ] / 2, 0.1, 100 );
+const camera = new OrthographicCamera( - size[ 0 ] / 2, size[ 0 ] / 2, size[ 1 ] / 2, - size[ 1 ] / 2, 0.1, 10 );
 
 /* Wave */
 const wave = new Wave( ... size );
@@ -35,6 +36,13 @@ const font_line = new FontLine( font_message, font_height, font_space );
 
 font_line.setPosition( 0, 0, - 1 );
 scene.add( font_line.get() );
+
+/* Scroll */
+const scroll_length = Math.min( window.innerHeight, window.innerWidth ) * 0.075;
+const scroll = new Scroll( scroll_length );
+
+scroll.setPosition( 0, - size[ 1 ] / 2 + scroll_length, - 1 ); // TODO: resize
+scene.add( scroll.get() );
 
 /* Animate */
 const clock = new Clock();

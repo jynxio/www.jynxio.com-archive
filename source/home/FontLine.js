@@ -21,14 +21,12 @@ const purple_color = new Color( 0x5d72f6 );
 
 const thin_material = new LineBasicMaterial( {
     vertexColors: true,
-    side: double_side,
     linewidth: 1,
     linecap: "round",
     linejoin: "round",
 } );
 const bold_material = new LineMaterial( {
-    linewidth: 1,
-    side: double_side,
+    linewidth: 3,
     worldUnits: true,
     vertexColors: true,
 } );
@@ -53,15 +51,15 @@ function MyThinLine( path ) {
 
         if ( strength <= 1 ) {                          // ∈[0, 1]
 
-            pure_color.copy( white_color ).lerp( green_color, strength );
+            pure_color.copy( green_color ).lerp( white_color, strength );
 
         } else if ( strength >= 2 ) {                   // ∈[2, 3]
 
-            pure_color.copy( purple_color ).lerp( white_color, strength - 2 );
+            pure_color.copy( purple_color ).lerp( green_color, strength - 2 );
 
         } else {                                        // ∈(1, 2)
 
-            pure_color.copy( green_color ).lerp( purple_color, strength - 1 );
+            pure_color.copy( white_color ).lerp( purple_color, strength - 1 );
 
         }
 
@@ -103,10 +101,23 @@ function MyBoldLine( path ) {
     for ( let i = 0; i < points.length; i++ ) {
 
         /* Color */
-        const strength = i / ( points.length - 1 );
+        const strength = i / ( points.length - 1 ) * 3; // ∈[0, 3]
 
-        // colors.push( 1 * strength, 1 * strength, 1 * strength );
-        colors.push( 1, 1, 1 );
+        if ( strength <= 1 ) {                          // ∈[0, 1]
+
+            pure_color.copy( green_color ).lerp( white_color, strength );
+
+        } else if ( strength >= 2 ) {                   // ∈[2, 3]
+
+            pure_color.copy( purple_color ).lerp( green_color, strength - 2 );
+
+        } else {                                        // ∈(1, 2)
+
+            pure_color.copy( white_color ).lerp( purple_color, strength - 1 );
+
+        }
+
+        colors.push( pure_color.r, pure_color.g, pure_color.b );
 
         /* Position */
         const vector2 = points[ i ];
@@ -220,7 +231,7 @@ export default class FontLine {
 
     setScale( value ) {
 
-        this.get().scale.set( value, value, 0 );
+        this.get().scale.set( value, value, value );
 
     }
 
