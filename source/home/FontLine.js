@@ -10,6 +10,9 @@ import { Box3 } from "three";
 import { Vector3 } from "three";
 import { Float32BufferAttribute } from "three";
 import { Color } from "three";
+import { Line2 } from "three/examples/jsm/lines/Line2";
+import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
+import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
 
 const COLOR_PINK = 0xea3373;
 const COLOR_GREEN = 0x377e7f;
@@ -59,6 +62,34 @@ function MyLine( path, material ) {
 
 }
 
+function MyFatLine( path, material ) {
+
+    const divisions = 12;
+    const points = path.getPoints( divisions );
+    const positions = [];
+
+    points.forEach( point => {
+
+        positions.push( point.x, point.y, 0 );
+
+    } );
+
+    const geometry = new LineGeometry();
+
+    geometry.setPositions( positions );
+    // TODO
+    const material_fat = new LineMaterial( {
+        color: COLOR_PINK,
+        worldUnits: true,
+        linewidth: 3,
+        vertexColors: false,
+    } );
+    const line = new Line2( geometry, material_fat );
+
+    return line;
+
+}
+
 export default class FontLine {
 
     /**
@@ -76,14 +107,16 @@ export default class FontLine {
 
         shapes.forEach( shape => {
 
-            const line = new MyLine( shape, material );
+            // const line = new MyLine( shape, material );
+            const line = new MyFatLine( shape, material );
 
             lines.add( line );
 
             if ( ! shape.holes ) return;
             if ( ! shape.holes.length ) return;
 
-            shape.holes.forEach( hole => line.add( new MyLine( hole, material ) ) );
+            // shape.holes.forEach( hole => line.add( new MyLine( hole, material ) ) );
+            shape.holes.forEach( hole => line.add( new MyFatLine( hole, material ) ) );
 
         } );
 
