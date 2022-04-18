@@ -5,38 +5,34 @@ import { Group } from "three";
 import { BufferGeometry } from "three";
 import { Line } from "three";
 import { LineBasicMaterial } from "three";
-import { DoubleSide as double_side } from "three";
 import { Box3 } from "three";
 import { Vector3 } from "three";
 import { Float32BufferAttribute } from "three";
 import { Color } from "three";
-import { Line2 } from "three/examples/jsm/lines/Line2";
-import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
-import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
-
-const pure_color = new Color();
-const white_color = new Color( 0xf2f5f7 );
-const green_color = new Color( 0x377e7f );
-const purple_color = new Color( 0x5d72f6 );
+import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
+import { Mesh } from "three";
+import { MeshBasicMaterial } from "three";
+import { DoubleSide as double_side } from "three";
 
 const thin_material = new LineBasicMaterial( {
-    vertexColors: true,
     linewidth: 1,
     linecap: "round",
     linejoin: "round",
+    vertexColors: true,
 } );
-const bold_material = new LineMaterial( {
-    linewidth: 3,
-    worldUnits: true,
+
+const bold_material = new MeshBasicMaterial( {
+    side: double_side, // 必需
     vertexColors: true,
 } );
 
 /**
- * 构造细线条，该线条的宽度恒定为1px。
+ * 构造细线条。
  * @param { Object } path - Path实例。
+ * @param { number } thickness - 线条宽度，该线条的宽度恒定为1。
  * @returns { Object } - Line实例。
  */
-function MyThinLine( path ) {
+function MyThinLine( path, thickness ) {
 
     const divisions = 12;
     const points = path.getPoints( divisions );
@@ -46,29 +42,10 @@ function MyThinLine( path ) {
 
     for ( let i = 0; i < points.length; i++ ) {
 
-        /* Color */
-        const strength = i / ( points.length - 1 ) * 3; // ∈[0, 3]
-
-        if ( strength <= 1 ) {                          // ∈[0, 1]
-
-            pure_color.copy( green_color ).lerp( white_color, strength );
-
-        } else if ( strength >= 2 ) {                   // ∈[2, 3]
-
-            pure_color.copy( purple_color ).lerp( green_color, strength - 2 );
-
-        } else {                                        // ∈(1, 2)
-
-            pure_color.copy( white_color ).lerp( purple_color, strength - 1 );
-
-        }
-
-        colors.push( pure_color.r, pure_color.g, pure_color.b );
-
-        /* Position */
         const vector2 = points[ i ];
 
         positions.push( vector2.x, vector2.y, 0 );
+        colors.push( Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
 
     }
 
@@ -86,52 +63,25 @@ function MyThinLine( path ) {
 }
 
 /**
- * 构造粗线条，该线条的join处存在严重瑕疵。
+ * 构造粗线条。
  * @param { Object } path - Path实例。
+ * @param { number } thickness - 线条宽度。
  * @returns { Object } - Line实例。
  */
-function MyBoldLine( path ) {
+function MyBoldLine( path, thickness ) {
 
     const divisions = 12;
     const points = path.getPoints( divisions );
-
+    const style = SVGLoader.getStrokeStyle( thickness, "rgb(255,255,255)" );
+    const geometry = SVGLoader.pointsToStroke( points, style );
     const colors = [];
-    const positions = [];
+    let count = geometry.getAttribute( "position" ).count;
 
-    for ( let i = 0; i < points.length; i++ ) {
+    while ( count-- ) colors.push( Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
 
-        /* Color */
-        const strength = i / ( points.length - 1 ) * 3; // ∈[0, 3]
+    geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
 
-        if ( strength <= 1 ) {                          // ∈[0, 1]
-
-            pure_color.copy( green_color ).lerp( white_color, strength );
-
-        } else if ( strength >= 2 ) {                   // ∈[2, 3]
-
-            pure_color.copy( purple_color ).lerp( green_color, strength - 2 );
-
-        } else {                                        // ∈(1, 2)
-
-            pure_color.copy( white_color ).lerp( purple_color, strength - 1 );
-
-        }
-
-        colors.push( pure_color.r, pure_color.g, pure_color.b );
-
-        /* Position */
-        const vector2 = points[ i ];
-
-        positions.push( vector2.x, vector2.y, 0 );
-
-    }
-
-    const geometry = new LineGeometry();
-
-    geometry.setColors( colors );
-    geometry.setPositions( positions );
-
-    const line = new Line2( geometry, bold_material );
+    const line = new Mesh( geometry, bold_material );
 
     return line;
 
@@ -144,27 +94,27 @@ export default class FontLine {
      * @param { string } message - 字符串。
      * @param { number } height - 字符的高度，比如100。
      * @param { number } space - 字符的间距（垂直方向），比如10。
+     * @param { number } thickness - 线条的宽度，比如1。
      * @returns { Object } - Group实例，代表字符串的轮廓线。
      */
-    constructor( message, height, space ) {
+    constructor( message, height, space, thickness ) {
 
         /* 创建轮廓线。 */
         const lines = new Group();
         const font = new FontLoader().parse( JSON.parse( data ) );
         const shapes = font.generateShapes( message, height );
+        const MyLine = thickness === 1 ? MyThinLine : MyBoldLine;
 
         shapes.forEach( shape => {
 
-            const line = new MyThinLine( shape );
-            // const line = new MyBoldLine( shape );
+            const line = new MyLine( shape, thickness );
 
             lines.add( line );
 
             if ( ! shape.holes ) return;
             if ( ! shape.holes.length ) return;
 
-            shape.holes.forEach( hole => line.add( new MyThinLine( hole ) ) );
-            // shape.holes.forEach( hole => line.add( new MyBoldLine( hole ) ) );
+            shape.holes.forEach( hole => line.add( new MyLine( hole, thickness ) ) );
 
         } );
 
