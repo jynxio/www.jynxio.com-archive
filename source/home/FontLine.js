@@ -14,77 +14,100 @@ import { Line2 } from "three/examples/jsm/lines/Line2";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
 
-const COLOR_PINK = 0xea3373;
-const COLOR_GREEN = 0x377e7f;
-const COLOR_PURPLE = 0x5d72f6;
+const pure_color = new Color( 0xffffff );
+const pink_color = new Color( 0xea3373 );
+const white_color = new Color( 0xf2f5f7 );
+const green_color = new Color( 0x377e7f );
+const purple_color = new Color( 0x5d72f6 );
 
-const font = new FontLoader().parse( JSON.parse( data ) );
-const material = new LineBasicMaterial( {
+const thin_material = new LineBasicMaterial( {
     vertexColors: true,
     side: double_side,
     linewidth: 1,
     linecap: "round",
     linejoin: "round",
 } );
+const bold_material = new LineMaterial( {
+    linewidth: 1,
+    side: double_side,
+    worldUnits: true,
+    vertexColors: true,
+} );
 
 /**
- * 构造线条。
+ * 构造细线条，该线条的宽度恒定为1px。
  * @param { Object } path - Path实例。
- * @param { Object } material - LineBasicMaterial实例。
  * @returns { Object } - Line实例。
  */
-function MyLine( path, material ) {
+function MyThinLine( path ) {
 
     const divisions = 12;
     const points = path.getPoints( divisions );
+
     const colors = [];
-    const color_pink = new Color( COLOR_PINK );
-    const color_green = new Color( COLOR_GREEN );
-    const color_purple = new Color( COLOR_PURPLE );
+    const positions = [];
 
     for ( let i = 0; i < points.length; i++ ) {
 
-        // TODO
+        /* Color */
         const strength = i / ( points.length - 1 );
-        const color = new Color().lerpColors( color_purple, color_pink, strength );
 
-        colors.push( color.r, color.g, color.b );
+        colors.push( 1 * strength, 1 * strength, 1 * strength );
+
+        /* Position */
+        const vector2 = points[ i ];
+
+        positions.push( vector2.x, vector2.y, 0 );
 
     }
 
-    const geometry = new BufferGeometry().setFromPoints( points );
+    const geometry = new BufferGeometry();
 
     geometry.setAttribute( "color", new Float32BufferAttribute( colors, 3 ) );
+    geometry.setAttribute( "position", new Float32BufferAttribute( positions, 3 ) );
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
 
-    const line = new Line( geometry, material );
+    const line = new Line( geometry, thin_material );
 
     return line;
 
 }
 
-function MyFatLine( path, material ) {
+/**
+ * 构造粗线条，该线条的join处存在严重瑕疵。
+ * @param { Object } path - Path实例。
+ * @returns { Object } - Line实例。
+ */
+function MyBoldLine( path ) {
 
     const divisions = 12;
     const points = path.getPoints( divisions );
+
+    const colors = [];
     const positions = [];
 
-    points.forEach( point => {
+    for ( let i = 0; i < points.length; i++ ) {
 
-        positions.push( point.x, point.y, 0 );
+        /* Color */
+        const strength = i / ( points.length - 1 );
 
-    } );
+        // colors.push( 1 * strength, 1 * strength, 1 * strength );
+        colors.push( 1, 1, 1 );
+
+        /* Position */
+        const vector2 = points[ i ];
+
+        positions.push( vector2.x, vector2.y, 0 );
+
+    }
 
     const geometry = new LineGeometry();
 
+    geometry.setColors( colors );
     geometry.setPositions( positions );
-    // TODO
-    const material_fat = new LineMaterial( {
-        color: COLOR_PINK,
-        worldUnits: true,
-        linewidth: 3,
-        vertexColors: false,
-    } );
-    const line = new Line2( geometry, material_fat );
+
+    const line = new Line2( geometry, bold_material );
 
     return line;
 
@@ -103,20 +126,21 @@ export default class FontLine {
 
         /* 创建轮廓线。 */
         const lines = new Group();
+        const font = new FontLoader().parse( JSON.parse( data ) );
         const shapes = font.generateShapes( message, height );
 
         shapes.forEach( shape => {
 
-            // const line = new MyLine( shape, material );
-            const line = new MyFatLine( shape, material );
+            const line = new MyThinLine( shape );
+            // const line = new MyBoldLine( shape );
 
             lines.add( line );
 
             if ( ! shape.holes ) return;
             if ( ! shape.holes.length ) return;
 
-            // shape.holes.forEach( hole => line.add( new MyLine( hole, material ) ) );
-            shape.holes.forEach( hole => line.add( new MyFatLine( hole, material ) ) );
+            shape.holes.forEach( hole => line.add( new MyThinLine( hole ) ) );
+            // shape.holes.forEach( hole => line.add( new MyBoldLine( hole ) ) );
 
         } );
 

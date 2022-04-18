@@ -9,7 +9,6 @@ import { WebGLRenderer } from "three";
 import { OrthographicCamera } from "three";
 import { Scene } from "three";
 import { Clock } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 /* Base */
 const size = [ window.innerWidth, window.innerHeight ];
@@ -20,26 +19,21 @@ renderer.setSize( ... size );
 renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
 
 const scene = new Scene();
-const camera = new OrthographicCamera( - size[ 0 ] / 2, size[ 0 ] / 2, size[ 1 ] / 2, - size[ 1 ] / 2, 0.1, 10000 );
-const control = new OrbitControls( camera, canvas );
-
-control.enableDamping = true;
+const camera = new OrthographicCamera( - size[ 0 ] / 2, size[ 0 ] / 2, size[ 1 ] / 2, - size[ 1 ] / 2, 0.1, 100 );
 
 /* Wave */
 const wave = new Wave( ... size );
 
 wave.setPosition( 0, 0, - 2 );
-// scene.add( wave.get() );
+scene.add( wave.get() );
 
 /* Font line: 需补充resize响应 */
 const font_message = "JYN\nXIO";
 const font_height = Math.min( window.innerHeight, window.innerWidth ) * 0.1;
 const font_space = font_height * 0.1;
 const font_line = new FontLine( font_message, font_height, font_space );
-const font_line_position = [ 0, 0, - 200 ];
 
-font_line.setPosition( ...font_line_position );
-control.target.set( ...font_line_position )
+font_line.setPosition( 0, 0, - 1 );
 scene.add( font_line.get() );
 
 /* Animate */
@@ -49,7 +43,6 @@ renderer.setAnimationLoop( _ => {
 
     const elapsed_time = clock.getElapsedTime();
 
-    control.update();
     wave.setTime( elapsed_time );
     renderer.render( scene, camera );
 
