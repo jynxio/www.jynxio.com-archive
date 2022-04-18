@@ -65,4 +65,6 @@ window.addEventListener( "resize", _ => {
     wave.setSize( ... size );
     wave.setResolution( ... size );
 
+    font_line.setScale( Math.min( ...size ) * 0.1 / font_height );
+
 } );

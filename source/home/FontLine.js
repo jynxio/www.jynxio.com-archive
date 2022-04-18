@@ -14,8 +14,7 @@ import { Line2 } from "three/examples/jsm/lines/Line2";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
 
-const pure_color = new Color( 0xffffff );
-const pink_color = new Color( 0xea3373 );
+const pure_color = new Color();
 const white_color = new Color( 0xf2f5f7 );
 const green_color = new Color( 0x377e7f );
 const purple_color = new Color( 0x5d72f6 );
@@ -50,9 +49,23 @@ function MyThinLine( path ) {
     for ( let i = 0; i < points.length; i++ ) {
 
         /* Color */
-        const strength = i / ( points.length - 1 );
+        const strength = i / ( points.length - 1 ) * 3; // ∈[0, 3]
 
-        colors.push( 1 * strength, 1 * strength, 1 * strength );
+        if ( strength <= 1 ) {                          // ∈[0, 1]
+
+            pure_color.copy( white_color ).lerp( green_color, strength );
+
+        } else if ( strength >= 2 ) {                   // ∈[2, 3]
+
+            pure_color.copy( purple_color ).lerp( white_color, strength - 2 );
+
+        } else {                                        // ∈(1, 2)
+
+            pure_color.copy( green_color ).lerp( purple_color, strength - 1 );
+
+        }
+
+        colors.push( pure_color.r, pure_color.g, pure_color.b );
 
         /* Position */
         const vector2 = points[ i ];
@@ -202,6 +215,12 @@ export default class FontLine {
     setPosition( x, y, z ) {
 
         this.get().position.set( x, y, z );
+
+    }
+
+    setScale( value ) {
+
+        this.get().scale.set( value, value, 0 );
 
     }
 
