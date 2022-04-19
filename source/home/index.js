@@ -40,11 +40,11 @@ scene.add( font_jynxio.get() );
 
 const font_scrolldown = new FontFillline(
     "SCROLL DOWN",
-    Math.max( size.x, size.y ) * 0.01,
-    Math.max( size.x, size.y ) * 0.01 * 0.1,
+    size.y * 0.015,
+    size.y * 0.015 * 0.1,
 );
 
-font_scrolldown.setPosition( 0, - size.y / 2 + font_scrolldown.getHeight() * 3, - 1 );
+font_scrolldown.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
 scene.add( font_scrolldown.get() );
 
 /* Animate */
@@ -79,7 +79,6 @@ window.addEventListener( "resize", _ => {
 
     font_jynxio.setScale( Math.max( size.x, size.y ) * 0.1 / font_jynxio.getHeight() );
 
-    font_scrolldown.setPosition( 0, - size.y / 2 + font_scrolldown.getHeight() * 3, - 1 );
-    font_scrolldown.setScale( Math.max( size.x, size.y ) * 0.01 / font_scrolldown.getHeight() );
-
+    font_scrolldown.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
+    font_scrolldown.setScale( size.y * 0.015 / font_scrolldown.getHeight() );
 } );
