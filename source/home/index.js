@@ -3,7 +3,8 @@ import "/style/public/font.css";
 import "/style/home/index.css";
 
 import Wave from "./Wave";
-import FontLine from "./FontLine";
+import FontOutline from "./FontOutline";
+import FontFillline from "./FontFillline";
 import { WebGLRenderer } from "three";
 import { OrthographicCamera } from "three";
 import { Scene } from "three";
@@ -27,7 +28,7 @@ wave.setPosition( 0, 0, - 2 );
 scene.add( wave.get() );
 
 /* Font */
-const font_jynxio = new FontLine(
+const font_jynxio = new FontOutline(
     "JYN\nXIO",
     Math.max( size.x, size.y ) * 0.1,
     Math.max( size.x, size.y ) * 0.1 * 0.1,
@@ -37,11 +38,10 @@ const font_jynxio = new FontLine(
 font_jynxio.setPosition( 0, 0, - 1 );
 scene.add( font_jynxio.get() );
 
-const font_scrolldown = new FontLine(
-    "SCROLLDOWN",
-    Math.max( size.x, size.y ) * 0.02,
-    Math.max( size.x, size.y ) * 0.02 * 0.1,
-    1
+const font_scrolldown = new FontFillline(
+    "SCROLL DOWN",
+    Math.max( size.x, size.y ) * 0.01,
+    Math.max( size.x, size.y ) * 0.01 * 0.1,
 );
 
 font_scrolldown.setPosition( 0, - size.y / 2 + font_scrolldown.getHeight() * 3, - 1 );
@@ -78,6 +78,8 @@ window.addEventListener( "resize", _ => {
     wave.setResolution( size.x, size.y );
 
     font_jynxio.setScale( Math.max( size.x, size.y ) * 0.1 / font_jynxio.getHeight() );
+
+    font_scrolldown.setPosition( 0, - size.y / 2 + font_scrolldown.getHeight() * 3, - 1 );
     font_scrolldown.setScale( Math.max( size.x, size.y ) * 0.01 / font_scrolldown.getHeight() );
 
 } );

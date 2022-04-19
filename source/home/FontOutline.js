@@ -1,4 +1,4 @@
-import data from "/static/json/jynxio-700.json";
+import data from "/static/json/cover-700.json";
 
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { Group } from "three";
@@ -12,9 +12,8 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import { Mesh } from "three";
 import { MeshBasicMaterial } from "three";
 import { DoubleSide as double_side } from "three";
-import { ShapeGeometry } from "three";
 
-export default class FontLine {
+export default class FontOutline {
 
     /**
      * 构造字符轮廓线。
@@ -85,7 +84,7 @@ export default class FontLine {
 
         } );
 
-        this._fontLine = lines;
+        this._font = lines;
 
     }
 
@@ -95,7 +94,7 @@ export default class FontLine {
      */
     get() {
 
-        return this._fontLine;
+        return this._font;
 
     }
 
@@ -234,14 +233,5 @@ function MyBoldLine( path, thickness ) {
     const line = new Mesh( geometry, bold_material );
 
     return line;
-
-}
-
-function MyFillLine( path ) {
-
-    const geometry = new ShapeGeometry( path );
-
-    geometry.computeBoundingBox();
-    geometry.computeBoundingSphere();
 
 }
