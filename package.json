@@ -23,7 +23,7 @@
         "build": "webpack  --config ./webpack/prod.js",
         "translate": "node ./generator/article/index.js",
         "subset": "node ./generator/font/index.js",
-        "subset-jynxio": "node ./generator/font/subsetJynxio.js",
+        "subset-cover": "node ./generator/font/subsetCover.js",
         "deploy": "vercel --prod"
     },
     "dependencies": {

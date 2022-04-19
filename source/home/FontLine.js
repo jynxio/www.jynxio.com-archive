@@ -12,6 +12,7 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 import { Mesh } from "three";
 import { MeshBasicMaterial } from "three";
 import { DoubleSide as double_side } from "three";
+import { ShapeGeometry } from "three";
 
 export default class FontLine {
 
@@ -24,6 +25,11 @@ export default class FontLine {
      * @returns { Object } - Group实例，代表字符串的轮廓线。
      */
     constructor( message, height, space, thickness ) {
+
+        this._message = message;
+        this._height = height;
+        this._space = space;
+        this._thickness = thickness;
 
         /* 创建轮廓线。 */
         const lines = new Group();
@@ -90,6 +96,46 @@ export default class FontLine {
     get() {
 
         return this._fontLine;
+
+    }
+
+    /**
+     * 获取文本。
+     * @returns { string } - 文本。
+     */
+    getMessage() {
+
+        return this._message;
+
+    }
+
+    /**
+     * 获取字符的高度。
+     * @returns { number } - 字符的高度。
+     */
+    getHeight() {
+
+        return this._height;
+
+    }
+
+    /**
+     * 获取字符的间距（垂直方向）。
+     * @returns { number } - 字符的间距（垂直方向）。
+     */
+    getSpace() {
+
+        return this.space;
+
+    }
+
+    /**
+     * 获取字符的线宽。
+     * @returns { number } - 字符的线宽。
+     */
+    getThickness() {
+
+        return this.thickness;
 
     }
 
@@ -188,5 +234,14 @@ function MyBoldLine( path, thickness ) {
     const line = new Mesh( geometry, bold_material );
 
     return line;
+
+}
+
+function MyFillLine( path ) {
+
+    const geometry = new ShapeGeometry( path );
+
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
 
 }
