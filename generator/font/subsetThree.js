@@ -2,11 +2,11 @@ const fontcaster = require( "font-caster" );
 const readlineSync = require( "readline-sync" );
 
 /* 原始字体文件的路径 */
-const ORIGIN_FONT_100 = "./static/font/original/cover-100.ttf";
-const ORIGIN_FONT_700 = "./static/font/original/cover-700.ttf";
+const ORIGIN_FONT_100 = "./static/font/original/three-100.ttf";
+const ORIGIN_FONT_700 = "./static/font/original/three-700.ttf";
 /* 子集字体文件的路径 */
-const SUBSET_FONT_100 = "./static/font/subset/cover-100.ttf";
-const SUBSET_FONT_700 = "./static/font/subset/cover-700.ttf";
+const SUBSET_FONT_100 = "./static/font/subset/three-100.ttf";
+const SUBSET_FONT_700 = "./static/font/subset/three-700.ttf";
 /* 子集化的字符 */
 const SUBSET_CHARACTERS = [
     "JYNXIO",
@@ -23,7 +23,7 @@ subset();
  */
 async function subset() {
 
-    console.log( `\nThe program will subset the cover-100.ttf and cover-700.ttf based on "${ SUBSET_CHARACTERS.join( "" ) }".` );
+    console.log( `\nThe program will subset the three-100.ttf and three-700.ttf based on "${ SUBSET_CHARACTERS.join( "" ) }".` );
 
     while ( true ) {
 

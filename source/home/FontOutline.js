@@ -1,4 +1,4 @@
-import data from "/static/json/cover-700.json";
+import data from "/static/json/three-700.json";
 
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { Group } from "three";

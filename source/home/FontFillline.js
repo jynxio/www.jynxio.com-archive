@@ -1,4 +1,4 @@
-import data from "/static/json/cover-100.json";
+import data from "/static/json/three-100.json";
 
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { Mesh } from "three";
