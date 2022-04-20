@@ -8,6 +8,8 @@ import { Mesh } from "three";
 
 export default class Wave {
 
+    #entity;
+
     /**
      * 构造wave。
      * @param { number } width - 宽度。
@@ -30,7 +32,7 @@ export default class Wave {
         const geometry = new PlaneGeometry( 1, 1, 1, 1 );
         const mesh = new Mesh( geometry, material );
 
-        this._mesh = mesh;
+        this.#entity = mesh;
         this.setSize( width, height );
 
     }
@@ -39,9 +41,9 @@ export default class Wave {
      * 获取Mesh实例。
      * @returns { Object } - Mesh实例。
      */
-    get() {
+    getEntity() {
 
-        return this._mesh;
+        return this.#entity;
 
     }
 
@@ -52,7 +54,7 @@ export default class Wave {
      */
     setSize( width, height ) {
 
-        this.get().scale.set( width, height, 1 );
+        this.getEntity().scale.set( width, height, 1 );
 
     }
 
@@ -64,7 +66,7 @@ export default class Wave {
      */
     setPosition( x, y, z ) {
 
-        this.get().position.set( x, y, z );
+        this.getEntity().position.set( x, y, z );
 
     }
 
@@ -74,7 +76,7 @@ export default class Wave {
      */
     setTime( time ) {
 
-        this.get().material.uniforms.uTime.value = time;
+        this.getEntity().material.uniforms.uTime.value = time;
 
     }
 
@@ -85,7 +87,7 @@ export default class Wave {
      */
     setResolution( x, y ) {
 
-        this.get().material.uniforms.uResolution.value.set( x, y );
+        this.getEntity().material.uniforms.uResolution.value.set( x, y );
 
     }
 

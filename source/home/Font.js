@@ -13,6 +13,7 @@ import { Box3 } from "three";
 import { Vector3 } from "three";
 import { Group } from "three";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { Float32BufferAttribute } from "three";
 
 export default class Font {
 
@@ -25,14 +26,15 @@ export default class Font {
 
     /**
      * 构造字体。
-     * @param { string } message - 文本。
-     * @param { number } height - 字符高度，比如100。
-     * @param { number } thickness - 线宽，比如2。
-     * @param { number } space - 垂直方向上的字符间距，比如10。
-     * @param { string } type - "fillline"或"outline"。
+     * @param { Object } options - 配置。
+     * @param { number } options.message - 文本。
+     * @param { number } options.height - 字符高度，比如100。
+     * @param { number } options.space - 垂直方向上的字符间距，比如10。
+     * @param { number } options.thickness - 线宽，比如2。
+     * @param { string } options.type - "fillline"或"outline"。
      * @returns { Object } - 实例。
      */
-    constructor( message, height, thickness, space, type ) {
+    constructor( { message, height, space, thickness, type } ) {
 
         this.#type = type;
         this.#space = space;
@@ -77,6 +79,12 @@ export default class Font {
     getThickness() {
 
         return this.#thickness;
+
+    }
+
+    getType() {
+
+        return this.#type;
 
     }
 

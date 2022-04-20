@@ -3,8 +3,7 @@ import "/style/public/font.css";
 import "/style/home/index.css";
 
 import Wave from "./Wave";
-import FontOutline from "./FontOutline";
-import FontFillline from "./FontFillline";
+import Font from "./Font";
 import { WebGLRenderer } from "three";
 import { OrthographicCamera } from "three";
 import { Scene } from "three";
@@ -25,27 +24,29 @@ const camera = new OrthographicCamera( - size.x / 2, size.x / 2, size.y / 2, - s
 const wave = new Wave( size.x, size.y );
 
 wave.setPosition( 0, 0, - 2 );
-scene.add( wave.get() );
+scene.add( wave.getEntity() );
 
 /* Font */
-const font_jynxio = new FontOutline(
-    "JYN\nXIO",
-    Math.max( size.x, size.y ) * 0.1,
-    Math.max( size.x, size.y ) * 0.1 * 0.1,
-    1
-);
+const font_name = new Font( {
+    message: "JYN\nXIO",
+    height: Math.max( size.x, size.y ) * 0.1,
+    space: Math.max( size.x, size.y ) * 0.1 * 0.1,
+    thickness: 1,
+    type: "outline",
+} );
 
-font_jynxio.setPosition( 0, 0, - 1 );
-scene.add( font_jynxio.get() );
+font_name.setPosition( 0, 0, - 1 );
+scene.add( font_name.getEntity() );
 
-const font_scrolldown = new FontFillline(
-    "SCROLL DOWN",
-    size.y * 0.015,
-    size.y * 0.015 * 0.1,
-);
+const font_scroll = new Font( {
+    message: "SCROLL DOWN",
+    height: size.y * 0.015,
+    space: size.y * 0.015 * 0.1,
+    type: "fillline",
+} );
 
-font_scrolldown.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
-scene.add( font_scrolldown.get() );
+font_scroll.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
+scene.add( font_scroll.getEntity() );
 
 /* Animate */
 const clock = new Clock();
@@ -77,8 +78,8 @@ window.addEventListener( "resize", _ => {
     wave.setSize( size.x, size.y );
     wave.setResolution( size.x, size.y );
 
-    font_jynxio.setScale( Math.max( size.x, size.y ) * 0.1 / font_jynxio.getHeight() );
+    font_name.setScale( Math.max( size.x, size.y ) * 0.1 / font_name.getHeight() );
 
-    font_scrolldown.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
-    font_scrolldown.setScale( size.y * 0.015 / font_scrolldown.getHeight() );
+    font_scroll.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
+    font_scroll.setScale( size.y * 0.015 / font_scroll.getHeight() );
 } );

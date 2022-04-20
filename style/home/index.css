@@ -18,7 +18,9 @@
 /* 重置：仅设定使用到的元素。 */
 /* ------------------------------------------------------------------------------------------------- */
 html, body,
-canvas, section {
+canvas, section,
+header, main, h1,
+span {
     color: var( --white );
     font-family: "IBM Plex Sans", "Noto Sans SC";
     line-height: var( --line-height );
@@ -37,13 +39,36 @@ canvas {
     display: block;
 }
 
-/* Canvas */
+/* Cover */
 /* ------------------------------------------------------------------------------------------------- */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
+
+/* Article */
+/* ------------------------------------------------------------------------------------------------- */
+section#article {
+    width: var( --article-width );
+    height: 100vh;
+    padding: 6%;
+    margin: 0 auto;
+    border: 1px dashed var( --white );
+    background-color: var( --black );
+}
+
+section#article > header {
+    display: flex;
+}
+
+section#article > header > h1 {
+    flex-grow: 1;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+section#article > header > h1 > span {
+    text-decoration-line: underline;
+    transition: color 100ms ease-out;
+    cursor: pointer;
+}
+
+section#article > header > h1 > span:hover {
+    color: var( --green );
 }
