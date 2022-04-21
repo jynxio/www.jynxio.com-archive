@@ -38,37 +38,3 @@ html, body {
 canvas {
     display: block;
 }
-
-/* Cover */
-/* ------------------------------------------------------------------------------------------------- */
-
-/* Article */
-/* ------------------------------------------------------------------------------------------------- */
-section#article {
-    width: var( --article-width );
-    height: 100vh;
-    padding: 6%;
-    margin: 0 auto;
-    border: 1px dashed var( --white );
-    background-color: var( --black );
-}
-
-section#article > header {
-    display: flex;
-}
-
-section#article > header > h1 {
-    flex-grow: 1;
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-section#article > header > h1 > span {
-    text-decoration-line: underline;
-    transition: color 100ms ease-out;
-    cursor: pointer;
-}
-
-section#article > header > h1 > span:hover {
-    color: var( --green );
-}

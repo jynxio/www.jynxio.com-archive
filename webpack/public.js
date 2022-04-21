@@ -4,8 +4,9 @@ const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 
 module.exports = {
     entry: {
-        article: "./source/article/index.js",
         home: "./source/home/index.js",
+        article: "./source/article/index.js",
+        catalogue: "./source/catalogue/index.js",
     },
     output: {
         path: path.resolve( __dirname, "../dist" ),
@@ -17,19 +18,56 @@ module.exports = {
         new MiniCssExtractPlugin( {
             filename: "css/[name].css"
         } ),
+        // index
         new HtmlWebpackPlugin( {
             filename: "index.html",
             template: "./template/home/index.html",
             chunks: [ "home" ],
         } ),
+        // catalogue
         new HtmlWebpackPlugin( {
-            filename: "test.html",
-            template: "./template/article/test/test.html",
+            filename: "catalogue.html",
+            template: "./template/catalogue/index.html",
+            chunks: [ "catalogue" ],
+        } ),
+        // article -> babel
+        new HtmlWebpackPlugin( {
+            filename: "./article/babel/babel.html",
+            template: "./template/article/babel/babel.html",
+            chunks: [ "article" ],
+        } ),
+        // article -> javascript
+        new HtmlWebpackPlugin( {
+            filename: "./article/javascript/code-structure.html",
+            template: "./template/article/javascript/code-structure.html",
             chunks: [ "article" ],
         } ),
         new HtmlWebpackPlugin( {
-            filename: "code-structure.html",
-            template: "./template/article/javascript/code-structure.html",
+            filename: "./article/javascript/operators.html",
+            template: "./template/article/javascript/operators.html",
+            chunks: [ "article" ],
+        } ),
+        new HtmlWebpackPlugin( {
+            filename: "./article/javascript/strict-mode.html",
+            template: "./template/article/javascript/strict-mode.html",
+            chunks: [ "article" ],
+        } ),
+        // article -> others
+        new HtmlWebpackPlugin( {
+            filename: "./article/others/semantic-versioning.html",
+            template: "./template/article/others/semantic-versioning.html",
+            chunks: [ "article" ],
+        } ),
+        // article -> test
+        new HtmlWebpackPlugin( {
+            filename: "./article/test/test.html",
+            template: "./template/article/test/test.html",
+            chunks: [ "article" ],
+        } ),
+        // article -> webpack
+        new HtmlWebpackPlugin( {
+            filename: "./article/webpack/webpack.html",
+            template: "./template/article/webpack/webpack.html",
             chunks: [ "article" ],
         } ),
     ],
