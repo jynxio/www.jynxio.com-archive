@@ -138,202 +138,112 @@ typeof ( a );
 
 | 数据类型                               | 返回值             |
 | -------------------------------------- | ------------------ |
-| `Undefined`                            | `'undefined'`      |
-| `Null`                                 | `'object'`         |
-| `Boolean`                              | `'boolean'`        |
-| `Number`                               | `'number'`         |
-| `Bigint`                               | `'bigint'`         |
-| `String`                               | `'string'`         |
-| `Symbol`                               | `'symbol'`         |
-| `Function`                             | `'function'`       |
+| `Undefined`                            | `"undefined"`      |
+| `Null`                                 | `"object"`         |
+| `Boolean`                              | `"boolean"`        |
+| `Number`                               | `"number"`         |
+| `Bigint`                               | `"bigint"`         |
+| `String`                               | `"string"`         |
+| `Symbol`                               | `"symbol"`         |
+| `Function`                             | `"function"`       |
 | 宿主对象（如 `window` 、 `document` ） | 取决于浏览器的实现 |
-| 其它对象                               | `'object'`         |
-| 未声明的变量                           | `'undefined'`      |
+| 其它对象                               | `"object"`         |
+| 未声明的变量                           | `"undefined"`      |
 
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-**历史错误 `typeof null` **：
-
-`typeof null` 的返回值是 `'object'` ，这是一个历史遗留错误。
-
-**侵犯标准的宿主对象：**
-
-```js
-typeof document.all; // 'undefined'
-```
-
-​		ECMAScript 规范外的对象可以自定义自己的 `typeof` 的返回值，但显然 `document.all` 对自己的 `typeof ` 定义并不合理，这被视为是对 ECMAScript 规范的侵犯，目前该接口已被废弃，但部分浏览器仍支持它。
-
-
+其中，`typeof null` 的返回值是 `'object'` ，这是一个历史遗留错误。
 
 ### delete
 
-​		删除对象自身的指定属性，但不会删除对象原型链上的同名属性。
-
-**语法：**
+删除对象自身的指定属性，但不会删除对象原型链上的同名属性，它的语法时是：
 
 ```js
 delete obj.prop;
-```
-
-```js
 delete obj[expr];
 ```
 
-**返回值：**
+它有 2 种返回值，分别是：
 
-- `false` ：非严格模式下，`delete` 不可配置的属性会返回 `false` ，且操作无效（严格模式下，则会抛出错误）；
-- `true` ：其余情况都返回 `true` ；
+- `false` ：若 `delete` 不可配置的属性，则会返回该值，且在非严格模式下，该操作将静默失败，在严格模式下，该操作将会抛出错误。
+- `true` ：其余情况都返回 `true`。
 
-**陷阱 1 ： `delete` 不存在的属性**
+#### delete 不存在的属性
 
-​		`delete` 不存在的属性会返回 `true` ，且被 `delete` 属性的对象没有任何变化。
+`delete` 不存在的属性也会返回 `true` ，且被操作的对象没有任何变化。
 
 ```js
 delete {}.a; // true
 ```
 
-**陷阱 2 ： `delete` 由 `var` 、 `let` 、 `const` 、 `function` 声明的变量：**
+#### delete 由 var、let、const、function 生命的变量
 
-​		任何作用域内，由声明关键字声明的变量是某个对象的不可配置的属性，由赋值来创建的变量是某个对象的可配置的属性。以 `var` 为例，`let` 、 `const` 、 `function` 同理（MDN说的）。
+在任何作用域内，由声明关键字声明的变量都是某个对象的不可配置的属性，而不经声明就直接赋值来创建的变量则是某个对象的可配置的属性。因此，`delete` 前者将会返回 `false`，`delete` 后者将会返回 `true`，比如：
+
+```js
+var a = 1;
+Object.getOwnPropertyDescriptor(window, "a").configurable; // false
+```
 
 ```js
 a = 1;
-var b = 2;
-
 Object.getOwnPropertyDescriptor(window, "a").configurable; // true
-Object.getOwnPropertyDescriptor(window, "b").configurable; // false
 ```
 
-​		`delete` 不可配置的属性就会返回 `false` ，或抛出错误。
+```
+
+```
+
+#### delete 数组元素
+
+`delete` 一个数组的元素，就会清空这个元素的内容，但不会释放掉这个元素所占据的内存空间，被 `delete` 后的元素的值为 `undefined` ，意义为 empty 。数组的长度不会改变，其它元素的下标也不会重排。
 
 ```js
-// 全局作用域
-var global_a = 1;
-
-let global_b = 2;
-
-const global_c = 3;
-
-function global_f() {};
-
-delete global_a; // false
-delete global_b; // false
-delete global_c; // false
-delete global_f; // false
-
-// 函数作用域
-void (function (){
-    
-    var a = 1;
-    
-    let b = 2;
-    
-    const c = 3;
-    
-    function f() {};
-    
-    delete a; // false
-	delete b; // false
-	delete c; // false
-	delete f; // false
-    
-}())
+const a = [ 1, 2 ];
+delete a[ 0 ];
+a;      // [ empty, 2 ]
+a[ 0 ]; // undefined
 ```
-
-**陷阱 3 ： `delete` 数组元素：**
-
-​		`delete` 一个数组的元素，就会清空这个元素的内容，但不会释放掉这个元素所占据的内存空间，所以被 `delete` 掉的元素的值为 `undefined` ，意义为 empty 。数组的长度不会改变，其它元素的下标不会重排。
-
-```js
-const array = [1, 2, 3];
-
-delete array[0];
-
-array;    // [empty, 2, 3]
-array[0]; // undefined
-```
-
-
 
 ## 三元运算符
 
-​		又被称为条件运算符。
-
-**语法：**
+又被称为条件运算符，它的语法是：
 
 ```js
 condition ? expr_1 : expr_2;
 ```
 
-- 若 `condition` 的布尔值是 `true` ，则执行 `expr_1` ，忽略 `expr_2` ，最后返回 `expr_1` 的初始值；
-- 否则，忽略 `expr_1` ， 执行 `expr_2` ，最后返回 `expr_2` 的初始值；
+若 `condition` 的 truthy 为 `true`，则执行 `expr_1`，且忽略 `expr_2`，最后返回 `expr_1` 的初始值。否则忽略 `expr_1`，执行 `expr_2`，最后返回 `expr_2` 的初始值。
 
-
-
-## ⏳ 比较运算符
+## 比较运算符
 
 > ⏳：《部分转换规则》和《部分比较规则》不齐全，需要继续补充。
 
-​		严格比较运算符会直接比较左、右运算元的数据类型和值。其它的比较运算符会将左、右运算元隐式转换为同一种数据类型，再比较它们的值。
+严格比较运算符需比较左、右运算元的数据类型与值，其余的比较运算符会将左、右运算元隐式转换为同一种数据类型后再比较它们的值。
 
 | 名称     | 运算符 | 名称       | 运算符 | 名称 | 运算符 | 名称       | 运算符 |
 | -------- | ------ | ---------- | ------ | ---- | ------ | ---------- | ------ |
 | 严格相等 | `===`  | 严格不相等 | `!==`  | 大于 | `>`    | 大于或等于 | `>=`   |
 | 宽松相等 | `==`   | 宽松不相等 | `!=`   | 小于 | `<`    | 小于或等于 | `<=`   |
 
-**部分转换规则：**
+部分转换规则：
 
-- 若两个运算元分别是 `Number` 和 `String` ，则 `String` 会被转换为 `Number`；
-- 若两个运算元分别是 `Number` 和 `Boolean` ，则 `Boolean` 会被转换为 `Number` ；
+- 若两个运算元分别是 `Number` 和 `String` ，则 `String` 会被转换为 `Number`。
+- 若两个运算元分别是 `Number` 和 `Boolean` ，则 `Boolean` 会被转换为 `Number` 。
 
-**部分比较规则：**
+部分比较规则：
 
 - 若两个运算元都是 `Object` ，则当它们都指向同一个对象时，认为它们宽松相等和严格相等，否则认为它们宽松不相等和严格不相等；
 - `NaN` 不与任何值（包括它自己）宽松相等或严格相等；
 - `+0` 和 `-0` 严格相等；
 
-
-
 ## 逗号运算符
 
-**语法：**
-
-​		从左向右的逐个执行运算元，最后返回最后那个运算元的执行结果。
+从左向右逐个执行运算元，然后返回最右边的运算元的初始值，请注意，声明语句中的逗号并不是逗号运算符，只有表达式中的逗号才是逗号运算符。它的语法是：
 
 ```
 expr_1, expr_2, ..., expr_n;
 ```
 
-**示例：**
+示例：
 
 ```js
 const exprA = _ => 1;
@@ -342,81 +252,44 @@ const exprB = _ => 2;
 (exprA(), exprB()); // 2
 ```
 
-**陷阱：**
-
-​		声明语句中的逗号不是逗号运算符，表达式中的逗号才是逗号运算符。
-
-
-
 ## 可选链运算符
 
-​		若左运算元为 `null` 或 `undefined` ，则返回 `undefined` ，并忽略右运算元，否则执行右运算元（通常是属性访问或函数调用）。
-
-**语法：**
+若左运算元为 `null` 或 `undefined` ，则返回 `undefined` ，并忽略右运算元，否则执行右运算元（通常是属性访问或函数调用）。它的语法是：
 
 ```js
 obj?.property;
-```
-
-```js
 obj?.[expression];
-```
-
-```js
 array?.[index];
-```
-
-```
 function?.();
 ```
 
-示例：
-
-```js
-const obj = {f: _ => 1};
-
-obj.f?.(); // 1
-obj.a?.(); // undefined
-```
-
-
-
 ## in 运算符
 
-​		若该属性存在于该对象或该对象的原型链上，则返回 `true` ，否则返回 `false` 。
-
-**语法：**
+若该属性存在于该对象或该对象的原型链上，则返回 `true` ，否则返回 `false` ，它的语法是：
 
 ```js
 prop in obj;
 ```
 
--  `prop` ： `String` 或 `Symbol` ，代表属性名或数组索引，其它数据类型的值都会被隐式转换为 `String` 
+-  `prop` ： `String` 或 `Symbol` ，代表属性名或数组索引，其它的数据类型的值都会被隐式转换为 `String` 
 -  `obj`   ： `Object`
 
-**示例：**
+示例：
 
 ```js
 'toString' in {}; // true
-```
-
-```js
 0 in [1, 2, 3];   // true
 ```
 
-
-
 ## instanceof 运算符
 
-​		若对象 A 的 `prototype` 属性存在于对象 B 的原型链上，则返回 `true` ，否则返回 `false` 。
-
-**语法：**
+若对象 A 的 `prototype` 属性位于对象 B 的原型链上，则返回 `true` ，否则返回 `false` 。它的语法是：
 
 ```js
 obj_b instanceof obj_a;
 ```
 
-**示例：**
+示例：
 
 ```js
 const A = function() {};
@@ -426,11 +299,9 @@ a instanceof A;      // true
 a instanceof Object; // true
 ```
 
-
-
 ## 位运算符
 
-> ​		这类运算符在实际开发中很少被用到，因此暂时忽略它们，如果你更感兴趣，可以从这里开始学习 🔗https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
+这类运算符在实际开发中很少被用到，因此暂时忽略它们，如果你更感兴趣，可以从 [这里](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators) 开始学习
 
 | 名称     | 运算符 | 名称       | 运算符 |
 | -------- | ------ | ---------- | ------ |
