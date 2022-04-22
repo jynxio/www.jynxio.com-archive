@@ -138,6 +138,11 @@ header > button:active {
     opacity: 1;
 }
 
+header > button > a {
+    color: inherit;
+    text-decoration: none;
+}
+
 /* Aside */
 /* ------------------------------------------------------------------------------------------------- */
 aside {

@@ -59,7 +59,8 @@ function translateCore( input_path, output_path ) {
                     listitem: parseLi,
                 },
             } );
-
+            // TODO 写一个一键translate的文件，然后用config.js来控制它。
+            // TODO 重新设计一下header需要些什么内容。
             const article_content = marked.parse( markdown_content );
             let html_content = `
                 <!DOCTYPE html>
@@ -72,7 +73,7 @@ function translateCore( input_path, output_path ) {
                     </head>
                     <body>
                         <header>
-                            <button>HOMEPAGE</button>
+                            <button><a href="/index.html">HOMEPAGE</a></button>
                         </header>
                         <aside>
                             <p><a href="#">IN THIS ARTICLE</a></p>
