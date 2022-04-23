@@ -1,27 +1,7 @@
 const fs = require( "fs" );
 const fontcaster = require( "font-caster" );
 const readlineSync = require( "readline-sync" );
-
-/* 原始字体文件的路径 */
-const ORIGIN_EN_400 = "./static/font/original/en-400.ttf";
-const ORIGIN_EN_700 = "./static/font/original/en-700.ttf";
-const ORIGIN_ZH_400 = "./static/font/original/zh-400.woff";
-const ORIGIN_ZH_700 = "./static/font/original/zh-700.woff";
-const ORIGIN_CO_400 = "./static/font/original/co-400.ttf";
-
-/* 子集字体文件的路径 */
-const SUBSET_EN_400 = "./static/font/subset/en-400.ttf";
-const SUBSET_EN_700 = "./static/font/subset/en-700.ttf";
-const SUBSET_ZH_400 = "./static/font/subset/zh-400.woff";
-const SUBSET_ZH_700 = "./static/font/subset/zh-700.woff";
-const SUBSET_CO_400 = "./static/font/subset/co-400.ttf";
-
-/* unicode文件的路径 */
-const UNICODE_EN_400 = "./static/font/unicode/en-400.txt";
-const UNICODE_EN_700 = "./static/font/unicode/en-700.txt";
-const UNICODE_ZH_400 = "./static/font/unicode/zh-400.txt";
-const UNICODE_ZH_700 = "./static/font/unicode/zh-700.txt";
-const UNICODE_CO_400 = "./static/font/unicode/co-400.txt";
+const configuration = require( "./config" );
 
 /**
  * （异步）询问html文件的路径并自动执行字体子集化，若路径指向单个html文件，则调用subsetBaseOnOneHtml，若路径指向一个文件夹，
@@ -76,7 +56,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* en-400 */
     {
 
-        const response = await subsetCore( path, UNICODE_EN_400, ORIGIN_EN_400, SUBSET_EN_400, undefined );
+        const response = await subsetCore( path, configuration.unicode.en400, configuration.origin.en400, configuration.subset.en400, undefined );
 
         if ( ! response.success ) {
 
@@ -93,7 +73,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* en-700 */
     {
 
-        const response = await subsetCore( path, UNICODE_EN_700, ORIGIN_EN_700, SUBSET_EN_700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, configuration.unicode.en700, configuration.origin.en700, configuration.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
 
         if ( ! response.success ) {
 
@@ -110,7 +90,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* zh-400 */
     {
 
-        const response = await subsetCore( path, UNICODE_ZH_400, ORIGIN_ZH_400, SUBSET_ZH_400, undefined );
+        const response = await subsetCore( path, configuration.unicode.zh400, configuration.origin.zh400, configuration.subset.zh400, undefined );
 
         if ( ! response.success ) {
 
@@ -127,7 +107,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* zh-700 */
     {
 
-        const response = await subsetCore( path, UNICODE_ZH_700, ORIGIN_ZH_700, SUBSET_ZH_700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, configuration.unicode.zh700, configuration.origin.zh700, configuration.subset.zh700, [ "h1", "h2", "h3", "h4", "strong" ] );
 
         if ( ! response.success ) {
 
@@ -144,7 +124,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* co-400 */
     {
 
-        const response = await subsetCore( path, UNICODE_CO_400, ORIGIN_CO_400, SUBSET_CO_400, [ "code", "pre" ] );
+        const response = await subsetCore( path, configuration.unicode.code400, configuration.origin.code400, configuration.subset.code400, [ "code", "pre" ] );
 
         if ( ! response.success ) {
 
@@ -191,11 +171,11 @@ async function subsetBaseOnMultipleHtml( path ) {
 
         const responses = await Promise.all( [
 
-            fontcaster.write( "", UNICODE_EN_400 ),
-            fontcaster.write( "", UNICODE_EN_700 ),
-            fontcaster.write( "", UNICODE_ZH_400 ),
-            fontcaster.write( "", UNICODE_ZH_700 ),
-            fontcaster.write( "", UNICODE_CO_400 ),
+            fontcaster.write( "", configuration.unicode.en400 ),
+            fontcaster.write( "", configuration.unicode.en700 ),
+            fontcaster.write( "", configuration.unicode.zh400 ),
+            fontcaster.write( "", configuration.unicode.zh700 ),
+            fontcaster.write( "", configuration.unicode.code400 ),
 
         ] );
 
@@ -216,7 +196,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* en-400 */
     {
 
-        const response = await subsetCore( path, UNICODE_EN_400, ORIGIN_EN_400, SUBSET_EN_400, undefined );
+        const response = await subsetCore( path, configuration.unicode.en400, configuration.origin.en400, configuration.subset.en400, undefined );
 
         if ( ! response.success ) {
 
@@ -233,7 +213,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* en-700 */
     {
 
-        const response = await subsetCore( path, UNICODE_EN_700, ORIGIN_EN_700, SUBSET_EN_700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, configuration.unicode.en700, configuration.origin.en700, configuration.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
 
         if ( ! response.success ) {
 
@@ -250,7 +230,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* zh-400 */
     {
 
-        const response = await subsetCore( path, UNICODE_ZH_400, ORIGIN_ZH_400, SUBSET_ZH_400, undefined );
+        const response = await subsetCore( path, configuration.unicode.zh400, configuration.origin.zh400, configuration.subset.zh400, undefined );
 
         if ( ! response.success ) {
 
@@ -267,7 +247,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* zh-700 */
     {
 
-        const response = await subsetCore( path, UNICODE_ZH_700, ORIGIN_ZH_700, SUBSET_ZH_700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, configuration.unicode.zh700, configuration.origin.zh700, configuration.subset.zh700, [ "h1", "h2", "h3", "h4", "strong" ] );
 
         if ( ! response.success ) {
 
@@ -284,7 +264,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* co-400 */
     {
 
-        const response = await subsetCore( path, UNICODE_CO_400, ORIGIN_CO_400, SUBSET_CO_400, [ "code", "pre" ] );
+        const response = await subsetCore( path, configuration.unicode.code400, configuration.origin.code400, configuration.subset.code400, [ "code", "pre" ] );
 
         if ( ! response.success ) {
 

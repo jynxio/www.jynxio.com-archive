@@ -3,15 +3,13 @@ const readlineSync = require( "readline-sync" );
 const { marked } = require( "marked" );
 const { v4: createUuid } = require( "uuid" );
 const beautify = require( "js-beautify" ).html;
+const configuration = require( "./config" );
 
 /**
- * （异步）询问md文件和html文件的路径，并自动执行转译。
+ * （异步）询问是否执行转译，确认后将根据config.js的配置来执行转译。
  * @returns { Promise } - Promise代表undefined。
  */
-async function __translate() {
-
-    const md_path = readlineSync.question( `\nThe program will translate the md file into an html file.\nPlease enter a path to the md file (eg "./a.md"): ` );
-    const html_path = readlineSync.question( `Please enter a path to the html file (eg "./a.html"): ` );
+async function translate() {
 
     while ( true ) {
 
@@ -22,9 +20,23 @@ async function __translate() {
 
     }
 
-    const response = await translateCore( md_path, html_path );
+    let is_success = true;
+    const responses = await Promise.all(
+        configuration.map( item => translateCore( item.input, item.output ) )
+    );
 
-    response.success ? console.log( "Done!" ) : console.error( "Error: ", response.error );
+    responses.forEach( responses => {
+
+        if ( responses.success ) return;
+
+        is_success = false;
+        console.log( "Error: ", responses.error );
+
+    } );
+
+    if ( ! is_success ) return;
+
+    console.log( "All done!" );
 
 }
 
@@ -35,7 +47,7 @@ async function __translate() {
  * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
  * {success: true, content}对象，content代表html的内容。
  */
-function translate( input_path, output_path ) {
+function translateCore( input_path, output_path ) {
 
     let markdown_content = "";
     let catalog_content = "";

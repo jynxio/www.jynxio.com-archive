@@ -1,4 +1,4 @@
-export default [
+module.exports =  [
     ... createTestScroped(),
     ... createJavascriptScroped(),
     ... createBabelScroped(),
@@ -93,27 +93,10 @@ function createScroped( base_input_path, base_output_path, file_names ) {
     return file_names.map( file_name => {
 
         return {
-            name: file_name + ".md",
             input: base_input_path + file_name + ".md",
             output: base_output_path + file_name + ".html",
         };
 
     } );
-
-}
-
-function IndexGenerator() {
-
-    const generator = createGenerator();
-
-    return ( _ => generator.next().value );
-
-    function* createGenerator() {
-
-        let count = 0;
-
-        while ( true ) yield ++count;
-
-    }
 
 }
