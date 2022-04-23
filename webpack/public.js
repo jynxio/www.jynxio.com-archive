@@ -34,7 +34,7 @@ module.exports = {
         // Article
         ... configuration.map( item => (
             new HtmlWebpackPlugin( {
-                filename: item.filename,
+                filename: item.filename, // TODO 这里可以改一下，把base路径放在该文件中。
                 template: item.template,
                 chunks: [ "article" ],
             } )
