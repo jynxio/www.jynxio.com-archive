@@ -8,7 +8,7 @@ const beautify = require( "js-beautify" ).html;
  * （异步）询问md文件和html文件的路径，并自动执行转译。
  * @returns { Promise } - Promise代表undefined。
  */
-async function translate() {
+async function __translate() {
 
     const md_path = readlineSync.question( `\nThe program will translate the md file into an html file.\nPlease enter a path to the md file (eg "./a.md"): ` );
     const html_path = readlineSync.question( `Please enter a path to the html file (eg "./a.html"): ` );
@@ -35,7 +35,7 @@ async function translate() {
  * @returns { Promise } - Promise代表是否执行成功，若失败，则返回{success: false, error}对象；若成功，则返回
  * {success: true, content}对象，content代表html的内容。
  */
-function translateCore( input_path, output_path ) {
+function translate( input_path, output_path ) {
 
     let markdown_content = "";
     let catalog_content = "";
@@ -59,8 +59,6 @@ function translateCore( input_path, output_path ) {
                     listitem: parseLi,
                 },
             } );
-            // TODO 写一个一键translate的文件，然后用config.js来控制它。
-            // TODO 重新设计一下header需要些什么内容。
             const article_content = marked.parse( markdown_content );
             let html_content = `
                 <!DOCTYPE html>
