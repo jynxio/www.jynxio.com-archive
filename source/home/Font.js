@@ -1,5 +1,5 @@
-import font_100_data from "/static/json/three-100.json";
-import font_700_data from "/static/json/three-700.json";
+import font_100_data from "/static/json/threejs-100.json";
+import font_700_data from "/static/json/threejs-700.json";
 
 import { BufferGeometry } from "three";
 import { Line } from "three";

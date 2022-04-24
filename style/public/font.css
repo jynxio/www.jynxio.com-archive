@@ -5,7 +5,7 @@
     font-weight: normal;
     font-display: swap;
     src: local( "IBM Plex Sans" ),
-        url( "/static/font/subset/en-400.ttf" ) format( "truetype" );
+        url( "/static/font/subset/en-400.woff2" ) format( "woff2" );
 }
 
 @font-face {
@@ -14,26 +14,7 @@
     font-weight: bold;
     font-display: swap;
     src: local( "IBM Plex Sans" ),
-        url( "/static/font/subset/en-700.ttf" ) format( "truetype" );
-}
-
-/* Chinese */
-@font-face {
-    font-family: "Noto Sans SC";
-    font-style: normal;
-    font-weight: normal;
-    font-display: swap;
-    src: local( "Noto Sans SC" ),
-        url( "/static/font/subset/zh-400.woff" ) format( "woff" );
-}
-
-@font-face {
-    font-family: "Noto Sans SC";
-    font-style: normal;
-    font-weight: bold;
-    font-display: swap;
-    src: local( "Noto Sans SC" ),
-        url( "/static/font/subset/zh-700.woff" ) format( "woff" );
+        url( "/static/font/subset/en-700.woff2" ) format( "woff2" );
 }
 
 /* Code */
@@ -43,5 +24,5 @@
     font-weight: normal;
     font-display: swap;
     src: local( "Fira Code" ),
-        url( "/static/font/subset/co-400.ttf" ) format( "truetype" );
+        url( "/static/font/subset/code-400.woff2" ) format( "woff2" );
 }

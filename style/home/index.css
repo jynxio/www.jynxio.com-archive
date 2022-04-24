@@ -22,7 +22,7 @@ canvas, section,
 header, main, h1,
 span {
     color: var( --white );
-    font-family: "IBM Plex Sans", "Noto Sans SC";
+    font-family: "IBM Plex Sans";
     line-height: var( --line-height );
     overflow-wrap: break-word;
 }

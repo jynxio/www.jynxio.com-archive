@@ -1,7 +1,9 @@
 const fs = require( "fs" );
+const path = require( "path" );
 const fontcaster = require( "font-caster" );
+const ttf2woff2 = require( "ttf2woff2" );
 const readlineSync = require( "readline-sync" );
-const configuration = require( "./config" );
+const config = require( "./config" );
 
 /**
  * （异步）询问html文件的路径并自动执行字体子集化，若路径指向单个html文件，则调用subsetBaseOnOneHtml，若路径指向一个文件夹，
@@ -56,7 +58,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* en-400 */
     {
 
-        const response = await subsetCore( path, configuration.unicode.en400, configuration.origin.en400, configuration.subset.en400, undefined );
+        const response = await subsetCore( path, config.unicode.en400, config.origin.en400, config.subset.en400, undefined );
 
         if ( ! response.success ) {
 
@@ -73,7 +75,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* en-700 */
     {
 
-        const response = await subsetCore( path, configuration.unicode.en700, configuration.origin.en700, configuration.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, config.unicode.en700, config.origin.en700, config.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
 
         if ( ! response.success ) {
 
@@ -87,10 +89,10 @@ async function subsetBaseOnOneHtml( path ) {
 
     }
 
-    /* zh-400 */
+    /* code-400 */
     {
 
-        const response = await subsetCore( path, configuration.unicode.zh400, configuration.origin.zh400, configuration.subset.zh400, undefined );
+        const response = await subsetCore( path, config.unicode.code400, config.origin.code400, config.subset.code400, [ "code", "pre" ] );
 
         if ( ! response.success ) {
 
@@ -100,41 +102,7 @@ async function subsetBaseOnOneHtml( path ) {
 
         }
 
-        console.log( "Done: zh-400" );
-
-    }
-
-    /* zh-700 */
-    {
-
-        const response = await subsetCore( path, configuration.unicode.zh700, configuration.origin.zh700, configuration.subset.zh700, [ "h1", "h2", "h3", "h4", "strong" ] );
-
-        if ( ! response.success ) {
-
-            console.error( "Error: ", response.error );
-
-            return;
-
-        }
-
-        console.log( "Done: zh-700" );
-
-    }
-
-    /* co-400 */
-    {
-
-        const response = await subsetCore( path, configuration.unicode.code400, configuration.origin.code400, configuration.subset.code400, [ "code", "pre" ] );
-
-        if ( ! response.success ) {
-
-            console.error( "Error: ", response.error );
-
-            return;
-
-        }
-
-        console.log( "Done: co-400" );
+        console.log( "Done: code-400" );
 
     }
 
@@ -171,11 +139,9 @@ async function subsetBaseOnMultipleHtml( path ) {
 
         const responses = await Promise.all( [
 
-            fontcaster.write( "", configuration.unicode.en400 ),
-            fontcaster.write( "", configuration.unicode.en700 ),
-            fontcaster.write( "", configuration.unicode.zh400 ),
-            fontcaster.write( "", configuration.unicode.zh700 ),
-            fontcaster.write( "", configuration.unicode.code400 ),
+            fontcaster.write( "", config.unicode.en400 ),
+            fontcaster.write( "", config.unicode.en700 ),
+            fontcaster.write( "", config.unicode.code400 ),
 
         ] );
 
@@ -196,7 +162,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* en-400 */
     {
 
-        const response = await subsetCore( path, configuration.unicode.en400, configuration.origin.en400, configuration.subset.en400, undefined );
+        const response = await subsetCore( path, config.unicode.en400, config.origin.en400, config.subset.en400, undefined );
 
         if ( ! response.success ) {
 
@@ -213,7 +179,7 @@ async function subsetBaseOnMultipleHtml( path ) {
     /* en-700 */
     {
 
-        const response = await subsetCore( path, configuration.unicode.en700, configuration.origin.en700, configuration.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, config.unicode.en700, config.origin.en700, config.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
 
         if ( ! response.success ) {
 
@@ -227,10 +193,10 @@ async function subsetBaseOnMultipleHtml( path ) {
 
     }
 
-    /* zh-400 */
+    /* code-400 */
     {
 
-        const response = await subsetCore( path, configuration.unicode.zh400, configuration.origin.zh400, configuration.subset.zh400, undefined );
+        const response = await subsetCore( path, config.unicode.code400, config.origin.code400, config.subset.code400, [ "code", "pre" ] );
 
         if ( ! response.success ) {
 
@@ -240,41 +206,7 @@ async function subsetBaseOnMultipleHtml( path ) {
 
         }
 
-        console.log( "Done: zh-400" );
-
-    }
-
-    /* zh-700 */
-    {
-
-        const response = await subsetCore( path, configuration.unicode.zh700, configuration.origin.zh700, configuration.subset.zh700, [ "h1", "h2", "h3", "h4", "strong" ] );
-
-        if ( ! response.success ) {
-
-            console.error( "Error: ", response.error );
-
-            return;
-
-        }
-
-        console.log( "Done: zh-700" );
-
-    }
-
-    /* co-400 */
-    {
-
-        const response = await subsetCore( path, configuration.unicode.code400, configuration.origin.code400, configuration.subset.code400, [ "code", "pre" ] );
-
-        if ( ! response.success ) {
-
-            console.error( "Error: ", response.error );
-
-            return;
-
-        }
-
-        console.log( "Done: co-400" );
+        console.log( "Done: code-400" );
 
     }
 
@@ -284,7 +216,7 @@ async function subsetBaseOnMultipleHtml( path ) {
 }
 
 /**
- * （异步）字体子集化。
+ * （异步）字体子集化，ttf字体会被自动转换为woff2字体，其余字体不会被转换。
  * @param { string } html_path - html文件的路径（如"./page/index.html"），或文件夹的路径（如"./page"）。若
  * 入参是html文件的路径，则将基于该html文件来进行字体子集化；若入参是文件夹的路径，则将基于该文件夹内的所有的html文件
  * 来进行字体子集化。
@@ -362,6 +294,13 @@ async function subsetCore(
     {
 
         const response = await fontcaster.subset( characters, origin_font_path, subset_font_path );
+
+        if ( path.extname( subset_font_path ) === ".ttf" ) {
+
+            // TODO 此处需要优化：操作冗余、缺少报错。
+            fs.writeFileSync( subset_font_path.slice( 0, - 4 ) + ".woff2", ttf2woff2( fs.readFileSync( subset_font_path ) ) );
+
+        }
 
         if ( ! response.success ) return { success: false, error: response.error };
 

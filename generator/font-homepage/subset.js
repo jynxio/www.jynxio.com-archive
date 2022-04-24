@@ -1,8 +1,6 @@
 const fontcaster = require( "font-caster" );
 const readlineSync = require( "readline-sync" );
-const configuration = require( "./configThree" );
-
-subset();
+const config = require( "./config" );
 
 /**
  * （异步）询问是否进行字体子集化。
@@ -10,7 +8,7 @@ subset();
  */
 async function subset() {
 
-    console.log( `\nThe program will subset the three-100.ttf and three-700.ttf based on "${ configuration.characters.join( "" ) }".` );
+    console.log( `\nThe program will subset the three-100.ttf and three-700.ttf based on "${ config.characters.join( "" ) }".` );
 
     while ( true ) {
 
@@ -21,8 +19,8 @@ async function subset() {
 
     }
 
-    const response_1 = await fontcaster.subset( configuration.characters.join( "" ), configuration.origin.en700, configuration.subset.en700 );
-    const response_2 = await fontcaster.subset( configuration.characters.join( "" ), configuration.origin.en100, configuration.subset.en100 );
+    const response_1 = await fontcaster.subset( config.characters.join( "" ), config.origin.en700, config.subset.en700 );
+    const response_2 = await fontcaster.subset( config.characters.join( "" ), config.origin.en100, config.subset.en100 );
 
     if ( ! response_1.success ) {
 
@@ -43,3 +41,5 @@ async function subset() {
     console.log( "Done!" );
 
 }
+
+module.exports = { subset };

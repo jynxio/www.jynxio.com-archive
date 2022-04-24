@@ -1,102 +1,122 @@
-module.exports =  [
-    ... createTestScroped(),
-    ... createJavascriptScroped(),
-    ... createBabelScroped(),
-    ... createWebpackScroped(),
-    ... createNpmScroped(),
-    ... createOtherScroped(),
-];
+const config = [];
+const createIndexName = ( function() {
 
-function createTestScroped() {
+    const generator = createGenerator();
 
-    const base_input = "./markdown/test/";
-    const base_output = "./template/article/test/";
-    const file_names = [
-        "test",
-    ];
+    return ( _ => generator.next().value );
 
-    return createScroped( base_input, base_output, file_names );
+    function* createGenerator() {
 
-}
+        let count = 0;
 
-function createJavascriptScroped() {
+        while ( true ) yield ( ++count + "" );
 
-    const base_input = "./markdown/javascript/";
-    const base_output = "./template/article/javascript/";
-    const file_names = [
-        "code-structure",
-        "operators",
-        "strict-mode",
-    ];
+    }
 
-    return createScroped( base_input, base_output, file_names );
+} )();
 
-}
+/* javascript区 */
+{
 
-function createBabelScroped() {
+    const options = {
+        name: "JavaScript",
+        baseInputPath: "./markdown/javascript/",
+        baseOutputPath: "./template/article/javascript/",
+        content: [
+            { enName: "code-structure", zhName: "代码结构", indexName: createIndexName() },
+            { enName: "operators", zhName: "运算符", indexName: createIndexName() },
+            { enName: "strict-mode", zhName: "严格模式", indexName: createIndexName() },
+        ],
+    };
 
-    const base_input = "./markdown/babel/";
-    const base_output = "./template/article/babel/";
-    const file_names = [
-        "babel",
-    ];
-
-    return createScroped( base_input, base_output, file_names );
+    config.push( createScope( options ) );
 
 }
 
-function createWebpackScroped() {
+/* babse区 */
+{
 
-    const base_input = "./markdown/webpack/";
-    const base_output = "./template/article/webpack/";
-    const file_names = [
-        "webpack",
-    ];
+    const options = {
+        name: "Babel",
+        baseInputPath: "./markdown/babel/",
+        baseOutputPath: "./template/article/babel/",
+        content: [
+            { enName: "babel", zhName: "Babel7", indexName: createIndexName() },
+        ],
+    };
 
-    return createScroped( base_input, base_output, file_names );
-
-}
-
-function createNpmScroped() {
-
-    const base_input = "./markdown/npm/";
-    const base_output = "./template/article/npm/";
-    const file_names = [
-        "npm",
-    ];
-
-    return createScroped( base_input, base_output, file_names );
+    config.push( createScope( options ) );
 
 }
 
-function createOtherScroped() {
+/* webpack区 */
+{
 
-    const base_input = "./markdown/other/";
-    const base_output = "./template/article/other/";
-    const file_names = [
-        "semantic-versioning",
-    ];
+    const options = {
+        name: "Webpack",
+        baseInputPath: "./markdown/webpack/",
+        baseOutputPath: "./template/article/webpack/",
+        content: [
+            { enName: "webpack", zhName: "Webpack5", indexName: createIndexName() },
+        ],
+    };
 
-    return createScroped( base_input, base_output, file_names );
+    config.push( createScope( options ) );
 
 }
+
+/* other区 */
+{
+
+    const options = {
+
+        name: "Others",
+        baseInputPath: "./markdown/other/",
+        baseOutputPath: "./template/article/other/",
+        content: [
+            { enName: "semantic-versioning", zhName: "语意化版本控制", indexName: createIndexName() },
+        ],
+    };
+
+    config.push( createScope( options ) );
+
+}
+
+module.exports = config;
 
 /**
- * 创建scroped。
- * @param { string } base_input_path - md文件的基础路径，比如"./markdown/test/"。
- * @param { string } base_output_path - html文件的基础路径，比如"./template/article/test/"。
- * @param { Array<string> } file_names - 存储所有md文件名称的数组，比如[ "test" ]。
- * @returns { Object } - 比如[ { input: "./markdown/test/test.md", output: "./template/article/test/test.html" } ]。
+ * 生成一个对象，该对象用于描述如何将md文件转译为html文件，同时catalogue也需要根据该对象来自动生成栏目。
+ * @param { Object } options - 参数。
+ * @param { string } options.name - 域名，catalogue需要根据该域名来创建栏目，栏目名即为域名。
+ * 域名在此处指代存储md文件的文件夹的别名，比如对于javascript文件夹，它的域名（建议）是JavaScript。
+ * @param { Array<string> } options.content - 域的内容，它是[ { enName: "", zhName: "", indexName: "" }]
+ * 格式的数组，catalogue需要根据enName、baseInputPath、baseOutputPath来确定输入的md文件的地址和输
+ * 出的html文件的地址，catalogue需要根据zhName来创建文章名，webpack需要根据indexName来确定html打包
+ * 时的名称。
+ * @param { string } baseInputPath - 存储md文件的文件夹的路径，比如对于javascript文件夹，
+ * 它的路径是"./markdown/javascript/"。
+ * @param { string } baseOutputPath - 存储生成的html文件的文件夹的路径，比如由javascript
+ * 文件夹中的md所生成的html文件，应存储在"./template/article/javascript/"。
+ * @returns { Object } - 它是{ name: "", content: [ ... ] }格式的对象，content字段是
+ * [ { enName: "", zhName: "", indexName: "", baseInputPath: "", baseOutputPath: "" }]
+ * 格式的数组。
  */
-function createScroped( base_input_path, base_output_path, file_names ) {
+function createScope( {
+    name,
+    content,
+    baseInputPath,
+    baseOutputPath,
+} ) {
 
-    return file_names.map( file_name => {
-
-        return {
-            input: base_input_path + file_name + ".md",
-            output: base_output_path + file_name + ".html",
-        };
-
+    return ( {
+        name,
+        content: content.map( item => ( {
+            enName: item.enName,
+            zhName: item.zhName,
+            indexName: item.indexName,
+            inputPath: baseInputPath + item.enName + ".md",
+            outputPath: baseOutputPath + item.enName + ".html",
+        } ) ),
     } );
 
 }

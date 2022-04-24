@@ -11,6 +11,7 @@
         "mini-css-extract-plugin": "^2.6.0",
         "readline-sync": "^1.4.10",
         "style-loader": "^3.3.1",
+        "ttf2woff2": "^4.0.5",
         "uuid": "^8.3.2",
         "vercel": "^24.1.0",
         "webpack": "^5.72.0",
@@ -21,9 +22,9 @@
     "scripts": {
         "start": "webpack serve --config ./webpack/dev.js",
         "build": "webpack  --config ./webpack/prod.js",
-        "translate": "node ./generator/article/index.js",
-        "subset": "node ./generator/font/index.js",
-        "subset-three": "node ./generator/font/subsetThree.js",
+        "create-article": "node ./generator/article/index.js",
+        "create-font": "node ./generator/font/index.js",
+        "create-font-homepage": "node ./generator/font-homepage/index.js",
         "deploy": "vercel --prod"
     },
     "dependencies": {

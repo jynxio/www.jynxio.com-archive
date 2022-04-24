@@ -3,7 +3,7 @@ const readlineSync = require( "readline-sync" );
 const { marked } = require( "marked" );
 const { v4: createUuid } = require( "uuid" );
 const beautify = require( "js-beautify" ).html;
-const configuration = require( "./config" );
+const config = require( "./config" );
 
 /**
  * （异步）询问是否执行转译，确认后将根据config.js的配置来执行转译。
@@ -20,9 +20,22 @@ async function translate() {
 
     }
 
+    const flattened_paths = [];
+
+    config.forEach( scope => {
+
+        scope.content.forEach( item => {
+
+            flattened_paths.push( { inputPath: item.inputPath, outputPath: item.outputPath } );
+
+        } );
+
+    } );
+
     let is_success = true;
+
     const responses = await Promise.all(
-        configuration.map( item => translateCore( item.input, item.output ) )
+        flattened_paths.map( item => translateCore( item.inputPath, item.outputPath ) )
     );
 
     responses.forEach( responses => {
@@ -83,7 +96,8 @@ function translateCore( input_path, output_path ) {
                     </head>
                     <body>
                         <header>
-                            <button><a href="/index.html">HOMEPAGE</a></button>
+                            <button class="catalogue"><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+                            <button class="homepage"><a href="/index.html"><strong>HOMEPAGE</strong></a></button>
                         </header>
                         <aside>
                             <p><a href="#">IN THIS ARTICLE</a></p>

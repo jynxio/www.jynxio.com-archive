@@ -1,7 +1,7 @@
 const path = require( "path" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
-const configuration = require( "./configArticle" );
+const config = require( "./config" );
 
 module.exports = {
     entry: {
@@ -32,9 +32,9 @@ module.exports = {
             chunks: [ "catalogue" ],
         } ),
         // Article
-        ... configuration.map( item => (
+        ... config.map( item => (
             new HtmlWebpackPlugin( {
-                filename: item.filename, // TODO 这里可以改一下，把base路径放在该文件中。
+                filename: "./article/" + item.filename,
                 template: item.template,
                 chunks: [ "article" ],
             } )
