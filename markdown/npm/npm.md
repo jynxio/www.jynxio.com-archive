@@ -93,45 +93,25 @@ npm init --yes
 
 ## 安装本地包
 
-执行下述命令，将会下载指定的 `unscoped` 或 `scoped` 包，下载后的包将被存储在当前文件夹下的 `node_modules` 文件夹中：
+执行下述命令来下载指定的包，包将存储在 `node_modules` 文件夹中。
 
 ```
 npm install <packagename>
 npm install <@scopename/packagename>
 ```
 
-执行下述命令，将会根据	本地文件夹下的 package.json 文件的信息，来下载所有的指定包（包括 unscoped 包和 scoped 包） ，并将其存储到当前文件夹下的 node_modules 文件夹内（若没有 node_modules 文件夹，则会自动创建一个）。
+执行下述命令，将会按照 `package.json` 的配置来下载包，包将存储在 `node_modules` 文件夹中。
 
 ```
 npm install
 ```
 
-> 注：
->
-> 对于 `npm install packagename` 和 `npm install @scepename/packagename` ：
->
-> 1. 如果当前文件夹下，没有 package.json 文件，则会下载最新版的指定包；
-> 2. 如果当前文件夹下，存在 package.json 文件，且 package.json 文件没有声明指定包，则会下载最新版的指定包；
-> 3. 如果当前文件夹下，存在 package.json 文件，且 package.json 文件声明了指定包，则会根据声明信息来下载满足某条件（见《包的更新规则》）的最新版的指定包；
->
-> 对于 `npm install` ：
->
-> 1. 如果当前文件夹下，没有 package.json 文件，就不会下载任何包；
-> 2. 如果当前文件夹下，存在 package.json 文件，就会根据 package.json 文件的信息来下载所有的指定包，所有指定包的版本满足某条件（见《包的更新规则》）。
-
-
-
-​		执行下述命令，将会下载指定版本的指定包（包括 unscoped 包和 scoped 包），并将其存储到当前文件夹下的 node_modules 文件夹内（若没有 node_modules 文件夹，则会自动创建一个）。
+执行下述命令，将会下载指定版本的指定包，包将存储在 `node_modules` 文件夹中。
 
 ```
 npm install <packagename@version>
-```
-
-```
 npm install <@scopename/packagename@version>
 ```
-
-​		譬如：
 
 ```
 npm install --save-dev @babel/core@7.0.0
@@ -139,141 +119,69 @@ npm install --save-dev @babel/core@7.0.0
 
 
 
-# 安装全局包
+## 包的更新规则
 
-​		见《 npm install 》
-
-
-
-# 更新本地包
-
-​		见《 npm update 》。
-
-
-
-# 更新全局包
-
-​		见《 npm update 》。
-
-
-
-# 包的更新规则
-
-​		命令 `npm install` 和命令 `npm update` 都可以对包进行更新，不过它们的具体行为有不少差异，详见《安装本地宝》、《安装全局包》、《更新本地包》、《更新全局包》。
-
-​		包的更新行为取决于包在 `package.json` 文件中的声明方式，主要有 3 种声明方式：
+`npm install` 和 `npm update` 都可以更新包，包的更新行为取决于包在 `package.json` 文件中的声明方式，主要有 3 种声明方式：
 
 - 精确的版本号，如 `1.0.0`
 - 脱字符版本号，如 `^1.0.0`
 - 波浪号版本号，如 `~1.0.0`
 
-​		若包在 `package.json` 文件中被声明为 `^非零号版本` ，则包的更新行为表现为：在主版本号不变的前提下，更新至最新版；
+若包在 `package.json` 文件中被声明为 `^非零号版本` ，则包的更新行为表现为：在主版本号不变的前提下，更新至最新版。若包在 `package.json` 文件中被声明为 `~非零号版本` ，则包的更新行为表现为：在主版本号和次版本号都不变的前提下，更新至最新版。若包在 `package.json` 文件中被声明为 `零号或非零号版本` ，则包的更新行为表现为：无法更新，版本号锁死。若包在 `package.json` 文件中被声明为 `^零号版本` ，则包的更新行为表现为：在主版本号和次版本号都不变的前提下，更新至最新版；
 
-​		若包在 `package.json` 文件中被声明为 `~非零号版本` ，则包的更新行为表现为：在主版本号和次版本号都不变的前提下，更新至最新版；
-
-​		若包在 `package.json` 文件中被声明为 `零号或非零号版本` ，则包的更新行为表现为：无法更新，版本号锁死；
-
-​		若包在 `package.json` 文件中被声明为 `^零号版本` ，则包的更新行为表现为：在主版本号和次版本号都不变的前提下，更新至最新版；
-
-> 注：
+> 注：零号版本是指 `0.y.z` ，非零号版本是指 `>=1.0.0` 。
 >
-> 1. 零号版本代表 `0.y.z` ，非零号版本代表 `>=1.0.0` 。
-> 2. 若包未被 `package.json` 文件声明，则包会更新至最新版。
 
 
 
-# 源管理
+## 源管理
 
-​		执行下述命令，可以查询 npm 的下载源：
+执行下述命令来查询 npm 的下载源：
 
 ```
 npm config get registry
 ```
 
-​		执行下述命令，可以修改 npm 的下载源，此后 npm 将从此新源下载所有包（既包括本地宝，也包括全局宝）：
+执行下述命令来修改 npm 的下载源，
 
 ```
 npm config set registry 新源地址
 ```
 
-
-
-​		国内网络环境下，淘宝源的下载速度比官方源（原始源）的更快，下文将描述如何换至淘宝源：
+推荐的镜像源有：
 
 ```
-> npm config get registry
-
-打印
-https://registry.npmjs.org
-
-> npm config set registry https://registry.npm.taobao.org
-> npm config get registry
-
-打印
-https://registry.npm.taobao.org
+npm config set registry="https://registry.npmmirror.com"
+npm config set registry="https://registry.npm.taobao.org"
 ```
 
-> 注：淘宝源的更新频率为 10 分钟。
+
+
+## 文件结构
+
+本小节假定：1.使用 Windows 系统；2.node.js 安装在 `D\nodejs` 文件夹；3.在 `E:\web` 文件夹中执行命令。
+
+### prefix
+
+指 `node_modules` 文件夹的父文件夹。对于本地环境，它是打开命令行窗口的那个文件夹。对于全局环境，它是 `npm` 的安装文件夹。比如：
+
+- 本地环境的 `prefix` 就是 `E:\web`。
+- 全局环境的 `prefix` 就是 `D:\nodejs\node_modules\npm`。
+
+### root
+
+是指 `node_modules` 文件夹。
+
+### executables
+
+是指存储可执行程序的文件夹，比如：
+
+- 本地环境的 `executables` 就是 `E:\web\node_modules\.bin`。
+- 全局环境的 `executables` 就是 `D:\nodejs\node_modules\npm\bin`。
 
 
 
-# 文件结构
-
-​		该节使用的所有例子都假定：① 本机使用 Windows 系统；② node.js 被安装至 `D:\nodejs` 文件夹中；③ 在 `E:\web` 文件夹中打开命令行 ；
-
-**prefix：**
-
-​		是指 `node_modules` 文件夹的父文件夹。对于本地环境，它是打开命令行窗口的那个文件夹。对于全局环境，它是 `npm` 的安装文件夹。比如：
-
-1. 本地环境的 `prefix` 就是 `E:\web` ；
-2. 全局环境的 `prefix` 就是 `D:\nodejs\node_modules\npm` ；
-
-**root：**
-
-​		是指 `node_modules` 文件夹。
-
-**executables：**
-
-​		是指存储可执行程序的文件夹，比如：
-
-- 本地环境的 `executables` 就是 `E:\web\node_modules\.bin` ；
-- 全局环境的 `executables` 就是 `D:\nodejs\node_modules\npm\bin`
-
-
-
-# npm-shrinkwrap.json
-
-​		该文件由命令 `npm shrinkwrap` 创建，它等同于 `package-lock.json` ，不同处是它可以被包含在发布的包中。
-
-​		等待完善 https://docs.npmjs.com/cli/v7/configuring-npm/npm-shrinkwrap-json
-
-
-
-# package.json
-
-​		等待完善 https://docs.npmjs.com/cli/v7/configuring-npm/package-json
-
-
-
-# package-lock.json
-
-​		等待完善 https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json
-
-
-
-# React
-
-​		创建 React 工程的流程（复制自旧笔记，期待将来完全更新它）：
-
-1. 进入工程文件夹
-2.  `npx create-react-app firstReactApp` 
-3.  `cd firstReactApp` 
-4.  `npm start` 开始使用
-5.  `npm run build` 打包
-
-
-
-# 所有命令
+## 所有命令
 
 - [√] ：你将会用到该命令，你学习了该命令
 - [×]  ：你不会用到该命令，你未学习该命令
