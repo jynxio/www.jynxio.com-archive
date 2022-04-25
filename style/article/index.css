@@ -68,7 +68,7 @@ table,
 ul, ol, li,
 pre,
 blockquote {
-    margin: 1rem 0;
+    margin: 0.8rem 0;
 }
 
 /* 选中样式 */
@@ -106,17 +106,12 @@ pre::-webkit-scrollbar {
 /* Header */
 /* ------------------------------------------------------------------------------------------------- */
 header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    width: 100%;
+    display: flow-root;
     border-bottom: 1px solid var( --grey );
-    backdrop-filter: blur( 0.65rem );
-    -webkit-backdrop-filter: blur( 0.65rem );
 }
 
 header > button {
+    float: right;
     padding: 0.5em 1em;
     margin: 1rem 2rem;
     border: none;
@@ -142,14 +137,6 @@ header > button > a > strong {
     font-size: 1.1rem;
     font-weight: bold;
     line-height: 1;
-}
-
-header > button.catalogue {
-    float: left;
-}
-
-header > button.homepage {
-    float: right;
 }
 
 /* Aside */
@@ -224,23 +211,7 @@ aside > p + p:hover {
 }
 
 aside > p + p[data-level="1"] {
-    padding-left: 1em;
-}
-
-aside > p + p[data-level="2"] {
-    padding-left: 2em;
-}
-
-aside > p + p[data-level="3"] {
-    padding-left: 3em;
-}
-
-aside > p + p[data-level="4"] {
-    padding-left: 4em;
-}
-
-aside > p + p[data-level="5"] {
-    padding-left: 5em;
+    padding-left: 1.5em;
 }
 
 /* Article */
@@ -260,13 +231,12 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     color: var( --white );
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     text-align: center;
-    letter-spacing: 0.1em;
-    word-spacing: 0.2em;
 }
 
 h2 {
+    margin-top: 4rem;
     font-size: 2rem;
 }
 
@@ -275,11 +245,17 @@ h3 {
 }
 
 h4 {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-weight: normal;
 }
 
-h5, h6 {
+h5 {
     font-size: 1rem;
+    font-weight: normal;
+}
+
+h6 {
+    font-size: 0.8rem;
     font-weight: normal;
 }
 

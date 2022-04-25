@@ -111,8 +111,7 @@ function translateCore( input_path, output_path ) {
                     </head>
                     <body>
                         <header>
-                            <button class="catalogue"><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
-                            <button class="homepage"><a href="/index.html"><strong>HOMEPAGE</strong></a></button>
+                            <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
                         </header>
                         <aside>
                             <p><a href="#">IN THIS ARTICLE</a></p>
@@ -161,8 +160,8 @@ function translateCore( input_path, output_path ) {
         const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
         const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
 
-        /* catalogue仅收录h2和h3。 */
-        if ( level === 2 || level === 3 ) catalog_content += p;
+        /* catalogue仅收录h2。 */
+        if ( level === 2 ) catalog_content += p;
 
         return h;
 

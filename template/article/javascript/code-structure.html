@@ -10,24 +10,23 @@
 
 <body>
     <header>
-        <button class="catalogue"><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
-        <button class="homepage"><a href="/index.html"><strong>HOMEPAGE</strong></a></button>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
     </header>
     <aside>
         <p><a href="#">IN THIS ARTICLE</a></p>
-        <p data-level="1"><a href="#31543955-ef73-4265-a248-742b75c5a683">语句</a></p>
-        <p data-level="1"><a href="#a78fd2cb-c403-41f2-bb0e-bbcec12ccbe8">表达式</a></p>
-        <p data-level="1"><a href="#695467a5-012d-47cf-a3e4-4f0e26788ca0">分号</a></p>
-        <p data-level="1"><a href="#6afd8769-7dbd-4a28-99ee-d0ddd42d4c4a">注释</a></p>
+        <p data-level="1"><a href="#9cfde07e-5ed2-4570-aa8c-d7fb102cba3a">语句</a></p>
+        <p data-level="1"><a href="#6ba7eebf-2606-4761-a11a-3949d5ea8d0b">表达式</a></p>
+        <p data-level="1"><a href="#4a8b2c56-e849-4d3a-ab2a-a1d33cbaf459">分号</a></p>
+        <p data-level="1"><a href="#5498bc9b-2458-40e5-848c-bb7014d1cd42">注释</a></p>
     </aside>
     <article>
         <h1>代码结构</h1>
         <p id="last-updated">Last Updated: 25/04/2022</p>
-        <h2 id="31543955-ef73-4265-a248-742b75c5a683">语句</h2>
+        <h2 id="9cfde07e-5ed2-4570-aa8c-d7fb102cba3a">语句</h2>
         <p>语句由变量、字面值、操作符构成，比如这就是一条语句：</p>
         <pre><code class="language-js">alert( &quot;Hello World.&quot; );
 </code></pre>
-        <h2 id="a78fd2cb-c403-41f2-bb0e-bbcec12ccbe8">表达式</h2>
+        <h2 id="6ba7eebf-2606-4761-a11a-3949d5ea8d0b">表达式</h2>
         <pre><code class="language-js">a = b * 2;
 </code></pre>
         <p>对于上例语句：</p>
@@ -48,10 +47,10 @@
         <p>下例则是一条调用表达式：</p>
         <pre><code class="language-js">alert( a );
 </code></pre>
-        <h2 id="695467a5-012d-47cf-a3e4-4f0e26788ca0">分号</h2>
+        <h2 id="4a8b2c56-e849-4d3a-ab2a-a1d33cbaf459">分号</h2>
         <p>JavaScript 有 <a href="https://tc39.es/ecma262/#sec-rules-of-automatic-semicolon-insertion">自动分号插入机制</a>，在大多数情况下，它会自动的将分号插入到源码的 token stream 中，因此你可以省略语句结尾的分号。但是自动分号插入机制不是完全可靠的，当语句以 <code>(</code> 或 <code>[</code>或、 <code>+</code>或、 <code>-</code>或、 <code>正则开头的斜杠</code> 或 <code>模版字符串</code> 开头时，该机制会失灵，因此你必须手动的为上一行语句添加分号。</p>
         <p>代码块的结尾则不需要使用分号。</p>
-        <h2 id="6afd8769-7dbd-4a28-99ee-d0ddd42d4c4a">注释</h2>
+        <h2 id="5498bc9b-2458-40e5-848c-bb7014d1cd42">注释</h2>
         <pre><code class="language-js">// 单行注释
 /* 多行注释 */
 &lt;!-- 单行注释，极不推荐
