@@ -44,7 +44,7 @@ function createHtml( data ) {
 
         return data.map( file => {
 
-            const a = `<a href="${ file.buildPath.slice( 1 ) }">${ file.alias }</a>`;
+            const a = `<a href="${ file.buildPath }">${ file.alias }</a>`;
             const li = `<li>${ a }</li>`;
 
             return li;

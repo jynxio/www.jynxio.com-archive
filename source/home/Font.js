@@ -1,4 +1,5 @@
 import font_100_data from "/static/json/threejs-100.json";
+import font_400_data from "/static/json/threejs-400.json";
 import font_700_data from "/static/json/threejs-700.json";
 
 import { BufferGeometry } from "three";
@@ -43,7 +44,7 @@ export default class Font {
         this.#thickness = thickness;
 
         const ThisLine = type === "fillline" ? FillLine : Outline;
-        const font_data = type === "fillline" ? font_100_data : font_700_data;
+        const font_data = type === "fillline" ? font_400_data : font_700_data;
 
         const font = new FontLoader().parse( JSON.parse( font_data ) );
         const shapes = font.generateShapes( message, height );

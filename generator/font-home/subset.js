@@ -20,7 +20,8 @@ async function subset() {
     }
 
     const response_1 = await fontcaster.subset( config.characters.join( "" ), config.origin.en700, config.subset.en700 );
-    const response_2 = await fontcaster.subset( config.characters.join( "" ), config.origin.en100, config.subset.en100 );
+    const response_2 = await fontcaster.subset( config.characters.join( "" ), config.origin.en400, config.subset.en400 );
+    const response_3 = await fontcaster.subset( config.characters.join( "" ), config.origin.en100, config.subset.en100 );
 
     if ( ! response_1.success ) {
 
@@ -31,6 +32,14 @@ async function subset() {
     }
 
     if ( ! response_2.success ) {
+
+        console.error( "Error: ", response_2.error );
+
+        return;
+
+    }
+
+    if ( ! response_3.success ) {
 
         console.error( "Error: ", response_2.error );
 

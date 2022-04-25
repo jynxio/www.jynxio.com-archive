@@ -25,7 +25,7 @@
         "create-article": "node ./generator/article/index.js",
         "create-catalogue": "node ./generator/catalogue/index.js",
         "create-font": "node ./generator/font/index.js",
-        "create-font-homepage": "node ./generator/font-homepage/index.js",
+        "create-font-home": "node ./generator/font-home/index.js",
         "deploy": "vercel --prod"
     },
     "dependencies": {
