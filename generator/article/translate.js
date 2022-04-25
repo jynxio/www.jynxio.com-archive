@@ -161,7 +161,8 @@ function translateCore( input_path, output_path ) {
         const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
         const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
 
-        catalog_content += p;
+        /* catalogue仅收录h2和h3。 */
+        if ( level === 2 || level === 3 ) catalog_content += p;
 
         return h;
 

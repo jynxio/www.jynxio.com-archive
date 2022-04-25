@@ -23,6 +23,7 @@
         "start": "webpack serve --config ./webpack/dev.js",
         "build": "webpack  --config ./webpack/prod.js",
         "create-article": "node ./generator/article/index.js",
+        "create-catalogue": "node ./generator/catalogue/index.js",
         "create-font": "node ./generator/font/index.js",
         "create-font-homepage": "node ./generator/font-homepage/index.js",
         "deploy": "vercel --prod"
