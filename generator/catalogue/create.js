@@ -1,5 +1,9 @@
-const config = require( "../article/config" );
-const html_content = `
+const configuration = require( "../article/config" );
+const beautify = require( "js-beautify" ).html;
+
+let html_content;
+
+html_content = `
     <!DOCTYPE html>
     <html lang="zh-CN">
     <head>
@@ -12,22 +16,40 @@ const html_content = `
         <header>
             <button>HOMEPAGE</button>
         </header>
-        <main>${ createSections( config ) }</main>
+        <main>${ createSections( configuration ) }</main>
     </body>
     </html>
 `;
+html_content = beautify( html_content );
 
 function createSections( data ) {
 
-    const sections = data.map( scope => {
+    const sections = data.map( folder => {
 
-        const h2 = `<h2>${ scope.name }</h2>`;
-        // TODO 整个config传递下来，会使得维护很难懂...
+        const alias = folder.alias;
+        const h2 = `<h2>${ alias }</h2>`;
+        const lis = folder.children.map( file => {
+
+            const href = `href="${ file.buildPath.slice( 1 ) }"`;
+            const text_content = file.alias;
+            const a = `<a ${ href }>${ text_content }</a>`;
+            const li = `<li>${ a }</li>`;
+
+            return li;
+
+        } ).join( "" );
+        const ol = `<ol>${ lis }</ol>`
+        const section = `<section>${ h2 }${ ol }</section>`;
+
+        return section;
+
     } );
 
-    console.log( data );
+    return sections.join( "" );
 
 }
+
+console.log( html_content ); // TODO GOGOGO! It work!
 
 // TODO 自动生成catalogue
 // TODO 将“生成article”、“生成字体”、“字体转woff2”、“生成catalogue”等合并为一条工作流水线
