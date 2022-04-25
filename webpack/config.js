@@ -1,21 +1,23 @@
-const config = require( "../generator/article/config" );
-const flattened_array = [];
+const configuration = require( "../generator/article/config" );
+const paths = [];
 
-config.forEach( scope => {
+configuration.forEach( folder => {
 
-    scope.content.forEach( item => {
+    folder.children.forEach( file => {
 
-        flattened_array.push( { indexName: item.indexName, outputPath: item.outputPath } );
+        const path = { input: file.htmlPath, output: file.buildPath };
+
+        paths.push( path );
 
     } );
 
 } );
 
-module.exports = flattened_array.map( item => {
+module.exports = paths.map( path => {
 
     return {
-        filename: item.indexName + ".html",
-        template: item.outputPath,
+        filename: path.output,
+        template: path.input,
     };
 
 } );

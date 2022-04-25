@@ -1,7 +1,7 @@
 const path = require( "path" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
-const config = require( "./config" );
+const configuration = require( "./config" );
 
 module.exports = {
     entry: {
@@ -32,10 +32,10 @@ module.exports = {
             chunks: [ "catalogue" ],
         } ),
         // Article
-        ... config.map( item => (
+        ... configuration.map( path => (
             new HtmlWebpackPlugin( {
-                filename: "./article/" + item.filename,
-                template: item.template,
+                filename: path.filename,
+                template: path.template,
                 chunks: [ "article" ],
             } )
         ) ),
