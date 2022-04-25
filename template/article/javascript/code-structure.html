@@ -15,19 +15,19 @@
     </header>
     <aside>
         <p><a href="#">IN THIS ARTICLE</a></p>
-        <p data-level="1"><a href="#2ddeccde-67b6-4b16-bd6a-7338347c714b">语句</a></p>
-        <p data-level="1"><a href="#b42ae30e-e3ee-4af7-9e37-dd577b7f021e">表达式</a></p>
-        <p data-level="1"><a href="#dde27a43-f0e4-4e0f-8e10-8a65df3c4a0c">分号</a></p>
-        <p data-level="1"><a href="#40cdacd3-a0b5-4f8c-bf35-a21f68b00bc7">注释</a></p>
+        <p data-level="1"><a href="#ceb8b68c-d5fa-403b-a704-e7f74d947b20">语句</a></p>
+        <p data-level="1"><a href="#95b41d62-a631-4f86-b69a-14d36373f20f">表达式</a></p>
+        <p data-level="1"><a href="#c16c66b5-c600-485b-9e09-d081eec218d9">分号</a></p>
+        <p data-level="1"><a href="#90782b3c-6240-42f6-bff8-2c316487f6a3">注释</a></p>
     </aside>
     <article>
         <h1>代码结构</h1>
         <p id="last-updated">Last Updated: 25/04/2022</p>
-        <h2 id="2ddeccde-67b6-4b16-bd6a-7338347c714b">语句</h2>
+        <h2 id="ceb8b68c-d5fa-403b-a704-e7f74d947b20">语句</h2>
         <p>语句由变量、字面值、操作符构成，比如这就是一条语句：</p>
         <pre><code class="language-js">alert( &quot;Hello World.&quot; );
 </code></pre>
-        <h2 id="b42ae30e-e3ee-4af7-9e37-dd577b7f021e">表达式</h2>
+        <h2 id="95b41d62-a631-4f86-b69a-14d36373f20f">表达式</h2>
         <pre><code class="language-js">a = b * 2;
 </code></pre>
         <p>对于上例语句：</p>
@@ -48,10 +48,10 @@
         <p>下例则是一条调用表达式：</p>
         <pre><code class="language-js">alert( a );
 </code></pre>
-        <h2 id="dde27a43-f0e4-4e0f-8e10-8a65df3c4a0c">分号</h2>
+        <h2 id="c16c66b5-c600-485b-9e09-d081eec218d9">分号</h2>
         <p>JavaScript 有 <a href="https://tc39.es/ecma262/#sec-rules-of-automatic-semicolon-insertion">自动分号插入机制</a>，在大多数情况下，它会自动的将分号插入到源码的 token stream 中，因此你可以省略语句结尾的分号。但是自动分号插入机制不是完全可靠的，当语句以 <code>(</code> 或 <code>[</code>或、 <code>+</code>或、 <code>-</code>或、 <code>正则开头的斜杠</code> 或 <code>模版字符串</code> 开头时，该机制会失灵，因此你必须手动的为上一行语句添加分号。</p>
         <p>代码块的结尾则不需要使用分号。</p>
-        <h2 id="40cdacd3-a0b5-4f8c-bf35-a21f68b00bc7">注释</h2>
+        <h2 id="90782b3c-6240-42f6-bff8-2c316487f6a3">注释</h2>
         <pre><code class="language-js">// 单行注释
 /* 多行注释 */
 &lt;!-- 单行注释，极不推荐

@@ -3,7 +3,7 @@ const readlineSync = require( "readline-sync" );
 const { marked } = require( "marked" );
 const { v4: createUuid } = require( "uuid" );
 const beautify = require( "js-beautify" ).html;
-const config = require( "./config" );
+const configuration = require( "./config" );
 
 /**
  * （异步）询问是否执行转译，确认后将根据config.js的配置来执行转译。
@@ -20,13 +20,15 @@ async function translate() {
 
     }
 
-    const flattened_paths = [];
+    const paths = [];
 
-    config.forEach( scope => {
+    configuration.forEach( folder => {
 
-        scope.content.forEach( item => {
+        folder.children.forEach( file => {
 
-            flattened_paths.push( { inputPath: item.inputPath, outputPath: item.outputPath } );
+            const path = { input: file.mdPath, output: file.htmlPath };
+
+            paths.push( path );
 
         } );
 
@@ -35,21 +37,34 @@ async function translate() {
     let is_success = true;
 
     const responses = await Promise.all(
-        flattened_paths.map( item => translateCore( item.inputPath, item.outputPath ) )
+        paths.map( path => translateCore( path.input, path.output ) )
     );
 
-    responses.forEach( responses => {
+    responses.forEach( ( response, index ) => {
 
-        if ( responses.success ) return;
+        if ( response.success ) {
+
+            console.log( "Done: " + paths[ index ].input );
+
+            return;
+
+        }
 
         is_success = false;
-        console.log( "Error: ", responses.error );
+
+        console.log( "Error: ", response.error, "at " + paths[ index ].input );
 
     } );
 
-    if ( ! is_success ) return;
+    if ( ! is_success ) {
 
-    console.log( "All done!" );
+        console.log( "\nThere were some errors occurring!" );
+
+        return;
+
+    }
+
+    console.log( "\nAll done!" );
 
 }
 
