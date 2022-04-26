@@ -78,8 +78,8 @@ document.body.append(
     font_ideas.getDom(),
     font_posts.getDom(),
 );
-font_github.getDom().addEventListener( "click", _ => globalThis.open( "https://github.com/jynxio" ) );
-font_posts.getDom().addEventListener( "click", _ => globalThis.open( globalThis.location.href + "catalogue.html" ) );
+font_github.getDom().addEventListener( "click", _ => globalThis.location.href = "https://github.com/jynxio" );
+font_posts.getDom().addEventListener( "click", _ => globalThis.location.href += "catalogue.html" );
 
 /* Animate */
 /* ----------------------------------------------------------------------------------------------- */
