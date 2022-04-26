@@ -18,11 +18,14 @@ import { Float32BufferAttribute } from "three";
 
 export default class Font {
 
+    #dom;
     #type;
+    #scale;
     #space;
     #entity;
     #height;
     #message;
+    #position;
     #thickness;
 
     /**
@@ -33,14 +36,17 @@ export default class Font {
      * @param { number } options.space - 垂直方向上的字符间距，比如10。
      * @param { number } options.thickness - 线宽，比如2。
      * @param { string } options.type - "fillline"或"outline"。
+     * @param { Array<number> } options.position - 实例的位置。
      * @returns { Object } - 实例。
      */
-    constructor( { message, height, space, thickness, type } ) {
+    constructor( { message, height, space, thickness, type, position } ) {
 
+        this.#scale = 1;
         this.#type = type;
         this.#space = space;
         this.#height = height;
         this.#message = message;
+        this.#position = position;
         this.#thickness = thickness;
 
         const ThisLine = type === "fillline" ? FillLine : Outline;
@@ -50,6 +56,7 @@ export default class Font {
         const shapes = font.generateShapes( message, height );
 
         this.#entity = new ThisLine( shapes, message, thickness, space );
+        this.#entity.position.set( ... position );
 
     }
 
@@ -67,6 +74,8 @@ export default class Font {
 
     getHeight() {
 
+        // BUG this.#height是一个永恒不变的值，这会导致一些违反直觉的现象。比如调用了setScale之后，实例的
+        // BUG 实际高度是this.getHeight() * this.getScale()，而不是this.getHeight()。
         return this.#height;
 
     }
@@ -89,6 +98,38 @@ export default class Font {
 
     }
 
+    getDom() {
+
+        if ( this.#dom ) return this.#dom;
+
+        let [ x, y ] = this.getPosition();
+
+        x = x + globalThis.innerWidth / 2;
+        y = - 1 * y + globalThis.innerHeight / 2;
+
+        this.#dom = document.createElement( "button" );
+        this.#dom.className = "font-dom";
+        this.#dom.style.height = this.getScale() * this.getHeight() + "px";
+        this.#dom.style.width = this.getScale() * this.getHeight() * Array.from( this.getMessage() ).length + "px";
+        this.#dom.style.left = x + "px";
+        this.#dom.style.top = y + "px";
+
+        return this.#dom;
+
+    }
+
+    getPosition() {
+
+        return this.#position;
+
+    }
+
+    getScale() {
+
+        return this.#scale;
+
+    }
+
     /**
      * 设置位置。
      * @param { number } x - x坐标。
@@ -97,6 +138,7 @@ export default class Font {
      */
     setPosition( x, y, z ) {
 
+        this.#position = [ x, y, z ];
         this.getEntity().position.set( x, y, z );
 
     }
@@ -107,7 +149,25 @@ export default class Font {
      */
     setScale( n ) {
 
+        this.#scale = n;
         this.getEntity().scale.set( n, n, n );
+
+    }
+
+    /**
+     * 更新dom的宽高与位置，当实例的position或scale发生变化后，都应该调用此方法。
+     */
+    updateDom() {
+
+        let [ x, y ] = this.getPosition();
+
+        x = x + globalThis.innerWidth / 2;
+        y = - 1 * y + globalThis.innerHeight / 2;
+
+        this.getDom().style.height = this.getScale() * this.getHeight() + "px";
+        this.getDom().style.width = this.getScale() * this.getHeight() * Array.from( this.getMessage() ).length + "px";
+        this.getDom().style.left = x + "px";
+        this.getDom().style.top = y + "px";
 
     }
 

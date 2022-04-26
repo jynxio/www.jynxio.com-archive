@@ -11,12 +11,12 @@ import { Clock } from "three";
 
 /* Base */
 /* ----------------------------------------------------------------------------------------------- */
-const size = { x: window.innerWidth, y: window.innerHeight };
+const size = { x: globalThis.innerWidth, y: globalThis.innerHeight };
 const canvas = document.querySelector( "canvas" );
 const renderer = new WebGLRenderer( { canvas, antialias: true } );
 
 renderer.setSize( size.x, size.y );
-renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
+renderer.setPixelRatio( Math.min( globalThis.devicePixelRatio, 2 ) );
 
 const scene = new Scene();
 const camera = new OrthographicCamera( - size.x / 2, size.x / 2, size.y / 2, - size.y / 2, 0.1, 10 );
@@ -36,9 +36,9 @@ const font_name = new Font( {
     space: Math.max( size.x, size.y ) * 0.1 * 0.1,
     thickness: 1.5,
     type: "outline",
+    position: [ 0, 0, - 1 ],
 } );
 
-font_name.setPosition( 0, 0, - 1 );
 scene.add( font_name.getEntity() );
 
 const font_option = {
@@ -46,39 +46,40 @@ const font_option = {
     space: size.y * 0.0135 * 0.1,
     type: "fillline",
 };
-const font_scroll = new Font( {
-    message: "SCROLL DOWN",
-    height: font_option.height,
-    space: font_option.space,
-    type: font_option.type,
-} );
-const font_github = new Font( {
-    message: "GITHUB",
-    height: font_option.height,
-    space: font_option.space,
-    type: font_option.type,
-} );
 const font_ideas = new Font( {
     message: "IDEAS",
     height: font_option.height,
     space: font_option.space,
     type: font_option.type,
+    position: [ 0, - size.y / 2 + size.y * 0.12 + 0, - 1 ],
 } );
 const font_posts = new Font( {
     message: "POSTS",
     height: font_option.height,
     space: font_option.space,
     type: font_option.type,
+    position: [ 0, - size.y / 2 + size.y * 0.12 - font_option.height * 2, - 1 ],
+} );
+const font_github = new Font( {
+    message: "GITHUB",
+    height: font_option.height,
+    space: font_option.space,
+    type: font_option.type,
+    position: [ 0, - size.y / 2 + size.y * 0.12 - font_option.height * 4, - 1 ],
 } );
 
-font_scroll.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
-font_github.setPosition( 0, - size.y / 2 + size.y * 0.12 + 0, - 1 );
-font_ideas.setPosition( 0, - size.y / 2 + size.y * 0.12 - font_option.height * 2, - 1 );
-font_posts.setPosition( 0, - size.y / 2 + size.y * 0.12 - font_option.height * 4, - 1 );
-// scene.add( font_scroll.getEntity() );
-scene.add( font_github.getEntity() );
-scene.add( font_ideas.getEntity() );
-scene.add( font_posts.getEntity() );
+scene.add(
+    font_github.getEntity(),
+    font_ideas.getEntity(),
+    font_posts.getEntity(),
+);
+document.body.append(
+    font_github.getDom(),
+    font_ideas.getDom(),
+    font_posts.getDom(),
+);
+font_github.getDom().addEventListener( "click", _ => globalThis.open( "https://github.com/jynxio" ) );
+font_posts.getDom().addEventListener( "click", _ => globalThis.open( globalThis.location.href + "catalogue.html" ) );
 
 /* Animate */
 /* ----------------------------------------------------------------------------------------------- */
@@ -95,13 +96,13 @@ renderer.setAnimationLoop( _ => {
 
 /* Resize */
 /* ----------------------------------------------------------------------------------------------- */
-window.addEventListener( "resize", _ => {
+globalThis.addEventListener( "resize", _ => {
 
-    size.x = window.innerWidth;
-    size.y = window.innerHeight;
+    size.x = globalThis.innerWidth;
+    size.y = globalThis.innerHeight;
 
     renderer.setSize( size.x, size.y );
-    renderer.setPixelRatio( Math.min( window.devicePixelRatio, 2 ) );
+    renderer.setPixelRatio( Math.min( globalThis.devicePixelRatio, 2 ) );
 
     camera.left = - size.x / 2;
     camera.right = size.x / 2;
@@ -114,16 +115,16 @@ window.addEventListener( "resize", _ => {
 
     font_name.setScale( Math.max( size.x, size.y ) * 0.1 / font_name.getHeight() );
 
-    font_scroll.setPosition( 0, - size.y / 2 + size.y * 0.05, - 1 );
-    font_scroll.setScale( font_option.height / font_scroll.getHeight() );
+    font_ideas.setScale( size.y * 0.0135 / font_ideas.getHeight() );
+    font_ideas.setPosition( 0, - size.y / 2 + size.y * 0.12 + font_ideas.getScale() * font_ideas.getHeight() * 0, - 1 );
+    font_ideas.updateDom();
 
-    font_github.setPosition( 0, - size.y / 2 + size.y * 0.12 + 0, - 1 );
-    font_github.setScale( font_option.height / font_github.getHeight() );
+    font_posts.setScale( size.y * 0.0135 / font_posts.getHeight() );
+    font_posts.setPosition( 0, - size.y / 2 + size.y * 0.12 - font_posts.getScale() * font_posts.getHeight() * 2, - 1 );
+    font_posts.updateDom();
 
-    font_ideas.setPosition( 0, - size.y / 2 + size.y * 0.12 - font_option.height * 2, - 1 );
-    font_ideas.setScale( font_option.height / font_ideas.getHeight() );
-
-    font_posts.setPosition( 0, - size.y / 2 + size.y * 0.12 - font_option.height * 4, - 1 );
-    font_posts.setScale( font_option.height / font_posts.getHeight() );
+    font_github.setScale( size.y * 0.0135 / font_github.getHeight() );
+    font_github.setPosition( 0, - size.y / 2 + size.y * 0.12 - font_github.getScale() * font_github.getHeight() * 4, - 1 );
+    font_github.updateDom();
 
 } );

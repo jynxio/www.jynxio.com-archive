@@ -38,3 +38,17 @@ html, body {
 canvas {
     display: block;
 }
+
+/* a: font-dom */
+/* ------------------------------------------------------------------------------------------------- */
+button.font-dom {
+    position: fixed;
+    z-index: 99;
+    padding: 0;
+    margin: 0;
+    border-width: 0;
+    outline-width: 0;
+    background-color: transparent;
+    transform: translate( -50%, -50% );
+    cursor: pointer;
+}
