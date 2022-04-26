@@ -18,7 +18,7 @@ function createHtml( data ) {
         </head>
         <body>
             <header>
-                <button><a href="/index.html"><strong>HOMEPAGE</strong></a></button>
+                <button><a href="/"><strong>HOMEPAGE</strong></a></button>
             </header>
             <main>${ createSections( data ) }</main>
         </body>
