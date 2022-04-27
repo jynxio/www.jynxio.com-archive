@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPM 命令</title>
+</head>
+
+<body>
+    <header>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+    </header>
+    <aside>
+        <p><a href="#">IN THIS ARTICLE</a></p>
+        <p data-level="1"><a href="#3b2c4f32-7882-43ed-b411-547551d518e8">npm</a></p>
+        <p data-level="1"><a href="#49e7ba22-c705-4749-a075-c9c0eb776e3e">npm init</a></p>
+        <p data-level="1"><a href="#ef314aa6-a357-4e0a-a63b-f30c951b1e13">npm install</a></p>
+        <p data-level="1"><a href="#a1a10c6a-7090-473a-bc91-04fb959f69c3">npm uninstall</a></p>
+        <p data-level="1"><a href="#e6f5b579-9396-43f4-83a2-7bba2be79376">npm update</a></p>
+        <p data-level="1"><a href="#6a86285b-72f5-4124-a473-c9ae834c5130">npm ls</a></p>
+        <p data-level="1"><a href="#43e36cc6-8b9d-4a40-821f-6551a3656d95">npm view</a></p>
+        <p data-level="1"><a href="#63cc92e9-696b-4792-a955-a6d008607674">npm config</a></p>
+        <p data-level="1"><a href="#e80d9ddd-534c-463a-9d30-40bd11f0938e">npm docs</a></p>
+        <p data-level="1"><a href="#aba6b60a-d6e3-4a40-b850-381d57c02abe">npm dedupe</a></p>
+        <p data-level="1"><a href="#64e99ed9-8f07-46a2-9b81-576c81277707">npm bin</a></p>
+        <p data-level="1"><a href="#76d8eb67-09ad-4b47-8905-d30345a9608a">npm pkg</a></p>
+        <p data-level="1"><a href="#dc3140a7-a826-47d2-8236-c515f4014747">npm prefix</a></p>
+        <p data-level="1"><a href="#18116a49-aef4-4a87-a772-2fd22833572e">npm root</a></p>
+        <p data-level="1"><a href="#7d471f8c-771c-4fd1-93d6-8e6ef8e9dfea">npm shrinkwrap</a></p>
+        <p data-level="1"><a href="#13f62ac9-54b4-48a5-a3ec-b461f3259cb1">npm start</a></p>
+        <p data-level="1"><a href="#ec189bf8-70d7-4c09-9493-e22484111969">npm stop</a></p>
+        <p data-level="1"><a href="#a41c39d7-9ef0-44d8-b63b-e21fae21d751">npm test</a></p>
+        <p data-level="1"><a href="#34d90e81-6d62-44bc-b7cc-eec67f01cdf8">npm ci</a></p>
+        <p data-level="1"><a href="#95ee2f9c-d550-41c1-a16d-9640dd37b317">npm cache</a></p>
+        <p data-level="1"><a href="#a7abc936-2c98-4c19-910a-17082b3b325b">npm deprecate</a></p>
+    </aside>
+    <article>
+        <h1>NPM 命令</h1>
+        <p id="last-updated">Last Updated: 27/04/2022</p>
+        <h2 id="3b2c4f32-7882-43ed-b411-547551d518e8">npm</h2>
+        <p>npm 是 node 运行时的包管理工具，用于发布、查询、安装、卸载、更新包。npm 命令具有本地模式和全局模式，默认使用本地模式，若需激活全局模式，则需主动使用 <code>-g</code> 或 <code>--global</code>。</p>
+        <h2 id="49e7ba22-c705-4749-a075-c9c0eb776e3e">npm init</h2>
+        <h3 id="031ed9e6-457f-4a96-8011-ce9896bb7918">描述</h3>
+        <p>以问卷调查的形式来询问并创建 <code>package.json</code> 文件，该文件将存储在命令的执行目录下。若使用 <code>--yes</code> 参数，则会略过询问环节，直接创建一个具有默认值的 <code>package.json</code> 文件，这些默认值为：</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>字段值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td>当前文件夹的名字</td>
+                </tr>
+                <tr>
+                    <td>version</td>
+                    <td><code>&quot;1.0.0&quot;</code></td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td><code>&quot;&quot;</code> 或 <code>README.md</code> 文件的首行内容</td>
+                </tr>
+                <tr>
+                    <td>main</td>
+                    <td><code>&quot;index.js&quot;</code></td>
+                </tr>
+                <tr>
+                    <td>scripts</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>keywords</td>
+                    <td><code>[]</code></td>
+                </tr>
+                <tr>
+                    <td>author</td>
+                    <td><code>&quot;&quot;</code></td>
+                </tr>
+                <tr>
+                    <td>license</td>
+                    <td><code>&quot;ISC&quot;</code></td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 id="5ef1164f-4b11-40ee-b5ea-a57055b02f6c">语法</h3>
+        <pre><code>npm init [ --yes | -y ]
+</code></pre>
+        <h2 id="ef314aa6-a357-4e0a-a63b-f30c951b1e13">npm install</h2>
+        <h3 id="7bd5848a-3695-4a4d-acd3-c9b8580e8601">描述</h3>
+        <p><code>npm install xxx</code> 将下载指定的包（同时也会下载该包的依赖包）。<code>npm install</code> 将基于 <code>package.json</code> 或 <code>yarn.lock</code> 或 <code>npm-shrinkwrap.json</code> 来下载包，当这 3 个文件同时存在时，只有优先级最高的文件会发挥作用，它们的优先级为：<code>npm-shrinkwrap.json</code> &gt; <code>package.json</code> &gt; <code>yarn.lock</code>。</p>
+        <h3 id="e710bec3-1492-45ad-8906-8da3463254de">语法</h3>
+        <pre><code>npm install
+npm install &lt;packagename&gt;
+npm install &lt;packagename@tag&gt;
+npm install &lt;packagename@version&gt;
+</code></pre>
+        <h3 id="95e982c0-6746-41a5-ad64-861b34298da5">参数</h3>
+        <p>以下参数可以自由的组合使用。</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>简写</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>--global</code></td>
+                    <td><code>-g</code></td>
+                    <td>激活全局模式，当该参数会使 <code>--no-save</code> 无效。</td>
+                </tr>
+                <tr>
+                    <td><code>--save-prod</code></td>
+                    <td><code>-P</code></td>
+                    <td>将下载的包定义为生产包，属于 <code>dependencies</code></td>
+                </tr>
+                <tr>
+                    <td><code>--save-dev</code></td>
+                    <td><code>-D</code></td>
+                    <td>将下载的包定义为开发包，属于 <code>devDependencies</code></td>
+                </tr>
+                <tr>
+                    <td><code>--save-optional</code></td>
+                    <td><code>-O</code></td>
+                    <td>将下载的包定义为可选包，属于 <code>optionalDependencies</code></td>
+                </tr>
+                <tr>
+                    <td><code>--save-exact</code></td>
+                    <td><code>-E</code></td>
+                    <td>使用精确的版本号，而非脱字符版本号（默认）</td>
+                </tr>
+                <tr>
+                    <td><code>--no-save</code></td>
+                    <td></td>
+                    <td>执行该命令后，不更新 <code>package.json</code>、<code>package-lock.json</code>、<code>npm-shrinkwrap.json</code></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>建议：请不要使用 <code>--save</code>，原因如下：</p>
+        <ol>
+            <li><code>npm install --save- x</code> 与 <code>npm install --save-prod x</code> 的作用是一样的，<code>--save-prod</code> 的优点是其与 <code>--save-dev</code> 更对仗。</li>
+            <li><code>npm install</code> 和 <code>npm uninstall</code> 都有 <code>--save</code> 参数，但是它们的意义却是不相同的，前者表示“自动更新相关包的信息，并将该包标记为 dependencies”，而后者表示“自动更新相关包的信息”。</li>
+            <li>请忘掉 <code>npm install</code> 和 <code>npm uninstall</code> 都拥有 <code>--save</code> 参数这件事吧，只需要记住它们都拥有 <code>--no-save</code> 参数就好了，这样子它们的行为就会更加统一：它们在默认情况下都会更新相关包的信息，使用了 <code>--no-save</code> 后它们都不会更新相关包的信息。</li>
+        </ol>
+        <h3 id="5bae4f1a-835e-4239-b402-b14f3d6cad18">范例</h3>
+        <pre><code># 下载生产包，然后更新package.json的dependencies字段
+npm install --save-prod &lt;packagename&gt;
+
+# 下载生产包，不更新package.json的dependencies字段
+npm install --save-prod --no-save &lt;packagename&gt;
+
+# 下载生产包，然后更新package.json的dependencies字段，并使用精确的版本号
+npm install --save-prod --save-exact &lt;packagename&gt;
+
+# 下载指定版本的生产包，然后更新package.json的dependencies字段
+npm install --save-prod  @babel/core@7.0.0
+
+# 下载指定标签的生产包，然后更新package.json的dependencies字段
+npm install --save-prod @babel/core@latest
+
+# 下载开发包，然后更新package.json的devDependencies字段
+npm install --save-dev &lt;packagename&gt;
+
+# 下载可选包，然后更新package.json的optionalDependencies字段
+npm install --save-optional &lt;packagename&gt;
+</code></pre>
+        <h2 id="a1a10c6a-7090-473a-bc91-04fb959f69c3">npm uninstall</h2>
+        <h3 id="7fad353a-f431-4884-ae8b-05df94d192f3">描述</h3>
+        <p>删除指定的包（同时也会删除它的依赖包），然后更新 <code>package.json</code>、<code>package-lock.json</code>、<code>npm-shrinkwrap.json</code> 文件。</p>
+        <h3 id="15c9870c-f2aa-4c5e-97ea-3726ecd81b21">语法</h3>
+        <pre><code>npm uninstall &lt;packagename&gt;
+</code></pre>
+        <h3 id="7df6ab03-fd1d-450b-90bf-b41570ea1af4">参数</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>简写</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>--global</code></td>
+                    <td><code>-g</code></td>
+                    <td>激活全局模式，当该参数会使 <code>--no-save</code> 无效。</td>
+                </tr>
+                <tr>
+                    <td><code>--save</code></td>
+                    <td><code>-S</code></td>
+                    <td>更新<code>package.json</code>、<code>package-lock.json</code>、<code>npm-shrinkwrap.json</code>（默认启用）</td>
+                </tr>
+                <tr>
+                    <td><code>--no-save</code></td>
+                    <td></td>
+                    <td>不更新<code>package.json</code>、<code>package-lock.json</code>、<code>npm-shrinkwrap.json</code></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 id="e6f5b579-9396-43f4-83a2-7bba2be79376">npm update</h2>
+        <h3 id="4c6f226d-6f1c-45c2-86d1-d2d47f18e5bb">描述</h3>
+        <p>基于《版本符号与更新规则》来更新所有的包或指定的包，同时它也会补齐缺失的包。</p>
+        <h3 id="f6a4c75c-dabb-40a9-a18f-e5a2f9ebfc58">语法</h3>
+        <pre><code>npm update
+npm update &lt;packagename&gt;
+</code></pre>
+        <h2 id="6a86285b-72f5-4124-a473-c9ae834c5130">npm ls</h2>
+        <h3 id="e1fff02f-35dd-4ca5-9250-0216b1fb893d">描述</h3>
+        <p>打印所有的包的信息，该命令的别名是 <code>npm list</code>。</p>
+        <h3 id="2fa1c158-19eb-4743-b3c0-1c99e824bc39">语法</h3>
+        <pre><code>npm ls
+</code></pre>
+        <h3 id="9c26cbf6-36f7-4737-a6d1-50e712b2b877">参数</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>--all</code></td>
+                    <td>不仅打印所有的包的信息，还会打印这些包的依赖包的信息。</td>
+                </tr>
+                <tr>
+                    <td><code>--json</code></td>
+                    <td>基于 json 格式来打印信息。</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 id="43e36cc6-8b9d-4a40-821f-6551a3656d95">npm view</h2>
+        <h3 id="f702db3f-f0d6-46a3-b02f-7757aa649b34">描述</h3>
+        <p>打印指定的包的信息。</p>
+        <h3 id="8cadb03b-de03-4b32-9f2f-8e9db5f5ca8a">语法</h3>
+        <pre><code>npm view &lt;packagename&gt;
+</code></pre>
+        <h3 id="45f7512d-38c4-4d54-8109-ee7dfca5ac99">参数</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>--json</code></td>
+                    <td>基于 json 格式来打印信息。</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 id="f426daa1-7a36-44aa-a2c9-ed6fce5b1e33">范例</h3>
+        <pre><code># 打印包的信息
+npm view @babel/core
+
+# 打印包的最新版本号
+npm view @babel/core version
+
+# 打印包的所有版本号
+npm view @babel/core versions
+
+# 打印包的生产依赖
+npm view @babel/core dependencies
+</code></pre>
+        <h2 id="63cc92e9-696b-4792-a955-a6d008607674">npm config</h2>
+        <h3 id="1b0b605e-6325-42b9-bf98-b41ea91bd723">描述</h3>
+        <p>配置 npm，npm 将其配置信息存储为了 <code>.npmrc</code> 文件（本地模式与全局模式各有一份独立的配置文件）你可以通过下述命令来查询或修改 npm 的配置文件。</p>
+        <h3 id="b31764a0-9830-4235-93a9-46e9f2d1e36f">语法</h3>
+        <pre><code>npm config set key=value [key=value ...]
+npm config get [key]
+npm config delete key [key ...]
+npm config list
+npm config edit
+
+npm set key=value [key=value ...]
+npm get [key ...]
+</code></pre>
+        <blockquote>
+            <p>注：<code>config</code> 可简写为 <code>c</code></p>
+        </blockquote>
+        <h3 id="63d45033-7ffc-49dc-9bc4-83f17b04a9e9">SET</h3>
+        <p>以键值对的形式来修改一个或多个配置参数，value 缺省时，对应的 key 会被设置为空字符串。</p>
+        <pre><code>npm config set key=value [key=value ...]
+npm set key=value [key=value ...]
+</code></pre>
+        <blockquote>
+            <p>勿用 <code>npm config set key value</code>：该写法已被淘汰，其作用等价于 <code>npm config set key=value</code>，只是出于向后兼容的目的而保留。</p>
+        </blockquote>
+        <h3 id="334defa0-81d5-4a88-978e-3a1664fdbf7d">GET</h3>
+        <p>查询一个或多个配置参数，然后将查询结果打印至命令行窗口中。当查询零个参数时（即 <code>npm config get</code>），其作用等价于 <code>npm config list</code>。</p>
+        <pre><code>npm config get [key ...]
+npm get [key ...]
+</code></pre>
+        <h3 id="73e7bd79-126f-4ee1-8dd0-733532c4b7e6">LIST</h3>
+        <p>查询所有配置参数，该命令具有可选的参数 <code>--json</code>，启用该参数后，该命令将以 JSON 的格式来打印结果。</p>
+        <pre><code>npm config list [--json]
+</code></pre>
+        <h3 id="36b0db5b-844f-4088-8bc7-f6fc1aba36f9">DELETE</h3>
+        <p>删除一个或多个属性。</p>
+        <pre><code>npm config delete key [key ...]
+</code></pre>
+        <h3 id="fd03826f-08a2-4f64-8e9f-0cebe7929b25">EDIT</h3>
+        <p>以 <code>.txt</code> 格式来打开本地或全局的配置文件。</p>
+        <pre><code>npm config edit [--global | -g]
+</code></pre>
+        <h2 id="e80d9ddd-534c-463a-9d30-40bd11f0938e">npm docs</h2>
+        <h3 id="9d8ff8c3-e866-4828-b689-a941029afda8">描述</h3>
+        <p>在浏览器中打开一个或多个包的 npm 主页。</p>
+        <h3 id="0876b077-2b0d-4cae-8640-48493f4371ee">语法</h3>
+        <pre><code>npm docs packagename
+</code></pre>
+        <h2 id="aba6b60a-d6e3-4a40-b850-381d57c02abe">npm dedupe</h2>
+        <h3 id="2485e0d8-4c24-43aa-a635-d7193e373e52">描述</h3>
+        <p>减少模块树中的重复，比如：</p>
+        <p>情况一：假设当前的模块树的依赖情况如下：</p>
+        <pre><code>a
++-- b &lt;-- depends on c@1.0.x
+|   `-- c@1.0.3
+`-- d &lt;-- depends on c@~1.0.9
+    `-- c@1.0.10
+</code></pre>
+        <p>执行 <code>npm dedupe</code> 后，该模块树将被精简为：</p>
+        <pre><code>a
++-- b
++-- d
+`-- c@1.0.10
+</code></pre>
+        <p>情况二：假设当前的模块树的依赖情况如下：</p>
+        <pre><code>a
++-- b &lt;-- depends on c@1.0.x
++-- c@1.0.3
+`-- d &lt;-- depends on c@1.x
+    `-- c@1.9.9
+</code></pre>
+        <p>执行 <code>npm dedupe</code> 后，该模块树将被精简为：</p>
+        <pre><code>a
++-- b
++-- d
+`-- c@1.0.3
+</code></pre>
+        <h3 id="bbb9fe45-41bc-4098-81c0-8afd225bcf76">语法</h3>
+        <pre><code>npm dedupe
+</code></pre>
+        <blockquote>
+            <p>注：<code>dedupe</code> 可简写为 <code>ddp</code>。</p>
+        </blockquote>
+        <h2 id="64e99ed9-8f07-46a2-9b81-576c81277707">npm bin</h2>
+        <h3 id="27c5fc85-d7ea-44ea-9df9-447474ecf923">描述</h3>
+        <p>npm 会将可执行程序安装在 <code>.bin</code> 文件下，该命令的作用是打印该 <code>.bin</code> 文件夹的地址。</p>
+        <h3 id="8def1bac-1941-4b72-af55-5b995eb9aa19">语法</h3>
+        <pre><code>npm bin [--global | -g]
+</code></pre>
+        <h3 id="690a3d7b-55dd-4058-8e57-77e729ac9315">范例</h3>
+        <p>执行下述命令，将会输出 <code>E:\test\node_modules\.bin</code>。</p>
+        <pre><code>npm bin 
+</code></pre>
+        <p>执行下述命令，将会输出 <code>D:\nodejs\node_global</code>。</p>
+        <pre><code>npm bin --global
+</code></pre>
+        <h2 id="76d8eb67-09ad-4b47-8905-d30345a9608a">npm pkg</h2>
+        <h3 id="ab5ef656-ab17-4a17-aaa1-033b73c5c138">描述</h3>
+        <p>增删改查 <code>package.json</code> 文件，但不会更改 <code>node_modules</code> 文件中的内容。</p>
+        <h3 id="fcee0fa3-09e3-4e0a-b8e1-e20b1fc11b8e">语法</h3>
+        <pre><code>npm pkg get key
+npm pkg set key=value
+npm pkg delete key
+</code></pre>
+        <h3 id="3f91912a-3171-4d3c-abc3-525a237b69d3">范例 - 查询</h3>
+        <p>假设 <code>package.json</code> 文件的部分内容如下：</p>
+        <pre><code class="language-json">&quot;dependencies&quot;: {
+    &quot;@babel/runtime&quot;: &quot;^7.15.4&quot;
+},
+&quot;devDependencies&quot;: {
+    &quot;@babel/core&quot;: &quot;^7.15.8&quot;
+}
+</code></pre>
+        <p>执行下述命令来查询 <code>package.json</code> 中的某个属性：</p>
+        <pre><code>npm pkg get dependencies // 输出 { &quot;@babel/runtime&quot;: &quot;^7.15.4&quot; }
+</code></pre>
+        <pre><code>npm pkg get dependencies.@babel/runtime // 输出 &quot;^7.15.4&quot;
+</code></pre>
+        <h3 id="8d55443e-b910-4bd8-a812-32a54399fa66">范例 - 修改</h3>
+        <p>执行下述命令来修改 <code>package.json</code> 中的某个属性：</p>
+        <pre><code>npm pkg set name=&quot;John&quot;
+</code></pre>
+        <p>由于 <code>package.json</code> 文件中并没有 <code>name</code> 字段，因此该命令会立即为其创建一个 <code>name</code> 字段，并将 <code>&quot;John&quot;</code> 作为其字段的值。</p>
+        <h3 id="7d4ec2f2-f3e6-434f-b1a1-1036634f594e">范例 - 删除</h3>
+        <p>执行下述命令来删除 <code>package.json</code> 中的某个属性：</p>
+        <pre><code>npm pkg delete dependencies
+</code></pre>
+        <h2 id="dc3140a7-a826-47d2-8236-c515f4014747">npm prefix</h2>
+        <h3 id="b37c8cf1-a504-47ae-a68a-d734441e4eeb">描述</h3>
+        <p>打印 <code>prefix</code> 文件的地址，<code>prefix</code> 文件是 <code>node_modules</code> 文件的父文件夹。</p>
+        <h3 id="fe34f5df-2395-4dff-9c70-84660bcbcbf5">语法</h3>
+        <pre><code>npm prefix [--global | -g]
+</code></pre>
+        <h2 id="18116a49-aef4-4a87-a772-2fd22833572e">npm root</h2>
+        <h3 id="2badc66e-3b38-4555-b522-66232dc0c49c">描述</h3>
+        <p>打印 <code>root</code> 文件的地址，<code>root</code> 文件即使 <code>node_modules</code> 文件。</p>
+        <h3 id="175562a5-cba9-4652-b108-376ab75f390c">语法</h3>
+        <pre><code>npm root [--global | -g]
+</code></pre>
+        <h2 id="7d471f8c-771c-4fd1-93d6-8e6ef8e9dfea">npm shrinkwrap</h2>
+        <h3 id="d748d975-4076-4be1-a06a-3ef834d05b39">描述</h3>
+        <p>将 <code>package-lock.json</code> 文件替换为 <code>npm-shrinkwrap.json</code> 文件。</p>
+        <h3 id="59d18d6b-cbd6-42f7-8e2b-3be36ca51388">语法</h3>
+        <pre><code>npm shrinkwrap
+</code></pre>
+        <h2 id="13f62ac9-54b4-48a5-a3ec-b461f3259cb1">npm start</h2>
+        <h3 id="d95904e2-caec-4531-a1a3-939e0c2f39a7">描述</h3>
+        <p>执行预定义的脚本，该脚本被编写在 <code>package.json</code> 文件中的 <code>script</code> 属性中的 <code>start</code> 属性中，比如：</p>
+        <pre><code>&quot;script&quot;: {
+    &quot;start&quot;: &quot;node ./index.js&quot;
+}
+</code></pre>
+        <h3 id="c7eac8d2-9719-4349-8810-b5f11c4b9a59">语法</h3>
+        <pre><code>npm start [-- &lt;args&gt;]
+</code></pre>
+        <h2 id="ec189bf8-70d7-4c09-9493-e22484111969">npm stop</h2>
+        <h3 id="d3625df3-0875-4bee-bb7d-25715398843d">描述</h3>
+        <p>执行预定义的脚本，该脚本被编写在 <code>package.json</code> 文件中的 <code>script</code> 属性中的 <code>stop</code> 属性中，比如：</p>
+        <pre><code>&quot;script&quot;: {
+    &quot;stop&quot;: &quot;node ./index.js&quot;
+}
+</code></pre>
+        <h3 id="53650f30-bc0f-4d5e-aaae-2208a44efec8">语法</h3>
+        <pre><code>npm stop [-- &lt;args&gt;]
+</code></pre>
+        <h2 id="a41c39d7-9ef0-44d8-b63b-e21fae21d751">npm test</h2>
+        <h3 id="ac8b5c11-a9d0-409d-9a0a-b2293e410000">描述</h3>
+        <p>执行预定义的脚本，该脚本被编写在 <code>package.json</code> 文件中的 <code>script</code> 属性中的 <code>test</code> 属性中，比如：</p>
+        <pre><code>&quot;script&quot;: {
+    &quot;test&quot;: &quot;node ./index.js&quot;
+}
+</code></pre>
+        <h3 id="4b1dd3fc-8d4e-455d-a539-88781db48da7">语法</h3>
+        <pre><code>npm test [-- &lt;args&gt;]
+</code></pre>
+        <h2 id="34d90e81-6d62-44bc-b7cc-eec67f01cdf8">npm ci</h2>
+        <h3 id="e3deeb3d-2c33-4c8b-a596-705e4c128bee">描述</h3>
+        <p>类似于 <code>npm install</code>，区别在于该命令可以让下载行为严格遵循 <code>package-lock.json</code>，以保证在任何地方构建的包都完全一致。</p>
+        <h2 id="95ee2f9c-d550-41c1-a16d-9640dd37b317">npm cache</h2>
+        <h3 id="9665f48f-fb63-48b4-8a60-aefe9212b0ea">描述</h3>
+        <p>操纵包缓存。</p>
+        <h2 id="a7abc936-2c98-4c19-910a-17082b3b325b">npm deprecate</h2>
+        <h3 id="83859aad-4c8e-4e87-823e-ec259e6fbf2b">描述</h3>
+        <p>将某个包标志为“弃用”，并向所有试图安装它的人提供一个弃用警告。</p>
+    </article>
+</body>
+
+</html>

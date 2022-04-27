@@ -74,6 +74,30 @@ const createWebpackInfo = _ => {
 
 };
 
+const createNpmInfo = _ => {
+
+    const name = "npm";
+    const alias = "NPM";
+    const md_path = BASE_MD_PATH + "/" + name;
+    const html_path = BASE_HTML_PATH + "/" + name;
+    const build_path = BASE_BUILD_PATH;
+    const children = [
+        { name: "npm-base", alias: "npm 基础" },
+        { name: "npm-command", alias: "npm 命令" },
+    ];
+    const options = {
+        name,
+        alias,
+        children,
+        mdPath: md_path,
+        htmlPath: html_path,
+        buildPath: build_path,
+    };
+
+    return createInfo( options );
+
+};
+
 const createOtherInfo = _ => {
 
     const name = "other";
@@ -101,6 +125,7 @@ const createAllInfo = _ => {
 
     return ( [
         createJavascriptInfo(),
+        createNpmInfo(),
         createBabelInfo(),
         createWebpackInfo(),
         createOtherInfo(),
