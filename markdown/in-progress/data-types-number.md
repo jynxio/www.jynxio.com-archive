@@ -1,34 +1,16 @@
-# 数据类型
+# Number
 
 ## 概述
 
-JavaScript 是一门动态的弱类型语言，它拥有 8 种数据类型，其中 7 种是原始类型，1 种是引用类型。
-
-静态类型语言的变量的数据类型在代码的编译阶段就被确定了，动态类型语言的变量的数据类型在代码的执行阶段才被确定。弱类型语言的变量的数据类型可以隐式转换，强类型语言的变量的数据类型不可以隐式转换。
-
-## 原始类型
-
-原始类型又称为基本数据类型，原始类型的值称为原始值，JavaScript 拥有 7 种原始类型，分别是：
-
-- Number
-- String
-- Boolean
-- Null
-- Undefined
-- BigInt
-- Symbol
-
-### Number
-
 `number` 是基于 IEEE-754 标准的双精度 64 位二进制格式的值，可以安全的存储 `[ -2^53+1, 2^53-1 ]` 范围的值，显然 ECMAScript 中没有整数的数字类型，只有浮点数。除了常规的数字， ECMAScript 还包括一些特殊数值，具体是： `Infinity` 、 `-Infinity` 、 `NaN` 。
 
-#### 极值
+## 极值
 
 浮点数的最大值是 `Number.MAX_VALUE` ，约为 `1.798e+308` ，最小值是 `Number.MIN_VALUE` ， 约为 `5e-324` ，注意最小浮点数并不等于 `0` ，而是无限接近于 `0` 。
 
 整数的最大值是 `Number.MAX_SAFE_INTEGER` ，即 `2^53-1` 或 `9007199254740991` ，最小值是 `Number.MIN_SAFE_INTEGER` ，即 `-2^53-1` 或 `-9007199254740991` 。
 
-#### NaN
+## NaN
 
 ECMAScript 中还包括一些特殊的数值，分别是： `Infinity` 、 `-Infinity` 、 `NaN` 。
 
@@ -49,27 +31,27 @@ if ( ! Number.isNaN ) Number.isNaN = function( v ) { return v !== v };
 
 另外，浏览器运行时也提供了一个名为 `window.isNaN( value )` 的方法来鉴定 `NaN`，但是实际上该 API 并不可靠，因为当入参为`NaN`、`undefined`、`非空非数字字符串`、`函数`、`对象` 时，它都会返回 `true`。
 
-#### Infinity 和 -Infinity
+## Infinity
 
-`Infinity` 代表数学中的无穷大 ∞ 。当数值超出存储极限后，数值就会被就近的舍入为 `Number.MAX_VALUE` 或 `Infinity` ，比如：
+`Infinity` 代表数学中的无穷大 ∞ ，`-Infinity` 代表数学中的无穷小，`-Infinity` 是表达式 `- 1 * Infinity` 的执行结果而不是一个独立的值。当数值超出存储极限后，数值就会被就近的舍入为 `Number.MAX_VALUE` 或 `Infinity` ，比如：
 
 ```js
 Number.MAX_VALUE + Math.pow( 2, 969 ); // Number.MAX_VALUE
 Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
 ```
 
-#### 数字分隔符
+## 数字分隔符
 
 [Numeric Separators](https://github.com/tc39/proposal-numeric-separator) 是一个用于增强数字可读性的语法糖特性，该特性于 2021 年发布，由于该特性在移动端的支持度不明，所以最好为其应用 babel。
 
-```js
+```javascript
 1_000_000_000_000;     /* equal to */ 1000000000000;
 1_000_000_000_000n;    /* equal to */ 1000000000000n;
 0b1010_0001_1000_0101; /* equal to */ 0b1010000110000101;
 0xa0_b0_c0;            /* equal to */ 0xa0b0c0;
 ```
 
-#### 小数不精确问题
+## 小数不精确问题
 
 ECMAScript 使用二进制来存储数字，虽然二进制可以准确的表示所有整数，但不能准确的表示所有小数，比如 `0.5` 的二进制值是 `0.1` ，但是 `0.1` 的二进制值是 `0.000110011001100...` ，这是一个循环节为 1100 的无限循环小数。
 
@@ -104,7 +86,7 @@ numbersCloseEnoughToEqual( 0.1 + 0.2, 0.3 ); // true
 if ( !Number.EPSILON ) Number.EPSILON = Math.pow( 2, -52 );
 ```
 
-#### 进制
+## 进制
 
 JavaScript 默认使用十进制，此外它还支持二进制、八进制、十六进制和其他进制，我们需要为数字值添加特殊的前缀标识才能激活这些进制，二进制的前缀是 `0b`，八进制的前缀是`0o`，十六进制的前缀是`0x`。此外，八进制还有一种淘汰了的以 `0` 为前缀的写法，严格模式禁止该写法。
 
@@ -122,7 +104,7 @@ JavaScript 默认使用十进制，此外它还支持二进制、八进制、十
 3..toString( 3 ); // "10"
 ```
 
-#### 字面量与原型方法
+## 字面量与原型方法
 
 数字字面量可以直接调用 `Number.prototype` 上的方法：
 
@@ -134,56 +116,3 @@ JavaScript 默认使用十进制，此外它还支持二进制、八进制、十
   - `( 1 ).toString()`
   - `1 .toString()`
 
-### BigInt
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-### String
-
-### Boolean
-
-### Null
-
-### Undefined
-
-### Symbol
-
-## 引用类型
-
-引用类型又称为复杂数据类型，引用类型的值称为引用值。
-
-## 待定-原始类型和引用类型的区别
-
-首先，在存储方式上，原始值存储在栈空间中，引用值存储在堆空间中。
-
- JavaScript 引擎可以直接获取存储在栈空间中的值，对于存储在堆空间中的值， JavaScript 引擎必须先从栈空间中获得指向引用值的指针（地址字符串），然后再根据指针从堆空间中获取引用值。
-
-之所以要这么设计，是为了加快查找值的速度，因为所有原始值所占的存储空间大小是固定不变的，如果栈空间中只存储原始值，那么每个原始值的地址都相差 N 个偏移量
