@@ -6,6 +6,7 @@
     --yellow: #ffe100;
     --purple: #5d72f6;
     --white: #f2f5f7;
+    --green: #377e7f;
 }
 
 :root {
@@ -294,11 +295,11 @@ pre {
 /* 引用块 */
 /* ------------------------------------------------------------------------------------------------- */
 blockquote {
-    padding: 0.5rem 1rem;
-    border-left: 0.35rem solid var( --purple );
+    display: flow-root;
+    padding: 0 1rem;
+    border-left: 0.5rem solid var( --purple );
     border-radius: var( --border-radius );
-    background-color: var( --grey );
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 /* 锚 */
