@@ -28,6 +28,29 @@ const createJavascriptInfo = _ => {
 
 }
 
+const createBrowserInfo = _ => {
+
+    const name = "browser";
+    const alias = "浏览器原理";
+    const md_path = BASE_MD_PATH + "/" + name;
+    const html_path = BASE_HTML_PATH + "/" + name;
+    const build_path = BASE_BUILD_PATH;
+    const children = [
+        { name: "chrome-architecture", alias: "Chrome架构" },
+    ];
+    const options = {
+        name,
+        alias,
+        children,
+        mdPath: md_path,
+        htmlPath: html_path,
+        buildPath: build_path,
+    };
+
+    return createInfo( options );
+
+};
+
 const createBabelInfo = _ => {
 
     const name = "babel";
@@ -125,6 +148,7 @@ const createAllInfo = _ => {
 
     return ( [
         createJavascriptInfo(),
+        createBrowserInfo(),
         createNpmInfo(),
         createBabelInfo(),
         createWebpackInfo(),
