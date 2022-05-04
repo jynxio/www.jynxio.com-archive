@@ -37,8 +37,7 @@ const createBrowserInfo = _ => {
     const build_path = BASE_BUILD_PATH;
     const children = [
         { name: "chrome-architecture", alias: "Chrome架构" },
-        { name: "tcp", alias: "TCP" },
-        { name: "http", alias: "HTTP" },
+        { name: "network-protocol", alias: "网络协议" },
     ];
     const options = {
         name,
