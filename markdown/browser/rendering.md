@@ -170,6 +170,8 @@ div {
 
 ![裁剪会产生新的图层](/static/image/markdown/browser/layer-clip-scroll.png)
 
+TODO：这张图是错误的！！！
+
 ## 图层绘制
 
 渲染引擎
