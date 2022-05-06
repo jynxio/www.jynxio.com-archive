@@ -12,7 +12,7 @@ typora-root-url: ..\..
 2. 样式计算
 3. 布局
 4. 分层
-5. 绘制
+5. 图层绘制
 6. 分块
 7. 光栅化与合成
 
@@ -124,8 +124,52 @@ HTML 解析器在解析到 `script` 标签的时候，由于其中的 JS 脚本�
 
 ## 分层
 
-接下来，渲染引擎需要为某些特定的元素生成专用的涂层，并生成一棵对应的图层树（Layer Tree），分层的目的是为了更加方便的实现某些元素的复杂样式，比如 3D 变换、页面滚动等，将所有图层叠加在一起之后，便呈现出了最终的页面。
-
-你可以通过打开开发者工具的 `Layers` 栏来查看当前页面的分层情况：
+接下来，渲染引擎需要为某些特定的元素生成专用的图层，并生成一棵对应的图层树（Layer Tree），分层的目的是为了更加方便的实现某些复杂样式，比如 3D 变换、页面滚动等。最后将所有图层叠加在一起就合成了最终看到的页面。你可以通过开发者工具的 `Layers` 栏来查看当前页面的分层情况：
 
 ![页面分层示意图](/static/image/markdown/browser/layout-example.png)
+
+下图是布局树与图层树的关系，可见并不是每个元素都拥有自己的图层，实际上渲染引擎只会为满足下述任意一个条件的元素创建新的图层：
+
+1. 元素拥有层叠上下文属性。
+2. 元素发生了裁剪行为。
+
+而如果一个元素没有自己的图层，那么这个元素就会从属于父元素的图层，比如下图中的 `span` 标签就从属于父元素 `div` 的图层，因此最终每个元素都会直接或间接的属于某个图层。
+
+![布局树与图层树的关系](/static/image/markdown/browser/layout-tree-and-layer-tree.png)
+
+那什么是裁剪呢？首先假设 HTML 页面的核心代码如下：
+
+```html
+<body>
+    <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+</body>
+```
+
+如果 `div` 元素的样式如下，那么该页面就只有一个根元素图层。
+
+```css
+div {
+	width: 200px;
+	height: 200px;
+	background-color: pink;
+}
+```
+
+![单图层](/static/image/markdown/browser/layer-clip-no-scroll.png)
+
+如果 `div` 元素的样式如下，那么该页面就有 3 个图层，分别是根元素图层、`div` 元素图层、水平滚动条图层。
+
+```css
+div {
+    overflow: auto;
+	width: 200px;
+    height: 200px;
+    background-color: pink;
+}
+```
+
+![裁剪会产生新的图层](/static/image/markdown/browser/layer-clip-scroll.png)
+
+## 图层绘制
+
+接下来，渲染引擎要准备开始
