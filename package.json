@@ -7,16 +7,16 @@
         "html-loader": "^3.1.0",
         "html-webpack-plugin": "^5.5.0",
         "js-beautify": "^1.14.3",
-        "marked": "^4.0.14",
+        "marked": "^4.0.15",
         "mini-css-extract-plugin": "^2.6.0",
         "readline-sync": "^1.4.10",
         "style-loader": "^3.3.1",
         "ttf2woff2": "^4.0.5",
         "uuid": "^8.3.2",
-        "vercel": "^24.1.0",
+        "vercel": "^24.2.0",
         "webpack": "^5.72.0",
         "webpack-cli": "^4.9.2",
-        "webpack-dev-server": "^4.8.1",
+        "webpack-dev-server": "^4.9.0",
         "webpack-merge": "^5.8.0"
     },
     "scripts": {
@@ -29,6 +29,6 @@
         "deploy": "vercel --prod"
     },
     "dependencies": {
-        "three": "^0.139.2"
+        "three": "^0.140.0"
     }
 }

@@ -14,8 +14,8 @@ typora-root-url: ..\..
 4. Layer：创建页面的图层
 5. Paint：创建图层的绘制指令列表
 6. Tiles：将图层分割为图块
-7. Raster：创建图块的位图
-8. Display：合并位图并显示网页
+7. Raster：创建图层的位图
+8. Display：合并图层位图并渲染页面
 
 ![完整的渲染流程](/static/image/markdown/browser/rendering-process.png)
 
@@ -197,7 +197,7 @@ div {
 
 DOM、Style、Layout、Layer、Paint 等过程都是由渲染进程的主线程来完成的，而图层的绘制操作则是由渲染进程的合成线程来完成的，如下所示：
 
-![主线程与合成线程的关系](/static/image/markdown/browser/compositing-thread-and-main-thread.png)
+![主线程与合成线程的关系](/static/image/markdown/browser/compositor-thread-and-main-thread.png)
 
 渲染进程的主线程会将绘制指令列表提交给合成线程，合成线程将会使用它们来绘制位图。不过在正式绘制开始之前，合成线程还要对每一个图层进行分块处理。
 
@@ -213,12 +213,12 @@ Raster 的直译是栅格化，这就是创建位图的意思，因为位图就�
 
 ![栅格化线程池](/static/image/markdown/browser/rasterization-thread-pool.png)
 
-通常，渲染进程会借助 GPU 来生成图块的位图，具体做法是栅格化线程会通过 IPC 向 GPU 发送绘制指令，然后由 GPU 来生成图块的位图并将位图存储在 GPU 的内存中，如下图所示。而借助了 GPU 来栅格化的行为则被称为快速栅格化或 GPU 栅格化。
+通常，渲染进程会借助 GPU 来生成图块的位图，具体做法是栅格化线程会通过 IPC 将绘制指令转发给 GPU，由 GPU 来生成图块的位图并将位图存储在 GPU 的内存中，然后 GPU 会将图块的位图返回给合成线程，合成线程会将图块的位图拼接在一起，组成图层的位图。如下图所示。而借助了 GPU 来栅格化的行为则被称为快速栅格化或 GPU 栅格化。
 
 ![GPU栅格化](/static/image/markdown/browser/rasterization-gpu.png)
 
 ## Display
 
-第八步是合并位图并显示网页。
+第八步是合并图层位图并渲染页面。
 
-当完成了 Raster 之后，合成线程会向浏览器进程发送一个 `DrawQuad` 命令，浏览器进程的 viz 组件将会接受到该命令，然后将页面内容绘制到内存中，最后将内存显示到屏幕上。
+合成线程会将图层位图发送给浏览器进程，并向浏览器进程发送一个 `DrawQuad` 命令，浏览器进程的 viz 组件将会接受到该命令，然后就会将所有图层位图合并为一张页面位图，最后将页面位图渲染到屏幕上。

@@ -38,6 +38,8 @@ const createBrowserInfo = _ => {
     const children = [
         { name: "chrome-architecture", alias: "Chrome架构" },
         { name: "network-protocol", alias: "网络协议" },
+        { name: "rendering-process", alias: "渲染流程" },
+        { name: "reflow-repaint-compositor", alias: "重排、重绘、合成" },
     ];
     const options = {
         name,
