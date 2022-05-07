@@ -62,7 +62,7 @@ UDP 具有校验数据包是否正确的能力，但是对于出错的数据包�
 
 传输单个数据包只是 TCP 连接过程中的一小部分，下图展示了完整的 TCP 连接过程，可见一个完整的 TCP 连接包括了建立连接、传输数据、断开连接三个阶段。
 
-![TCP连接的生命周期](/Users/xiaojin/Documents/github/blog/static/image/markdown/browser/tcp-lifecycle.png)
+![TCP连接的生命周期](/static/image/markdown/browser/tcp-lifecycle.png)
 
 1. 首先是建立连接阶段，该阶段需要通过“三次握手”来建立客户端和服务器之间的连接，“三次握手”是指在建立一个 TCP 连接时，两端总共需要发送 3 个数据包来确认连接的建立，这是 TCP 被称为面向连接的原因。
 2. 其次是传输数据阶段，在该阶段中，客户端在接收到每一个数据包后，都需要向服务器发送“确认数据包”，服务器在发送了一个数据包之后，如果没能在规定时间内接受到相应的“确认数据包”，就会判断为数据包丢失，并处罚重发机制。另外，一个大的文件在传输过程中会被拆分成很多的小数据包，客户端会按照 TCP 头中的序号为其排序，从而保证组成完整的文件。
@@ -74,7 +74,7 @@ UDP 具有校验数据包是否正确的能力，但是对于出错的数据包�
 
 由于 HTTP 请求是在 TCP 的传输阶段中发送的，因此在 HTTP 正式工作之前，浏览器需要通过 TCP 与服务器建立连接，TCP 和 HTTP 的关系如下图所示：
 
-![TCP和HTTP的关系](/Users/xiaojin/Documents/github/blog/static/image/markdown/browser/tcp-http.png)
+![TCP和HTTP的关系](/static/image/markdown/browser/tcp-http.png)
 
 ### CURL
 
@@ -126,7 +126,7 @@ GET /index.html HTTP1.1
 
 如果你打开 `https://jynxio.com`，你就会发现浏览器最终打开的页面地址是 `https://www.jynxio.com`，之所以会产生这种现象，是因为发生了重定向。在 Terminal 中执行 `curl -I https://jynxio.com` 命令，服务器将返回下述内容：
 
-![永久重定向](/Users/xiaojin/Documents/github/blog/static/image/markdown/browser/permanent-redirect.png)
+![永久重定向](/static/image/markdown/browser/permanent-redirect.png)
 
 如果你打开 `https"//www.jynxio.com`，则直接进入到第八步。
 
@@ -136,7 +136,7 @@ HTTP 请求送达服务器，待服务器处理结束后，便会返回数据。
 
 在 Terminal 中执行 `curl -i https://www.jynxio.com` 命令，服务器将返回下述内容：
 
-![响应内容的格式](/Users/xiaojin/Documents/github/blog/static/image/markdown/browser/response-content-format.png)
+![响应内容的格式](/static/image/markdown/browser/response-content-format.png)
 
 #### 第九步 - 断开连接
 
@@ -152,7 +152,7 @@ DNS 缓存就是浏览器在本地把域名和对应的 IP 地址关联起来。
 
 浏览器创建并使用页面缓存的流程如下所示：
 
-![页面缓存](/Users/xiaojin/Documents/github/blog/static/image/markdown/browser/page-cache.png)
+![页面缓存](/static/image/markdown/browser/page-cache.png)
 
 当服务器返回 HTTP 响应头给浏览器的时候，浏览器通过响应头中的 `Cache-Control` 字段来设置是否缓存该资源，通过我们还需要为这个资源设置一个缓存保质期，该保质期是通过 `Max-age` 参数来设置的，比如上图中设置的缓存保质期是 2000 秒，相应的 `Cache-Control` 字段内容如下：
 
