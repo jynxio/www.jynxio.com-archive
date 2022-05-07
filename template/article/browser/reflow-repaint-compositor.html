@@ -14,15 +14,15 @@
     </header>
     <aside>
         <p><a href="#">IN THIS ARTICLE</a></p>
-        <p data-level="1"><a href="#cab690d9-9088-4a54-972f-303a9993f413">渲染流程</a></p>
-        <p data-level="1"><a href="#6c48f61a-2525-4ddf-aa69-4a0e6c094cde">重排</a></p>
-        <p data-level="1"><a href="#7ac55122-7b2d-4f0b-9c61-e0acf3a74efa">重绘</a></p>
-        <p data-level="1"><a href="#dfff4769-246d-4ba4-aea4-a8a7f0b905ab">合成</a></p>
+        <p data-level="1"><a href="#3ba9f43f-093d-4b0a-83e9-1c1828e4ab52">渲染流程</a></p>
+        <p data-level="1"><a href="#c6faa9fa-9fa1-44ec-ac49-14a4ee25f230">重排</a></p>
+        <p data-level="1"><a href="#0deabdc8-3a30-48b3-9ded-253f4a29a52e">重绘</a></p>
+        <p data-level="1"><a href="#0246b683-209d-42c0-acbe-136f0e7af6e5">合成</a></p>
     </aside>
     <article>
         <h1>重排、重绘、合成</h1>
         <p id="last-updated">Last Updated: 08/05/2022</p>
-        <h2 id="cab690d9-9088-4a54-972f-303a9993f413">渲染流程</h2>
+        <h2 id="3ba9f43f-093d-4b0a-83e9-1c1828e4ab52">渲染流程</h2>
         <p>首先，渲染流程是：</p>
         <ol>
             <li>DOM：创建 DOM 树</li>
@@ -34,13 +34,13 @@
             <li>Raster：创建图层的位图</li>
             <li>Display：合并图层位图并渲染页面</li>
         </ol>
-        <h2 id="6c48f61a-2525-4ddf-aa69-4a0e6c094cde">重排</h2>
+        <h2 id="c6faa9fa-9fa1-44ec-ac49-14a4ee25f230">重排</h2>
         <p>如果你改变了元素的几何属性或位置属性（比如宽度、高度等），元素在页面中的位置就会发生变化，并且其它元素的位置也可能会受其影响而改变，因此渲染进程就需要重新执行 <code>Layout</code> 步骤来更新页面的布局信息，并且渲染流程中之后的步骤也都需要重新执行。</p>
         <p>可见，重排几乎需要更新完整的渲染流水线（除了 <code>DOM</code> 步骤），故而重排的开销是最大的。</p>
-        <h2 id="7ac55122-7b2d-4f0b-9c61-e0acf3a74efa">重绘</h2>
+        <h2 id="0deabdc8-3a30-48b3-9ded-253f4a29a52e">重绘</h2>
         <p>如果你改变了元素的绘制属性（比如背景颜色），那么渲染进程就需要重新执行 <code>Paint</code> 及其之后的步骤。因为这种改变不会修改页面的布局和分层，因此渲染进程就跳过了 <code>Layout</code> 和 <code>Layer</code> 步骤。</p>
         <p>可见重绘带来的计算负荷比重排的要小。</p>
-        <h2 id="dfff4769-246d-4ba4-aea4-a8a7f0b905ab">合成</h2>
+        <h2 id="0246b683-209d-42c0-acbe-136f0e7af6e5">合成</h2>
         <p>如果你修改的是诸如 <code>translate</code> 之类的 CSS3 动画属性，那么渲染进程就只需要执行 <code>Tiles</code> 及其之后的步骤就好了。</p>
         <p>比如，对于一个启用了 <code>translate</code> 属性的元素而言，它拥有自己的专属图层，改变它的 <code>translate</code> 属性不会影响页面的分层状况。并且，<code>Paint</code> 阶段输出的绘制指令列表是以图层为单位的，由于该元素的外观根本没有发生改变，因此也不需要更新绘制指令列表，自然也可以跳过 <code>Paint</code> 阶段。最后，改变了 <code>translate</code> 属性后，由于元素的位置发生了变化，理应是要更新页面的布局信息的，不过渲染进程似乎是通过在 <code>Display</code> 阶段偏移该元素图层的位置来实现使其位移的，因此也可以跳过 <code>Layout</code> 阶段。</p>
         <p>由于“合成”所需的计算负荷更小，并且其还是在非主线程中完成的，因此“合成”的的计算负荷比起前两者的要小得多。</p>
