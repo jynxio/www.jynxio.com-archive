@@ -272,7 +272,7 @@ code {
     padding: 0 0.5rem;
     border-radius: 0.2em;
     background-color: var( --grey );
-    font-family: "Fira Code", "Noto Sans SC";
+    font-family: "Fira Code";
     font-weight: normal;
 }
 
