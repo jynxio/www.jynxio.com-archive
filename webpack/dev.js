@@ -11,5 +11,6 @@ module.exports = merge( public, {
         server: "http",
         port: 8080,
         open: false,
+        // publicPath: "", // 解决devServer访问不了图片的问题
     },
 } );
