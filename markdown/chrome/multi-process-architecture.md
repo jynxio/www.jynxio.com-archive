@@ -86,7 +86,23 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 ![更少的进程](/static/image/markdown/chrome/multi-process-architecture/less-process.png)
 
-## 网站隔离
+## 站点隔离
 
-网站隔离（Site Isolation）
+站点隔离（Site Isolation）是 Chrome 的一项安全策略，它用于进一步的阻止恶意代码窃取站点数据，比如银行账户信息。它的具体做法是将来自不同站点的页面分隔到不同的渲染进程中去，无论这个页面是一个 tab 还是一个 iframe，这样就可以借助进程之间相互隔离的特性来阻止恶意代码访问其他站点的数据。同时，这也意味着有可能会发生一个 tab 拥有多个渲染进程的情况。
 
+> 如果两个页面的 URL 的协议和域名是相同的，那么就会认为这两个页面来自同一个站点，否则就会触发站点隔离。比如 `https://foo.example.com` 和 `https://foo.example.com:8080` 会被视为来自同一个站点，注意该规则是忽略端口、子域和路径的。
+
+![站点隔离](/static/image/markdown/chrome/multi-process-architecture/site-isolation.png)
+
+另外，站点隔离还会阻止渲染进程接收跨域的数据资源，除非服务器通过 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) 明确表示该资源可被跨域访问，你可以通过 [这篇文章](https://developers.google.com//web/updates/2018/07/site-isolation) 来了解该设计的动机。
+
+页面从服务器那拿到的资源可以分为两种类型，一种是数据资源，比如 HTML、XML、JSON 等，另一种是媒体资源，比如图像、JavaScript、CSS 等。其中，页面可以接收任意来源的媒体资源，但只能接收符合同源策略或被 CORS 批准的数据资源。不过，`<img>` 和 `<script>` 可以下载任意来源的数据资源，但是站点隔离会阻止跨域的数据资源进入渲染进程的内存，哪怕完成了网络请求。
+
+```html
+<img src="https://your-bank.example/balance.json">
+<script src="https://your-bank.example/balance.json"></script>
+```
+
+对于 Windows、Mac、Linux、Chrome OS，从 Chrome 67 开始就已经全面启用了站点隔离。对于安卓，仅对内存大于 2GB 且有用户登录行文的页面启用站点隔离。你可以通过 [这篇文章](https://www.chromium.org/Home/chromium-security/site-isolation/) 来了解更详细的情况，另外站点隔离会导致各平台的 Chrome 占用更多的内存，大约是 3%~13%。
+
+## 同一站点
