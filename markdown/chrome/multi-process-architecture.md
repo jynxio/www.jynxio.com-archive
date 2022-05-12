@@ -114,13 +114,55 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 ## 进程模型
 
+[进程模型](https://www.chromium.org/developers/design-documents/process-models/) 是 Chromium 创建渲染进程的规则，Chromium 有 4 种进程模型，分别是：
 
+- Process-per-site-instance
+- Process-per-site
+- Process-per-tab
+- Single process
 
+其中，Process-per-site-instance 是 Chromium 默认使用的进程模型，这种进程模型与站点隔离息息相关。对于 Chromium，如果想要使用另外 3 种进程模型，就必须使用命令行来启动 Chromium，同时附带上相应的参数，比如 `--process-per-site`。对于 Chrome，它目前只使用 Process-per-site-instance。
 
+另外，Chromium 创建的渲染进程的数量是有上限的，上限与主机的内存量成正比。如果 Chromium 所创建的进程数量达到了上限，那么 Chromium 就会开始复用已有的渲染进程，即用单个渲染进程来渲染多个站点，并且目前这种复用是随机的，不过 Chromium 表示其未来可能会开发更智能的方式来复用渲染进程。这个规则同样适用于 Chrome。
 
-同时，这也意味着有可能会发生一个页面拥有多个渲染进程的情况。
+### Process-per-site-instance
 
+这是 Chromium 默认使用的进程模型，它会将每个站点都分配给独立的渲染进程，无论这个站点是一个 tab 还是一个 iframe，这意味着可能会发生一个页面拥有多个渲染进程的情况。
 
+![一个页面拥有多个渲染进程](/static/image/markdown/chrome/multi-process-architecture/site-isolation.png)
 
-![站点隔离](/static/image/markdown/chrome/multi-process-architecture/site-isolation.png)
+另外，如果符合同一站点规则的两个站点是单独打开的，那么这两个站点将会分配给两个独立的渲染进程，比如通过地址栏分别打开站点 a（`http://192.168.0.100:8080/a.html`）和站点 b（`http://192.168.0.100:8080/b.html`）站点 a 将会分配给 `51798` 渲染进程，站点 b 将会分配给 `51814` 渲染进程。
 
+![不共享渲染进程](/static/image/markdown/chrome/multi-process-architecture/doesnt-share-rendering-process.png)
+
+如果站点 b 是通过站点 a 来打开的，那么站点 a 和站点 b 就会分配给同一个渲染进程 `51798`。
+
+![共享渲染进程](/static/image/markdown/chrome/multi-process-architecture/share-rendering-process.png)
+
+其中，站点 a 是通过 `window.open` API 来打开站点 b 的，站点 a 的 `<body>` 代码如下：
+
+```html
+<body>
+    <h1>This is A.</h1>
+    <h1>Turn to B.</h1>
+    <script>
+        document.querySelectorAll( "h1" )[ 1 ].addEventListener( "click", window.open( "http://192.168.0.100:8080/b.html" ), false );
+    </script>
+</body>
+```
+
+如果通过 `右键-在新标签页中打开链接` 来打开站点 b，那么站点 b 也会被分配给另一个独立的渲染进程。
+
+另外，根据 MDN 的 [描述](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a#attr-target)，如果通过 `<a href="http://192.168.0.100:8080/b.html" target="_blank"></a>` 来打开的站点 b，站点 b 也会和站点 a 共享同一个渲染进程。但是实践发现，站点 b 还是会分配给另一个独立的渲染进程，MDN 的描述似乎错了。
+
+### Process-per-site
+
+所有属于同一站点的站点都将被分配给同一个渲染进程，不属于同一站点的站点将会被分配给不同的渲染进程。
+
+### Process-per-tab
+
+每个页面一个渲染进程。
+
+### Single process
+
+整个浏览器都将运行在一个进程中。
