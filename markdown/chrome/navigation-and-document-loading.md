@@ -19,3 +19,21 @@ TODO：导航和文档加载的定义。
 ![浏览器进程的作用](/static/image/markdown/chrome/navigation-and-document-loading/browser-process-role.png)
 
 ## 导航阶段
+
+导航分为 5 个阶段，分别是：
+
+1. 1
+
+### 第 1 步：处理输入
+
+Chrome 中的地址栏是由浏览器进程的 UI 线程管理的。用户在地址栏中输入了待搜索的内容，然后按下回车键，UI 线程首先会判断输入的内容是一个 URL（如 `https://www.jynxio.com`） 还是一个用于搜索的词条（如 `jynxio`）。
+
+如果是后者，UI 线程就会使用搜索引擎来合成一段带有这个搜索词条的新 URL，比如，如果搜索词条是 `jynxio` 且地址栏使用的是 Google 搜索的话，就会构造出如下的 URL。
+
+```
+https://www.google.com/search?q=jynxio&oq=jynxio&aqs=chrome.0.69i59j35i39j69i60l6.1869j0j9&sourceid=chrome&ie=UTF-8
+```
+
+如果是前者，则直接用来准备
+
+UI 线程就会为这段 URL 补充缺失的协议来合成一段完整的
