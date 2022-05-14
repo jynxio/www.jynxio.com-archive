@@ -52,7 +52,7 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 ## 多进程架构
 
-多进程架构是指应用程序使用多个进程的架构，多进程架构可以设计成许多种不同的样子，不过本章只介绍 Chrome 的多进程架构，下图是 2018 年时 Chrome 的架构。
+多进程架构是指应用程序使用多个进程的架构，多进程架构可以设计成许多种不同的样子，不过本文只介绍 Chrome 的多进程架构，下图是 2018 年时 Chrome 的架构，来自 [Inside look at modern web browser (part 1)](https://developer.chrome.com/blog/inside-browser-part1/)。
 
 ![2018年Chrome的多进程架构](/static/image/markdown/chrome/multi-process-architecture/chrome-multi-process-architecture.png)
 
@@ -63,8 +63,6 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 | Plugin Process   | 控制浏览器的插件，每个运行的插件都会创建一个插件进程，对于某些操作系统，插件进程会运行在沙箱中。 |
 | GPU Process      | 处理 GPU 任务，比如绘制浏览器的 UI 界面位图和视图位图。      |
 | ...              | 除上述的进程外，还存在着其他的进程，比如扩展进程、代理进程、实用程序进程等等。 |
-
-> 截止 2022 年，网络请求功能已从浏览器进程中剥离了出来，由网络进程来执行。
 
 多进程架构的优点是更加稳定、更加流程、更加安全，缺点是会更占内存。
 
@@ -91,15 +89,17 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 ## 服务化架构
 
-为了节省内存，Chrome 至早从 2018 年起就决定逐步迁移至服务化的架构，这种架构的特点是以 service 的形式来运行浏览器的各个功能，以便于根据硬件的性能（如内存大小、CPU 算力）来弹性的控制进程数量。这次架构转型是一个长期的过程，直至 2022 年，Chrome 还处在过渡阶段。
-
-比如当硬件性能较强时，Chrome 就会将每个服务拆分为不同的进程来提供更高的稳定性和流畅性。
+为了节省内存，Chrome 至早从 2018 年起就决定逐步迁移至服务化的架构，这种架构的特点是以 service 的形式来运行浏览器的各个功能，以便于根据硬件的性能（如内存大小、CPU 算力）来弹性的控制进程数量。比如当硬件性能较强时，Chrome 就会将每个服务拆分为不同的进程来提供更高的稳定性和流畅性。
 
 ![更多的进程](/static/image/markdown/chrome/multi-process-architecture/more-process.png)
 
 比如当硬件性能较弱时，Chrome 就会将多个服务整合到一个进程中来节省内存。
 
 ![更少的进程](/static/image/markdown/chrome/multi-process-architecture/less-process.png)
+
+一个实际的案例是，原本与网络传输（比如 http、sockets、web sockets）相关的功能是由浏览器进程中的网络线程来负责的，现在它被重构为了“网络服务”。浏览器进程会视情况来决定应该在哪个进程或线程中运行网络服务，在大多数平台上，网络服务都会运行在实用程序进程的 IO 线程上，在 Android 上，网络服务则会运行在浏览器进程中的某条线程上（对于 Chrome os 而言，是 IO 线程），你可以从 [Network Service](https://chromium.googlesource.com/chromium/src/+/HEAD/services/network/README.md) 这篇文章找到更多资料。
+
+这次架构转型是一个长期的过程，直至 2022 年，Chrome 还处在过渡阶段。
 
 ## 站点隔离
 
