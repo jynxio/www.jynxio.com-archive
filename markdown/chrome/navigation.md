@@ -78,7 +78,7 @@ https://www.google.com/search?q=mysite&oq=mysite&aqs=chrome..69i57j0i12i512j0i51
 
 ## 第 6 步：完成导航
 
-现在数据和渲染进程都已经准备就绪了，浏览器进程会通过 IPC 向渲染进程发送消息（提交导航消息），同时还会向渲染进程持续的传输 HTML 数据。这时 UI 线程就会更新地址栏的安全标识，还有前进和后退按钮的指向。
+现在数据和渲染进程都已经准备就绪了，浏览器进程会通过 IPC 向渲染进程发送消息（该消息被称为“提交导航”），同时还会向渲染进程持续的传输 HTML 数据。这时 UI 线程就会更新地址栏的安全标识，还有前进和后退按钮的指向。
 
 ![提交导航](/static/image/markdown/chrome/navigation/finish-navigation.png)
 
