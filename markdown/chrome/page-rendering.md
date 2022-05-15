@@ -29,3 +29,5 @@ token 是构建 DOM 时的中间产物，因为主线程会运行一个 HTML 解
 ### 额外：JavaScript 会阻塞 HTML 解析
 
 当 HTML 解析器发现了一个 `<script>` 时，HTML 解析器就会暂停工作，直至加载和执行完 JavaScript 代码后才会重新运行。HTML 解析器之所以要这么做，是因为 JavaScript 拥有可以改变 DOM 的能力，比如 `document.write()` API。
+
+TODO CSS 阻塞解析
