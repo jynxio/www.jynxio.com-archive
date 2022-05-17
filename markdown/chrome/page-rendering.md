@@ -114,69 +114,57 @@ typora-root-url: ..\..
 
 分层的作用是将单层的页面拆分成多个图层，它的具体做法是：主线程遍历布局树上的元素，然后智能的为需要的元素创建专属的图层，而没有专属图层的元素将会依附于父元素的图层，最后布局树中的每个元素都会依附于某个图层，并且主线程还会根据图层的结构来创建一棵图层树（layer tree）。
 
+![生成图层树](/static/image/markdown/chrome/page-rendering/generate-layer-tree.png)
+
 通常情况下，主线程会自动的为使用了层叠上下文属性的元素或发生了裁剪的元素创建专属的图层。另外，我们也可以通过主动的为元素应用 `will-change` 属性来通知主线程为该元素创建一个专属图层。
 
 主线程是如何判断一个元素是否需要创建专属图层的呢？答案是 `will-change`。具体来说，其实页面中的每个元素都会默认应用 `will-change: auto`，此时主线程就会根据元素的其他 CSS 属性（如层叠上下文属性）和行为（如裁剪）来判断是否应该为其创建专属图层。并且，你可以通过修改 `will-change` 的属性来强制让主线程为该元素创建专属的图层，比如如果元素使用了 `will-change: transform`，那么主线程就一定会为该元素创建专属的图层，并提前做好准备来应对该元素将来发生的 transform 动作，以加速页面的渲染速度。
 
-但是创建图层是有代价的，
+但是创建图层是有代价的，因为图层是需要消耗 GPU 内存的，更多的图层就意味着需要消耗更多的 GPU 内存。具体原因是，当页面有 n 个图层时，GPU 就需要生成 n 幅位图，并且这些位图会存储在 GPU 的内存中。另外，更多的图层就需要消耗更多的 CPU 和 GPU 之间的带宽。你可以从 [这篇文章](https://web.dev/stick-to-compositor-only-properties-and-manage-layer-count/) 来进一步了解创建图层的代价。
 
-从根本上来说，主线程是通过元素的 `will-change` 属性来判断是否应该为元素创建专属图层的。`will-change` 属性的默认值是 `auto`，此时主线程就会根据元素的其他 CSS 属性来猜测是否应当为其创建专属图层，这就是为什么当元素使用了层叠上下文属性或发生了裁剪行为的时候，
+如果创建了过多的图层，那么其带来的性能负荷将可能远远超过其带来的好处。因此请不要滥用图层，而是只为需要的元素创建图层。
 
-![生成图层树](/static/image/markdown/chrome/page-rendering/generate-layer-tree.png)
+### 额外：元素裁剪
 
-元素裁剪是什么意思呢？如果页面的 HTML 如下，那么页面就只有 1 个图层，即根元素图层。
+如果某个元素应用了 `overflow: auto`，且该元素的内容超出了元素的尺寸，那么该元素就会隐藏超出的内容并创建滚动条。在这种情况下，主线程就会为该元素创建专属的图层，显然创建图层的目的是为了更快速的响应滚动事件（即当滚动查看元素的内容时，可以加速页面的渲染）。
 
-```html
-<html>
-    <head>
-    	<style>
-            div {
-                width: 200px;
-                height: 200px;
-                background-color: pink;
-            }
-        </style>
-    </head>
-    <body>
-        <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-    </body>
-</html>
+比如，如果 DIV 元素没有应用 `overflow: auto`，那么整个页面就只有 1 个图层，即根元素图层，DIV 元素将依附于该图层。
+
+```css
+div {
+    width: 200px;
+    height: 200px;
+    background-color: pink;
+}
 ```
+
+你可以通过 DevTools 的 Layers 选项卡来查看当前页面的分层情况。
 
 ![单图层](/static/image/markdown/chrome/page-rendering/single-layer.png)
 
-如果页面的 HTML 如下，那么页面就有 3 个图层，分别是根元素图层、DIV 元素图层、水平滚动条图层。
+如果 DIV 元素应用了 `overflow: auto`，那么整个页面将会有 3 个图层，分别是根元素图层、DIV 元素图层、水平滚动条图层。仔细查看你会发现 DIV 元素图层在垂直方向上少了 `17px`，这是因为水平滚动条图层占用了这 `17px`。
 
-```html
-<html>
-    <head>
-    	<style>
-            div {
-                overflow: auto;
-                width: 200px;
-                height: 200px;
-                background-color: pink;
-            }
-        </style>
-    </head>
-    <body>
-        <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-    </body>
-</html>
+```css
+div {
+    overflow: auto;
+    width: 200px;
+    height: 200px;
+    background-color: pink;
+}
 ```
 
 ![多图层](/static/image/markdown/chrome/page-rendering/multi-layer.png)
 
-另外，如果你激活了 Layers 选项卡中的 Show internel layers 特性，你会发现该页面将不止有 3 个图层。其中 DIV 元素会有 2 个图层，其中一个图层的尺寸是 `200*183`，它代表 DIV 元素的可视范围，其高度之所以会缺少 `17px`，是因为该元素的水平滚动条占了 `17px`，另一个图层的尺寸是 `478*183`，它代表 DIV 元素内的文本框的实际尺寸。
+另外，如果你激活了 Layers 选项卡中的 Show internel layers 特性，那么就能看到图层的内部图层，其中 DIV 元素图层有 2 个内部图层，其中一个内部图层的尺寸是 `200px*183px`，它代表了 DIV 元素的可见范围，另一个内部图层的尺寸是 `478px*187px`，它代表了 DIV 元素内容的实际尺寸。
 
-虽然文本框的尺寸大于 DIV 元素可视范围的尺寸，但是超出的部分被裁剪掉了，最后显示的可视部分也只有 `200*178`，这便是裁剪行为。
+在渲染页面时，浏览器进程只会渲染前一个内部图层范围内的画面，而后一个图层的超出部分则会被裁掉。如果 DIV 元素的内容发生了滚动，那么就只需要平移后一个内部图层的位置，然后再截取前一个内部图层范围内的画面，最后再合成所有图层，就能完成页面的渲染了。
 
 ![激活Show internel layers](/static/image/markdown/chrome/page-rendering/multi-layer-internel.png)
 
-另外，从根本上来说，主线程是通过 `will-change` 属性来判断是否应当
-
-请不要滥用分层（开发者有能力为每个元素都创建专属图层），因为合成大量图层的性能会很慢，甚至慢于 Chrome 最初的绘制策略的性能。
-
 ## 第 6 步：分块
+
+接下来，主线程会将图层树与绘制指令发送给合成线程，合成线程是一个独立的线程，它负责图层分块与光栅化。合成线程在光栅化图层之前，需要先将图层分割成小块，因为一个图层有可能会和整个页面那么大，分块更有利于光栅化。
+
+
 
 ## TODO：更新渲染管道的某个环节会带来什么影响
