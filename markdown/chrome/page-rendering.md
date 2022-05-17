@@ -112,9 +112,70 @@ typora-root-url: ..\..
 
 ## 第 5 步：分层
 
+分层的作用是将单层的页面拆分成多个图层，它的具体做法是：主线程遍历布局树上的元素，然后智能的为需要的元素创建专属的图层，而没有专属图层的元素将会依附于父元素的图层，最后布局树中的每个元素都会依附于某个图层，并且主线程还会根据图层的结构来创建一棵图层树（layer tree）。
 
+通常情况下，主线程会自动的为使用了层叠上下文属性的元素或发生了裁剪的元素创建专属的图层。另外，我们也可以通过主动的为元素应用 `will-change` 属性来通知主线程为该元素创建一个专属图层。
 
-你可以在 DevTools 的 Layers 选项卡中查看当前网页的分层情况。
+主线程是如何判断一个元素是否需要创建专属图层的呢？答案是 `will-change`。具体来说，其实页面中的每个元素都会默认应用 `will-change: auto`，此时主线程就会根据元素的其他 CSS 属性（如层叠上下文属性）和行为（如裁剪）来判断是否应该为其创建专属图层。并且，你可以通过修改 `will-change` 的属性来强制让主线程为该元素创建专属的图层，比如如果元素使用了 `will-change: transform`，那么主线程就一定会为该元素创建专属的图层，并提前做好准备来应对该元素将来发生的 transform 动作，以加速页面的渲染速度。
+
+但是创建图层是有代价的，
+
+从根本上来说，主线程是通过元素的 `will-change` 属性来判断是否应该为元素创建专属图层的。`will-change` 属性的默认值是 `auto`，此时主线程就会根据元素的其他 CSS 属性来猜测是否应当为其创建专属图层，这就是为什么当元素使用了层叠上下文属性或发生了裁剪行为的时候，
+
+![生成图层树](/static/image/markdown/chrome/page-rendering/generate-layer-tree.png)
+
+元素裁剪是什么意思呢？如果页面的 HTML 如下，那么页面就只有 1 个图层，即根元素图层。
+
+```html
+<html>
+    <head>
+    	<style>
+            div {
+                width: 200px;
+                height: 200px;
+                background-color: pink;
+            }
+        </style>
+    </head>
+    <body>
+        <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+    </body>
+</html>
+```
+
+![单图层](/static/image/markdown/chrome/page-rendering/single-layer.png)
+
+如果页面的 HTML 如下，那么页面就有 3 个图层，分别是根元素图层、DIV 元素图层、水平滚动条图层。
+
+```html
+<html>
+    <head>
+    	<style>
+            div {
+                overflow: auto;
+                width: 200px;
+                height: 200px;
+                background-color: pink;
+            }
+        </style>
+    </head>
+    <body>
+        <div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+    </body>
+</html>
+```
+
+![多图层](/static/image/markdown/chrome/page-rendering/multi-layer.png)
+
+另外，如果你激活了 Layers 选项卡中的 Show internel layers 特性，你会发现该页面将不止有 3 个图层。其中 DIV 元素会有 2 个图层，其中一个图层的尺寸是 `200*183`，它代表 DIV 元素的可视范围，其高度之所以会缺少 `17px`，是因为该元素的水平滚动条占了 `17px`，另一个图层的尺寸是 `478*183`，它代表 DIV 元素内的文本框的实际尺寸。
+
+虽然文本框的尺寸大于 DIV 元素可视范围的尺寸，但是超出的部分被裁剪掉了，最后显示的可视部分也只有 `200*178`，这便是裁剪行为。
+
+![激活Show internel layers](/static/image/markdown/chrome/page-rendering/multi-layer-internel.png)
+
+另外，从根本上来说，主线程是通过 `will-change` 属性来判断是否应当
+
+请不要滥用分层（开发者有能力为每个元素都创建专属图层），因为合成大量图层的性能会很慢，甚至慢于 Chrome 最初的绘制策略的性能。
 
 ## 第 6 步：分块
 
