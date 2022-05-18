@@ -2,11 +2,11 @@
 typora-root-url: ..\..
 ---
 
-# 导航
+# 浏览器的导航
 
 ## 概述
 
-导航是指浏览器从旧页面进入到新页面的过程，它分为 6 个步骤和 1 个额外的步骤：
+导航是指浏览器从旧页面进入到新页面的过程，本文将会讲述浏览器的导航过程。导航分为 6 个步骤和 1 个额外的步骤：
 
 1. 处理输入
 2. 开始导航
@@ -24,13 +24,13 @@ typora-root-url: ..\..
 >
 > 本文将假设网络服务运行在浏览器进程的网络线程上。
 
-![浏览器进程的作用](/static/image/markdown/chrome/navigation/browser-process-role.png)
+![浏览器进程的作用](/static/image/markdown/chrome/browser-navigation/browser-process-role.png)
 
 ## 第 1 步：处理输入
 
 当用户键入地址栏时（按下回车键之前），UI 线程就会解析输入的内容，来判断这是一个 URL（如 `www.mysite.com`）还是一个搜索词条（如 `mysite`）。
 
-![UI线程解析地址栏的内容](/static/image/markdown/chrome/navigation/ui-thread-parse-address-bar.png)
+![UI线程解析地址栏的内容](/static/image/markdown/chrome/browser-navigation/ui-thread-parse-address-bar.png)
 
 ## 第 2 步：开始导航
 
@@ -44,7 +44,7 @@ https://www.google.com/search?q=mysite&oq=mysite&aqs=chrome..69i57j0i12i512j0i51
 
 > 如果网络服务运行在另一个进程中，而不是运行在浏览器进程中的网络线程的话，浏览器进程就需要通过 IPC 来将站点 URL 发送给网络服务所在的进程，然后再发起网络请求。
 
-![网络线程发起网络请求](/static/image/markdown/chrome/navigation/network-thread-network-request.png)
+![网络线程发起网络请求](/static/image/markdown/chrome/browser-navigation/network-thread-network-request.png)
 
 ## 第 3 步：发起网络请求
 
@@ -62,7 +62,7 @@ https://www.google.com/search?q=mysite&oq=mysite&aqs=chrome..69i57j0i12i512j0i51
 
 如果响应行的状态吗是 `200`，网络线程就会继续往下处理。
 
-![响应头和响应体](/static/image/markdown/chrome/navigation/response-header-and-body.png)
+![响应头和响应体](/static/image/markdown/chrome/browser-navigation/response-header-and-body.png)
 
 首先，网络线程会查看响应头的 `Content-type` 字段，来判断响应体的数据的类型，以决定该如何处理响应体的数据。比如，如果 `Content-type` 是 `application/octet-stream`，就代表响应体的数据是字节流类型，那么网络线程就会将数据传递给下载管理器，然后结束本次导航。如果 `Content-type` 是 `text/html`，就代表响应体的数据是 HTML 格式的文本，那么网络线程就会将数据传递给渲染进程。
 
@@ -80,11 +80,11 @@ https://www.google.com/search?q=mysite&oq=mysite&aqs=chrome..69i57j0i12i512j0i51
 
 现在数据和渲染进程都已经准备就绪了，浏览器进程会通过 IPC 向渲染进程发送消息（该消息被称为“提交导航”），同时还会向渲染进程持续的传输 HTML 数据，渲染进程一旦开始接收到数据，就会开始渲染页面，同时 UI 线程就会更新地址栏的安全标识，还有前进和后退按钮的指向。
 
-![提交导航](/static/image/markdown/chrome/navigation/finish-navigation.png)
+![提交导航](/static/image/markdown/chrome/browser-navigation/finish-navigation.png)
 
 当渲染进程“完成”了页面的渲染后，渲染进程就会通过 IPC 向浏览器进程发送消息，该消息代表“页面已渲染完毕”。浏览器进程接收到消息后，UI 线程就会隐藏选项卡上的加载标识，并显示站点的 favicon 标识。
 
-![确认提交导航](/static/image/markdown/chrome/navigation/finish-navigation-confirmation.png)
+![确认提交导航](/static/image/markdown/chrome/browser-navigation/finish-navigation-confirmation.png)
 
 不过，上文的“完成”是带双引号的，它代表渲染进程完成了基本的渲染，渲染进程在后续可能还会加载额外的资源来渲染出新的内容。至此，整个导航就结束了。
 

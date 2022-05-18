@@ -2,39 +2,41 @@
 typora-root-url: ..\..
 ---
 
-# 多进程架构
+# 浏览器的架构
 
 ## 术语
+
+本文将会讲述浏览器的架构，在正式开始之前，我们需要先了解以下概念。
 
 ### CPU
 
 CPU 是 Center Processing Unit 的简写，汉译为中央处理器。CPU 是计算机的大脑，一个 CPU 内核就像图中的一个工作人员，它会一个一个的处理手头上的任务。过去的 CPU 普遍只有一个芯片，现在的 CPU 普遍拥有多个芯片。
 
-![CPU](/static/image/markdown/chrome/multi-process-architecture/cpu.png)
+![CPU](/static/image/markdown/chrome/browser-architecture/cpu.png)
 
 ### GPU
 
 GPU 是 Graphics Processing Unit 的简写，汉译为图形处理器。GPU 特点是擅长并发的处理简单的任务。
 
-![GPU](/static/image/markdown/chrome/multi-process-architecture/gpu.png)
+![GPU](/static/image/markdown/chrome/browser-architecture/gpu.png)
 
 计算机或手机上的应用程序是由 CPU 与 GPU 来驱动的，不过应用程序通常都需要借助操作系统所提供的机制来调用 CPU 和 GPU，这样就形成了“三层结构”，底层是硬件（包括 CPU、GPU 和其它），中间层是操作系统，顶层是应用程序。
 
-![三层结构](/static/image/markdown/chrome/multi-process-architecture/three-layers.png)
+![三层结构](/static/image/markdown/chrome/browser-architecture/three-layers.png)
 
 ### Process & Thread
 
 Process 是进程，进程是应用程序的执行程序。Thread 是线程，线程存在于进程的内部，它负责执行进程的任务，一个进程可以拥有一个或多个线程。
 
-![进程和线程](/static/image/markdown/chrome/multi-process-architecture/process-and-thread.png)
+![进程和线程](/static/image/markdown/chrome/browser-architecture/process-and-thread.png)
 
 启动应用程序时，操作系统就会为其创建进程来保证其的运行，进程又可能会创建自己的线程来帮助自己的工作（可选的）。操作系统在创建进程的时候就会为进程分配一块内存，应用程序的所有数据都会保存在这块内存上，当应用程序关闭的时候，操作系统就会关闭相应的进程和完全回收这些进程所占用的内存，无论进程的内部是否发生了内存泄漏。
 
-![操作系统为应用程序创建进程和分配内存来供其保存数据](/static/image/markdown/chrome/multi-process-architecture/process-using-memory.png)
+![操作系统为应用程序创建进程和分配内存来供其保存数据](/static/image/markdown/chrome/browser-architecture/process-using-memory.png)
 
 对于使用多个进程的应用程序而言，每个进程都会分配得到自己专属的内存，如果这些进程之间需要通信，那么就需要使用“进程间通信”（IPC）来实现。
 
-![进程之间通过IPC来通信](/static/image/markdown/chrome/multi-process-architecture/process-communicating-over-ipc.png)
+![进程之间通过IPC来通信](/static/image/markdown/chrome/browser-architecture/process-communicating-over-ipc.png)
 
 另外，同一个进程内的所有线程都可以读写这个进程的内存，这意味着线程之间可以共享数据。并且，因为不同的进程之间是相互隔绝的，所以即使某个进程发生了故障，这个故障的进程也不会影响到其它的进程，其他的进程仍然会正常运行，但是如果进程内的任意一个线程发生了错误，那么这整个进程都会崩溃。
 
@@ -42,7 +44,7 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 单进程架构是指应用程序只使用一个进程的架构，这意味着应用程序的所有功能模块都会运行在一个进程中，在 2006 年前后的浏览器都采用了这种架构。下图是某种假设的单进程架构，单进程架构也当然可以设计成其它样子。
 
-![某种假设的单进程架构](/static/image/markdown/chrome/multi-process-architecture/single-process-architecture.png)
+![某种假设的单进程架构](/static/image/markdown/chrome/browser-architecture/single-process-architecture.png)
 
 不过采用单进程架构的浏览器都有不稳定、不流畅的缺点。
 
@@ -54,7 +56,7 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 多进程架构是指应用程序使用多个进程的架构，多进程架构可以设计成许多种不同的样子，不过本文只介绍 Chrome 的多进程架构，下图是 2018 年时 Chrome 的架构，来自 [Inside look at modern web browser (part 1)](https://developer.chrome.com/blog/inside-browser-part1/)。
 
-![2018年Chrome的多进程架构](/static/image/markdown/chrome/multi-process-architecture/chrome-multi-process-architecture.png)
+![2018年Chrome的多进程架构](/static/image/markdown/chrome/browser-architecture/chrome-multi-process-architecture.png)
 
 | 进程             | 作用                                                         |
 | ---------------- | ------------------------------------------------------------ |
@@ -76,7 +78,7 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 接下来，让我们来详细的看看浏览器进程和渲染进程的内部构造。
 
-![浏览器进程和渲染进程的构造](/static/image/markdown/chrome/multi-process-architecture/browser-rendering-process-construction.png)
+![浏览器进程和渲染进程的构造](/static/image/markdown/chrome/browser-architecture/browser-rendering-process-construction.png)
 
 | 名称              | 作用                                                         |
 | ----------------- | ------------------------------------------------------------ |
@@ -85,17 +87,17 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 | RenderView        | 渲染进程的内部有一至多个 RenderView 对象，每个 RenderView 都对应一个视图，并拥有一个在该渲染进程内唯一的 ID，RenderView 由 RenderProcess 所管理。它代表视图的内容。 |
 | RenderViewHost    | RenderProcess 对象会管理一至多个 RenderViewHost 对象，每个 RenderViewHost 都对应一个 RenderView（在相应的渲染进程中）。RenderViewHost 的作用是指导 RenderProcessHost 来向对应的 RenderProcess 发送消息，消息最后会到达 RenderVIewHost 对应的 RenderView。 |
 
-> 你可以通过 [Multi-process Architecture](https://www.chromium.org/developers/design-documents/multi-process-architecture/#components-and-interfaces) 和 [How Chromium Displays Web Pages](https://www.chromium.org/developers/design-documents/displaying-a-web-page-in-chrome/) 来了解更详细的信息。
+> 你可以通过 [Multi-process Architecture](https://www.chromium.org/developers/design-documents/browser-architecture/#components-and-interfaces) 和 [How Chromium Displays Web Pages](https://www.chromium.org/developers/design-documents/displaying-a-web-page-in-chrome/) 来了解更详细的信息。
 
 ## 服务化架构
 
 为了节省内存，Chrome 至早从 2018 年起就决定逐步迁移至服务化的架构，这种架构的特点是以 service 的形式来运行浏览器的各个功能，以便于根据硬件的性能（如内存大小、CPU 算力）来弹性的控制进程数量。比如当硬件性能较强时，Chrome 就会将每个服务拆分为不同的进程来提供更高的稳定性和流畅性。
 
-![更多的进程](/static/image/markdown/chrome/multi-process-architecture/more-process.png)
+![更多的进程](/static/image/markdown/chrome/browser-architecture/more-process.png)
 
 比如当硬件性能较弱时，Chrome 就会将多个服务整合到一个进程中来节省内存。
 
-![更少的进程](/static/image/markdown/chrome/multi-process-architecture/less-process.png)
+![更少的进程](/static/image/markdown/chrome/browser-architecture/less-process.png)
 
 一个实际的案例是，原本与网络传输（比如 http、sockets、web sockets）相关的功能是由浏览器进程中的网络线程来负责的，现在它被重构为了“网络服务”。浏览器进程会视情况来决定应该在哪个进程或线程中运行网络服务，在大多数平台上，网络服务都会运行在实用程序进程的 IO 线程上，在 Android 上，网络服务则会运行在浏览器进程中的某条线程上（对于 Chrome os 而言，是 IO 线程），你可以从 [Network Service](https://chromium.googlesource.com/chromium/src/+/HEAD/services/network/README.md) 这篇文章找到更多资料。
 
@@ -138,15 +140,15 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 这是 Chromium 默认使用的进程模型，它会将每个站点都分配给独立的渲染进程，无论这个站点是一个选项卡还是一个 iframe，这意味着可能会发生一个选项卡拥有多个渲染进程的情况。
 
-![一个页面拥有多个渲染进程](/static/image/markdown/chrome/multi-process-architecture/site-isolation.png)
+![一个页面拥有多个渲染进程](/static/image/markdown/chrome/browser-architecture/site-isolation.png)
 
 另外，如果符合同一站点规则的两个站点是单独打开的，那么这两个站点将会分配给两个独立的渲染进程，比如通过地址栏分别打开站点 a（`http://192.168.0.100:8080/a.html`）和站点 b（`http://192.168.0.100:8080/b.html`）站点 a 将会分配给 `51798` 渲染进程，站点 b 将会分配给 `51814` 渲染进程。
 
-![不共享渲染进程](/static/image/markdown/chrome/multi-process-architecture/doesnt-share-rendering-process.png)
+![不共享渲染进程](/static/image/markdown/chrome/browser-architecture/doesnt-share-rendering-process.png)
 
 如果站点 b 是通过站点 a 来打开的，那么站点 a 和站点 b 就会分配给同一个渲染进程 `51798`。
 
-![共享渲染进程](/static/image/markdown/chrome/multi-process-architecture/share-rendering-process.png)
+![共享渲染进程](/static/image/markdown/chrome/browser-architecture/share-rendering-process.png)
 
 其中，站点 a 是通过 `window.open` API 来打开站点 b 的，站点 a 的 `<body>` 代码如下：
 
