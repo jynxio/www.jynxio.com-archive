@@ -31,15 +31,15 @@ const createJavascriptInfo = _ => {
 const createBrowserInfo = _ => {
 
     const name = "browser";
-    const alias = "浏览器原理";
+    const alias = "浏览器";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
     const build_path = BASE_BUILD_PATH;
     const children = [
-        { name: "chrome-architecture", alias: "Chrome架构" },
         { name: "network-protocol", alias: "网络协议" },
-        { name: "rendering-process", alias: "渲染流程" },
-        { name: "reflow-repaint-compositor", alias: "重排、重绘、合成" },
+        { name: "browser-architecture", alias: "浏览器的架构" },
+        { name: "browser-navigation", alias: "浏览器的导航" },
+        { name: "page-rendering", alias: "页面的渲染" },
     ];
     const options = {
         name,

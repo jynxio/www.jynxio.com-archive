@@ -1,5 +1,5 @@
 ---
-typora-root-url: ../../../test
+typora-root-url: ..\..
 ---
 
 # 数据类型与标准内置对象
@@ -111,6 +111,6 @@ console.log( removed ); // output: []
 console.log( array );   // output: [ "a", "b", "c", "d" ]
 ```
 
-![test](/static/image/test.png)
+![test](/static/image/markdown/test/test.png)
 
 > Image from [simpledesktops](http://simpledesktops.com/).
