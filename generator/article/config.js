@@ -31,7 +31,7 @@ const createJavascriptInfo = _ => {
 const createBrowserInfo = _ => {
 
     const name = "browser";
-    const alias = "浏览器";
+    const alias = "Browser";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
     const build_path = BASE_BUILD_PATH;
