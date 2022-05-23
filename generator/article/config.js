@@ -40,6 +40,7 @@ const createBrowserInfo = _ => {
         { name: "browser-architecture", alias: "浏览器的架构" },
         { name: "browser-navigation", alias: "浏览器的导航" },
         { name: "page-rendering", alias: "页面的渲染" },
+        { name: "input-event-and-page-scroll", alias: "输入事件与页面滚动" },
     ];
     const options = {
         name,

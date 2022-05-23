@@ -2,13 +2,9 @@
 typora-root-url: ..\..
 ---
 
-# 输入事件与页面渲染
+# 输入事件与页面滚动
 
 ## 概述
-
-我们在屏幕上所看到的浏览器的画面其实是一幅位图，当输入事件所引发的事件监听器或默认动作修改了页面的样式后，浏览器就会迅速的更新这幅位图来响应这些修改，这样用户便产生了“浏览器响应了我的操作”这种错觉。比如，当用户滚动了滚轮之后，浏览器就会根据滚轮的滚动情况来决定该如何滚动页面，并尽可能的以屏幕的刷新频率来更新页面的位图，这样就可以制造出流畅的滚动动画了，不过如果更新的频率不够高或时间间隔不够均匀，用户就会感觉到滚动动画很卡顿（jank），所以卡顿的本质是更新发生了延迟。
-
-> 我不确定浏览器的画面到底是一幅完整的位图，还是由多幅位图拼接而成的拼图，因为 Chrome Blog 提到过浏览器 UI 的位图和选项卡页面的位图是分开生成的，不过哪怕不知道这个问题的答案，也不会影响我们理解这篇文章，所以暂勿纠结。
 
 本文将会介绍的是浏览器处理输入事件与更新页面的过程。
 
@@ -92,7 +88,7 @@ globalThis.addEventListener( "click", _ => {
 } );
 ```
 
-如果你对 JS 代码中的 `{ passive: false }` 感到困惑，请不用担心，因为文章的下一节（Passive event listeners）会阐述它的作用。不过可以提前告诉你，正是它引发了这个页面假死。
+如果你对 JS 代码中的 `{ passive: false }` 感到困惑，请不用担心，因为文章的下一节（Passive event listeners）会阐述它的作用。不过可以提前告诉你，正是它引发了这个页面的假死。
 
 ## Passive event listeners
 
@@ -145,20 +141,20 @@ globalThis.addEventListener( "click", _ => {
 3. 如果合成器线程判断出这个输入事件不会触发任何事件监听器，那么合成器线程就会直接生产新的页面位图。
 4. 如果合成器判断出这个输入事件会触发事件监听器，那么合成器线程就会将这则消息发送给主线程，由主线程来找到并调用相应的事件监听器。如果事件监听器的 `passive` 为 `true`，那么合成器线程就不会停下来等待主线程，而是在将输入事件的消息发送给主线程之后，就立即开始自己的工作。如果事件监听器的 `passive` 为 `false`，那么合成器线程就会停下来等待主线程，直至主线程处理完所有任务之后再开始工作。
 
-![输入事件的信息](/static/image/markdown/browser/deal-with-input-event/input-event-information.png)
+![输入事件的信息](/static/image/markdown/browser/input-event-and-page-scroll/input-event-information.png)
 
 另外，主线程是如何找到相应的事件监听器的呢？当主线程接收到来自合成线程的信息后，主线程会使用输入事件的坐标来和绘图指令（渲染流程第 4 步的输出结果）来进行对比，然后找到相应的 `event.target`，最后在 `event.target` 上找到需要被调用的事件监听器。
 
-![寻找事件监听器](/static/image/markdown/browser/deal-with-input-event/finding-event-target.png)
+![寻找事件监听器](/static/image/markdown/browser/input-event-and-page-scroll/finding-event-target.png)
 
 ## Non-Fast Scrollable Region
 
 为什么合成器线程可以根据输入事件的发生地来判断输入事件是否会触发事件监听器呢？因为合成器线程会将绑定了事件监听器的区域标记为 non-fast scrollable region，如果输入事件发生在标记区域的范围内，合成器线程就会将输入事件的信息发送给主线程，否则就不会。
 
-![non-fast-scrollable-region](/static/image/markdown/browser/deal-with-input-event/non-fast-scrollable-region.png)
+![non-fast-scrollable-region](/static/image/markdown/browser/input-event-and-page-scroll/non-fast-scrollable-region.png)
 
 我们经常会使用事件代理来为元素绑定事件监听器，它的具体原理是：将事件监听器绑定在祖先节点的身上，然后通过判断输入事件究竟发生在哪个子孙节点的身上来决定应该执行哪些任务。
 
 不过，事件代理会扩大 non-fast scrollable region 的范围，比如，如果将事件监听器绑定在了 `globalThis` 节点上，那么整个页面都将会被标记为 non-fast scrollable region。这样一来，无论输入事件发生在页面的哪个位置，合成器线程都必须与主线程通信，哪怕输入事件根本没有触发任何事件监听器。而且，如果主线程还会阻塞合成器线程的话，那么一旦事件监听器的执行时间较长，原本流畅的页面就会变得卡顿，使用 `{ passive: true }` 可以减轻这种负面影响。
 
-![使用事件代理将可能扩大non-fast scrollable region的区域](/static/image/markdown/browser/deal-with-input-event/event-delegation.png)
+![使用事件代理将可能扩大non-fast scrollable region的区域](/static/image/markdown/browser/input-event-and-page-scroll/event-delegation.png)

@@ -14,27 +14,27 @@
     </header>
     <aside>
         <p><a href="#">IN THIS ARTICLE</a></p>
-        <p data-level="1"><a href="#0a53ee1e-0fd2-428c-93b2-c323e6c4753f">术语</a></p>
-        <p data-level="1"><a href="#ab39f59c-c940-4763-a406-dd6c6c86053f">单进程架构</a></p>
-        <p data-level="1"><a href="#c16cb4af-3e29-43b5-985c-a273a9068a03">多进程架构</a></p>
-        <p data-level="1"><a href="#b804f4b1-5ec9-4d86-90f0-cfaa424f08ba">服务化架构</a></p>
-        <p data-level="1"><a href="#c4bb228e-cf78-46c6-8660-c64f8eb51e46">站点隔离</a></p>
-        <p data-level="1"><a href="#a933423f-f02a-49bd-aae8-4ceb02f23b3d">进程模型</a></p>
+        <p data-level="1"><a href="#970346e3-f638-4357-a961-ba9804a88384">术语</a></p>
+        <p data-level="1"><a href="#5ec531f0-875f-405c-9be1-56d702280d55">单进程架构</a></p>
+        <p data-level="1"><a href="#602b37b1-9ca2-4cf2-a38f-b35499ed8e6f">多进程架构</a></p>
+        <p data-level="1"><a href="#4ff8a6a8-f26d-443d-8d3d-3977d92c4967">服务化架构</a></p>
+        <p data-level="1"><a href="#ed32b5db-816a-4e6a-8720-ead36da2c255">站点隔离</a></p>
+        <p data-level="1"><a href="#5b515698-3999-4dd9-909d-53ff7e60dc96">进程模型</a></p>
     </aside>
     <article>
         <h1>浏览器的架构</h1>
-        <p id="last-updated">Last Updated: 18/05/2022</p>
-        <h2 id="0a53ee1e-0fd2-428c-93b2-c323e6c4753f">术语</h2>
+        <p id="last-updated">Last Updated: 24/05/2022</p>
+        <h2 id="970346e3-f638-4357-a961-ba9804a88384">术语</h2>
         <p>本文将会讲述浏览器的架构，在正式开始之前，我们需要先了解以下概念。</p>
-        <h3 id="f16bea19-b5f5-4d6d-a9bc-7130f632997f">CPU</h3>
+        <h3 id="6a0704e8-fdc7-40b7-a60c-7a6c0db52f6c">CPU</h3>
         <p>CPU 是 Center Processing Unit 的简写，汉译为中央处理器。CPU 是计算机的大脑，一个 CPU 内核就像图中的一个工作人员，它会一个一个的处理手头上的任务。过去的 CPU 普遍只有一个芯片，现在的 CPU 普遍拥有多个芯片。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/cpu.png" alt="CPU"></p>
-        <h3 id="157e89c9-5ef9-4ac5-b366-7f96c51ffeb3">GPU</h3>
+        <h3 id="e4604170-7c91-422d-ac77-bbced4f8237c">GPU</h3>
         <p>GPU 是 Graphics Processing Unit 的简写，汉译为图形处理器。GPU 特点是擅长并发的处理简单的任务。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/gpu.png" alt="GPU"></p>
         <p>计算机或手机上的应用程序是由 CPU 与 GPU 来驱动的，不过应用程序通常都需要借助操作系统所提供的机制来调用 CPU 和 GPU，这样就形成了“三层结构”，底层是硬件（包括 CPU、GPU 和其它），中间层是操作系统，顶层是应用程序。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/three-layers.png" alt="三层结构"></p>
-        <h3 id="a0d3e2ce-4ac8-4c41-b2a1-493cc6ac2713">Process &amp; Thread</h3>
+        <h3 id="39a73f59-dc41-43ba-870c-c42475e2434c">Process &amp; Thread</h3>
         <p>Process 是进程，进程是应用程序的执行程序。Thread 是线程，线程存在于进程的内部，它负责执行进程的任务，一个进程可以拥有一个或多个线程。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/process-and-thread.png" alt="进程和线程"></p>
         <p>启动应用程序时，操作系统就会为其创建进程来保证其的运行，进程又可能会创建自己的线程来帮助自己的工作（可选的）。操作系统在创建进程的时候就会为进程分配一块内存，应用程序的所有数据都会保存在这块内存上，当应用程序关闭的时候，操作系统就会关闭相应的进程和完全回收这些进程所占用的内存，无论进程的内部是否发生了内存泄漏。</p>
@@ -42,13 +42,13 @@
         <p>对于使用多个进程的应用程序而言，每个进程都会分配得到自己专属的内存，如果这些进程之间需要通信，那么就需要使用“进程间通信”（IPC）来实现。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/process-communicating-over-ipc.png" alt="进程之间通过IPC来通信"></p>
         <p>另外，同一个进程内的所有线程都可以读写这个进程的内存，这意味着线程之间可以共享数据。并且，因为不同的进程之间是相互隔绝的，所以即使某个进程发生了故障，这个故障的进程也不会影响到其它的进程，其他的进程仍然会正常运行，但是如果进程内的任意一个线程发生了错误，那么这整个进程都会崩溃。</p>
-        <h2 id="ab39f59c-c940-4763-a406-dd6c6c86053f">单进程架构</h2>
+        <h2 id="5ec531f0-875f-405c-9be1-56d702280d55">单进程架构</h2>
         <p>单进程架构是指应用程序只使用一个进程的架构，这意味着应用程序的所有功能模块都会运行在一个进程中，在 2006 年前后的浏览器都采用了这种架构。下图是某种假设的单进程架构，单进程架构也当然可以设计成其它样子。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/single-process-architecture.png" alt="某种假设的单进程架构"></p>
         <p>不过采用单进程架构的浏览器都有不稳定、不流畅的缺点。</p>
         <p>关于不稳定，那时的浏览器需要借助插件来实现视频和游戏等功能，由于插件的质量良莠不齐容易崩溃，就导致浏览器也容易崩溃。并且当 JavaScript 非常复杂时也容易引起渲染引擎的崩溃，进而导致浏览器崩溃，这是单进程架构的浏览器不稳定的原因。</p>
         <p>关于不流畅，如果某些选项卡会发生内存泄漏，那么随着浏览器运行的时间越来越长、打开过选项卡越来越多，内存泄漏就会越来越多，内存占用也会越拉越多，浏览器也可能会变得越来越慢，这是单进程架构的浏览器不流畅的原因。</p>
-        <h2 id="c16cb4af-3e29-43b5-985c-a273a9068a03">多进程架构</h2>
+        <h2 id="602b37b1-9ca2-4cf2-a38f-b35499ed8e6f">多进程架构</h2>
         <p>多进程架构是指应用程序使用多个进程的架构，多进程架构可以设计成许多种不同的样子，不过本文只介绍 Chrome 的多进程架构，下图是 2018 年时 Chrome 的架构，来自 <a href="https://developer.chrome.com/blog/inside-browser-part1/">Inside look at modern web browser (part 1)</a>。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/chrome-multi-process-architecture.png" alt="2018年Chrome的多进程架构"></p>
         <table>
@@ -117,14 +117,14 @@
         <blockquote>
             <p>你可以通过 <a href="https://www.chromium.org/developers/design-documents/browser-architecture/#components-and-interfaces">Multi-process Architecture</a> 和 <a href="https://www.chromium.org/developers/design-documents/displaying-a-web-page-in-chrome/">How Chromium Displays Web Pages</a> 来了解更详细的信息。</p>
         </blockquote>
-        <h2 id="b804f4b1-5ec9-4d86-90f0-cfaa424f08ba">服务化架构</h2>
+        <h2 id="4ff8a6a8-f26d-443d-8d3d-3977d92c4967">服务化架构</h2>
         <p>为了节省内存，Chrome 至早从 2018 年起就决定逐步迁移至服务化的架构，这种架构的特点是以 service 的形式来运行浏览器的各个功能，以便于根据硬件的性能（如内存大小、CPU 算力）来弹性的控制进程数量。比如当硬件性能较强时，Chrome 就会将每个服务拆分为不同的进程来提供更高的稳定性和流畅性。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/more-process.png" alt="更多的进程"></p>
         <p>比如当硬件性能较弱时，Chrome 就会将多个服务整合到一个进程中来节省内存。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/less-process.png" alt="更少的进程"></p>
         <p>一个实际的案例是，原本与网络传输（比如 http、sockets、web sockets）相关的功能是由浏览器进程中的网络线程来负责的，现在它被重构为了“网络服务”。浏览器进程会视情况来决定应该在哪个进程或线程中运行网络服务，在大多数平台上，网络服务都会运行在实用程序进程的 IO 线程上，在 Android 上，网络服务则会运行在浏览器进程中的某条线程上（对于 Chrome os 而言，是 IO 线程），你可以从 <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/services/network/README.md">Network Service</a> 这篇文章找到更多资料。</p>
         <p>这次架构转型是一个长期的过程，直至 2022 年，Chrome 还处在过渡阶段。</p>
-        <h2 id="c4bb228e-cf78-46c6-8660-c64f8eb51e46">站点隔离</h2>
+        <h2 id="ed32b5db-816a-4e6a-8720-ead36da2c255">站点隔离</h2>
         <p>站点隔离（Site Isolation）是 Chrome 的一项安全策略，它用于阻止恶意代码窃取站点数据。</p>
         <p>它的具体做法是将不同的站点分隔到不同的渲染进程中去，无论这个站点是一个选项卡还是一个内嵌的 iframe，这样就可以借助进程之间相互隔离的特性来阻止恶意代码访问其他站点的数据。同时，它还会阻止渲染进程获取跨域的数据资源，除非服务器通过 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a> 明确表示该数据资源可被跨域访问。</p>
         <blockquote>
@@ -138,7 +138,7 @@
         </blockquote>
         <p><a href="https://developers.google.com//web/updates/2018/07/site-isolation#full-page_layout_is_no_longer_synchronous">Site Isolation for web developers</a> 和 <a href="https://security.googleblog.com/2018/07/mitigating-spectre-with-site-isolation.html">Mitigating Spectre with Site Isolation in Chrome</a> 这两篇文章详细介绍了站点隔离是如何保护站点数据的，<a href="https://www.chromium.org/developers/design-documents/site-isolation/">Site Isolation Design Document</a> 这篇文章详细阐述了站点隔离在 Chromium 中的实现。</p>
         <p>最后，对于 Windows、Mac、Linux、Chrome OS，从 Chrome 67 开始就已经全面启用了站点隔离。对于安卓，仅对内存大于 2GB 且有用户登录行为的站点启用站点隔离。你可以通过 <a href="https://www.chromium.org/Home/chromium-security/site-isolation/">这篇文章</a> 来了解更详细的情况，另外站点隔离会导致各平台的 Chrome 占用更多的内存，大约是 3%~13%，你也可以在这篇文章中找到更详细的统计数据。</p>
-        <h2 id="a933423f-f02a-49bd-aae8-4ceb02f23b3d">进程模型</h2>
+        <h2 id="5b515698-3999-4dd9-909d-53ff7e60dc96">进程模型</h2>
         <p><a href="https://www.chromium.org/developers/design-documents/process-models/">进程模型</a> 是 Chromium 创建渲染进程的规则，Chromium 有 4 种进程模型，分别是：</p>
         <ul>
             <li>Process-per-site-instance</li>
@@ -148,7 +148,7 @@
         </ul>
         <p>其中，Process-per-site-instance 是 Chromium 默认使用的进程模型，这种进程模型与站点隔离息息相关。对于 Chromium，如果想要使用另外 3 种进程模型，就必须使用命令行来启动 Chromium，同时附带上相应的参数，比如 <code>--process-per-site</code>。对于 Chrome，它目前只使用 Process-per-site-instance。</p>
         <p>另外，Chromium 创建的渲染进程的数量是有上限的，上限与主机的内存量成正比。如果 Chromium 所创建的进程数量达到了上限，那么 Chromium 就会开始复用已有的渲染进程，即用单个渲染进程来渲染多个站点，目前这种复用是随机的，不过 Chromium 表示其未来可能会开发更智能的方式来复用渲染进程。这个规则同样适用于 Chrome。</p>
-        <h3 id="ea275d17-8edc-4aeb-89fc-ce7a33bae306">Process-per-site-instance</h3>
+        <h3 id="2f237e43-2bd5-489b-9f56-aacf5ad34792">Process-per-site-instance</h3>
         <p>这是 Chromium 默认使用的进程模型，它会将每个站点都分配给独立的渲染进程，无论这个站点是一个选项卡还是一个 iframe，这意味着可能会发生一个选项卡拥有多个渲染进程的情况。</p>
         <p><img src="/static/image/markdown/browser/browser-architecture/site-isolation.png" alt="一个页面拥有多个渲染进程"></p>
         <p>另外，如果符合同一站点规则的两个站点是单独打开的，那么这两个站点将会分配给两个独立的渲染进程，比如通过地址栏分别打开站点 a（<code>http://192.168.0.100:8080/a.html</code>）和站点 b（<code>http://192.168.0.100:8080/b.html</code>）站点 a 将会分配给 <code>51798</code> 渲染进程，站点 b 将会分配给 <code>51814</code> 渲染进程。</p>
@@ -166,11 +166,11 @@
 </code></pre>
         <p>如果通过 <code>右键-在新标签页中打开链接</code> 来打开站点 b，那么站点 b 也会被分配给另一个独立的渲染进程。</p>
         <p>另外，根据 MDN 的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a#attr-target">描述</a>，如果通过 <code>&lt;a href=&quot;http://192.168.0.100:8080/b.html&quot; target=&quot;_blank&quot;&gt;&lt;/a&gt;</code> 来打开的站点 b，站点 b 也会和站点 a 共享同一个渲染进程。但是实践发现，站点 b 还是会分配给另一个独立的渲染进程，MDN 的描述似乎错了。</p>
-        <h3 id="97f17939-bcce-44a0-85a4-8e978e9eb122">Process-per-site</h3>
+        <h3 id="464fd728-8f55-4487-b71d-0c1c3d74b0f2">Process-per-site</h3>
         <p>所有属于同一站点的站点都将被分配给同一个渲染进程，不属于同一站点的站点将会被分配给不同的渲染进程。</p>
-        <h3 id="64f4da6d-26b6-451f-8178-3e378256e350">Process-per-tab</h3>
+        <h3 id="44939068-e67b-48a1-a41c-34ed9c0395b2">Process-per-tab</h3>
         <p>每个选项卡一个渲染进程。</p>
-        <h3 id="2117aa72-4b7d-4113-bc03-bdbcad236ab8">Single process</h3>
+        <h3 id="8562392f-6f5c-4518-a3fa-1c13082e3efe">Single process</h3>
         <p>整个浏览器都将运行在一个进程中。</p>
     </article>
 </body>
