@@ -94,9 +94,47 @@ globalThis.addEventListener( "click", _ => {
 
 ## Passive event listeners
 
-[Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) 是一项用于消除
+[Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) 是一项用于消除滚动阻塞的特性，它可以保障页面和元素滚动的流畅性，你可以从这篇 [DOM 规范](https://dom.spec.whatwg.org/#dom-addeventlisteneroptions-passive) 中找到它的详细定义，该特性从 Chrome 51 和 Firefix 49 开始生效。
 
-该特性允许开发者自定义触摸事件和 `wheel` 事件的默认动作是否会被主线程阻塞，该特性从 Chrome 51 和 Firefox 49 开始生效。
+该特性允许开发者在使用 `addEventListener` API 来绑定事件监听器的同时，为事件监听器指定一个名为 `passive` 的可选参数。如果 `passive` 的值为 `true`，那么浏览器就会假定事件监听器不会调用 `event.preventDefault()`，然后主线程会继续执行事件监听器（和其他任务），但是合成器线程不会停下来等待主线程，而是直接合成新的页面位图。如果 `passive` 的值为 `false`，那么合成器线程就会停下来等待主线程，直至主线程清空掉所有任务后，合成器线程才会开始工作。
+
+> 如果 `passive` 的值为 `true`，且事件监听器又调用了 `event.preventDefault()`，那么浏览器就会忽略该语句，并在控制台中输出一条警告信息来提醒开发者做了不合理的操作，合成器线程也不会停下来等待主线程。
+
+修改一下上个例子中的代码，将 `{ passive: false }` 改为 `{ passive: true }`，然后再为页面增加一个带有 `:hover` 特效的。再次运行这个例子，点击页面后立即使用触控板或滚轮来滚动页面，同时也将光标不断的移入和移出 DIV 元素，你会发现你可以流畅的滚动页面，但是 DIV 元素的 `:hover` 特效失效了，直至页面突变成白色之后，DIV 元素的 `:hover` 特效才会重新生效。
+
+这是因为浏览器已经知道事件监听器不会调用 `event.preventDefault()` 了，所以合成器线程也就不必再停下来等待主线程了，合成器线程会立即开始合成滚动后的页面位图，由于这个合成过程非常迅速，合成的频率可以达到屏幕的刷新率，所以用户才可以流畅的滚动页面。不过，由于 `:hover` 的特效是依靠重绘来实现的，而重绘会被主线程阻塞，所以 `:hover` 特效才会在页面假死期间失效。
+
+```css
+body {
+    height: 300vh;
+    background-image: linear-gradient( red, blue );
+}
+div {
+    width: 50vmin;
+    height: 50vmin;
+    background-color: pink;
+}
+div:hover {
+    background-color: teal;
+}
+```
+
+```js
+globalThis.addEventListener( "wheel", _ => {}, { passive: true } );
+globalThis.addEventListener( "click", _ => {
+    
+    document.body.style.backgroundImage = "none";
+    
+    for ( let i = 0; i < 100000000; i++ ) new Date(); // 非常耗时的任务
+    
+} );
+```
+
+对于触摸事件和 `wheel` 事件而言，通常我们只有在想要禁用滚动时才会调用 `event.preventListener()`，如果你根本就不打算禁用页面或元素的滚动，那么就请记得总是为这些事件监听器应用 `{ passive: true }` 来提升滚动的流畅性。否则，随着你的页面越来越复杂，主线程很可能会在不知不觉之间要处理越来越多的任务，那么你的页面的滚动体验也会在不知不觉之间变得越来越差。你可以直接观看 [这个视频](https://www.youtube.com/watch?v=NPM6172J22g) 来感受一下 passive event listeners 特性对一个新闻网站的影响，没有使用 `{ passive: true }` 时的滚动体验实在是太糟糕了。
+
+
+
+
 
 该特性的作用是保障页面滚动的流畅性，因为页面滚动是触摸事件和 `wheel` 事件的默认动作，如果这些默认动作会被主线程阻塞，且主线程上的任务非常耗时，那么页面的滚动将会非常卡顿。你可以通过 [这个视频](https://www.youtube.com/watch?v=NPM6172J22g) 来了解这项特性对页面滚动的影响，很显然禁用了这项特性的页面的滚动非常卡顿，而启动了这项特性的页面的滚动则非常流畅。
 
