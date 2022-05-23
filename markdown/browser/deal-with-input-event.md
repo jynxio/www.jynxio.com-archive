@@ -50,7 +50,7 @@ globalThis.addEventListener( "click", _ => {
 
 不过在最开始的时候，使用合成来实现的页面滚动也还是会被主线程阻塞，直至 Chrome 51 开始，Chrome 才利用 [Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) 特性解决了这个问题。
 
-## Passive event listeners
+## 合成阻塞
 
 许多输入事件都具有默认动作，比如
 
@@ -70,11 +70,33 @@ globalThis.addEventListener( "click", _ => {
 
 > 注意，上文所说的“合成器线程不仅仅只是被事件监听器阻塞，而是会被主线程阻塞”不代表所有情况下的合成器线程的行为，只代表由默认动作所引发的合成行为这一种情况。
 
-且合成器线程只有在主线程处理完事件监听器之后才能知道默认动作有没有被取消，所以合成器线程只能等待主线程处理完事件监听器之后再工作。
+```css
+body {
+    height: 300vh;
+    background-image: linear-gradient( red, blue );
+}
+```
 
-且在主线程处理完事件监听器之前，渲染进程永远都不知道默认动作究竟有没有被取消，因此渲染进程才会在
+```js
+globalThis.addEventListener( "wheel", _ => {}, { passive: false } );
+globalThis.addEventListener( "click", _ => {
+    
+    document.body.style.backgroundImage = "none";
+    
+    for ( let i = 0; i < 100000000; i++ ) new Date(); // 非常耗时的任务
+    
+} );
+```
 
-曾经所有的默认动作都会被主线程阻塞，不过后来 DOM 规范新增了一项名为 [Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) 的特性，该特性允许开发者自定义触摸事件和 `wheel` 事件的默认动作是否会被主线程阻塞，该特性从 Chrome 51 和 Firefox 49 开始生效。
+新建一个空白的页面，试试使用上述的代码，点击页面后立即使用触控板或滚轮来滚动页面，你会发现你根本就无法滚动页面，直至页面突变成白色之后，你才能重新滚动页面，再次点击页面就循环这个过程。之所以会出现这种情况，是因为页面滚动被主线程阻塞了，具体来说就是滑动滚轮或上下滑动触控板会触发一个默认动作，这个默认动作的影响就是滚动页面，滚动后的新页面位图是由合成器线程来合成的，而合成器线程会被主线程阻塞，刚好主线程要执行一个非常耗时的任务，在这期间合成器线程都无法合成出滚动后的页面位图来及时响应你的操作，于是你就体验到了页面的假死。
+
+如果你对 JS 代码中的 `{ passive: false }` 感到困惑，请不用担心，因为文章的下一节（Passive event listeners）会阐述它的作用。不过可以提前告诉你，正是它引发了这个页面假死。
+
+## Passive event listeners
+
+[Passive event listeners](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) 是一项用于消除
+
+该特性允许开发者自定义触摸事件和 `wheel` 事件的默认动作是否会被主线程阻塞，该特性从 Chrome 51 和 Firefox 49 开始生效。
 
 该特性的作用是保障页面滚动的流畅性，因为页面滚动是触摸事件和 `wheel` 事件的默认动作，如果这些默认动作会被主线程阻塞，且主线程上的任务非常耗时，那么页面的滚动将会非常卡顿。你可以通过 [这个视频](https://www.youtube.com/watch?v=NPM6172J22g) 来了解这项特性对页面滚动的影响，很显然禁用了这项特性的页面的滚动非常卡顿，而启动了这项特性的页面的滚动则非常流畅。
 
