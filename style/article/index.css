@@ -11,7 +11,8 @@
 
 :root {
     --article-width: 100vmin;
-    --line-height: 1.5;       /* 大部分字符的行高 */
+    --max-article-width: 50rem;
+    --line-height: 1.75;       /* 大部分字符的行高 */
     --border-radius: 0.25rem; /* 块元素的圆滑值 */
 }
 
@@ -43,7 +44,7 @@ html, body, article {
 img {
     box-sizing: border-box;
     display: block;
-    max-width: 88%;
+    max-width: 100%;
     height: auto;
     padding: 0;
     margin: 1rem auto;
@@ -69,7 +70,7 @@ table,
 ul, ol, li,
 pre,
 blockquote {
-    margin: 0.8rem 0;
+    margin: 1.5rem 0;
 }
 
 /* 选中样式 */
@@ -219,6 +220,7 @@ aside > p + p[data-level="1"] {
 /* ------------------------------------------------------------------------------------------------- */
 article {
     width: var( --article-width );
+    max-width: var( --max-article-width );
     padding: 3rem 1rem 3rem 1rem;
     margin: 0 auto;
 }
@@ -232,30 +234,24 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     color: var( --white );
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     text-align: center;
 }
 
 h2 {
-    margin-top: 2em;
-    font-size: 2.5rem;
+    /* margin-top: 2em; */
+    font-size: 2.25rem;
 }
 
 h3 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
 }
 
-h4 {
-    font-size: 1.2rem;
-}
-
-h5 {
+h4, h5, h6 {
     font-size: 1rem;
-    font-weight: normal;
 }
 
-h6 {
-    font-size: 0.8rem;
+h5, h6 {
     font-weight: normal;
 }
 
@@ -263,7 +259,7 @@ h6 {
 /* ------------------------------------------------------------------------------------------------- */
 p#last-updated {
     color: var( --white );
-    text-align: right;
+    text-align: center;
 }
 
 /* 代码 */
@@ -296,10 +292,23 @@ pre {
 /* ------------------------------------------------------------------------------------------------- */
 blockquote {
     display: flow-root;
-    padding: 0 1rem;
-    border-left: 0.5rem solid var( --purple );
+    padding: 0 0.5rem;
+    border-left: 0.25rem solid var( --purple );
     border-radius: var( --border-radius );
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+}
+
+blockquote > p {
+    margin: 0.5rem 0;
+    color: var( --purple );
+}
+
+blockquote > p:first-child {
+    margin-top: 0;
+}
+
+blockquote > p:last-child {
+    margin-bottom: 0;
 }
 
 /* 锚 */
