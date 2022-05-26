@@ -29,6 +29,6 @@
         "deploy": "vercel --prod"
     },
     "dependencies": {
-        "three": "^0.140.2"
+        "three": "^0.141.0"
     }
 }
