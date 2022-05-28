@@ -158,3 +158,18 @@ globalThis.addEventListener( "click", _ => {
 不过，事件代理会扩大 non-fast scrollable region 的范围，比如，如果将事件监听器绑定在了 `globalThis` 节点上，那么整个页面都将会被标记为 non-fast scrollable region。这样一来，无论输入事件发生在页面的哪个位置，合成器线程都必须与主线程通信，哪怕输入事件根本没有触发任何事件监听器。而且，如果主线程还会阻塞合成器线程的话，那么一旦事件监听器的执行时间较长，原本流畅的页面就会变得卡顿，使用 `{ passive: true }` 可以减轻这种负面影响。
 
 ![使用事件代理将可能扩大non-fast scrollable region的区域](/static/image/markdown/browser/input-event-and-page-scroll/event-delegation.png)
+
+## 参考资料
+
+- [Inside look at modern web browser (part 1)](https://developer.chrome.com/blog/inside-browser-part1/)
+- [Inside look at modern web browser (part 2)](https://developer.chrome.com/blog/inside-browser-part2/)
+- [Inside look at modern web browser (part 3)](https://developer.chrome.com/blog/inside-browser-part3/)
+- [Inside look at modern web browser (part 4)](https://developer.chrome.com/blog/inside-browser-part4/)
+- [Multi-process Architecture](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
+
+Chromium 的更新很快，本文无法代表最新的 Chromium，如果你想了解最新的 Chromium 的内容，可以尝试从阅读下述资料开始。
+
+- [Chromuim 概述](https://source.chromium.org/chromium/chromium/src/+/main:cc/README.md)
+- [Chromium 工作原理](https://source.chromium.org/chromium/chromium/src/+/main:docs/how_cc_works.md)
+
+另外，http://chromium.org 上的不少资料已经过期了，你可以从 [这里](https://cs.chromium.org/chromium/src/docs/) 找到最新的 Chromium 的资料。

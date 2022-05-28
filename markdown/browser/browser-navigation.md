@@ -95,3 +95,18 @@ beforeunload 事件会弹出一个对话框，来询问用户是否真的要离�
 如果当前页面绑定了 beforeunload 事件，那么在导航开始之前会先触发该事件，直至用户点击“确认”后，才会导航至新页面。
 
 因为 beforeunload 事件是由渲染进程来处理的，因此如果是通过浏览器进程来发起的导航（比如通过地址栏），浏览器进程就需要在导航开始之前询问渲染进程是否需要执行 beforeunload 事件。如果是通过渲染进程来发起的导航（比如页面中的链接、`window.open` 等 API），渲染进程就会在导航开始之前先检查自身是否有要执行的 beforeunload 事件。
+
+## 参考资料
+
+- [Inside look at modern web browser (part 1)](https://developer.chrome.com/blog/inside-browser-part1/)
+- [Inside look at modern web browser (part 2)](https://developer.chrome.com/blog/inside-browser-part2/)
+- [Inside look at modern web browser (part 3)](https://developer.chrome.com/blog/inside-browser-part3/)
+- [Inside look at modern web browser (part 4)](https://developer.chrome.com/blog/inside-browser-part4/)
+- [Multi-process Architecture](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
+
+Chromium 的更新很快，本文无法代表最新的 Chromium，如果你想了解最新的 Chromium 的内容，可以尝试从阅读下述资料开始。
+
+- [Chromuim 概述](https://source.chromium.org/chromium/chromium/src/+/main:cc/README.md)
+- [Chromium 工作原理](https://source.chromium.org/chromium/chromium/src/+/main:docs/how_cc_works.md)
+
+另外，http://chromium.org 上的不少资料已经过期了，你可以从 [这里](https://cs.chromium.org/chromium/src/docs/) 找到最新的 Chromium 的资料。

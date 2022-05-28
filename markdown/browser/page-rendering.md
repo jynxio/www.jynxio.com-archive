@@ -192,3 +192,18 @@ div {
 ![合成](/static/image/markdown/browser/page-rendering/compositing.png)
 
 Chrome 官方的博客并没有说明 GPU 是如何组合这些位图来生成最终的页面位图的，我推测这个组合的过程是这样的：`draw quads` 包含了位图在页面中的位置信息，这些位置信息类似于 x、y、z 坐标，GPU 会根据位图的位置来摆放这些位图，这些位图既会平铺和排列在一个平面上，也会在垂直方向上发生层叠和遮盖，最后 GPU 就像一个相机一样，沿着垂直于这个平面的方向来拍摄一张快照，这张快照便是最终的页面位图。
+
+## 参考资料
+
+- [Inside look at modern web browser (part 1)](https://developer.chrome.com/blog/inside-browser-part1/)
+- [Inside look at modern web browser (part 2)](https://developer.chrome.com/blog/inside-browser-part2/)
+- [Inside look at modern web browser (part 3)](https://developer.chrome.com/blog/inside-browser-part3/)
+- [Inside look at modern web browser (part 4)](https://developer.chrome.com/blog/inside-browser-part4/)
+- [Multi-process Architecture](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
+
+Chromium 的更新很快，本文无法代表最新的 Chromium，如果你想了解最新的 Chromium 的内容，可以尝试从阅读下述资料开始。
+
+- [Chromuim 概述](https://source.chromium.org/chromium/chromium/src/+/main:cc/README.md)
+- [Chromium 工作原理](https://source.chromium.org/chromium/chromium/src/+/main:docs/how_cc_works.md)
+
+另外，http://chromium.org 上的不少资料已经过期了，你可以从 [这里](https://cs.chromium.org/chromium/src/docs/) 找到最新的 Chromium 的资料。
