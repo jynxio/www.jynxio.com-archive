@@ -11,7 +11,9 @@ globalThis.addEventListener( "load", _ => {
     const { width: aside_width, height: aside_height } = aside.getBoundingClientRect();
 
     displayOrHiddenAside();
+
     aside.style.visibility = "visible";
+
     globalThis.addEventListener( "resize", _ => displayOrHiddenAside() );
 
     function displayOrHiddenAside() {
@@ -22,7 +24,6 @@ globalThis.addEventListener( "load", _ => {
 
         /* 计算页面的尺寸是否足以容纳aside */
         const article_width = Math.min( viewport_width, viewport_height ); // 100vmin，因为page.css规定了article的width是100vmin。
-
         const is_width_enough = ( viewport_width - article_width ) / 2 >= aside_width;
         const is_height_enough = viewport_height >= aside_height;
 
