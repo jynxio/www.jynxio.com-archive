@@ -147,7 +147,7 @@ aside {
     position: fixed;
     top: 50%;
     left: calc( 50vw + var( --article-width ) / 2 );
-    transform: translateY( - 50% );
+    transform: translateY( -50% );
     opacity: 0.5;
     transition: opacity 100ms ease-out;
 }
