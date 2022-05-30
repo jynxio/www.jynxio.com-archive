@@ -38,3 +38,8 @@ function canYouDisplayAside() {
     aside.style.display = is_width_enough && is_height_enough ? "block" : "none";
 
 }
+
+/**
+ * 禁止页面刷新后自动滚动至历史位置
+ */
+history.scrollRestoration && ( history.scrollRestoration = "manual" );
