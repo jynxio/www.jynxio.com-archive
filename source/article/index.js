@@ -3,7 +3,7 @@ import "/style/public/font.css";
 import "/style/article/index.css";
 
 /**
- * 若页面的尺寸足够容纳aside，则显示aside，否则隐藏aside。
+ * 若页面的尺寸足够容纳aside，则显示aside，否则隐藏aside
  */
 globalThis.addEventListener( "load", _ => {
 
@@ -23,7 +23,7 @@ globalThis.addEventListener( "load", _ => {
         const viewport_height = globalThis.innerHeight;
 
         /* 计算页面的尺寸是否足以容纳aside */
-        const article_width = Math.min( viewport_width, viewport_height ); // 100vmin，因为page.css规定了article的width是100vmin。
+        const article_width = Math.min( viewport_width, viewport_height ); // 100vmin，因为page.css规定了article的width是100vmin
         const is_width_enough = ( viewport_width - article_width ) / 2 >= aside_width;
         const is_height_enough = viewport_height >= aside_height;
 
@@ -37,4 +37,4 @@ globalThis.addEventListener( "load", _ => {
 /**
  * 禁止页面刷新后自动滚动至历史位置
  */
-history.scrollRestoration && ( history.scrollRestoration = "manual" );
+history.scrollRestoration && ( history.scrollRestoration = "manual" ); // BUG：失效
