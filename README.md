@@ -18,3 +18,6 @@ Execute the following commands in order to deploy new notes. After I made some o
 2. `npm run create-catalogue`
 3. `npm run create-font`
 4. `npm run deploy`
+
+### License
+I am considering...
