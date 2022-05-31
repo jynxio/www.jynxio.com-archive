@@ -19,5 +19,7 @@ Execute the following commands in order to deploy new notes. After I made some o
 3. `npm run create-font`
 4. `npm run deploy`
 
+<br/>
+
 ### License
 I am considering...
