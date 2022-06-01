@@ -22,4 +22,15 @@ Execute the following commands in order to deploy new notes. After I made some o
 <br/>
 
 ### License
-I am considering...
+This project uses the [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode) license, it includes:
+- Reproduction
+- Attribution
+- No commercial
+- No derivative
+
+该项目使用 [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.zh-Hans) 协议，该协议规定：
+- 自由转载
+- 保持署名
+- 禁止商用
+- 禁止衍生
+
