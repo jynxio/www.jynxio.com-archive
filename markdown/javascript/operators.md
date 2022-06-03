@@ -229,6 +229,8 @@ condition ? expr_1 : expr_2;
 
 若 `condition` 的 truthy 为 `true`，则执行 `expr_1`，且忽略 `expr_2`，最后返回 `expr_1` 的初始值。否则忽略 `expr_1`，执行 `expr_2`，最后返回 `expr_2` 的初始值。
 
+注意，非表达式的语法结构不能作为三元运算符的运算元，比如函数内部的 `return`，循环体内的 `break` 和 `continue`。
+
 ## 比较运算符
 
 所有比较运算符均会返回布尔值。
