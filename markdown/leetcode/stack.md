@@ -197,7 +197,7 @@ function decimalToAnyBase( decimal_number, base ) {
 		remainder_stack.push( remainder );
         quotient = Math.floor( quotient / base );
         
-    } while ( quotient )
+	} while ( quotient )
         
     let binary_string = "";
     
