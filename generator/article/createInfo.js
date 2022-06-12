@@ -16,7 +16,7 @@ const { createUuid } = require( "./createUuid" );
  * name属性代表该md文件夹的文件名，alias属性代表该md文件夹的别名，children下的name属性代表md文件的文件名，children下的alias属性代表md文件的别名，mdPath代表md文件的路径，
  * htmlPath代表由md文件转译生成的html文件的路径，buildPath代表html文件打包后的存储路径。
  */
- function createInfo( {
+function createInfo( {
     name,
     alias,
     children,

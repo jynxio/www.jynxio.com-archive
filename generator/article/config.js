@@ -55,6 +55,31 @@ const createBrowserInfo = _ => {
 
 };
 
+const createLeetcodeInfo = _ => {
+
+    const name = "leetcode";
+    const alias = "LeetCode";
+    const md_path = BASE_MD_PATH + "/" + name;
+    const html_path = BASE_HTML_PATH + "/" + name;
+    const build_path = BASE_BUILD_PATH;
+    const children = [
+        { name: "time-space-complexity", alias: "时间和空间复杂度" },
+        { name: "stack", alias: "栈" },
+        { name: "queue", alias: "队列" },
+    ];
+    const options = {
+        name,
+        alias,
+        children,
+        mdPath: md_path,
+        htmlPath: html_path,
+        buildPath: build_path,
+    };
+
+    return createInfo( options );
+
+};
+
 const createBabelInfo = _ => {
 
     const name = "babel";
