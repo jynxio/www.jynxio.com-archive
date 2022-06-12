@@ -27,7 +27,27 @@ JavaScript 中没有队列这种数据结构，我们将使用对象来实现一
 | ------ | -------------- |
 | size   | 查询元素的数量 |
 
+### 第一步：实现思路
+
+我们会创建一个名为 `Queue` 的类来代表队列，在 `Queue` 的内部，我们会创建一个名为 `#elements` 的内部属性，它是一个普通的 JavaScript 对象，比如 `{}`，我们用它来存储队列中的元素。具体来说，`#elements` 对象使用键值对来存储队列中的元素，其中键是元素的序号字符串，值就是元素。
+
+![#elements内部属性](/static/image/markdown/leetcode/queue/elements-property.png)
+
+如果我们修改了队列，那么我们就需要更新 `#elements`，比如我们从队首移除了 `"John"` 并向队尾依次
+
 ### 第一步：创建队列的类
+
+我们会创建一个名为 `Queue` 的类来代表队列这种数据结
+
+```js
+class Queue {
+    
+    #to = 0;
+    #from = 0;
+    #elements = {};
+    
+}
+```
 
 
 
