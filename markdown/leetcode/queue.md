@@ -49,7 +49,7 @@ JavaScript 中没有队列这种数据结构，我们将使用对象来实现一
 
 从这一步开始，我们就要正式开始创建我们的队列了，简明的代码比啰嗦的文字要更加易懂，所以请直接来看代码吧！
 
-首先，创建类的大致结构。
+首先，创建类的大致结构：
 
 ```js
 class Queue {
@@ -71,16 +71,116 @@ class Queue {
 }
 ```
 
-
-
-然后，创建类的构造函数
+然后，实现构造函数：
 
 ```js
 class Queue {
     
-    #to = 0;
-    #from = 0;
+    // ...
+    
+    constructor( ... elements ) {
+        
+        this.size = 0;
+        this.enqueue( ... elements );
+        
+    }
+    
+}
+```
+
+然后，实现 `enqueue` 方法：
+
+```js
+class Queue {
+    
+    // ...
+    
+    enqueue( ... elements ) {
+        
+        elements.forEach( element => {
+            
+            this.#elements[ this.#to ] = element;
+            this.#to ++;
+            this.size ++;
+            
+        } );
+        
+        return this;
+        
+    }
+    
+}
+```
+
+然后，实现 `dequeue` 方法：
+
+```js
+class Queue {
+    
+	// ...
+    
+    dequeue() {
+        
+        if ( ! this.size ) return;
+        
+        const element = this.#elements[ this.#from ];
+        
+		delete this.#elements[ this.#from ];
+        this.#from ++;
+        this.size --;
+        
+        return element;
+        
+    }
+    
+}
+```
+
+然后，实现 `clear` 方法：
+
+```js
+class Queue {
+    
+    // ...
+    
+    clear() {
+        
+        this.#to = 0;
+        this.#from = 0;
+        this.#elements = {};
+        this.size = 0;
+
+        return this.#elements;
+        
+    }
+    
+}
+```
+
+然后，实现 `peek` 方法：
+
+```js
+class Queue {
+    
+    // ...
+    
+    peek() {
+        
+        return this.#elements[ this.#from ];
+        
+    }
+    
+}
+```
+
+最后，完整的 `Queue` 的实现代码如下：
+
+```js
+class Queue {
+    
     #elements = {};
+    #from = 0;
+    #to = 0;
     
     constructor( ... elements ) {
         
@@ -93,7 +193,7 @@ class Queue {
         
         elements.forEach( element => {
             
-            this.#elements[ this.to ] = element;
+            this.#elements[ this.#to ] = element;
             this.#to ++;
             this.size ++;
             
