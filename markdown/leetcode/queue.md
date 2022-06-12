@@ -27,21 +27,29 @@ JavaScript 中没有队列这种数据结构，我们将使用对象来实现一
 | ------ | -------------- |
 | size   | 查询元素的数量 |
 
-### 第一步：实现思路
+### 第一步：明确实现的思路
 
 我们会创建一个名为 `Queue` 的类来代表队列，在 `Queue` 的内部，我们会创建一个名为 `#elements` 的内部属性，它是一个普通的 JavaScript 对象，比如 `{}`，我们用它来存储队列中的元素。具体来说，`#elements` 对象使用键值对来存储队列中的元素，其中键是元素的序号字符串，值就是元素。
 
 ![#elements内部属性](/static/image/markdown/leetcode/queue/elements-property.png)
 
-如果我们修改了队列，那么我们就需要更新 `#elements` 的键值对，在说明如何更新 `#elements` 之前，我们需要先了解一下 `#elements` 是如何存储队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 `#from`，另一个名为 `#to`，指针 `#from` 会指向队首元素在 `#elements` 中的位置，指针 `#to` 会指向队尾元素在 `#elements` 中的位置的 **下一个位置**。
+如果我们修改了队列，那么我们就需要更新 `#elements` 的键值对，在说明如何更新 `#elements` 之前，我们需要先了解一下 `#elements` 是如何存储队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 `#from`，另一个名为 `#to`，指针 `#from` 会指向队首元素在 `#elements` 中的位置，指针 `#to` 会指向队尾元素在 `#elements` 中的位置的 **下一个位置**，就像下图这样。
 
+> 注意：`#from` 和 `#to` 不是 C 语言中的指针，在这个例子中，`#from` 和 `#to` 中存储的值是序号字符串。
 
+![指针#from和#to](/static/image/markdown/leetcode/queue/pointer-from-and-to.png)
 
-比如我们从队首移除了 `"John"`，并向队尾依次添加了 `"Camila"` 和 `Lina`，那么
+这种设计的好处之一是我们可以基于 `#from` 和 `#to` 的值来推算出 `#elements` 中所有的键值对（即队列中所有的元素），另一个好处是我们只需要移动指针的位置（即改变指针的值）即可实现移除和添加元素，而不需要像数组的 `splice` 方法那样重排所有元素的序号。举个例子，如果我们要移除掉队首的 `"John"` 和向队尾添加 `"Jynx"` 和 `"Neo"`，那么我们只需要将 `#from` 和 `#to` 各自向下移动 1 格和 2 格就可以了，就像下图这样。
 
-### 第一步：创建队列的类
+![使用指针来修改队列](/static/image/markdown/leetcode/queue/change-queue-by-pointer.png)
 
-我们会创建一个名为 `Queue` 的类来代表队列这种数据结
+明确了实现队列的核心思路后，就可以开始实现我们的队列了。
+
+### 第二步：创建队列的类
+
+从这一步开始，我们就要正式开始创建我们的队列了，简明的代码比啰嗦的文字要更加易懂，所以请直接来看代码吧！
+
+首先，创建类的大致结构。
 
 ```js
 class Queue {
@@ -50,10 +58,22 @@ class Queue {
     #from = 0;
     #elements = {};
     
+	constructor( ... elements ) {}
+    
+    enqueue( ... elements ) {}
+    
+    dequeue() {}
+
+    clear() {}
+    
+    peek() {}
+    
 }
 ```
 
 
+
+然后，创建类的构造函数
 
 ```js
 class Queue {
@@ -71,9 +91,9 @@ class Queue {
     
     enqueue( ... elements ) {
         
-        elements.forEach( ( element, index ) => {
+        elements.forEach( element => {
             
-            this.#elements[ this.to + index ] = element;
+            this.#elements[ this.to ] = element;
             this.#to ++;
             this.size ++;
             
@@ -101,9 +121,10 @@ class Queue {
         
         this.#to = 0;
         this.#from = 0;
+        this.#elements = {};
         this.size = 0;
 
-        return this.#elements = {};
+        return this.#elements;
         
     }
     
