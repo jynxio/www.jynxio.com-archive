@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>队列</title>
+</head>
+
+<body>
+    <header>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+    </header>
+    <aside>
+        <p><a href="#">IN THIS ARTICLE</a></p>
+        <p data-level="1"><a href="#dbeaf2ad-6afc-48bd-8d71-a45b127290a8">概述</a></p>
+        <p data-level="1"><a href="#1424f3c0-e1ba-4f5b-b8ff-4d6c66188939">实现队列</a></p>
+        <p data-level="1"><a href="#d641e62f-abc0-41cc-a1fb-aa9b06811f0b">TODO</a></p>
+    </aside>
+    <article>
+        <h1>队列</h1>
+        <p id="last-updated">Last Updated: 13/06/2022</p>
+        <h2 id="dbeaf2ad-6afc-48bd-8d71-a45b127290a8">概述</h2>
+        <p>队列是遵循先进先出（FIFO）原则的有序集合，“先进先出”是指最先入列的数据会最先出列，最后入列的数据会最后出列。</p>
+        <p>举例来说，队列就像现实生活中的排队，早来的人会排在队伍的前面，后来会排在队伍的后面，队首的人会优先获得服务并离队，队尾的人只能最后获得服务再离队，如果有新人加入，那么新人必须排在队伍的最后，其中队伍代表队列，人代表数据。</p>
+        <h2 id="1424f3c0-e1ba-4f5b-b8ff-4d6c66188939">实现队列</h2>
+        <p>JavaScript 中没有队列这种数据结构，我们将使用对象来实现一个队列。其实我们也可以使用数组来实现队列，不过考虑到基于数组的队列有可能会触发某些遍历操作，而为了获得更好的性能，我们需要避免这种情况，所以我们最终采用了对象。</p>
+        <p>我们实现的队列将会拥有以下方法和属性：</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>方法名</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>enqueue</td>
+                    <td>向队尾添加一个至多个元素，然后返回更新后的队列</td>
+                </tr>
+                <tr>
+                    <td>dequeue</td>
+                    <td>从队首移除一个元素，然后返回这个元素</td>
+                </tr>
+                <tr>
+                    <td>clear</td>
+                    <td>清空队列，然后返回更新后的队列</td>
+                </tr>
+                <tr>
+                    <td>peek</td>
+                    <td>查询位于队首的元素</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>属性名</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>size</td>
+                    <td>查询元素的数量</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 id="e51748fd-f642-4614-bf61-6cc1fd7f69cb">第一步：明确实现的思路</h3>
+        <p>我们会创建一个名为 <code>Queue</code> 的类来代表队列，在 <code>Queue</code> 的内部，我们会创建一个名为 <code>#elements</code> 的内部属性，它是一个普通的 JavaScript 对象，比如 <code>{}</code>，我们用它来存储队列中的元素。具体来说，<code>#elements</code> 对象使用键值对来存储队列中的元素，其中键是元素的序号字符串，值就是元素。</p>
+        <p><img src="/static/image/markdown/leetcode/queue/elements-property.png" alt="#elements内部属性"></p>
+        <p>如果我们修改了队列，那么我们就需要更新 <code>#elements</code> 的键值对，在说明如何更新 <code>#elements</code> 之前，我们需要先了解一下 <code>#elements</code> 是如何存储队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 <code>#from</code>，另一个名为 <code>#to</code>，指针 <code>#from</code> 会指向队首元素在 <code>#elements</code> 中的位置，指针 <code>#to</code> 会指向队尾元素在 <code>#elements</code> 中的位置的 <strong>下一个位置</strong>，就像下图这样。</p>
+        <blockquote>
+            <p>注意：<code>#from</code> 和 <code>#to</code> 不是 C 语言中的指针，在这个例子中，<code>#from</code> 和 <code>#to</code> 中存储的值是序号字符串。</p>
+        </blockquote>
+        <p><img src="/static/image/markdown/leetcode/queue/pointer-from-and-to.png" alt="指针#from和#to"></p>
+        <p>这种设计的好处之一是我们可以基于 <code>#from</code> 和 <code>#to</code> 的值来推算出 <code>#elements</code> 中所有的键值对（即队列中所有的元素），另一个好处是我们只需要移动指针的位置（即改变指针的值）即可实现移除和添加元素，而不需要像数组的 <code>splice</code> 方法那样重排所有元素的序号。举个例子，如果我们要移除掉队首的 <code>&quot;John&quot;</code> 和向队尾添加 <code>&quot;Jynx&quot;</code> 和 <code>&quot;Neo&quot;</code>，那么我们只需要将 <code>#from</code> 和 <code>#to</code> 各自向下移动 1 格和 2 格就可以了，就像下图这样。</p>
+        <p><img src="/static/image/markdown/leetcode/queue/change-queue-by-pointer.png" alt="使用指针来修改队列"></p>
+        <p>明确了实现队列的核心思路后，就可以开始实现我们的队列了。</p>
+        <h3 id="733f66be-60ed-421a-8a4e-de6c0ca3ccc3">第二步：创建队列的类</h3>
+        <p>从这一步开始，我们就要正式开始创建我们的队列了，简明的代码比啰嗦的文字要更加易懂，所以请直接来看代码吧！</p>
+        <p>首先，创建类的大致结构：</p>
+        <pre><code class="language-js">class Queue {
+    
+    #to = 0;
+    #from = 0;
+    #elements = {};
+    
+    constructor( ... elements ) {}
+    
+    enqueue( ... elements ) {}
+    
+    dequeue() {}
+
+    clear() {}
+    
+    peek() {}
+    
+}
+</code></pre>
+        <p>然后，实现构造函数：</p>
+        <pre><code class="language-js">class Queue {
+    
+    // ...
+    
+    constructor( ... elements ) {
+        
+        this.size = 0;
+        this.enqueue( ... elements );
+        
+    }
+    
+}
+</code></pre>
+        <p>然后，实现 <code>enqueue</code> 方法：</p>
+        <pre><code class="language-js">class Queue {
+    
+    // ...
+    
+    enqueue( ... elements ) {
+        
+        elements.forEach( element =&gt; {
+            
+            this.#elements[ this.#to ] = element;
+            this.#to ++;
+            this.size ++;
+            
+        } );
+        
+        return this;
+        
+    }
+    
+}
+</code></pre>
+        <p>然后，实现 <code>dequeue</code> 方法：</p>
+        <pre><code class="language-js">class Queue {
+    
+    // ...
+    
+    dequeue() {
+        
+        if ( ! this.size ) return;
+        
+        const element = this.#elements[ this.#from ];
+        
+        delete this.#elements[ this.#from ];
+        this.#from ++;
+        this.size --;
+        
+        return element;
+        
+    }
+    
+}
+</code></pre>
+        <p>然后，实现 <code>clear</code> 方法：</p>
+        <pre><code class="language-js">class Queue {
+    
+    // ...
+    
+    clear() {
+        
+        this.#to = 0;
+        this.#from = 0;
+        this.#elements = {};
+        this.size = 0;
+
+        return this.#elements;
+        
+    }
+    
+}
+</code></pre>
+        <p>然后，实现 <code>peek</code> 方法：</p>
+        <pre><code class="language-js">class Queue {
+    
+    // ...
+    
+    peek() {
+        
+        return this.#elements[ this.#from ];
+        
+    }
+    
+}
+</code></pre>
+        <p>最后，完整的 <code>Queue</code> 的实现代码如下：</p>
+        <pre><code class="language-js">class Queue {
+    
+    #elements = {};
+    #from = 0;
+    #to = 0;
+    
+    constructor( ... elements ) {
+        
+        this.size = 0;
+        this.enqueue( ... elements );
+        
+    }
+    
+    enqueue( ... elements ) {
+        
+        elements.forEach( element =&gt; {
+            
+            this.#elements[ this.#to ] = element;
+            this.#to ++;
+            this.size ++;
+            
+        } );
+        
+        return this;
+        
+    }
+    
+    dequeue() {
+        
+        if ( ! this.size ) return;
+        
+        const element = this.#elements[ this.#from ];
+        
+        delete this.#elements[ this.#from ];
+        this.#from ++;
+        this.size --;
+        
+        return element;
+        
+    }
+    
+    clear() {
+        
+        this.#to = 0;
+        this.#from = 0;
+        this.#elements = {};
+        this.size = 0;
+
+        return this.#elements;
+        
+    }
+    
+    peek() {
+        
+        return this.#elements[ this.#from ];
+        
+    }
+    
+}
+</code></pre>
+        <h2 id="d641e62f-abc0-41cc-a1fb-aa9b06811f0b">TODO</h2>
+        <p>双端队列</p>
+        <p>队列的应用</p>
+    </article>
+</body>
+
+</html>

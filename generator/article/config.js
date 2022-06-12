@@ -178,6 +178,7 @@ const createAllInfo = _ => {
     return ( [
         createJavascriptInfo(),
         createBrowserInfo(),
+        createLeetcodeInfo(),
         createNpmInfo(),
         createBabelInfo(),
         createWebpackInfo(),
