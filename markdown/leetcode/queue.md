@@ -33,7 +33,11 @@ JavaScript 中没有队列这种数据结构，我们将使用对象来实现一
 
 ![#elements内部属性](/static/image/markdown/leetcode/queue/elements-property.png)
 
-如果我们修改了队列，那么我们就需要更新 `#elements`，比如我们从队首移除了 `"John"` 并向队尾依次
+如果我们修改了队列，那么我们就需要更新 `#elements` 的键值对，在说明如何更新 `#elements` 之前，我们需要先了解一下 `#elements` 是如何存储队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 `#from`，另一个名为 `#to`，指针 `#from` 会指向队首元素在 `#elements` 中的位置，指针 `#to` 会指向队尾元素在 `#elements` 中的位置的 **下一个位置**。
+
+
+
+比如我们从队首移除了 `"John"`，并向队尾依次添加了 `"Camila"` 和 `Lina`，那么
 
 ### 第一步：创建队列的类
 
