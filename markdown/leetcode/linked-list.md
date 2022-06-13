@@ -25,4 +25,12 @@ typora-root-url: ..\..
 
 ## 实现链表
 
-TODO
+我们实现的链表将会有以下方法和属性：
+
+getIndex
+
+getNode
+
+insert
+
+Remove
