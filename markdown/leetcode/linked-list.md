@@ -111,7 +111,7 @@ class LinkedList {
             
         }
         
-        return - 1; // TODO
+        return - 1;
         
     }
     
@@ -141,10 +141,16 @@ class LinkedList {
     removeNodeByValue( value ) {
         
         const current_node = getNodeByValue( value );
-        const previous = index - 1 < 0 ? undefined : getNodeByValue( index - 1 );
-        const next = inex + 1 > ( this.size - 1 ) ? undefined : getNodeByIndex( index + 1 );
+        const current_index = getIndexByNode( current_node );
+// TODO
+        const previous_node = current_index - 1 < 0 
+        	? undefined 
+        	: getNodeByIndex( current_index - 1 );
+        const next_node = current_index + 1 > ( this.size - 1 ) 
+        	? undefined 
+        	: getNodeByIndex( current_index + 1 );
             
-		return this.removeNode( previous, current, next );
+		return this.removeNode( previous_node, current_node, next_node );
         
     }
     
