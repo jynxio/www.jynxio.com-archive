@@ -42,32 +42,125 @@ typora-root-url: ..\..
 | ------ | -------------- |
 | size   | 查询元素的数量 |
 
-### 第一步：创建基础组件
+### 
+
+下述程序不考虑“如何处理错误的调用”，因为一旦写了，例子就更不容易看懂了
+
+
 
 ```js
 class Node {
     
-	constructor( element ) {
+    constructor( value ) {
         
-        this.value = element;
+        this.value = value;
         this.next = undefined;
         
     }
     
 }
+```
 
+
+
+```js
 class LinkedList {
     
-    #elements = {};
-	#head = undefined;
+    #head = undefined;
     
-    constructor( ... elements ) {
+    constructor( ... values ) {
         
         this.size = 0;
-        
-        insert( 0, ... elements );
+        this.insert( 0, ... values );
         
     }
+    
+    getNodeByIndex( index ) {
+        
+		let node = this.#head;
+        
+        for ( let i = 0; i < index; i++ ) node = node.next;
+        
+        return node;
+        
+    }
+    
+    getNodeByValue( value ) {
+        
+        let node = this.#head;
+        
+		while ( node.next ) {
+            
+            if ( node.value === value ) return node;
+            
+            node = node.next;
+            
+        }
+        
+    }
+    
+    getIndexByNode( node ) {
+        
+        let current_node = this.#head;
+        
+        for ( let i = 0; i < this.size; i++ ) {
+            
+            if ( current_node === node ) return i;
+            
+            current_node = current_node.next;
+            
+        }
+        
+        return - 1; // TODO
+        
+    }
+    
+    removeNode( previous, current, next ) {
+        
+        if ( ! previous && ! next ) this.#head = undefined;
+        else if ( previous && ! next ) previous.next = undefined;
+        else if ( ! previous && next ) this.#head = next;
+        else previous.next = next;
+        
+        this.size --;
+        
+        return this;
+        
+    }
+    
+    removeNodeByIndex( index ) {
+        
+        const current = getNodeByIndex( index );
+        const previous = index - 1 < 0 ? undefined : getNodeByIndex( index - 1 );
+        const next = inex + 1 > ( this.size - 1 ) ? undefined : getNodeByIndex( index + 1 );
+            
+		return this.removeNode( previous, current, next );
+        
+    }
+    
+    removeNodeByValue( value ) {
+        
+        const current_node = getNodeByValue( value );
+        const previous = index - 1 < 0 ? undefined : getNodeByValue( index - 1 );
+        const next = inex + 1 > ( this.size - 1 ) ? undefined : getNodeByIndex( index + 1 );
+            
+		return this.removeNode( previous, current, next );
+        
+    }
+    
+    insert( index, ... values ) {}
+    
+    clear() {}
+    
+}
+```
+
+
+
+
+
+```js
+class LinkedList {
     
     getNode( index ) {
 
@@ -122,9 +215,13 @@ class LinkedList {
         
     }
     
-    removeElement() {}
+    removeElement( element ) {
+        
+        
+        
+    }
     
-    removeIndex() {}
+    removeIndex( index ) {}
     
     clear() {}
     
