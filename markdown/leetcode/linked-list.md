@@ -68,169 +68,149 @@ class LinkedList {
     
     #head = undefined;
     
-    constructor( ... values ) {
-        
-        this.size = 0;
-        this.insert( 0, ... values );
-        
-    }
+    constructor( ... values ) {}
     
     getNodeByIndex( index ) {
         
-		let node = this.#head;
+        if ( this.size === 0 ) return { success: false };
+        if ( index < 0 || index >= this.size ) return { success: false };
         
-        for ( let i = 0; i < index; i++ ) node = node.next;
+        let node = this.#head;
         
-        return node;
+        for ( let i = 0; i < index; i ++ ) node = node.next;
+        
+        return { success: true, value: node };
         
     }
     
     getNodeByValue( value ) {
         
-        let node = this.#head;
+        if ( this.size === 0 ) return { success: false };
         
-		while ( node.next ) {
+		let node = this.#head;
+        
+		do {
             
-            if ( node.value === value ) return node;
+            if ( node.value === value ) return { success: true, value: node };
             
             node = node.next;
             
-        }
+        } while ( node );
+        
+        return { success: false };
         
     }
     
-    getIndexByNode( node ) {
+    getValueByIndex( index ) {
         
-        let current_node = this.#head;
+        const response = this.getNodeByIndex( index );
         
-        for ( let i = 0; i < this.size; i++ ) {
-            
-            if ( current_node === node ) return i;
-            
-            current_node = current_node.next;
-            
-        }
+        if ( ! response.success ) return { success: false };
         
-        return - 1;
+        return { success: true, value: response.value.value };
         
     }
     
-    removeNode( previous, current, next ) {
+    getIndexByValue( value ) {
+
+        if ( this.size === 0 ) return { success: false };
         
-        if ( ! previous && ! next ) this.#head = undefined;
-        else if ( previous && ! next ) previous.next = undefined;
-        else if ( ! previous && next ) this.#head = next;
-        else previous.next = next;
+        let index = 0;
+        let node = this.#head;
         
-        this.size --;
+        do {
+            
+            if ( node.value === value ) return { success: true, value: index };
+            
+            index ++;
+            node = node.next;
+            
+        } while ( node );
         
-        return this;
+        return { success: false };
         
     }
     
     removeNodeByIndex( index ) {
         
-        const current = getNodeByIndex( index );
-        const previous = index - 1 < 0 ? undefined : getNodeByIndex( index - 1 );
-        const next = inex + 1 > ( this.size - 1 ) ? undefined : getNodeByIndex( index + 1 );
+        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
+        
+        if ( ! has_current_node ) return { success: false };
+        
+		const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
+        const { success: has_next_node, value: next_node } = this.getNodeByIndex( index + 1 );
+        
+        if ( has_previous_node && has_current_node && has_next_node ) {
             
-		return this.removeNode( previous, current, next );
+            previous_node.next = next_node;
+            
+        } else if ( has_previous_node && has_current_node ) {
+            
+            has_previous_node.next = undefined;
+            
+        } else if ( has_current_node && has_next_node ) {
+            
+            this.#head = next_node;
+            
+        } else {
+            
+            this.#head = undefined;
+            
+        }
+        
+        this.size --;
+        
+        return { success: true, value: this };
         
     }
     
     removeNodeByValue( value ) {
         
-        const current_node = getNodeByValue( value );
-        const current_index = getIndexByNode( current_node );
-// TODO
-        const previous_node = current_index - 1 < 0 
-        	? undefined 
-        	: getNodeByIndex( current_index - 1 );
-        const next_node = current_index + 1 > ( this.size - 1 ) 
-        	? undefined 
-        	: getNodeByIndex( current_index + 1 );
-            
-		return this.removeNode( previous_node, current_node, next_node );
+        const get_index_response = this.getIndexByValue( value );
+        
+		if ( ! get_index_response.success ) return { success: false };
+        
+        const index = get_index_response.value;
+        const remove_node_response = this.removeNodeByIndex( index );
+        const remove_node_success = remove_node_response.success;
+        
+		return remove_node_success ? { success: true, value: this } : { success: false };
         
     }
     
-    insert( index, ... values ) {}
-    
-    clear() {}
-    
-}
-```
-
-
-
-
-
-```js
-class LinkedList {
-    
-    getNode( index ) {
-
-        if ( index < 0 || index >= this.size ) return;
+    insert( index, ... values ) {
         
-        let node = this.#head;
+        const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
         
-        for ( let i = 0; i < index; i++ ) node = node.next;
+        if ( ! has_current_node ) return { success: false };
         
-        return node;
+        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
+        const nodes = values.map( value => { value, next: undefined } );
+		const last_node = nodes.slice( - 1 )[ 0 ];
+        const first_node = nodes[ 0 ];
         
-    }
-    
-    getElement( index ) {
+        nodes.reducer( ( previous_node, current_node ) => previous_node.next = current_node );
         
-		return this.getNode( index )?.value;
+        if ( ! has_previous_node ) this.#head = first_node;
+        else previous_node.next = first_node;
         
-    }
-    
-    getIndex( element ) {
-        
-        if ( ! this.size ) return - 1;
-        
-        let node = this.#head;
-        
-		for ( let i = 0; i < this.size; i++ ) {
-            
-            if ( node.value === element ) return i;
-            
-            node = node.next;
-            
-        }
-        
-        return - 1;
-        
-    }
-    
-    insert( index, ... elements ) {
-        
-        if ( ! elements.length ) return this;
-        
-        const nodes = elements
-        	.map( element => new Node( element ) )                        // 创建节点
-        	.reducer( ( previous, current ) => previous.next = current ); // 连接节点
-        
-        if ( ! this.size ) this.#head = nodes[ 0 ];
-        else this.getNode( index ).next = nodes[ 0 ]; 
+        last_node.next = current_node;
         
         this.size += nodes.length;
         
-        return this;
+        return { success: true, value: this };
         
     }
     
-    removeElement( element ) {
+    clear() {
         
-        
+        this.size = 0;
+        this.#head = undefined;
         
     }
-    
-    removeIndex( index ) {}
-    
-    clear() {}
     
 }
 ```
+
+
 
