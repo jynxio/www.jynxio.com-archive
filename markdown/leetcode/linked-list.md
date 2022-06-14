@@ -23,14 +23,111 @@ typora-root-url: ..\..
 
 ![链表的结构](/static/image/markdown/leetcode/linked-list/linked-list-structure.png)
 
+链表的好处是可以任意的扩展长度，并且增删元素时无需重排后续元素的位置。不过链表的缺点是不能像数组那样直接访问任何位置的元素，如果想要访问链表中的某个元素，就必须从链表的第一个节点开始搜索，直至找到目标元素。
+
 ## 实现链表
 
 我们实现的链表将会有以下方法和属性：
 
-getIndex
+| 方法名                      | 描述                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| `insert( index, elements )` | 向链表的 `index` 位置插入零至多个新元素，然后返回更新后的链表 |
+| `removeElement( element )`  | 从链表中移除第一个 `element` 元素，然后返回更新后的链表      |
+| `removeIndex( index )`      | 从链表中移除 `index` 位置的元素，然后返回更新后的链表        |
+| `getElement( index )`       | 查询链表中 `index` 位置的元素                                |
+| `getIndex( element )`       | 查询链表中第一个 `element` 元素的位置                        |
+| `clear()`                   | 清空链表，然后返回清空后的链表                               |
 
-getNode
+| 属性名 | 描述           |
+| ------ | -------------- |
+| size   | 查询元素的数量 |
 
-insert
+### 第一步：创建基础组件
 
-Remove
+```js
+class Node {
+    
+	constructor( element ) {
+        
+        this.value = element;
+        this.next = undefined;
+        
+    }
+    
+}
+
+class LinkedList {
+    
+    #elements = {};
+	#head = undefined;
+    
+    constructor( ... elements ) {
+        
+        this.size = 0;
+        
+        insert( 0, ... elements );
+        
+    }
+    
+    getNode( index ) {
+
+        if ( index < 0 || index >= this.size ) return;
+        
+        let node = this.#head;
+        
+        for ( let i = 0; i < index; i++ ) node = node.next;
+        
+        return node;
+        
+    }
+    
+    getElement( index ) {
+        
+		return this.getNode( index )?.value;
+        
+    }
+    
+    getIndex( element ) {
+        
+        if ( ! this.size ) return - 1;
+        
+        let node = this.#head;
+        
+		for ( let i = 0; i < this.size; i++ ) {
+            
+            if ( node.value === element ) return i;
+            
+            node = node.next;
+            
+        }
+        
+        return - 1;
+        
+    }
+    
+    insert( index, ... elements ) {
+        
+        if ( ! elements.length ) return this;
+        
+        const nodes = elements
+        	.map( element => new Node( element ) )                        // 创建节点
+        	.reducer( ( previous, current ) => previous.next = current ); // 连接节点
+        
+        if ( ! this.size ) this.#head = nodes[ 0 ];
+        else this.getNode( index ).next = nodes[ 0 ]; 
+        
+        this.size += nodes.length;
+        
+        return this;
+        
+    }
+    
+    removeElement() {}
+    
+    removeIndex() {}
+    
+    clear() {}
+    
+}
+```
+
