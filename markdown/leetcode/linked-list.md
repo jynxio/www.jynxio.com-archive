@@ -50,14 +50,14 @@ typora-root-url: ..\..
 
 ```js
 class Node {
-    
+
     constructor( value ) {
-        
+
         this.value = value;
         this.next = undefined;
-        
+
     }
-    
+
 }
 ```
 
@@ -65,150 +65,186 @@ class Node {
 
 ```js
 class LinkedList {
-    
+
     #head = undefined;
-    
-    constructor( ... values ) {}
-    
+
+    constructor( ... values ) {
+
+        this.size = 0;
+        this.insert( 0, ... values );
+
+    }
+
     getNodeByIndex( index ) {
-        
+
         if ( this.size === 0 ) return { success: false };
         if ( index < 0 || index >= this.size ) return { success: false };
-        
+
         let node = this.#head;
-        
+
         for ( let i = 0; i < index; i ++ ) node = node.next;
-        
+
         return { success: true, value: node };
-        
+
     }
-    
+
     getNodeByValue( value ) {
-        
+
         if ( this.size === 0 ) return { success: false };
-        
+
 		let node = this.#head;
-        
+
 		do {
-            
+
             if ( node.value === value ) return { success: true, value: node };
-            
+
             node = node.next;
-            
+
         } while ( node );
-        
+
         return { success: false };
-        
+
     }
-    
+
     getValueByIndex( index ) {
-        
+
         const response = this.getNodeByIndex( index );
-        
+
         if ( ! response.success ) return { success: false };
-        
+
         return { success: true, value: response.value.value };
-        
+
     }
-    
+
     getIndexByValue( value ) {
 
         if ( this.size === 0 ) return { success: false };
-        
+
         let index = 0;
         let node = this.#head;
-        
+
         do {
-            
+
             if ( node.value === value ) return { success: true, value: index };
-            
+
             index ++;
             node = node.next;
-            
+
         } while ( node );
-        
+
         return { success: false };
-        
+
     }
-    
+
     removeNodeByIndex( index ) {
-        
-        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
-        
+
+        const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
+
         if ( ! has_current_node ) return { success: false };
-        
-		const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
+
+        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
         const { success: has_next_node, value: next_node } = this.getNodeByIndex( index + 1 );
-        
+
         if ( has_previous_node && has_current_node && has_next_node ) {
-            
+
             previous_node.next = next_node;
-            
+
         } else if ( has_previous_node && has_current_node ) {
-            
-            has_previous_node.next = undefined;
-            
+
+            previous_node.next = undefined;
+
         } else if ( has_current_node && has_next_node ) {
-            
+
             this.#head = next_node;
-            
+
         } else {
-            
+
             this.#head = undefined;
-            
+
         }
-        
+
         this.size --;
-        
+
         return { success: true, value: this };
-        
+
     }
-    
+
     removeNodeByValue( value ) {
-        
+
         const get_index_response = this.getIndexByValue( value );
-        
+
 		if ( ! get_index_response.success ) return { success: false };
-        
+
         const index = get_index_response.value;
         const remove_node_response = this.removeNodeByIndex( index );
         const remove_node_success = remove_node_response.success;
-        
+
 		return remove_node_success ? { success: true, value: this } : { success: false };
-        
+
     }
-    
+
     insert( index, ... values ) {
-        
-        const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
-        
-        if ( ! has_current_node ) return { success: false };
-        
-        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
-        const nodes = values.map( value => { value, next: undefined } );
+
+        if ( index < 0 || index > this.size ) return { success: false };
+
+        const nodes = values.map( value => ( { value, next: undefined } ) );
 		const last_node = nodes.slice( - 1 )[ 0 ];
         const first_node = nodes[ 0 ];
-        
-        nodes.reducer( ( previous_node, current_node ) => previous_node.next = current_node );
-        
-        if ( ! has_previous_node ) this.#head = first_node;
-        else previous_node.next = first_node;
-        
-        last_node.next = current_node;
-        
+
+        nodes.reduce( ( previous_node, current_node ) => previous_node.next = current_node );
+
+        const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
+        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
+
+        if ( has_current_node && has_previous_node ) {
+
+            previous_node.next = first_node;
+            last_node.next = current_node;
+
+        } else if ( has_current_node && ! has_previous_node ) {
+
+            this.#head = first_node;
+            last_node.next = current_node;
+
+        } else if ( ! has_current_node && has_previous_node ) {
+
+            previous_node.next = first_node;
+
+        } else if ( ! has_current_node && ! has_previous_node ) {
+
+            this.#head = first_node;
+
+        }
+
         this.size += nodes.length;
-        
+
         return { success: true, value: this };
-        
+
     }
-    
+
+    toArray() {
+
+        const array = [];
+        let node = this.#head;
+
+        while ( node ) {
+
+            array.push( node.value );
+            node = node.next;
+
+        }
+
+        return { success: true, value: array };
+
+    }
+
     clear() {
-        
+
         this.size = 0;
         this.#head = undefined;
-        
+
     }
-    
+
 }
 ```
 
