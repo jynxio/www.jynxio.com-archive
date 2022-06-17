@@ -57,9 +57,11 @@ typora-root-url: ..\..
 
 不过有序链表可以快速的移除最值节点，因为只需要移除头节点或尾节点即可，因此有序链表适用于那些需要频繁存取最小值且不怎么需要存取中间值的场景。
 
-## 实现单向链表 TODO
+## 实现单向链表
 
-我们实现的链表将会有以下方法和属性：
+### 方法和属性
+
+我们实现的单向链表将会有以下方法和属性：
 
 | 方法名                    | 描述                                                         |
 | ------------------------- | ------------------------------------------------------------ |
@@ -72,7 +74,7 @@ typora-root-url: ..\..
 | `unshift()`               | 在链表的头部插入一个值为 `data` 的新节点，然后返回更新后的链表 |
 | `pop()`                   | 移除链表末尾的节点，然后返回这个被移除的节点                 |
 | `shift()`                 | 移除链表头部的节点，然后返回这个被移除的节点                 |
-| `toArray()`               | 沿着从头到尾的顺序来将节点的值存入一个数组，然后返回这个数组 |
+| `toArray()`               | 沿着从头到尾的方向来将节点的值存入一个数组，然后返回这个数组 |
 | `clear()`                 | 清空链表，然后返回更新后的链表                               |
 
 | 属性名 | 描述       |
@@ -84,16 +86,40 @@ typora-root-url: ..\..
 1. 节点的序号是从零起算的，链表的 `head` 所指向的节点就是零号节点。
 2. 上述所有方法的返回值都是一个 `{success, data}` 格式的对象，其中 `success` 的值为 `true` 或 `false`，它代表方法是否执行成功，仅当方法执行成功时才会返回有效的 `data` 字段，`data` 则代表该方法执行成功后的真正返回值，比如节点的序号、被移除的节点、更新后的链表等。
 
-### 实现 Node 类
+### 遍历、插入、移除节点
 
-链表的节点是一个拥有 `value` 属性和 `next` 属性的对象，其中 `value` 属性代表节点的值，`next` 属性代表指向下一个节点的指针。为了待会将要实现的 `LinkedList` 类可以轻松的创建节点，因此请让我们先实现一个 `Node` 类，它的实现代码如下：
+遍历、插入、移除节点是实现单向链表的主要难点。关于遍历节点，其具体实现如下。
 
 ```js
-class Node {
+let current_node = head;
 
-    constructor( value ) {
+while ( current_node ) {
 
-        this.value = value;
+    console.log( current_node );
+    
+    current_node = current_node.next;
+    
+}
+```
+
+关于插入节点，其对应的方法是 `insert`、`push`、`unshift`，其中后两者都是基于 `insert` 来实现的，插入节点的核心逻辑如下。
+
+![单向链表插入节点](/static/image/markdown/leetcode/linked-list/singly-linked-list-insert.png)
+
+关于移除节点，其对应的方法是 `remove`、`pop`、`shift`，其中后两者都是基于 `remove` 来实现的，移除节点的核心逻辑如下。
+
+![单向链表移除节点](/static/image/markdown/leetcode/linked-list/singly-linked-list-remove.png)
+
+### 实现 SinglyNode
+
+在正式开始实现 `SinglyLinkedList` 之前，我们需要先实现一个关于单向节点的类 `SinglyNode`，它用于构造具有 `data` 和 `next` 属性的对象，这可以让我们在实现链表的过程中更轻松、更清晰的创建节点。
+
+```js
+class SinglyNode {
+
+    constructor( data ) {
+
+        this.data = data;
         this.next = undefined;
 
     }
@@ -101,32 +127,29 @@ class Node {
 }
 ```
 
-### 实现 LinkedList 类
+### 实现 SinglyLinkedList
 
-首先，我们先实现 `LinkedList` 类的构造函数。
+简明的代码比啰嗦的语言更加易懂，所以请通过阅读下述代码来了解如何实现一个单向链表吧。
 
 ```js
-class LinkedList {
-    
+class SinglyLinkedList {
+
     #head = undefined;
-    
-    constructor( ... values ) {
-        
+
+    /**
+     * @returns { Object } - SinglyLinkedList实例。
+     */
+    constructor() {
+
         this.size = 0;
-        this.insert( 0, ... values );
-        
+
     }
-    
-}
-```
 
-然后，再来实现 `getNodeByIndex` 方法。
-
-```js
-class LinkedList {
-
-    // ...
-
+    /**
+     * 获取序号为index的节点。
+     * @param { number } index - 节点的序号，从零起算。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为节点对象，即SinglyNode实例。
+     */
     getNodeByIndex ( index ) {
 
         if ( this.size === 0 ) return { success: false };                 // 链表无节点可查
@@ -136,21 +159,16 @@ class LinkedList {
 
         for ( let i = 0; i < index; i ++ ) node = node.next;
 
-        return { success: true, value: node };
+        return { success: true, data: node };
 
     }
 
-}
-```
-
-然后，再来实现 `getNodeByValue` 方法。
-
-```js
-class LinkedList {
-
-    // ...
-
-    getNodeByValue ( value ) {
+    /**
+     * 获取第一个值为data的节点。
+     * @param { * } data - 节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为节点对象，即SinglyNode实例。
+     */
+    getNodeByData( data ) {
 
         if ( this.size === 0 ) return { success: false }; // 链表无节点可查
 
@@ -158,7 +176,7 @@ class LinkedList {
 
         do {
 
-            if ( node.value === value ) return { success: true, value: node };
+            if ( node.data === data ) return { success: true, data: node };
 
         } while ( node = node.next );
 
@@ -166,24 +184,19 @@ class LinkedList {
 
     }
 
-}
-```
-
-然后，再来实现 `getIndexByValue` 方法。
-
-```js
-class LinkedList {
-
-    // ...
-
-    getIndexByValue ( value ) {
+    /**
+     * 获取第一个值为data的节点的序号。
+     * @param { * } data - 节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为节点对象，即SinglyNode实例。
+     */
+    getIndexByData ( data ) {
 
         let index = 0;
         let node = this.#head;
 
         do {
 
-            if ( node.value === value ) return { success: true, value: index };
+            if ( node.data === data ) return { success: true, data: index };
 
             index ++;
 
@@ -193,24 +206,19 @@ class LinkedList {
 
     }
 
-}
-```
-
-然后，再来实现 `remove` 方法。
-
-```js
-class LinkedList {
-
-    // ...
-
+    /**
+     * 移除index号节点，然后返回这个被移除的节点。
+     * @param { number } index - 节点的序号，从零起算。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为被移除的节点，即SinglyNode实例。
+     */
     remove ( index ) {
 
-        const { success: has_target_node, value: target_node } = this.getNodeByIndex( index );
+        const { success: has_target_node, data: target_node } = this.getNodeByIndex( index );
 
         if ( ! has_target_node ) return { success: false }; // 目标位置无节点可删
 
-        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
-        const { success: has_next_node, value: next_node } = this.getNodeByIndex( index + 1 );
+        const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
+        const { success: has_next_node, data: next_node } = this.getNodeByIndex( index + 1 );
 
         if ( has_target_node && has_previous_node && has_next_node ) // 有前有后
             previous_node.next = next_node;
@@ -223,80 +231,120 @@ class LinkedList {
 
         this.size --;
 
-        return { success: true, value: target_node };
+        return { success: true, data: target_node };
 
     }
 
-}
-```
+    /**
+     * 在index位置插入一个值为data的新节点，然后返回更新后的链表。
+     * @param { number } index - 节点的序号，从零起算。
+     * @param { * } data - 新节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    insert ( index, data ) {
 
-然后，再来实现 `insert` 方法。
-
-```js
-class LinkedList {
-
-    // ...
-
-    insert ( index, ... values ) {
-
-        if ( values.length === 0 ) return { success: false };            // 无节点可插
         if ( index < 0 || index > this.size ) return { success: false }; // index不合理
 
-        const nodes = values.map( value => new Node( value ) );
-        const last_node = nodes[ nodes.length - 1 ];
-        const first_node = nodes[ 0 ];
-
-        nodes.reduce( ( previous_node, current_node ) => previous_node.next = current_node ); // 链接节点为链表
-
-		const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
-        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
+        const node = new SinglyNode( data );
+        const { success: has_current_node, data: current_node } = this.getNodeByIndex( index );
+        const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
 
         if ( has_current_node && has_previous_node ) {
 
-            previous_node.next = first_node;
-            last_node.next = current_node;
+            previous_node.next = node;
+            node.next = current_node;
 
         } else if ( has_current_node && ! has_previous_node ) {
 
-            this.#head = first_node;
-
-            last_node.next = current_node;
+            this.#head = node;
+            node.next = current_node;
 
         } else if ( ! has_current_node && has_previous_node ) {
 
-            previous_node.next = first_node;
+            previous_node.next = node;
 
         } else {
 
-            this.#head = first_node;
+            this.#head = node;
 
         }
 
-        this.size += nodes.length;
+        this.size ++;
 
-        return { success: true, value: this };
-
+        return { success: true, data: this };
 
     }
 
-}
-```
+    /**
+     * 在链表的末尾插入一个值为data的新节点，然后返回更新后的链表。
+     * @param { * } data - 新节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    push ( data ) {
 
-然后，再来实现 `toArray` 方法。
+        const response = this.insert( this.size, data );
 
-```js
-class LinkedList {
+        if ( ! response.success ) return { success: false };
 
-    // ...
+        return { success: true, data: this };
 
+    }
+
+    /**
+     * 移除链表末尾的节点，然后返回这个被移除的节点。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为被移除的节点，即SinglyNode实例。
+     */
+    pop () {
+
+        const response = this.remove( this.size - 1 );
+
+        if ( ! response.success ) return { success: false };
+
+        return { success: true, data: response.data };
+
+    }
+
+    /**
+     * 在链表的头部插入一个值为data的新节点，然后返回更新后的链表。
+     * @param { * } data - 新节点的data属性的值。
+     * @returns { Object }  - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    unshift ( data ) {
+
+        const response = this.insert( 0, data );
+
+        if ( ! response.success ) return { success: false };
+
+        return { success: true, data: this };
+
+    }
+
+    /**
+     * 移除链表头部的节点，然后返回这个被移除的节点。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为被移除的节点，即SinglyNode实例。
+     */
+    shift () {
+
+        const response = this.remove( 0 );
+
+        if ( ! response.success ) return { success: false };
+
+        return { success: true, data: response.data };
+
+    }
+
+    /**
+     * 沿着从头到尾的方向来将节点的值存入一个数组，然后返回这个数组。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为有序的存储了所有节点的值的数组。
+     */
     toArray () {
 
 		let node = this.#head;
-		const result = { success: true, value: [] };
+		const result = { success: true, data: [] };
 
         while ( node ) {
 
-            result.value.push( node.value );
+            result.data.push( node.data );
             node = node.next;
 
         }
@@ -305,189 +353,16 @@ class LinkedList {
 
     }
 
-}
-```
-
-最后再实现 `clear` 方法。
-
-```js
-class LinkedList {
-
-    // ...
-
+    /**
+     * 清空链表，然后返回更新后的链表。
+     * @returns { Object }  - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
     clear () {
 
         this.size = 0;
         this.#head = undefined;
 
-        return { success: true, value: this };
-
-    }
-
-}
-```
-
-### 完整的实现代码
-
-完整的实现代码如下。
-
-```js
-class Node {
-
-    constructor( value ) {
-
-        this.value = value;
-        this.next = undefined;
-
-    }
-
-}
-
-class LinkedList {
-
-    #head = undefined;
-
-    constructor( ... values ) {
-
-        this.size = 0;
-        this.insert( 0, ... values );
-
-    }
-
-    getNodeByIndex ( index ) {
-
-        if ( this.size === 0 ) return { success: false };                 // 链表无节点可查
-        if ( index < 0 || index >= this.size ) return { success: false }; // index不合理
-
-        let node = this.#head;
-
-        for ( let i = 0; i < index; i ++ ) node = node.next;
-
-        return { success: true, value: node };
-
-    }
-
-    getNodeByValue ( value ) {
-
-        if ( this.size === 0 ) return { success: false }; // 链表无节点可查
-
-        let node = this.#head;
-
-        do {
-
-            if ( node.value === value ) return { success: true, value: node };
-
-        } while ( node = node.next );
-
-        return { success: false };
-
-    }
-
-    getIndexByValue ( value ) {
-
-        let index = 0;
-        let node = this.#head;
-
-        do {
-
-            if ( node.value === value ) return { success: true, value: index };
-
-            index ++;
-
-        } while ( node = node.next );
-
-        return { success: false };
-
-    }
-
-    remove ( index ) {
-
-        const { success: has_target_node, value: target_node } = this.getNodeByIndex( index );
-
-        if ( ! has_target_node ) return { success: false }; // 目标位置无节点可删
-
-        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
-        const { success: has_next_node, value: next_node } = this.getNodeByIndex( index + 1 );
-
-        if ( has_target_node && has_previous_node && has_next_node ) // 有前有后
-            previous_node.next = next_node;
-        else if ( has_target_node && has_previous_node )             // 有前无后
-            previous_node.next = undefined;
-        else if ( has_target_node && has_next_node )                 // 无前有后
-            this.#head = next_node;
-        else                                                         // 无前无后
-            this.#head = undefined;
-
-        this.size --;
-
-        return { success: true, value: target_node };
-
-    }
-
-    insert ( index, ... values ) {
-
-        if ( values.length === 0 ) return { success: false };            // 无节点可插
-        if ( index < 0 || index > this.size ) return { success: false }; // index不合理
-
-        const nodes = values.map( value => new Node( value ) );
-        const last_node = nodes[ nodes.length - 1 ];
-        const first_node = nodes[ 0 ];
-
-        nodes.reduce( ( previous_node, current_node ) => previous_node.next = current_node ); // 链接节点为链表
-
-		const { success: has_current_node, value: current_node } = this.getNodeByIndex( index );
-        const { success: has_previous_node, value: previous_node } = this.getNodeByIndex( index - 1 );
-
-        if ( has_current_node && has_previous_node ) {
-
-            previous_node.next = first_node;
-            last_node.next = current_node;
-
-        } else if ( has_current_node && ! has_previous_node ) {
-
-            this.#head = first_node;
-
-            last_node.next = current_node;
-
-        } else if ( ! has_current_node && has_previous_node ) {
-
-            previous_node.next = first_node;
-
-        } else {
-
-            this.#head = first_node;
-
-        }
-
-        this.size += nodes.length;
-
-        return { success: true, value: this };
-
-
-    }
-
-    toArray () {
-
-		let node = this.#head;
-		const result = { success: true, value: [] };
-
-        while ( node ) {
-
-            result.value.push( node.value );
-            node = node.next;
-
-        }
-
-		return result;
-
-    }
-
-    clear () {
-
-        this.size = 0;
-        this.#head = undefined;
-
-        return { success: true, value: this };
+        return { success: true, data: this };
 
     }
 
