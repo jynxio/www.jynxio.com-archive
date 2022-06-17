@@ -134,14 +134,13 @@ class SinglyNode {
 ```js
 class SinglyLinkedList {
 
-    #head = undefined;
-
     /**
      * @returns { Object } - SinglyLinkedList实例。
      */
-    constructor () {
+    constructor() {
 
         this.size = 0;
+        this.head = undefined;
 
     }
 
@@ -155,7 +154,7 @@ class SinglyLinkedList {
         if ( this.size === 0 ) return { success: false };                 // 链表无节点可查
         if ( index < 0 || index >= this.size ) return { success: false }; // index不合理
 
-        let node = this.#head;
+        let node = this.head;
 
         for ( let i = 0; i < index; i ++ ) node = node.next;
 
@@ -172,7 +171,7 @@ class SinglyLinkedList {
 
         if ( this.size === 0 ) return { success: false }; // 链表无节点可查
 
-        let node = this.#head;
+        let node = this.head;
 
         do {
 
@@ -191,8 +190,10 @@ class SinglyLinkedList {
      */
     getIndexByData ( data ) {
 
+        if ( this.size === 0 ) return { success: false }; // 链表无节点可查
+
         let index = 0;
-        let node = this.#head;
+        let node = this.head;
 
         do {
 
@@ -215,7 +216,7 @@ class SinglyLinkedList {
 
         const { success: has_target_node, data: target_node } = this.getNodeByIndex( index );
 
-		if ( ! has_target_node ) return { success: false };          // 目标位置无节点可删
+        if ( ! has_target_node ) return { success: false };          // 目标位置无节点可删
 
         const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
         const { success: has_next_node, data: next_node } = this.getNodeByIndex( index + 1 );
@@ -225,9 +226,9 @@ class SinglyLinkedList {
         else if ( has_target_node && has_previous_node )             // 有前无后
             previous_node.next = undefined;
         else if ( has_target_node && has_next_node )                 // 无前有后
-            this.#head = next_node;
+            this.head = next_node;
         else                                                         // 无前无后
-            this.#head = undefined;
+            this.head = undefined;
 
         this.size --;
 
@@ -256,7 +257,7 @@ class SinglyLinkedList {
 
         } else if ( has_current_node && ! has_previous_node ) {          // 无前有后
 
-            this.#head = node;
+            this.head = node;
             node.next = current_node;
 
         } else if ( ! has_current_node && has_previous_node ) {          // 有前无后
@@ -265,7 +266,7 @@ class SinglyLinkedList {
 
         } else {                                                         // 无前无后
 
-            this.#head = node;
+            this.head = node;
 
         }
 
@@ -339,7 +340,7 @@ class SinglyLinkedList {
      */
     toArray () {
 
-		let node = this.#head;
+		let node = this.head;
 		const result = { success: true, data: [] };
 
         while ( node ) {
@@ -360,7 +361,7 @@ class SinglyLinkedList {
     clear () {
 
         this.size = 0;
-        this.#head = undefined;
+        this.head = undefined;
 
         return { success: true, data: this };
 
@@ -370,9 +371,6 @@ class SinglyLinkedList {
 ```
 
 ## 实现双向链表
-
-1. 修复 `SinglyLinkedList` 中的bug，在 72 行
-2. 由于 # 属性的特点，好像所有使用了 # 属性的方法都不能直接继承拿来用，会出事。
 
 ## 实现循环链表
 
