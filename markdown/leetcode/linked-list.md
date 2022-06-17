@@ -372,6 +372,193 @@ class SinglyLinkedList {
 
 ## 实现双向链表
 
+接下来，我们会实现一个名为 `DoublyLinkedList` 的类，它代表双向链表的构造器。双向链表应当继承单向链表的属性和方法，为此我们会令 `DoublyLinkedList` 继承 `SinglyLinkedList`。
+
+相比于单向链表的节点，双向链表的节点拥有额外的 `prev` 指针，所以我们需要实现一个 `DoublyNode` 来替代 `SinglyNode`。我们既可以从头实现 `DoublyNode`，也可以在 `SinglyNode` 的基础上实现 `DoublyNode`，本文选择后者。
+
+```js
+class DoublyNode extends SinglyNode {
+
+    constructor ( data ) {
+
+        super( data );
+
+        this.prev = undefined;
+
+    }
+
+}
+```
+
+如果我们插入或移除了节点，那么我们就需要更新相关节点的 `prev` 指针，为此我们需要重写与移除和插入节点相关的方法，即 `insert`和 `remove` 方法。
+
+> 注意：我们不需要重写 `push`、`pop`、`shift`、`unshift` 方法，因为它们是完全基于 `insert` 或 `remove` 来实现的。
+
+另外，我们的双向链表还拥有 `tail` 指针，我们可以利用它来提升 `getNodeByIndex` 的效率，具体来说，当目标节点的序号大于 `size / 2` 时便从尾部开始向头部搜索，否则就从头部开始向尾部搜索，所以我们还应该重写 `getNodeByIndex` 方法。
+
+最后，我们还要重写 `clear` 方法来让它可以重置 `tail` 指针。`DoublyLinkedList` 的实现代码如下。
+
+```js
+class DoublyLinkedList extends SinglyLinkedList {
+
+    /**
+     * @returns { Object } - SinglyLinkedList实例。
+     */
+    constructor () {
+
+        super();
+
+        this.tail = undefined;
+
+    }
+
+    /**
+     * 获取序号为index的节点。
+     * @param { number } index - 节点的序号，从零起算。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为节点对象，即SinglyNode实例。
+     */
+    getNodeByIndex ( index ) {
+
+        if ( this.size === 0 ) return { success: false };                 // 链表无节点可查
+        if ( index < 0 || index >= this.size ) return { success: false }; // index不合理
+
+        let node, count, pointer;
+
+        if ( index < this.size / 2 ) {
+
+            node = this.head;
+            count = index;
+            pointer = "next";
+
+        } else {
+
+            node = this.tail;
+            count = this.size - 1 - index;
+            pointer = "prev";
+
+        }
+
+        while ( count -- ) node = node[ pointer ];
+
+        return { success: true, data: node };
+
+    }
+
+    /**
+     * 移除index号节点，然后返回这个被移除的节点。
+     * @param { number } index - 节点的序号，从零起算。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为被移除的节点，即SinglyNode实例。
+     */
+    remove ( index ) {
+
+        const { success: has_target_node, data: target_node } = this.getNodeByIndex( index );
+
+        if ( ! has_target_node ) return { success: false };            // 目标位置无节点可删
+
+        const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
+        const { success: has_next_node, data: next_node } = this.getNodeByIndex( index + 1 );
+
+        if ( has_target_node && has_previous_node && has_next_node ) { // 有前有后
+
+            previous_node.next = next_node;
+            next_node.prev = previous_node;
+
+        } else if ( has_target_node && has_previous_node ) {           // 有前无后
+
+            previous_node.next = undefined;
+
+            this.tail = previous_node;
+
+        } else if ( has_target_node && has_next_node ) {               // 无前有后
+
+            this.head = next_node;
+
+            next_node.prev = undefined;
+
+        } else {                                                       // 无前无后
+
+            this.head = undefined;
+            this.tail = undefined;
+
+        }
+
+        this.size --;
+
+        return { success: true, data: target_node };
+
+    }
+
+    /**
+     * 在index位置插入一个值为data的新节点，然后返回更新后的链表。
+     * @param { number } index - 节点的序号，从零起算。
+     * @param { * } data - 新节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    insert ( index, data ) {
+
+        if ( index < 0 || index > this.size ) return { success: false }; // index不合理
+
+        const node = new DoublyNode( data );
+        const { success: has_current_node, data: current_node } = this.getNodeByIndex( index );
+        const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
+
+        if ( has_current_node && has_previous_node ) {
+
+            previous_node.next = node;
+            node.prev = previous_node;
+
+            node.next = current_node;
+            current_node.prev = node;
+
+        } else if ( has_current_node && ! has_previous_node ) {
+
+            this.head = node;
+            node.prev = undefined;
+
+            node.next = current_node;
+            current_node.prev = node;
+
+        } else if ( ! has_current_node && has_previous_node ) {
+
+            previous_node.next = node;
+            node.prev = previous_node;
+
+            node.next = undefined;
+
+            this.tail = node;
+
+        } else {
+
+            this.head = node;
+            node.prev = undefined;
+
+            this.tail = node;
+
+        }
+
+        this.size ++;
+
+        return { success: true, data: this };
+
+    }
+
+    /**
+     * 清空链表，然后返回更新后的链表。
+     * @returns { Object }  - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    clear () {
+
+        this.size = 0;
+        this.head = undefined;
+        this.tail = undefined;
+
+        return { success: true, data: this };
+
+    }
+
+}
+```
+
 ## 实现循环链表
 
 ## 实现有序链表
