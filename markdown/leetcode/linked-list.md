@@ -117,7 +117,7 @@ while ( current_node ) {
 ```js
 class SinglyNode {
 
-    constructor( data ) {
+    constructor ( data ) {
 
         this.data = data;
         this.next = undefined;
@@ -129,7 +129,7 @@ class SinglyNode {
 
 ### 实现 SinglyLinkedList
 
-简明的代码比啰嗦的语言更加易懂，所以请通过阅读下述代码来了解如何实现一个单向链表吧。
+现在，我们可以开始实现单向链表了，简明的代码比啰嗦的语言更加易懂，所以请通过阅读下述代码来了解如何实现一个单向链表吧。
 
 ```js
 class SinglyLinkedList {
@@ -139,7 +139,7 @@ class SinglyLinkedList {
     /**
      * @returns { Object } - SinglyLinkedList实例。
      */
-    constructor() {
+    constructor () {
 
         this.size = 0;
 
@@ -215,7 +215,7 @@ class SinglyLinkedList {
 
         const { success: has_target_node, data: target_node } = this.getNodeByIndex( index );
 
-        if ( ! has_target_node ) return { success: false }; // 目标位置无节点可删
+		if ( ! has_target_node ) return { success: false };          // 目标位置无节点可删
 
         const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
         const { success: has_next_node, data: next_node } = this.getNodeByIndex( index + 1 );
@@ -249,21 +249,21 @@ class SinglyLinkedList {
         const { success: has_current_node, data: current_node } = this.getNodeByIndex( index );
         const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
 
-        if ( has_current_node && has_previous_node ) {
+        if ( has_current_node && has_previous_node ) {                   // 有前有后
 
             previous_node.next = node;
             node.next = current_node;
 
-        } else if ( has_current_node && ! has_previous_node ) {
+        } else if ( has_current_node && ! has_previous_node ) {          // 无前有后
 
             this.#head = node;
             node.next = current_node;
 
-        } else if ( ! has_current_node && has_previous_node ) {
+        } else if ( ! has_current_node && has_previous_node ) {          // 有前无后
 
             previous_node.next = node;
 
-        } else {
+        } else {                                                         // 无前无后
 
             this.#head = node;
 
@@ -369,3 +369,11 @@ class SinglyLinkedList {
 }
 ```
 
+## 实现双向链表
+
+1. 修复 `SinglyLinkedList` 中的bug，在 72 行
+2. 由于 # 属性的特点，好像所有使用了 # 属性的方法都不能直接继承拿来用，会出事。
+
+## 实现循环链表
+
+## 实现有序链表
