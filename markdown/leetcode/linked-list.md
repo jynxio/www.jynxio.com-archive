@@ -258,7 +258,7 @@ class SinglyLinkedList {
         } else if ( has_current_node && ! has_previous_node ) {          // 无前有后
 
             this.head = node;
-            node.next = current_node;
+            this.head.next = current_node;
 
         } else if ( ! has_current_node && has_previous_node ) {          // 有前无后
 
@@ -465,20 +465,17 @@ class DoublyLinkedList extends SinglyLinkedList {
 
         } else if ( has_target_node && has_previous_node ) {           // 有前无后
 
-            previous_node.next = undefined;
-
             this.tail = previous_node;
+            this.tail.next = undefined;
 
         } else if ( has_target_node && has_next_node ) {               // 无前有后
 
             this.head = next_node;
-
-            next_node.prev = undefined;
+            this.head.prev = undefined;
 
         } else {                                                       // 无前无后
 
-            this.head = undefined;
-            this.tail = undefined;
+            this.head = this.tail = undefined;
 
         }
 
@@ -502,7 +499,7 @@ class DoublyLinkedList extends SinglyLinkedList {
         const { success: has_current_node, data: current_node } = this.getNodeByIndex( index );
         const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
 
-        if ( has_current_node && has_previous_node ) {
+        if ( has_current_node && has_previous_node ) {                   // 有前有后
 
             previous_node.next = node;
             node.prev = previous_node;
@@ -510,28 +507,23 @@ class DoublyLinkedList extends SinglyLinkedList {
             node.next = current_node;
             current_node.prev = node;
 
-        } else if ( has_current_node && ! has_previous_node ) {
+        } else if ( has_current_node && ! has_previous_node ) {          // 无前有后
+
+            node.next = current_node;
+            current_node.prev = node;
 
             this.head = node;
-            node.prev = undefined;
 
-            node.next = current_node;
-            current_node.prev = node;
-
-        } else if ( ! has_current_node && has_previous_node ) {
+        } else if ( ! has_current_node && has_previous_node ) {          // 有前无后
 
             previous_node.next = node;
             node.prev = previous_node;
-
-            node.next = undefined;
 
             this.tail = node;
 
-        } else {
+        } else {                                                          // 无前无后
 
             this.head = node;
-            node.prev = undefined;
-
             this.tail = node;
 
         }
@@ -560,5 +552,122 @@ class DoublyLinkedList extends SinglyLinkedList {
 ```
 
 ## 实现循环链表
+
+循环链表既可以基于单向链表来实现，也可以基于双向链表来实现。基于单向链表来实现的循环链表与单向链表的区别在于前者的尾节点的 `next` 指针会指向头节点，而不是 `undefined`。基于双向链表来实现的循环链表与双向链表的区别在于前者的尾节点的 `next` 指针会指向头节点，而不是 `undefined`，并且前者的头节点的 `prev` 指针会指向尾节点，而不是 `undefined`。
+
+接下来我们会基于双向链表来实现循环链表，我们把它称为 `CircularLinkedList`，显然 `CircularLinkedList` 会继承 `DoublyLinkedList`，并且我们需要重写 `CircularLinkedList` 的 `insert` 和 `remove` 方法。最后的实现代码如下。
+
+```js
+class CircularLinkedList extends DoublyLinkedList {
+
+    /**
+     * @returns { Object } - SinglyLinkedList实例。
+     */
+    constructor () {
+
+        super();
+
+    }
+
+    /**
+     * 移除index号节点，然后返回这个被移除的节点。
+     * @param { number } index - 节点的序号，从零起算。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为被移除的节点，即SinglyNode实例。
+     */
+    remove ( index ) {
+
+        const { success: has_target_node, data: target_node } = this.getNodeByIndex( index );
+
+        if ( ! has_target_node ) return { success: false };            // 目标位置无节点可删
+
+        const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
+        const { success: has_next_node, data: next_node } = this.getNodeByIndex( index + 1 );
+
+        if ( has_target_node && has_previous_node && has_next_node ) { // 有前有后
+
+            previous_node.next = next_node;
+            next_node.prev = previous_node;
+
+        } else if ( has_target_node && has_previous_node ) {           // 有前无后
+
+            this.tail = previous_node;
+            this.tail.next = this.head;
+            this.head.prev = this.tail;
+
+        } else if ( has_target_node && has_next_node ) {               // 无前有后
+
+            this.head = next_node;
+            this.head.prev = this.tail;
+            this.tail.next = this.head;
+
+        } else {                                                       // 无前无后
+
+            this.head = this.tail = undefined;
+
+        }
+
+        this.size --;
+
+        return { success: true, data: target_node };
+
+    }
+
+    /**
+     * 在index位置插入一个值为data的新节点，然后返回更新后的链表。
+     * @param { number } index - 节点的序号，从零起算。
+     * @param { * } data - 新节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    insert ( index, data ) {
+
+        if ( index < 0 || index > this.size ) return { success: false }; // index不合理
+
+        const node = new DoublyNode( data );
+        const { success: has_current_node, data: current_node } = this.getNodeByIndex( index );
+        const { success: has_previous_node, data: previous_node } = this.getNodeByIndex( index - 1 );
+
+        if ( has_current_node && has_previous_node ) {                   // 有前有后
+
+            previous_node.next = node;
+            node.prev = previous_node;
+
+            node.next = current_node;
+            current_node.prev = node;
+
+        } else if ( has_current_node && ! has_previous_node ) {          // 无前有后
+
+            node.next = current_node;
+            current_node.prev = node;
+
+            this.head = node;
+            this.head.prev = this.tail;
+            this.tail.next = this.head;
+
+        } else if ( ! has_current_node && has_previous_node ) {          // 有前无后
+
+            previous_node.next = node;
+            node.prev = previous_node;
+
+            this.tail = node;
+            this.tail.next = this.head;
+            this.head.prev = this.tail;
+
+        } else {                                                          // 无前无后
+
+            this.head = node;
+            this.tail = node;
+            this.head.prev = this.tail;
+            this.tail.next = this.head;
+
+        }
+
+        this.size ++;
+
+        return { success: true, data: this };
+
+    }
+
+}
+```
 
 ## 实现有序链表
