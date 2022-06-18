@@ -51,11 +51,13 @@ typora-root-url: ..\..
 
 ![有序链表的结构](/static/image/markdown/leetcode/linked-list/ordered-linked-list-structure.png)
 
-因为有序链表的节点们是有序的，所以插入一个新节点之前，我们需要遍历并比较链表上的旧节点，来找到那个符合规律的位置，最后再把新节点插入到这个位置上，所以有序链表的插入操作的时间复杂度是 `O(n)`。
+因为有序链表的节点的排列顺序是有要求的，所以我们还需要在插入新节点之前就计算出新节点的插入位置，为此我们可以通过遍历并比较链表上节点来找到合适的位置，再把新节点插入到这个位置上，此时有序链表的插入操作的时间复杂度是 `O(n)`。不过，我们还可以使用其它的方法来计算新节点的插入位置，比如二分查找，这样就可以将插入操作的时间复杂度降低到 `O(logn)`。
 
 ![有序链表插入新节点](/static/image/markdown/leetcode/linked-list/ordered-linked-list-insert-node.png)
 
-不过有序链表可以快速的移除最值节点，因为只需要移除头节点或尾节点即可，因此有序链表适用于那些需要频繁存取最小值且不怎么需要存取中间值的场景。
+有序链表的优点是可以快速的移除极值节点，因为只需要移除头节点或尾节点即可，因此有序链表适用于那些需要频繁存取极值且不怎么需要存取中间值的场景。
+
+有序链表可以基于单向链表、双向链表、循环链表或其它类型的链表来实现。
 
 ## 实现单向链表
 
@@ -671,3 +673,106 @@ class CircularLinkedList extends DoublyLinkedList {
 ```
 
 ## 实现有序链表
+
+有序链表是一种节点会按照某种规律来排列的链表，比如按照数值大小来排列、按照 Unicode 大小来排列或者按照其它规则来排列。在这里，我们将基于双向链表来实现一个有序链表，这个有序链表的节点将会按照数值从小到大的顺序来排列。我们之所以选用了双向链表，是因为我们实现的有序链表会用到 `prev` 和 `next` 指针，且又不会用到循环链表的“首位相连”的特性。
+
+因为有序列表会自动的根据预定义的排列规则与新节点的值来决定新节点的插入位置，所以我们就不再需要在插入节点时指定插入的位置了，为此我们需要重写 `insert` 方法，令其只接受一个唯一的参数，这个参数用于设置新节点的 `data`。实现代码如下。
+
+```js
+class SortedLinkedList extends DoublyLinkedList {
+
+    constructor () {
+
+        super();
+
+    }
+
+    /**
+     * 在index位置插入一个值为data的新节点，然后返回更新后的链表。
+     * @param { number } number - 新节点的data属性的值。
+     * @returns { Object } - {success, data}格式的对象，仅当success为true时，才代表执行成功，此时data为调用该方法的SinglyLinkedList实例。
+     */
+    insert ( number ) {
+
+        if ( typeof( number ) !== "number" ) return { success: false }; // data不合理
+
+        const insert_node = new DoublyNode( number );
+
+        if ( this.size === 0 ) {
+
+            this.head = this.tail = insert_node;
+            this.size ++;
+
+            return { success: true, data: this };
+
+        }
+
+        if ( number <= this.head.data ) {
+
+            const first_node = insert_node;
+            const second_node = this.head;
+
+            first_node.next = second_node;
+            second_node.prev = first_node;
+
+            this.head = first_node;
+            this.size ++;
+
+            return { success: true, data: this };
+
+        }
+
+        if ( number > this.tail.data ) {
+
+            const first_to_last_node = insert_node;
+            const second_to_last_node = this.tail;
+
+            second_to_last_node.next = first_to_last_node;
+            first_to_last_node.prev = second_to_last_node;
+
+            this.tail = first_to_last_node;
+            this.size ++;
+
+            return { success: true, data: this };
+
+        }
+
+        let current_node = this.head.next;
+
+        while ( current_node ) {
+
+            if ( number > current_node.data ) {
+
+                current_node = current_node.next;
+
+                continue;
+
+            }
+
+            const previous_node = current_node.prev;
+
+            previous_node.next = insert_node;
+            insert_node.prev = previous_node;
+
+            insert_node.next = current_node;
+            current_node.prev = insert_node;
+
+            this.size ++;
+
+            return { success: true, data: this };
+
+        }
+
+        return { success: false };
+
+    }
+
+}
+```
+
+另外，显然的是，有序链表不应该拥有 `push` 和 `unshift` 方法，所以我们需要禁用原型链上的 `push` 和 `unshift`。
+
+```js
+SortedLinkedList.prototype.push = undefined;
+SortedLinkedList.prototype.unshift = undefined;
+```
