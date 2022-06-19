@@ -781,21 +781,230 @@ SortedLinkedList.prototype.unshift = undefined;
 
 ### 用链表来实现栈
 
-在这里，我们将会用双向链表来实现栈，这样做的好处是可以简化栈的实现。本文实现的栈将会拥有如下方法和属性。
+在这里，我们将会用双向链表来重新实现栈。如果可以基于已经实现了的双向链表来实现栈，那么就可以大大的简化栈的实现步骤。这里实现的栈将会拥有如下的方法和属性。
 
-| 方法名         | 描述                                         |
-| -------------- | -------------------------------------------- |
-| `push( data )` | 向栈顶添加一个元素，然后返回更新后的栈       |
-| `pop()`        | 从栈顶移除一个元素，然后返回这个被移除的元素 |
-| `clear()`      | 清空栈，然后返回更新后的栈                   |
-| `peek()`       | 查询位于栈顶的元素                           |
+| 方法名            | 描述                                         |
+| ----------------- | -------------------------------------------- |
+| `push( element )` | 向栈顶添加一个元素，然后返回更新后的栈       |
+| `pop()`           | 从栈顶移除一个元素，然后返回这个被移除的元素 |
+| `clear()`         | 清空栈，然后返回更新后的栈                   |
+| `peek()`          | 查询位于栈顶的元素                           |
 
 | 属性名 | 描述       |
 | ------ | ---------- |
 | `size` | 元素的个数 |
 
-本文之所以选用双向链表，是因为栈顶既能添加元素，又能移除元素，而我们实现的双向链表又恰好具有指向尾节点的 `tail` 指针，利用这个指针可以帮助我们直接找到尾节点（它对应栈顶元素），然后操纵尾节点，而无需从头节点开始遍历来找到尾节点。
+本文之所以选用双向链表来实现栈，是因为如此实现的栈的 `push` 和 `pop` 方法的时间复杂度都会是 `O(1)`。具体来说，我们会使用双向链表的 `push` 和 `pop` 方法来实现栈的 `push` 和 `pop` 方法，得益于 `DoublyLinkedList` 的 `tail` 指针，`DoublyLinkedList` 的 `push` 和 `pop` 方法的时间复杂度都是 `O(1)`，所以基于 `DoublyLinkedList` 来实现的栈的 `push` 和 `pop` 方法的时间复杂度都将会是 `O(1)`。
 
-TODO
+实际上，我们也可以通过为 `SinglyLinkedList` 添加 `tail` 指针来将它的 `push` 和 `pop` 方法的时间复杂度降低到 `O(1)`，然后基于改造后的 `SinglyLinkedList` 来实现的栈的 `push` 和 `pop` 方法也将会是 `O(1)`。
 
-### 用链表来实现队列
+> 注意：在本博客的另一篇文章《栈》中，提到了一种基于对象来实现的栈，这种栈的 `push` 和 `pop` 方法的时间复杂度也是 `O(1)`。
+
+基于 `DoublyLinkedList` 的栈的实现代码如下。
+
+```js
+class Stack {
+
+    #elements;
+
+    constructor () {
+
+        this.#elements = new DoublyLinkedList();
+
+    }
+
+    push ( element ) {
+
+        this.#elements.push( element );
+
+        return this;
+
+    }
+
+    pop () {
+
+        return this.#elements.pop().data.data;
+
+    }
+
+    clear () {
+
+        this.#elements.clear();
+
+        return this;
+
+    }
+
+    peek() {
+
+        return this.#elements.getNodeByIndex( 0 ).data.data;
+
+    }
+
+    get size() {
+
+        return this.#elements.size;
+
+    }
+
+}
+```
+
+### 用链表来实现普通队列
+
+在这里，我们将会用双向链表 `DoublyLinkedList` 来重新实现普通队列，选用 `DoublyLinkedList` 的原因与上文一致。这里实现的普通队列将会拥有如下的方法和属性。
+
+| 方法名               | 描述                                         |
+| -------------------- | -------------------------------------------- |
+| `enqueue( element )` | 向队尾添加一个元素，然后返回更新后的队列     |
+| `dequeue()`          | 从队首移除一个元素，然后返回这个被移除的元素 |
+| `clear()`            | 清空队列，然后返回更新后的队列               |
+| `peek()`             | 查询位于队首的元素                           |
+
+| 属性名 | 描述       |
+| ------ | ---------- |
+| `size` | 元素的数量 |
+
+基于 `DoublyLinkedList` 的普通队列的实现代码如下。
+
+```js
+class Queue {
+
+    #elements;
+
+    constructor () {
+        
+        this.#elements = new DoublyLinkedList();
+        
+    }
+
+    enqueue ( element ) {
+
+        this.#elements.push( element );
+
+        return this;
+
+    }
+
+    dequeue () {
+
+        return this.#elements.shift().data.data;
+
+    }
+
+    clear () {
+
+        this.#elements.clear();
+
+        return this;
+
+    }
+
+    peek () {
+
+        return this.#elements.getNodeByIndex( 0 ).data.data;
+
+    }
+
+    get size () {
+
+        return this.#elements.size;
+
+    }
+
+}
+```
+
+### 用链表来实现双端队列
+
+在这里，我们将会用双向链表 `DoublyLinkedList` 来重新实现双端队列，选用 `DoublyLinkedList` 的原因与上文一致。这里实现的双端队列将会拥有如下的方法和属性。
+
+| 方法名                | 描述                                         |
+| --------------------- | -------------------------------------------- |
+| `addFront( element )` | 向队首添加一个元素，然后返回更新后的队列     |
+| `addBack( element )`  | 向队尾添加一个元素，然后返回更新后的队列     |
+| `removeFront()`       | 从队首移除一个元素，然后返回这个被移除的元素 |
+| `removeBack()`        | 从队尾移除一个元素，然后返回这个被移除的元素 |
+| `peekFront()`         | 查询位于队首的元素                           |
+| `peekBack()`          | 查询位于队尾的元素                           |
+| `clear()`             | 清空队列，然后返回更新后的队列               |
+
+| 属性名 | 描述       |
+| ------ | ---------- |
+| `size` | 元素的数量 |
+
+基于 `DoublyLinkedList` 的双端队列的实现代码如下。
+
+```js
+class Deque {
+
+    #elements;
+
+    constructor () {
+
+        this.#elements = new DoublyLinkedList();
+
+    }
+
+    addFront ( element ) {
+
+        this.#elements.unshift( element );
+
+        return this;
+
+    }
+
+    addBack ( element ) {
+
+        this.#elements.push( element );
+
+        return this;
+
+    }
+
+    removeFront () {
+
+        return this.#elements.shift().data.data;
+
+    }
+
+    removeBack () {
+
+        return this.#elements.pop().data.data;
+
+    }
+
+    peekFront () {
+
+        return this.#elements.getNodeByIndex( 0 ).data.data;
+
+    }
+
+    peekBack () {
+
+        return this.#elements.getNodeByIndex( this.#elements.size - 1 ).data.data;
+
+    }
+
+    clear () {
+
+        this.#elements.clear();
+
+        return this;
+
+    }
+
+    get size () {
+
+        return this.#elements.size;
+
+    }
+
+    print () {
+
+        console.log( this.#elements.toArray().data );
+
+    }
+
+}
+```
