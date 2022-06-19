@@ -66,6 +66,7 @@ const createLeetcodeInfo = _ => {
         { name: "time-space-complexity", alias: "时间和空间复杂度" },
         { name: "stack", alias: "栈" },
         { name: "queue", alias: "队列" },
+        { name: "linked-list", alias: "链表" },
     ];
     const options = {
         name,
