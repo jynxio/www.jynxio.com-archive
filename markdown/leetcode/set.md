@@ -20,7 +20,7 @@ typora-root-url: ..\..
 | ------------------- | ------------------------------------------------------------ |
 | `has( element )`    | 检查集合中是否存在 `element` 元素，然后返回一个代表其是否存在的布尔值 |
 | `add( element )`    | 向集合添加一个 `element` 元素，然后返回更新后的集合          |
-| `delete( element )` | 从集合中移除一个 `element` 元素，然后返回这个被移除的元素    |
+| `delete( element )` | 从集合中移除一个 `element` 元素，然后返回一个代表其是否移除成功的布尔值 |
 | `toArray()`         | 按照元素的插入顺序来将元素存入一个数组，然后返回这个数组     |
 | `clear()`           | 清空集合，然后返回更新后的集合                               |
 
@@ -28,4 +28,99 @@ typora-root-url: ..\..
 | ------ | ---------- |
 | `size` | 元素的数量 |
 
-在开始实现 `MySet` 之前，我们需要选择一种基础的数据结构来存储集合中的元素，比如数组 `[]` 或对象 `{}` 。如果我们选用对象来存储集合中的元素，那么我们不仅可以轻松的实现出 `has`、`add`、`delete` 这 3 个方法，而且这 3 个方法的时间复杂度都将会是 `O(1)`，不过
+在实现 `MySet` 之前，我们还需要考虑应当使用哪一种数据结构来存储集合中的元素，本文最终选择了双向链表 `DoublyLinkedList` 来存储集合中的元素。`DoublyLinkedList` 是已经实现好的双向链表的类，你可以通过本博客的另一篇文章《链表》来了解它。
+
+> 本文之所以没有选择 JavaScript 中的 `[]` 或 `{}` 来存储集合中的元素，是因为用它们来实现集合时都会碰到一些棘手的难题。
+
+`MySet` 的实现代码如下。
+
+```js
+class MySet {
+
+    #elements;
+
+    /**
+     * @returns { Object } - MySet实例。
+     */
+    constructor () {
+
+        this.#elements = new DoublyLinkedList();
+
+    }
+
+    /**
+     * 检查集合中是否存在element元素，然后返回一个代表其是否存在的布尔值。
+     * @param { * } element - 待检查的元素。
+     * @returns { boolean } - 若该集合中存在element元素，则返回true，否则返回false。
+     */
+    has ( element ) {
+
+        return this.#elements.getNodeByData( element ).success;
+
+    }
+
+    /**
+     * 向集合添加一个element元素，然后返回更新后的集合。
+     * @param { * } element - 待添加的元素。
+     * @returns { Object } - 更新后的MySet实例。
+     */
+    add ( element ) {
+
+        const is_has = this.has( element );
+
+        if ( is_has ) return this;
+
+        this.#elements.push( element );
+
+        return this;
+
+    }
+
+    /**
+     * 从集合中移除一个element元素，然后返回一个代表其是否移除成功的布尔值。
+     * @param { * } element - 待移除的元素。
+     * @returns { boolean } - 若该集合中存在element元素，则会移除该元素并返回true代表移除成功，若该集合中不存在element元素，则直接返回fasle代表移除失败
+     */
+    delete ( element ) {
+
+        const response = this.#elements.getIndexByData( element );
+
+        if ( ! response.success ) return false;
+
+        this.#elements.remove( response.data );
+
+        return true;
+
+    }
+
+    /**
+     * 按照元素的插入顺序来将元素存入一个数组，然后返回这个数组。
+     * @returns { Array } - 元素数组。
+     */
+    toArray () {
+
+        return this.#elements.toArray().data;
+
+    }
+
+    /**
+     * 清空集合，然后返回更新后的集合。
+     * @returns { Object } - 更新后的MySet实例。
+     */
+    clear () {
+
+        this.#elements.clear();
+
+        return this;
+
+    }
+
+    get size () {
+
+        return this.#elements.size;
+
+    }
+
+}
+```
+
