@@ -777,9 +777,7 @@ SortedLinkedList.prototype.push = undefined;
 SortedLinkedList.prototype.unshift = undefined;
 ```
 
-## 用链表来实现栈和队列
-
-### 用链表来实现栈
+## 基于链表的栈
 
 在这里，我们将会用双向链表来重新实现栈。如果可以基于已经实现了的双向链表来实现栈，那么就可以大大的简化栈的实现步骤。这里实现的栈将会拥有如下的方法和属性。
 
@@ -850,7 +848,7 @@ class Stack {
 }
 ```
 
-### 用链表来实现普通队列
+## 基于链表的普通队列
 
 在这里，我们将会用双向链表 `DoublyLinkedList` 来重新实现普通队列，选用 `DoublyLinkedList` 的原因与上文一致。这里实现的普通队列将会拥有如下的方法和属性。
 
@@ -915,7 +913,7 @@ class Queue {
 }
 ```
 
-### 用链表来实现双端队列
+## 基于链表的双端队列
 
 在这里，我们将会用双向链表 `DoublyLinkedList` 来重新实现双端队列，选用 `DoublyLinkedList` 的原因与上文一致。这里实现的双端队列将会拥有如下的方法和属性。
 
@@ -1008,3 +1006,8 @@ class Deque {
 
 }
 ```
+
+## 源码
+
+本文已将实现链表的源码上传至该 [库](https://github.com/jynxio/leetcode-everyday/blob/main/linked-list.js) 中。
+
