@@ -128,8 +128,114 @@ class MySet {
 
 ## 实现集合运算
 
-集合运算是指“针对集合的运算”，具体来说，集合运算包括并集、交集、差集、子集。在这里，我们会在 `MySet` 的基础上继续实现这 4 个方法。
+集合运算是指“针对集合的运算”，具体来说，集合运算包括并集、交集、差集、子集，它们的定义如图所示。
 
 ![集合运算](/static/image/markdown/leetcode/set/set-operation.png)
 
+我们会在 `MySet` 的基础上以纯函数的形式来继续实现这 4 个方法，纯函数是指没有副作用的函数，具体来说，纯函数不会修改调用者与入参，只会生成一个新的结果。
+
 ### 并集
+
+```js
+class MySet {
+
+	// ...
+
+    /**
+     * 返回一个新的MySet实例，它代表调用者和入参的并集，该方法不会改变调用者和入参。
+     * @param { Object } another_set - MySet实例。
+     * @returns { Object } - 新的MySet实例，它代表调用者和入参的并集。
+     */
+    merge ( another_set ) {
+
+        const set = new MySet();
+
+        this.toArray().forEach( element => set.add( element ) );
+        another_set.toArray().forEach( element => set.add( element ) );
+
+        return set;
+
+    }
+
+}
+```
+
+### 交集
+
+```js
+class MySet {
+
+    // ...
+
+    /**
+     * 返回一个新的MySet实例，它代表调用者和入参的交集，该方法不会改变调用者和入参。
+     * @param { Object } another_set - MySet实例。
+     * @returns { Object } - 新的MySet实例，它代表调用者和入参的交集。
+     */
+    intersect ( another_set ) {
+
+        const set = new MySet();
+
+        this.toArray().forEach( element => another_set.has( element ) && set.add( element ) );
+
+        return set;
+
+    }
+
+}
+```
+
+### 差集
+
+```js
+class MySet {
+
+    // ...
+
+    /**
+     * 返回一个新的MySet实例，它代表调用者和入参的差集（其元素只属于调用者且不属于入参），该方法不会改变调用者和入参。
+     * @param { Object } another_set - MySet实例。
+     * @returns { Object } - 新的MySet实例，它代表调用者和入参的差集。
+     */
+    differ ( another_set ) {
+
+        const set = new MySet();
+
+        this.toArray().forEach( element => another_set.has( element ) || set.add( element ) );
+
+        return set;
+
+    }
+
+}
+```
+
+### 子集
+
+```js
+class MySet {
+
+	// ...
+
+    /**
+     * 返回一个布尔值，代表调用者是否是入参的子集。
+     * @param { Object } another_set - MySet实例。
+     * @returns { boolean } - 若调用者是入参的子集，则返回true，否则返回false。
+     */
+    isSubsetOf ( another_set ) {
+
+        if ( this.size > another_set.size ) return false;
+
+        return this.toArray().every( element => {
+
+            if ( another_set.has( element ) ) return true;
+
+            return false;
+
+        } );
+
+    }
+
+}
+```
+
