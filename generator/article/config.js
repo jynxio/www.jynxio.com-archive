@@ -67,6 +67,7 @@ const createLeetcodeInfo = _ => {
         { name: "stack", alias: "栈" },
         { name: "queue", alias: "队列" },
         { name: "linked-list", alias: "链表" },
+        { name: "set", alias: "集合" },
     ];
     const options = {
         name,
