@@ -75,7 +75,7 @@ async function subsetBaseOnOneHtml( path ) {
     /* en-700 */
     {
 
-        const response = await subsetCore( path, config.unicode.en700, config.origin.en700, config.subset.en700, [ "h1", "h2", "h3", "h4", "strong" ] );
+        const response = await subsetCore( path, config.unicode.en700, config.origin.en700, config.subset.en700, [ "h1", "h2", "h3", "h4", "strong", "th" ] );
 
         if ( ! response.success ) {
 

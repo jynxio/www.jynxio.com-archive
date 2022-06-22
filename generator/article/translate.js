@@ -97,6 +97,7 @@ function translateCore( input_path, output_path ) {
                     heading: parseH123456,
                     checkbox: parseCheckboxInput,
                     listitem: parseLi,
+                    blockquote: parseBlockquote,
                 },
             } );
             const article_content = marked.parse( markdown_content );
@@ -183,6 +184,14 @@ function translateCore( input_path, output_path ) {
         const li = is_checkbox ? `<li class="check-li">${ content }</li>` : `<li>${ content }</li>`;
 
         return li;
+
+    }
+
+    function parseBlockquote( content ) {
+
+        const title = `<p><strong>Note</strong></p>`;
+
+        return `<blockquote>${ title }${ content }</blockquote>`;
 
     }
 

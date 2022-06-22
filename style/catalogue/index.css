@@ -10,7 +10,7 @@
 
 :root {
     --article-width: 100vmin;
-    --line-height: 1.5;       /* 大部分字符的行高 */
+    --line-height: 2;       /* 大部分字符的行高 */
     --border-radius: 0.25rem; /* 块元素的圆滑值 */
 }
 
@@ -138,7 +138,7 @@ header > button > a > strong {
 /* ------------------------------------------------------------------------------------------------- */
 main {
     width: var( --article-width );
-    padding: 6rem 1rem 3rem 1rem;
+    padding: 1rem;
     margin: 0 auto;
 }
 

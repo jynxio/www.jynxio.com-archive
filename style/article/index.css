@@ -6,7 +6,8 @@
     --yellow: #ffe100;
     --purple: #5d72f6;
     --white: #f2f5f7;
-    --green: #377e7f;
+    --green: #62aa9a;
+    --darkgreen: #032823;
 }
 
 :root {
@@ -69,7 +70,7 @@ table,
 ul, ol, li,
 pre,
 blockquote {
-    margin: 1.5rem 0;
+    margin: 1.75rem 0;
 }
 
 /* 选中样式 */
@@ -290,23 +291,15 @@ pre {
 /* ------------------------------------------------------------------------------------------------- */
 blockquote {
     display: flow-root;
-    padding: 0 0.5rem;
-    border-left: 0.25rem solid var( --purple );
+    padding: 0rem 2rem 0.5rem 2rem;
     border-radius: var( --border-radius );
-    font-size: 0.7rem;
+    background-color: var( --darkgreen );
 }
 
-blockquote > p {
-    margin: 0.5rem 0;
-    color: var( --purple );
-}
-
-blockquote > p:first-child {
-    margin-top: 0;
-}
-
-blockquote > p:last-child {
-    margin-bottom: 0;
+blockquote > p:first-child > strong {
+    color: var( --green );
+    font-size: 1.5rem;
+    line-height: 1;
 }
 
 /* 锚 */
@@ -330,40 +323,46 @@ strong * {
 /* 表格 */
 /* ------------------------------------------------------------------------------------------------- */
 table {
-    --bold: 0.25rem;
-    --thin: calc( var( --bold ) / 4 );
+    --border-width: 2px;
 }
 
 table {
-    table-layout: fixed;
+    table-layout: auto;
     width: 100%;
-    border-top: var( --bold ) solid var( --grey );
-    border-bottom: var( --bold ) solid var( --grey );
+    border-top: var( --border-width ) solid var( --grey );
+    background-color: rgba( 24, 38, 53, 0.1 );
 }
 
 table * {
-    line-height: 2;
+    line-height: var( --line-height );
 }
 
-thead {
-    border-bottom: var( --thin ) solid var( --grey );
+tr > th:first-child,
+tr > td:first-child {
+    padding-left: 1rem;
+}
+
+tr > th:last-child,
+tr > td:last-child {
+    padding-right: 1rem;
 }
 
 th {
+    background-color: rgba( 24, 38, 53, 0.5 );
     font-weight: bold;
     text-align: left;
     letter-spacing: 0.1em;
     word-spacing: 0.2em;
 }
 
-th:first-child,
-td:first-child {
-    padding-left: 2rem;
+th, td {
+    padding: 0.5rem 0;
+    border-bottom: var( --border-width ) solid var( --grey );
 }
 
-th:last-child,
-td:last-child {
-    padding-right: 2rem;
+tr:hover {
+    background-color: rgba( 24, 38, 53, 0.5 );
+    transition: background-color 100ms ease-out;
 }
 
 /* 列表 */
