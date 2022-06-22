@@ -39,7 +39,7 @@ JavaScript 中没有普通队列这种数据结构，我们将使用对象来实
 
 如果我们修改了普通队列，那么我们就需要更新 `#elements` 的键值对，在说明如何更新 `#elements` 之前，我们需要先了解一下 `#elements` 是如何存储普通队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 `#from`，另一个名为 `#to`，指针 `#from` 会指向队首元素在 `#elements` 中的位置，指针 `#to` 会指向队尾元素在 `#elements` 中的位置的 **下一个位置**，就像下图这样。
 
-> 注意：`#from` 和 `#to` 不是 C 语言中的指针，在这个例子中，`#from` 和 `#to` 中存储的值是序号字符串。
+> `#from` 和 `#to` 不是 C 语言中的指针，在这个例子中，`#from` 和 `#to` 中存储的值是序号字符串。
 
 ![指针#from和#to](/static/image/markdown/leetcode/queue/pointer-from-and-to.png)
 

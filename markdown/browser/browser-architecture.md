@@ -109,15 +109,11 @@ Process 是进程，进程是应用程序的执行程序。Thread 是线程，�
 
 它的具体做法是将不同的站点分隔到不同的渲染进程中去，无论这个站点是一个选项卡还是一个内嵌的 iframe，这样就可以借助进程之间相互隔离的特性来阻止恶意代码访问其他站点的数据。同时，它还会阻止渲染进程获取跨域的数据资源，除非服务器通过 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) 明确表示该数据资源可被跨域访问。
 
-> 关于数据资源：
+> 关于数据资源，浏览器从服务器那拿到的资源可以分为两种类型，一种是数据资源，比如 HTML、XML、JSON 等，另一种是媒体资源，比如图像、JavaScript、CSS 等。站点可以接收任意来源的媒体资源，但站点只能接收符合同源策略的数据资源或被 CORS 批准的跨站点资源。不过，`<img>` 和 `<script>` 拥有可以下载任意来源的资源的能力，攻击者会利用这两个标签来下载敏感数据，如此一来，敏感数据就进入了渲染进程的内存中，然后攻击者会通过某种手段来嗅探渲染进程中的内存以获得这些数据。
 >
-> 浏览器从服务器那拿到的资源可以分为两种类型，一种是数据资源，比如 HTML、XML、JSON 等，另一种是媒体资源，比如图像、JavaScript、CSS 等。站点可以接收任意来源的媒体资源，但站点只能接收符合同源策略的数据资源或被 CORS 批准的跨站点资源。
->
-> 不过，`<img>` 和 `<script>` 拥有可以下载任意来源的资源的能力，攻击者会利用这两个标签来下载敏感数据，如此一来，敏感数据就进入了渲染进程的内存中，然后攻击者会通过某种手段来嗅探渲染进程中的内存以获得这些数据。
 
-> 关于同一站点（same site）：
+> 关于同一站点（same site），Chrome 是这样来定义“同一站点”这个概念的：如果两个 URL 的协议和根域名是相同，那么就认为它们属于同一个站点。同一站点和同源这两个概念很相似，但区别是同一站点是不考虑子域名、端口和路径的，比如 `https://example.com` 和 `https://foo.example.com:8080` 就属于同一个站点。
 >
-> Chrome 是这样来定义“同一站点”这个概念的：如果两个 URL 的协议和根域名是相同，那么就认为它们属于同一个站点。同一站点和同源这两个概念很相似，但区别是同一站点是不考虑子域名、端口和路径的，比如 `https://example.com` 和 `https://foo.example.com:8080` 就属于同一个站点。
 
 [Site Isolation for web developers](https://developers.google.com//web/updates/2018/07/site-isolation#full-page_layout_is_no_longer_synchronous) 和 [Mitigating Spectre with Site Isolation in Chrome](https://security.googleblog.com/2018/07/mitigating-spectre-with-site-isolation.html) 这两篇文章详细介绍了站点隔离是如何保护站点数据的，[Site Isolation Design Document](https://www.chromium.org/developers/design-documents/site-isolation/) 这篇文章详细阐述了站点隔离在 Chromium 中的实现。
 

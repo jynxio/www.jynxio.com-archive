@@ -35,7 +35,7 @@ typora-root-url: ..\..
 
 另外，我们还为这个双向链表添加了一个 `tail` 指针，它用来指向链表中的最后一个节点，当我们需要查找链表上的某个节点时，如果目标节点的序号大于 `size / 2`，那么我们就应该从尾部开始朝着头部方向去查找，否则我们就应该从头部开始朝着尾部方向去查找，这样可以减少遍历的次数。
 
-> 注意：你可以自由的决定是否为你的双向链表添加 `tail` 指针，因为 `tail` 指针不是双向链表的必需品。另外，其实你也可以给你的单向链表添加 `tail` 指针。
+> 你可以自由的决定是否为你的双向链表添加 `tail` 指针，因为 `tail` 指针不是双向链表的必需品。另外，其实你也可以给你的单向链表添加 `tail` 指针。
 
 ![双向链表的结构](/static/image/markdown/leetcode/linked-list/doubly-linked-list-structure.png)
 
@@ -394,7 +394,7 @@ class DoublyNode extends SinglyNode {
 
 如果我们插入或移除了节点，那么我们就需要更新相关节点的 `prev` 指针，为此我们需要重写与移除和插入节点相关的方法，即 `insert`和 `remove` 方法。
 
-> 注意：我们不需要重写 `push`、`pop`、`shift`、`unshift` 方法，因为它们是完全基于 `insert` 或 `remove` 来实现的。
+> 我们不需要重写 `push`、`pop`、`shift`、`unshift` 方法，因为它们是完全基于 `insert` 或 `remove` 来实现的。
 
 另外，我们的双向链表还拥有 `tail` 指针，我们可以利用它来提升 `getNodeByIndex` 的效率，具体来说，当目标节点的序号大于 `size / 2` 时便从尾部开始向头部搜索，否则就从头部开始向尾部搜索，所以我们还应该重写 `getNodeByIndex` 方法。
 
@@ -796,7 +796,7 @@ SortedLinkedList.prototype.unshift = undefined;
 
 实际上，我们也可以通过为 `SinglyLinkedList` 添加 `tail` 指针来将它的 `push` 和 `pop` 方法的时间复杂度降低到 `O(1)`，然后基于改造后的 `SinglyLinkedList` 来实现的栈的 `push` 和 `pop` 方法也将会是 `O(1)`。
 
-> 注意：在本博客的另一篇文章《栈》中，提到了一种基于对象来实现的栈，这种栈的 `push` 和 `pop` 方法的时间复杂度也是 `O(1)`。
+> 在本博客的另一篇文章《栈》中，提到了一种基于对象来实现的栈，这种栈的 `push` 和 `pop` 方法的时间复杂度也是 `O(1)`。
 
 基于 `DoublyLinkedList` 的栈的实现代码如下。
 
