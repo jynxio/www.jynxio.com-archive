@@ -13,19 +13,19 @@
         <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
     </header>
     <aside>
-        <p><a href="#">IN THIS ARTICLE</a></p>
-        <p data-level="1"><a href="#49452000-548b-4963-964f-0addd58f7b1e">概述</a></p>
-        <p data-level="1"><a href="#4128076e-d43c-44b6-9aed-d250d8aca738">&quot;use strict&quot;</a></p>
-        <p data-level="1"><a href="#7a05822b-b409-488b-9ceb-c03d4426284a">作用</a></p>
-        <p data-level="1"><a href="#28cb9e25-1b38-4061-bc70-ed3f571624b1">Class 和 module</a></p>
-        <p data-level="1"><a href="#27f0e2e8-ab4a-48c9-9ad2-d850cc268783">浏览器控制台</a></p>
+        <p>In this article</p>
+        <p data-target-id=646f457b-4e49-460b-8a17-be1257d15087>概述</p>
+        <p data-target-id=8b4d8821-27ec-4833-9f34-0e6214904d08>&quot;use strict&quot;</p>
+        <p data-target-id=d7fb0b7f-2a88-443d-9e67-82eb15e9b35b>作用</p>
+        <p data-target-id=49a5b3dc-ca66-4ead-b860-bd13530f6c77>Class 和 module</p>
+        <p data-target-id=f85dd0e9-13aa-4bfa-ad7b-ad4f0e6a10e6>浏览器控制台</p>
     </aside>
     <article>
         <h1>严格模式</h1>
-        <p id="last-updated">Last Updated: 23/06/2022</p>
-        <h2 id="49452000-548b-4963-964f-0addd58f7b1e">概述</h2>
+        <p id="last-updated">Last Updated: 24/06/2022</p>
+        <h2 id="646f457b-4e49-460b-8a17-be1257d15087">概述</h2>
         <p>严格模式由 ES5 引入，它修正了 JavaScript 这门语言中的不良设计并引入了许多新特性。严格模式的影响是破坏性的，为了保持向后兼容，严格模式没有默认开启，你需要一个特殊的指令——<code>&quot;use strict&quot;</code> 来明确的激活它，并且严格模式一旦激活便无法退出。</p>
-        <h2 id="4128076e-d43c-44b6-9aed-d250d8aca738">&quot;use strict&quot;</h2>
+        <h2 id="8b4d8821-27ec-4833-9f34-0e6214904d08">&quot;use strict&quot;</h2>
         <p>若 <code>&quot;use strict&quot;</code> 出现在脚本文件的顶部，则整个脚本文件将使用严格模式。若 <code>&quot;use strict&quot;</code> 出现在函数体的顶部，则该函数将使用严格模式，比如：</p>
         <pre><code class="language-js">&quot;use strict&quot;;
 
@@ -38,7 +38,7 @@
 }
 </code></pre>
         <p>若 <code>&quot;use strict&quot;</code> 的书写位置不是整个脚本文件的顶部或函数体的顶部，则会静默失败。例外的是，注释可以出现在 <code>&quot;use strict&quot;</code> 的上方。</p>
-        <h2 id="7a05822b-b409-488b-9ceb-c03d4426284a">作用</h2>
+        <h2 id="d7fb0b7f-2a88-443d-9e67-82eb15e9b35b">作用</h2>
         <p>以下操作在严格模式下会触发错误，在非严格模式下则不会：</p>
         <ul>
             <li>使用废弃的 <code>with</code></li>
@@ -70,9 +70,9 @@
                 </ul>
             </li>
         </ul>
-        <h2 id="28cb9e25-1b38-4061-bc70-ed3f571624b1">Class 和 module</h2>
+        <h2 id="49a5b3dc-ca66-4ead-b860-bd13530f6c77">Class 和 module</h2>
         <p><code>class</code> 语法和模块脚本是默认使用严格模式的。</p>
-        <h2 id="27f0e2e8-ab4a-48c9-9ad2-d850cc268783">浏览器控制台</h2>
+        <h2 id="f85dd0e9-13aa-4bfa-ad7b-ad4f0e6a10e6">浏览器控制台</h2>
         <p>浏览器控制台默认不激活严格模式，如果你想在控制台中激活严格模式，则需要搭配使用 <code>Shift + Enter</code> 来键入多行代码，并且将 <code>&quot;use strict&quot;</code> 放在代码的顶部，这种办法对大部分浏览器都有效，如果不奏效，可以使用下例这种方法：</p>
         <pre><code class="language-js">( function() {    // Shift + Enter
     &quot;use strict&quot;; // Shift + Enter
