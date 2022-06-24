@@ -1,6 +1,8 @@
 import "/style/public/reset.css";
 import "/style/public/font.css";
 import "/style/article/index.css";
+import "/style/article/code-highlight.css";
+import "prismjs";
 
 /**
  * 目录

@@ -264,10 +264,6 @@ pre > code {
 
 pre {
     overflow: auto;
-    border-top: 1rem solid var( --grey );
-    border-right: 2rem solid var( --grey );
-    border-bottom: 1rem solid var( --grey );
-    border-left: 2rem solid var( --grey );
     border-radius: var( --border-radius );
     background-color: var( --grey );
 }
