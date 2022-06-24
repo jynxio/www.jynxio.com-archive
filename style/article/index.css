@@ -114,13 +114,15 @@ header {
 
 header > button {
     float: right;
-    padding: 0.5em 1em;
+    width: 10rem;
+    height: 3rem;
+    padding: 0;
     margin: 1rem 2rem;
     border: none;
     border-radius: var( --border-radius );
     background-color: var( --purple );
     opacity: 0.5;
-    transition: opacity 100ms ease-out;
+    transition: opacity 50ms ease-out;
     cursor: pointer;
 }
 
@@ -130,18 +132,20 @@ header > button:active {
 }
 
 header > button > a {
-    font-size: 1.1rem;
-    text-decoration: none;
+    display: block;
+    text-decoration-line: none;
 }
 
 header > button > a > strong {
+    display: block;
     color: var( --grey );
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: bold;
     line-height: 1;
+    text-decoration-line: none;
 }
 
-/* Aside */
+/* 目录 */
 /* ------------------------------------------------------------------------------------------------- */
 aside {
     visibility: hidden;
@@ -149,45 +153,6 @@ aside {
     top: 50%;
     left: calc( 50vw + var( --article-width ) / 2 );
     transform: translateY( -50% );
-    opacity: 0.5;
-    transition: opacity 100ms ease-out;
-}
-
-aside:hover {
-    opacity: 1;
-}
-
-aside * {
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
-    color: inherit;
-    font: inherit;
-    line-height: 2.5;
-    text-decoration-line: none !important;
-}
-
-aside > p:first-child > a {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var( --purple );
-    font-size: 1.2rem;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    word-spacing: 0.2em;
-}
-
-aside > p + p {
-    padding-right: 1em;
-    border-left: 0.35em solid var( --purple );
-    border-top-right-radius: 0.2em;
-    border-bottom-right-radius: 0.2em;
-    background-color: transparent;
-    font-size: 0.8rem;
-    transition: border-left-color 100ms ease-out,
-                background-color 100ms ease-out,
-                color 100ms ease-out;
     cursor: pointer;
     user-select: none;
     -ms-user-select: none;
@@ -195,25 +160,45 @@ aside > p + p {
     -moz-user-select: none;
 }
 
-aside > p + p > a {
-    display: block;
+aside > p {
+    padding: 0;
+    margin: 0;
+    line-height: 3;
+    transition:
+        color 50ms ease-out,
+        border-left-color 50ms ease-out,
+        background-color 50ms ease-out;
 }
 
-aside > p + p > a:link,
-aside > p + p > a:visited,
-aside > p + p > a:hover,
-aside > p + p > a:active {
+aside > p:first-child {
     color: var( --white );
+    font-size: 1.2rem;
+}
+
+aside > p + p {
+    padding-left: 1.5em;
+    padding-right: 1em;
+    border-left: 2px solid var( --grey );
+    border-top-right-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+    background-color: transparent;
+    font-size: 0.8rem;
+}
+
+aside > p + p:link,
+aside > p + p:visited,
+aside > p + p:hover,
+aside > p + p:active {
+    color: var( --white );
+}
+
+aside > p:hover {
+    color: var( --purple );
 }
 
 aside > p + p:hover {
     border-left-color: var( --purple );
     background-color: var( --grey );
-    color: var( --purple );
-}
-
-aside > p + p[data-level="1"] {
-    padding-left: 1.5em;
 }
 
 /* Article */
@@ -360,15 +345,11 @@ th, td {
     border-bottom: var( --border-width ) solid var( --grey );
 }
 
-tr:hover {
-    background-color: rgba( 24, 38, 53, 0.5 );
-    transition: background-color 100ms ease-out;
-}
-
 /* 列表 */
 /* ------------------------------------------------------------------------------------------------- */
 li {
     position: relative;
+    margin: 0.5rem;
     margin-left: 2rem;
 }
 
@@ -423,7 +404,7 @@ ul > li > input[type="checkbox"] + label {
     line-height: 1;
     opacity: 0.2;
     transform: translate( -100%, -50% );
-    transition: opacity 100ms ease-out;
+    transition: opacity 50ms ease-out;
     user-select: none;
     -ms-user-select: none;
     -webkit-user-select: none;

@@ -107,13 +107,15 @@ header {
 
 header > button {
     float: right;
-    padding: 0.5em 1em;
+    width: 10rem;
+    height: 3rem;
+    padding: 0;
     margin: 1rem 2rem;
     border: none;
     border-radius: var( --border-radius );
     background-color: var( --purple );
     opacity: 0.5;
-    transition: opacity 100ms ease-out;
+    transition: opacity 50ms ease-out;
     cursor: pointer;
 }
 
@@ -123,15 +125,17 @@ header > button:active {
 }
 
 header > button > a {
-    font-size: 1.1rem;
-    text-decoration: none;
+    display: block;
+    text-decoration-line: none;
 }
 
 header > button > a > strong {
+    display: block;
     color: var( --grey );
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: bold;
     line-height: 1;
+    text-decoration-line: none;
 }
 
 /* Main */

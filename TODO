@@ -1,5 +1,3 @@
 homepage增加点选和消失动画、碎裂动画。
 流水线整个过程。
 从data-types-base.md开始
-
-可以通过 scrollIntoView API 来解决锚点标签对浏览器前进后退重启时的滚动影响

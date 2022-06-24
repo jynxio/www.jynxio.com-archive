@@ -115,7 +115,7 @@ function translateCore( input_path, output_path ) {
                             <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
                         </header>
                         <aside>
-                            <p><a href="#">IN THIS ARTICLE</a></p>
+                            <p>In this article</p>
                             ${ catalog_content }
                         </aside>
                         <article>${ article_content }</article>
@@ -141,10 +141,10 @@ function translateCore( input_path, output_path ) {
 
     function parseH123456( content, level ) {
 
-        /* 若Typora设置了图床地址，则会注入下述内容的h2，该语句旨在于剔除该h2。 */
+        /* 剔除Typora的图床地址。 */
         if ( content.search( /typora-root-url:/ ) > -1 ) return "";
 
-        /* 处理h1。 */
+        /* 处理<h1>。 */
         if ( level === 1 ) {
 
             const h = `<h1>${ content }</h1>`;
@@ -156,12 +156,12 @@ function translateCore( input_path, output_path ) {
 
         }
 
-        /* 处理h23456。 */
+        /* 处理<h2>~<h6>。 */
         const id = createUuid();
-        const p = `<p data-level="${ level - 1 }"><a href="#${ id }">${ content }</a></p>`;
+        const p = `<p data-target-id=${ id }>${ content }</p>`;
         const h = `<h${ level } id="${ id }">${ content }</h${ level }>`;
 
-        /* catalogue仅收录h2。 */
+        /* catalogue收录<h2>。 */
         if ( level === 2 ) catalog_content += p;
 
         return h;

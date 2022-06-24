@@ -3,11 +3,13 @@ import "/style/public/font.css";
 import "/style/article/index.css";
 
 /**
- * 若页面的尺寸足够容纳aside，则显示aside，否则隐藏aside
+ * 目录
  */
 globalThis.addEventListener( "load", _ => {
 
     const aside = document.querySelector( "aside" );
+
+    /* 显隐目录 */
     const { width: aside_width, height: aside_height } = aside.getBoundingClientRect();
 
     displayOrHiddenAside();
@@ -32,9 +34,27 @@ globalThis.addEventListener( "load", _ => {
 
     }
 
-} );
+    /* 目录滚动 */
+    aside.addEventListener( "click", event => {
 
-/**
- * 禁止页面刷新后自动滚动至历史位置
- */
-history.scrollRestoration && ( history.scrollRestoration = "manual" ); // BUG：失效
+        const node = event.target;
+        const name = node.nodeName.toLowerCase();
+
+        if ( name !== "p" ) return;
+
+        const id = node.getAttribute( "data-target-id" );
+        const option = [ true, { behavior: "smooth", block: "start", inline: "center" } ];
+
+        if ( ! id ) {
+
+            document.getElementsByTagName( "header" )[ 0 ].scrollIntoView( ... option );
+
+            return;
+
+        }
+
+        document.getElementById( id ).scrollIntoView( ... option );
+
+    } );
+
+} );
