@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字典</title>
+</head>
+
+<body>
+    <header>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+    </header>
+    <aside>
+        <p>In this article</p>
+        <p data-target-id=8adc6a4a-3c02-411e-bad1-51cdccc67862>概述</p>
+        <p data-target-id=7bab9a01-8e2e-4f39-94dd-806c59f82f77>实现</p>
+        <p data-target-id=fff1afa3-7a56-4898-b475-fd1cc8107764>Map API</p>
+    </aside>
+    <article>
+        <h1>字典</h1>
+        <p id="last-updated">Last Updated: 24/06/2022</p>
+        <h2 id="8adc6a4a-3c02-411e-bad1-51cdccc67862">概述</h2>
+        <p>字典是指用键值对来存储数据的数据结构，它又称为映射、符号表、关联数组，JavaScript 的普通对象 <code>{}</code> 就是字典。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>字典不等于散列表，因为散列表只是字典的一种实现方式，而不是字典本身。字典还可以基于树和二维数组来实现，并且散列表不仅可以用来实现字典，还可以用来实现集合。可见，字典这一概念更侧重“外部的形式”，散列表这一概念更侧重“内部的实现”。简而言之，任何一种在形式上使用键值对来存储数据的数据结构都属于字典，而无论该数据结构的内部是通过何种方式来实现的。</p>
+        </blockquote>
+        <h2 id="7bab9a01-8e2e-4f39-94dd-806c59f82f77">实现</h2>
+        <p>我们实现的字典将会拥有以下方法和属性。</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>方法名</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>has( key )</code></td>
+                    <td>检查字典中是否存在键为 <code>key</code> 的键值对，然后返回一个代表其是否存在的布尔值</td>
+                </tr>
+                <tr>
+                    <td><code>get( key )</code></td>
+                    <td>从字典中获取一个键为 <code>key</code> 的键值对的值</td>
+                </tr>
+                <tr>
+                    <td><code>set( key, value )</code></td>
+                    <td>向字典添加一个键为 <code>key</code> 值为 <code>value</code> 的键值对（若已存在则修改该键值对），然后返回更新后的字典</td>
+                </tr>
+                <tr>
+                    <td><code>delete( key )</code></td>
+                    <td>从字典中移除一个键为 <code>key</code> 的键值对，然后返回一个代表其是否移除成功的布尔值</td>
+                </tr>
+                <tr>
+                    <td><code>toArray()</code></td>
+                    <td>按照键值对的插入顺序来将键值对以 <code>[key, value]</code> 的格式存入一个数组，然后返回这个数组</td>
+                </tr>
+                <tr>
+                    <td><code>clear()</code></td>
+                    <td>清空字典，然后返回更新后的字典</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>属性名</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>size</code></td>
+                    <td>键值对的数量</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>在这里，我们选择使用双向链表 <code>DoublyLinkedList</code> 来存储字典中的键值对，<code>DoublyLinkedList</code> 是一个已经实现好的双向链表的类，你可以通过本博客的另一篇文章《链表》来了解它。</p>
+        <p>具体来说，我们会使用 2 个 <code>DoublyLinkedList</code> 来实现一个字典，其中一个用于存储键，另一个用于存储值，最后通过节点的序号来将两个双向链表关联在一起。</p>
+        <p><img src="/static/image/markdown/leetcode/dictionary/double-linked-list-structure.png" alt="双链表结构"></p>
+        <p>不过，这样实现的字典的性能不高，比如它的 <code>has</code>、<code>get</code>、<code>set</code>、<code>delete</code>、<code>toArray</code> 方法的时间复杂度都是 <code>O(n)</code>，并且它也需要占用比较多的内存空间。</p>
+        <p>最后，它的实现代码如下。</p>
+        <pre><code class="language-js">class Dictionary {
+
+    #key_table;
+    #value_table;
+
+    /**
+     * @returns { Object } - Dictionary实例。
+     */
+    constructor () {
+
+        this.#key_table = new DoublyLinkedList();
+        this.#value_table = new DoublyLinkedList();
+
+    }
+
+    /**
+     * 检查字典中是否存在键为key的键值对，然后返回一个代表其是否存在的布尔值。
+     * @param { * } element - 键。
+     * @returns { boolean } - 若该集合中存在键为key的键值对，则返回true，否则返回false。
+     */
+    has ( key ) {
+
+        return this.#key_table.getNodeByData( key ).success;
+
+    }
+
+    /**
+     * 从字典中获取一个键为key的键值对的值。
+     * @param { * } key - 键。
+     * @returns { * } - 键对应的值。
+     */
+    get ( key ) {
+
+        const { success: has_key, data: index } = this.#key_table.getIndexByData( key );
+
+        if ( ! has_key ) return;
+
+        return this.#value_table.getNodeByIndex( index ).data.data;
+
+    }
+
+    /**
+     * 向字典添加一个键为key值为value的键值对（若已存在则修改该键值对），然后返回更新后的字典。
+     * @param { * } key - 键。
+     * @param { * } value - 值。
+     * @returns { Object } - 更新后的字典。
+     */
+    set ( key, value ) {
+
+        const { success: has_key, data: index } = this.#key_table.getIndexByData( key );
+
+        if ( has_key ) {
+
+            this.#value_table.getNodeByIndex( index ).data.data = value;
+
+            return this;
+
+        }
+
+        this.#key_table.push( key );
+        this.#value_table.push( value );
+
+        return this;
+
+    }
+
+    /**
+     * 从字典中移除一个键为key的键值对，然后返回一个代表其是否移除成功的布尔值。
+     * @param { * } key - 键。
+     * @returns { boolean } - 若移除成功，则返回true，否则返回false。
+     */
+    delete ( key ) {
+
+        const { success: has_key, data: index } = this.#key_table.getIndexByData( key );
+
+        if ( ! has_key ) return false;
+
+        this.#key_table.remove( index );
+        this.#value_table.remove( index );
+
+        return true;
+
+    }
+
+    /**
+     * 按照键值对的插入顺序来将键值对以[key, value]的格式存入一个数组，然后返回这个数组。
+     * @returns { Array } - 以[key, value]的格式来存储字典键值对的数组。
+     */
+    toArray () {
+
+        const key_array = this.#key_table.toArray().data;
+        const value_array = this.#value_table.toArray().data;
+
+        return key_array.map( ( key, index ) =&gt; [ key, value_array[ index ] ] );
+
+    }
+
+    /**
+     * 清空字典，然后返回更新后的字典。
+     * @returns { Object } - 更新后的字典。
+     */
+    clear () {
+
+        this.#key_table.clear();
+        this.#value_table.clear();
+
+        return this;
+
+    }
+
+    get size () {
+
+        return this.#key_table.size;
+
+    }
+
+}
+</code></pre>
+        <h2 id="fff1afa3-7a56-4898-b475-fd1cc8107764">Map API</h2>
+        <p>JavaScript 中有 2 种内建的字典，一种是普通对象 <code>{}</code>，另一种是 <code>Map</code>，其中 <code>Map</code> 来源于 ECMAScript 2015，它是一种比普通对象更强大的字典，比如可以使用任意数据类型作为键，可以按照键值对的插入顺序来迭代，拥有更高的增删性能等，如果你想进一步了解 <code>Map</code>，那么你可以阅读 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map">这篇文章</a> 。</p>
+        <p>另外，JavaScript 还实现了一种特别的字典，名为 <code>WeakMap</code>，你可以通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">这篇文章</a> 来了解它。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>V8 团队在 <a href="https://v8.dev/blog/hash-code">这篇文章</a> 中表示 <code>Set</code>、<code>Map</code>、<code>WeakSet</code>、<code>WeakMap</code> 的底层都使用了散列表，但是 <code>Map</code> 的 <a href="https://tc39.es/ecma262/#sec-map-objects">ECMAScript 规范</a> 却表示 <code>Map</code> 的多种方法都是通过遍历来实现的，比如 <code>Map.prototype.get</code> 方法的实现逻辑就是通过遍历每个键来找到相应的值，规范原文如下。</p>
+            <pre><code>1. Let M be the this value.
+2. Perform ? RequireInternalSlot(M, [[MapData]]).
+3. Let entries be the List that is M.[[MapData]].
+4. For each Record { [[Key]], [[Value]] } p of entries, do
+a. If p.[[Key]] is not empty and SameValueZero(p.[[Key]], key) is true, return p.[[Value]].
+5. Return undefined.
+</code></pre>
+            <p>另外，<code>Map.prototype.has</code>、<code>Map.prototype.set</code>、<code>Map.prototype.delete</code> 等方法也是使用遍历来实现的。那么，<code>Map</code> 等 API 究竟是如何实现的呢？</p>
+        </blockquote>
+    </article>
+</body>
+
+</html>
