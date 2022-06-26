@@ -175,6 +175,13 @@ aside > p:first-child {
     font-size: 1.2rem;
 }
 
+aside > p:first-child:link,
+aside > p:first-child:visited,
+aside > p:first-child:hover,
+aside > p:first-child:active {
+    color: var( --purple );
+}
+
 aside > p + p {
     padding-left: 1.5em;
     padding-right: 1em;
@@ -189,14 +196,6 @@ aside > p + p:link,
 aside > p + p:visited,
 aside > p + p:hover,
 aside > p + p:active {
-    color: var( --white );
-}
-
-aside > p:hover {
-    color: var( --purple );
-}
-
-aside > p + p:hover {
     border-left-color: var( --purple );
     background-color: var( --grey );
 }
