@@ -4,6 +4,8 @@
 
 > 本文会描述 V8 数组的实现，不过本文首先会假设 V8 运行在 64 位的系统上，并且 V8 的版本为 8.9。
 
+`FixedArray` 是 V8 实现的一个类似于数组的类，它和数组的区别在于，它具有一些额外的自定义函数。
+
 ## 参考
 
 - [Fast properties in V8 - V8 (30/08/2017)](https://v8.dev/blog/fast-properties)
