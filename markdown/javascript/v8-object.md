@@ -8,7 +8,15 @@ TODO
 
 ## 调试
 
-在 node.js 运行时中，我们可以通过键入 `node --allow-natives-syntax` 命令来激活一个特性，激活该特性后，我们就可以通过键入 `%DebugPrint( x )` 命令来查看 `x` 的内部信息，我们可以通过观察这些内部信息来了解 V8 是如何实现 `x` 的。
+在 node.js 运行时中，我们可以通过键入 `node --allow-natives-syntax` 命令来激活一个特性，这个特性可以允许我们观察变量的内部信息。
+
+具体来说，我们先在 terminal 中键入 `node --allow-natives-syntax` 来激活该特性，然后再键入 `%DebugPrint( { a: 1 } )`，之后 node.js 运行时就会打印出字面量
+
+激活该特性后，我们再键入 `%DebugPrint( { a: 1 } )` 命令，
+
+来查看 `x` 的内部信息，
+
+我们可以通过观察这些内部信息来了解 V8 是如何实现 `x` 的。
 
 现在，让我们在 terminal 中键入如下命令，来看看这项特性是如何使用的。
 
