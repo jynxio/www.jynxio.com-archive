@@ -2,23 +2,19 @@
 
 ## 概述
 
-`Object` 是 JavaScript 的基本数据类型之一，本文将会描述 V8 引擎实现 `Object` 的具体细节。
+`Object` 是 JavaScript 的基本数据类型之一，本文将会描述 `Object` 在 V8 中的实现细节。
 
 TODO
 
 ## 调试
 
-在 node.js 运行时中，我们可以通过键入 `node --allow-natives-syntax` 命令来激活一个特性，这个特性可以允许我们观察变量的内部信息。
+V8 引擎
 
-具体来说，我们先在 terminal 中键入 `node --allow-natives-syntax` 来激活该特性，然后再键入 `%DebugPrint( { a: 1 } )`，之后 node.js 运行时就会打印出字面量
 
-激活该特性后，我们再键入 `%DebugPrint( { a: 1 } )` 命令，
 
-来查看 `x` 的内部信息，
+在正式开始介绍 `Object` 的实现细节之前，我想先向你介绍一个有用的 node.js 特性，我们将会使用这个特性来观察 JavaScript 的值的内部信息，这有助于我们了解 V8 是如何实现 `Object` 的。
 
-我们可以通过观察这些内部信息来了解 V8 是如何实现 `x` 的。
-
-现在，让我们在 terminal 中键入如下命令，来看看这项特性是如何使用的。
+具体来说，让我们在 node.js 运行时（比如 terminal）中键入 `node --allow-natives-syntax` 命令，
 
 ```
 node --allow-natices-syntax       // your input
