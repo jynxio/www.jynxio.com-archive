@@ -4,6 +4,10 @@
 
 `Object` 是 JavaScript 的基本数据类型之一，本文将会描述 `Object` 在 V8 引擎中的实现细节。
 
+## 版本
+
+标注当前文章所使用的 V8 引擎的版本。
+
 ## 调试
 
 在 V8 引擎中，有一些内建的函数可以帮助开发者进行 debug，其中有一个名为 `%DebugPrint` 的函数可以帮助开发者观察 JavaScript 值的内部信息。不过，在使用 `%DebugPrint` 之类的内建函数之前，我们必须先执行 `--allow-natives-syntax` 命令。
