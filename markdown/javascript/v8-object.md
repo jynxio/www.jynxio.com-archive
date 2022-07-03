@@ -26,3 +26,12 @@ internal information...           // output
 ```
 
 > 我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在其他使用 V8 引擎的运行时中使用 V8 引擎的内建函数，比如 Chrome/Chromium。
+
+## 参考资料
+
+- [阅读V8（一）：V8底层如何实现JSArray](https://zhuanlan.zhihu.com/p/192468212)
+- [（更新）从Chrome源码看JS Object的实现](https://zhuanlan.zhihu.com/p/26169639)
+- [从Chrome源码看JS Array的实现](https://zhuanlan.zhihu.com/p/26388217)
+- [Fast properties in V8](https://v8.dev/blog/fast-properties)
+- [Elements kinds in V8](https://v8.dev/blog/elements-kinds)
+- [[V8 Deep Dives] Understanding Array Internals](https://itnext.io/v8-deep-dives-understanding-array-internals-5b17d7a28ecc)
