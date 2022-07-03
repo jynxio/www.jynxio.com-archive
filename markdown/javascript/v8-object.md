@@ -1,8 +1,18 @@
-# V8 Object
+# JavaScript 的对象在 V8 中的实现
 
 ## 概述
 
-`Object` 是 JavaScript 的基本数据类型之一，本文将会描述 `Object` 在 V8 引擎中的实现细节。
+本文将会描述 V8 引擎是如何实现 JavaScript 的对象的，不过，在正式开始之前，我们需要先了解一下对象是什么。
+
+JavaScript 的对象是指 `Object` 类型的值，它采用键值对来存储数据，比如 `{a: 1}`，显然，它是典型的字典（一种数据结构）。
+
+
+
+在开始了解 V8 引擎是如何实现 JavaScript 的 Object 之前，让我们先来了解一下这个 Object。
+
+JavaScript 的 Object 是一个典型的字典，它采用键值对来存储数据，其中 Object 的键只能是 `String` 类型或 `Symbol` 类型的值。具体来说，如果你使用 `Symbol` 类型的值来作为键，那么这个键就是原来那个 `Symbol` 类型的值，如果你使用一个非 `Symbol` 且非 `String` 类型的值来作为键，那么这个键就会被隐式转换为 `String` 类型的值。
+
+Object 是 JavaScript 的基本数据类型之一，本文将会描述 Object 在 V8 引擎中的实现细节。
 
 ## 版本
 
@@ -25,7 +35,11 @@ internal information...           // output
 { a: 1 }                          // output
 ```
 
-> 我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在其他使用 V8 引擎的运行时中使用 V8 引擎的内建函数，比如 Chrome/Chromium。
+> 我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在 Chromium 中使用这些内建函数，因为这些运行时都使用了 V8 引擎。
+
+
+
+
 
 ## 参考资料
 
