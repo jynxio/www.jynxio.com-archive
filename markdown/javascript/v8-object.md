@@ -2,28 +2,23 @@
 
 ## 概述
 
-`Object` 是 JavaScript 的基本数据类型之一，本文将会描述 `Object` 在 V8 中的实现细节。
-
-TODO
+`Object` 是 JavaScript 的基本数据类型之一，本文将会描述 `Object` 在 V8 引擎中的实现细节。
 
 ## 调试
 
-V8 引擎
+在 V8 引擎中，有一些内建的函数可以帮助开发者进行 debug，其中有一个名为 `%DebugPrint` 的函数可以帮助开发者观察 JavaScript 值的内部信息。不过，在使用 `%DebugPrint` 之类的内建函数之前，我们必须先执行 `--allow-natives-syntax` 命令。
 
-
-
-在正式开始介绍 `Object` 的实现细节之前，我想先向你介绍一个有用的 node.js 特性，我们将会使用这个特性来观察 JavaScript 的值的内部信息，这有助于我们了解 V8 是如何实现 `Object` 的。
-
-具体来说，让我们在 node.js 运行时（比如 terminal）中键入 `node --allow-natives-syntax` 命令，
+具体来说，在 Node 运行时中，我们可以通过如下做法来调用 `%DebugPrint` 函数，并让其打印字面量 `{a: 1}` 的内部信息。
 
 ```
-node --allow-natices-syntax       // your input
-Welcome to Node.js v16.13.1.      // system's output
-Type ".help" for more information // system's output
-> %DebugPrint( { a: 1 } );        // your input
-some information...               // system's output
-some information...               // system's output
-some information...               // system's output
-{ a: 1 }                          // system's output
+node --allow-natices-syntax       // input
+Welcome to Node.js v16.13.1.      // output
+Type ".help" for more information // output
+> %DebugPrint( { a: 1 } );        // input
+internal information...           // output
+internal information...           // output
+internal information...           // output
+{ a: 1 }                          // output
 ```
 
+> 我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在其他使用 V8 引擎的运行时中使用 V8 引擎的内建函数，比如 Chrome/Chromium。
