@@ -1,8 +1,16 @@
+---
+typora-root-url: ..\..
+---
+
 # JavaScript 对象在 V8 中的实现
 
 ## 概述
 
 本文将会描述 V8 引擎实现 JavaScript 对象的原理，其中 JavaScript 对象是指 `Object` 类型的值，它是 JavaScript 的八种基本数据类型之一，它采用键值对来存储数据，比如 `{a: 1}`，显然，它是典型的字典。
+
+另外，JavaScript 对象的键只能使用 `String` 或 `Symbol` 类型的值，如果你使用了一个非 `String` 且非 `Symbol` 类型的值来作为对象的键，那么这个值会先被隐式的转换为 `String` 类型的值，然后再用这个转换后的值来作为键。
+
+> 不过，JavaScript 内建的 `Map` 和 `WeakMap` 允许使用任意类型的值来作为键。
 
 ## 版本
 
@@ -29,21 +37,21 @@ internal information...           // output
 
 ## 实现
 
-JavaScript 对象拥有两类属性，一类是数组索引属性，另一类是命名属性。数组索引属性是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。命名属性是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `"a"`、`"b"` 等，另外，使用 `Symbol` 类型的值来作为键的属性也是命名属性。
+JavaScript 对象拥有两类属性，一类是命名属性（Named properties），一类是数组索引属性（Array-indexed properties）。不过 V8 官方将命名属性称为 properties，将数组索引属性称为 elements，本文会沿用 V8 官方的叫法，因为这种叫法更加简洁。
 
-需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于命名属性。
+在 V8 引擎层面，对象的 Properties 和 Elements 被分别存储在两个独立的数据结构中。
 
-> V8 官方将数组索引属性称为 array index property，将命名属性称为 name property。另外，V8 官方更喜欢使用 element 来指代 array index property，不过本文更喜欢使用 array index property，因为这个名称更加贴切。
+![Properties和Elements](/static/image/markdown/javascript/properties-and-elements.png)
 
-另外，JavaScript 对象的键只能使用 `String` 或 `Symbol` 类型的值，如果你使用了一个非 `String` 且非 `Symbol` 类型的值来作为对象的键，那么这个值会先被隐式的转换为 `String` 类型的值，然后再用这个转换后的值来作为键。
+### Properties
 
-> 不过，JavaScript 内建的 `Map` 和 `WeakMap` 允许使用任意类型的值来作为键。
+Properties 的准确名称是 Named properties，翻译为命名属性，是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `"a"`、`"b"` 等，另外，使用 `Symbol` 类型的值来作为键的属性也 Properties。
 
-V8 引擎使用了不同的方式来实现命名属性和数组索引属性。
+### Elements
 
-### 命名属性的实现
+Elements 的准确名称是 Array-indexed properties，翻译为数组索引属性，是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 Properties 而不是 Elements。
 
-### 数组索引属性的实现
+因为数组只使用正整数来作为元素的索引，所以该类属性才被称为数组索引属性，而不是索引属性。
 
 ## 参考
 
