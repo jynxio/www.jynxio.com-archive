@@ -37,15 +37,29 @@ internal information...           // output
 
 ## 实现
 
-JavaScript 对象拥有两类属性，一类是命名属性（Named properties），一类是数组索引属性（Array-indexed properties）。不过 V8 官方将命名属性称为 properties，将数组索引属性称为 elements，本文会沿用 V8 官方的叫法，因为这种叫法更加简洁。
+JavaScript 对象拥有两类属性，一类是命名属性（Named properties），一类是数组索引属性（Array-indexed properties）。不过 V8 官方将命名属性称为 Properties，将数组索引属性称为 Elements，本文会沿用 V8 官方的叫法，因为这种叫法更加简洁。
 
-在 V8 引擎层面，对象的 Properties 和 Elements 被分别存储在两个独立的数据结构中。
+V8 主要是用 C++ 来编写的，它会创建一个定长数组来存储 JavaScript 对象，不过 V8 不会将对象的 Properties 和 Elements 直接存储在这个对象上，而是将它们分别存储在另外两个独立的数据结构中，然后令该数组的第二个元素指向存储 Properties 的数据结构，令该数组的第三个元素指向存储 Elements 的数据结构。
 
 ![Properties和Elements](/static/image/markdown/javascript/properties-and-elements.png)
+
+其实，V8 也会将一小部分的 Properties 存储在存储 JavaScript 对象的数组上，下文揭示了更多的相关细节。
 
 ### Properties
 
 Properties 的准确名称是 Named properties，翻译为命名属性，是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `"a"`、`"b"` 等，另外，使用 `Symbol` 类型的值来作为键的属性也 Properties。
+
+V8 会使用一个独立的数组或字典来存储 Properties。另外，存储 JavaScript 对象的数组本身也能存储一部分的 Properties，这些 Properties 被称为 In-object properties。
+
+#### In-object properties
+
+V8 使用数组来存储 JavaScript 对象，这个数组在创建之初就会预留一定的空间来存储 Properties，这些被直接存储在该数组上的 Properties 就被称为 In-object properties。不过，In-object properties 的数量是很有限的，如果我们想要存储的 Properties 的数量超出了 In-object properties 的容限，那么超出的部分就只能存储到另一个独立的数据结构中去，我们将超出的部分称为 Normal properties。显然，相比于 Elements 和 Normal properties，In-object properties 的访问速度要更快的。
+
+如果我们经常使用一些仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被 V8 当作 In-object properties 来处理了，这正是 V8 设计 In-object properties 的原因。
+
+#### Normal properties
+
+
 
 ### Elements
 
