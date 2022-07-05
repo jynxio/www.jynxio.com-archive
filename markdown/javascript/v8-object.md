@@ -2,11 +2,11 @@
 
 ## 概述
 
-本文将会描述 V8 引擎是如何实现 JavaScript 对象的，不过，在正式开始之前，我们需要先了解一下对象是什么。
+本文将会描述 V8 引擎实现 JavaScript 对象的原理，其中 JavaScript 对象是指 `Object` 类型的值，它是 JavaScript 的八种基本数据类型之一，它采用键值对来存储数据，比如 `{a: 1}`，显然，它是典型的字典。
 
-JavaScript 对象是指 `Object` 类型的值，它采用键值对来存储数据，比如 `{a: 1}`，显然，它是典型的字典（一种数据结构）。
+另外，JavaScript 对象的键只能使用 `String` 或 `Symbol` 类型的值，如果你使用了一个非 `String` 且非 `Symbol` 类型的值来作为对象的键，那么这个值会先被隐式的转换为 `String` 类型的值，然后再用这个转换后的值来作为键。
 
-另外，JavaScript 对象的键只能使用 `Symbol` 和 `String` 类型的值。如果你使用一个 `Symbol` 类型的值来作为 JavaScript 对象的键，那么这个键就是原来的那个 `Symbol` 类型的值。如果你使用一个非 `Symbol` 且非 `String` 类型的值来作为 JavaScript 对象的键，那么 V8 引擎就会将那个原来的值隐式转换为 `String` 类型的值，然后再用这个 `String` 类型的值来作为键。
+> JavaScript 内建的 `Map` 和 `WeakMap` 允许使用任意类型的值来作为键。
 
 ## 版本
 
