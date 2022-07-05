@@ -6,11 +6,17 @@ typora-root-url: ..\..
 
 ## 概述
 
-本文将会描述 V8 引擎实现 JavaScript 对象的原理，其中 JavaScript 对象是指 `Object` 类型的值，它是 JavaScript 的八种基本数据类型之一，它采用键值对来存储数据，比如 `{a: 1}`，显然，它是典型的字典。
+本文将会描述 V8 引擎是如何实现 JavaScript 对象的。
 
-另外，JavaScript 对象的键只能使用 `String` 或 `Symbol` 类型的值，如果你使用了一个非 `String` 且非 `Symbol` 类型的值来作为对象的键，那么这个值会先被隐式的转换为 `String` 类型的值，然后再用这个转换后的值来作为键。
+## 对象
 
-> 不过，JavaScript 内建的 `Map` 和 `WeakMap` 允许使用任意类型的值来作为键。
+JavaScript 中的对象和面向对象语言中的对象是不一样的，在 JavaScript 中，对象是一种字典类型的数据结构，比如 `{a: 1}`。其中，对象的键只能使用 `String` 或 `Symbol` 类型的值，对象的值则可以使用任意的数据类型。
+
+> 在 JavaScript 中有 2 个特别的内建对象，分别是 `Map` 和 `WeakMap`，它们都同样是字典类型的数据结构，其中，`Map` 可以使用任意数据类型来作为键，`WeakMap` 则只能使用对象来作为键。
+
+
+
+
 
 ## 版本
 
@@ -59,11 +65,13 @@ V8 使用数组来存储 JavaScript 对象，这个数组在创建之初就会�
 
 如果我们经常使用一些仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被 V8 当作 In-object properties 来处理了，这正是 V8 设计 In-object properties 的原因。
 
+TODO 为什么 In-object properties 的数量很少呢？
+
 #### Normal properties
 
 存储 JavaScript 对象的数组只能存储有限且少量的 In-object-properties，而超出的部分将会被存储到另一个独立的数据结构中去，这些超出的部分就被称为 Normal properties。
 
-
+TODO 从这里开始！
 
 ### Elements
 
