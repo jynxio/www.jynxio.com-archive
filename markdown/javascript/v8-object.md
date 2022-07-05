@@ -55,9 +55,13 @@ V8 会使用一个独立的数组或字典来存储 Properties。另外，存储
 
 V8 使用数组来存储 JavaScript 对象，这个数组在创建之初就会预留一定的空间来存储 Properties，这些被直接存储在该数组上的 Properties 就被称为 In-object properties。不过，In-object properties 的数量是很有限的，如果我们想要存储的 Properties 的数量超出了 In-object properties 的容限，那么超出的部分就只能存储到另一个独立的数据结构中去，我们将超出的部分称为 Normal properties。显然，相比于 Elements 和 Normal properties，In-object properties 的访问速度要更快的。
 
+![In-object properties](/static/image/markdown/javascript/in-object-properties.png)
+
 如果我们经常使用一些仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被 V8 当作 In-object properties 来处理了，这正是 V8 设计 In-object properties 的原因。
 
 #### Normal properties
+
+存储 JavaScript 对象的数组只能存储有限且少量的 In-object-properties，而超出的部分将会被存储到另一个独立的数据结构中去，这些超出的部分就被称为 Normal properties。
 
 
 
