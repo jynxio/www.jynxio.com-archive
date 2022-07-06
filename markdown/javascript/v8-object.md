@@ -73,7 +73,15 @@ properties 的准确名称是 named properties，译为命名属性，是指使�
 
 #### in-object properties
 
-首先，V8 引擎在创建 JavaScript 对象数组的时候，就会在该数组上预留一些空间来存储 properties，而这些被直接存储在 JavaScript 对象数组上的 properties 就被称为 in-object properties。默认情况下，JavaScript 对象数组可以存储 10 个 in-object properties，而超出的 properties 将会被存储在另一个独立的数据结构中，而这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 properties 称为 normal properties。
+首先，V8 引擎在创建 JavaScript 对象数组的时候，就会在该数组上预留一些空间来存储 properties，而这些被直接存储在 JavaScript 对象数组上的 properties 就被称为 in-object properties。
+
+通常，JavaScript 对象数组只能存储少量的 in-object properties，而超出的 properties 将会被存储在另一个独立的数据结构中，而这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 properties 称为 normal properties。
+
+> 根据 V8 官方的说法，JavaScript 对象数组所能存储的 in-object properties 的数量在 JavaScript 对象初始化的时候就确定好了，原文是 [“The number of in-object properties is predetermined by the initial size of the object”](https://v8.dev/blog/fast-properties)。
+>
+> 根据实践，JavaScript 对象数组所能存储的 in-object properties 的数量似乎取决于创建 JavaScript 对象的方式，我并没有找到一个明显的规律，不过总的来说，JavaScript 对象数组只能存储寥寥几个 in-object properties。
+>
+> 错了！！！居然能存 26 个！！！
 
 显然，in-object properties 的访问速度要比 normal properties 和 elements 的访问速度更快，因为 V8 引擎可以直接在 JavaScript 对象数组上找到 in-object properties。
 
@@ -93,9 +101,13 @@ V8 引擎要么使用线性的数据结构来存储 normal properties，要么�
 >
 > 如果需要访问字典的某个属性，那么就可以通过哈希函数来计算出该键所对应的内存地址，然后在该地址中找到相应的值。因为要进行哈希计算，所以字典（基于散列表）的数据访问速度没有数组的数据访问速度快。
 
-normal properties 是键值对格式的数据，
+#### HiddenClass
 
-### Elements
+JavaScript 对象数组的第一个元素名为 HiddenClass，HiddenClass 存储了一些关于 JavaScript 对象的信息，比如 JavaScript 对象的属性数量、原型等。
+
+另外，如果 V8 引擎使用 `FixedArray` 来存储 normal properties，那么就会衍生出一个额外的问题，具体来说，在 JavaScript 层面，因为对象是一个字典，所以我们会通过键来访问属性，而在
+
+### elements
 
 Elements 的准确名称是 Array-indexed properties，翻译为数组索引属性，是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 Properties 而不是 Elements。
 
