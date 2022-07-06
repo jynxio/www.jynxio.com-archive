@@ -14,7 +14,21 @@ JavaScript 中的对象和面向对象语言中的对象是不一样的，在 Ja
 
 > 在 JavaScript 中有 2 个特别的内建对象，分别是 `Map` 和 `WeakMap`，它们都同样是字典类型的数据结构，其中，`Map` 可以使用任意数据类型来作为键，`WeakMap` 则只能使用对象来作为键。
 
+另外，如果我们遍历对象的属性，那么就会先按照索引值的升序顺序来输出对象的数组索引属性，然后再按照属性创建的先后顺序来输出其他属性，这是根据 ECMAScript 规范的要求来设计的。
 
+```js
+const obj = {};
+
+obj[ "2" ] = "";
+obj[ "1" ] = "";
+obj[ "0" ] = "";
+obj[ "a" ] = "";
+obj[ "b" ] = "";
+obj[ "c" ] = "";
+
+for ( let key in obj ) console.log( key );
+// 0 1 2 a b c
+```
 
 
 
@@ -43,35 +57,43 @@ internal information...           // output
 
 ## 实现
 
-JavaScript 对象拥有两类属性，一类是命名属性（Named properties），一类是数组索引属性（Array-indexed properties）。不过 V8 官方将命名属性称为 Properties，将数组索引属性称为 Elements，本文会沿用 V8 官方的叫法，因为这种叫法更加简洁。
+JavaScript 对象拥有两类属性，一类是命名属性（named properties），一类是数组索引属性（array-indexed properties）。不过 V8 官方将命名属性简称为 properties，将数组索引属性简称为 elements，本文会沿用 V8 官方的叫法，因为这种叫法更加简洁。
 
-V8 主要是用 C++ 来编写的，它会创建一个定长数组来存储 JavaScript 对象，不过 V8 不会将对象的 Properties 和 Elements 直接存储在这个对象上，而是将它们分别存储在另外两个独立的数据结构中，然后令该数组的第二个元素指向存储 Properties 的数据结构，令该数组的第三个元素指向存储 Elements 的数据结构。
+V8 引擎是使用 C++ 来编写的，同时还使用到了 JavaScript 和汇编，不过在 C++ 中，并没有一种像 JavaScript 对象一样的 API，所以 V8 团队需要亲自实现 JavaScript 对象。
+
+具体来说，V8 引擎会创建一个定长数组来存储 JavaScript 对象，为方便起见，本文会将该数组称为 JavaScript 对象数组。不过 V8 引擎并不会直接将 properties 和 elements 直接存储在这个 JavaScript 对象数组上，而是将它们分别存储在另外两个独立的数据结构中，然后令 JavaScript 对象数组的第二个元素指向存储 properties 的数据结构，令 JavaScript 对象数组的第三个元素指向存储 elements 的数据结构，正如下图所示。
 
 ![Properties和Elements](/static/image/markdown/javascript/properties-and-elements.png)
 
-其实，V8 也会将一小部分的 Properties 存储在存储 JavaScript 对象的数组上，下文揭示了更多的相关细节。
+下文将会详细描述 V8 引擎是如何存储 properties 和 elements 的。
 
-### Properties
+### properties
 
-Properties 的准确名称是 Named properties，翻译为命名属性，是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `"a"`、`"b"` 等，另外，使用 `Symbol` 类型的值来作为键的属性也 Properties。
+properties 的准确名称是 named properties，译为命名属性，是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `{ a: 1 }` 等，另外，使用 `Symbol` 类型的值来作为键的属性也属于 properties。
 
-V8 会使用一个独立的数组或字典来存储 Properties。另外，存储 JavaScript 对象的数组本身也能存储一部分的 Properties，这些 Properties 被称为 In-object properties。
+#### in-object properties
 
-#### In-object properties
+首先，V8 引擎在创建 JavaScript 对象数组的时候，就会在该数组上预留一些空间来存储 properties，而这些被直接存储在 JavaScript 对象数组上的 properties 就被称为 in-object properties。默认情况下，JavaScript 对象数组可以存储 10 个 in-object properties，而超出的 properties 将会被存储在另一个独立的数据结构中，而这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 properties 称为 normal properties。
 
-V8 使用数组来存储 JavaScript 对象，这个数组在创建之初就会预留一定的空间来存储 Properties，这些被直接存储在该数组上的 Properties 就被称为 In-object properties。不过，In-object properties 的数量是很有限的，如果我们想要存储的 Properties 的数量超出了 In-object properties 的容限，那么超出的部分就只能存储到另一个独立的数据结构中去，我们将超出的部分称为 Normal properties。显然，相比于 Elements 和 Normal properties，In-object properties 的访问速度要更快的。
+显然，in-object properties 的访问速度要比 normal properties 和 elements 的访问速度更快，因为 V8 引擎可以直接在 JavaScript 对象数组上找到 in-object properties。
 
 ![In-object properties](/static/image/markdown/javascript/in-object-properties.png)
 
-如果我们经常使用一些仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被 V8 当作 In-object properties 来处理了，这正是 V8 设计 In-object properties 的原因。
+试想一下，如果我们经常使用仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被当作 in-object properties 来处理了，这正是 V8 引擎设计 in-object properties 的原因。
 
-TODO 为什么 In-object properties 的数量很少呢？
+#### normal properties
 
-#### Normal properties
+normal properties 是指存储在独立的数据结构中的 properties，即非 in-object properties 的 properties。
 
-存储 JavaScript 对象的数组只能存储有限且少量的 In-object-properties，而超出的部分将会被存储到另一个独立的数据结构中去，这些超出的部分就被称为 Normal properties。
+V8 引擎要么使用线性的数据结构来存储 normal properties，要么使用非线性的数据结构来存储 normal properties。其中，线性数据结构是指 `FixedArray`，这是一个由 V8 引擎自己实现的类似于数组的类，它和数组的区别在于它拥有更多的方法，而非线性数据结构则是指基于散列表的数组。
 
-TODO 从这里开始！
+如果 V8 引擎使用 `FixedArray` 来存储 normal properties，那么 V8 引擎就会将这些 normal properties 称为 fast properties，即快属性。如果 V8 引擎使用散列表来存储 normal properties，那么 V8 引擎就会将这些 normal properties 称为 slow properties，即慢属性。V8 引擎之所以会把 normal properties 分别称呼为快属性或慢属性，是因为线性数据结构中的数据访问速度比非线性数据结构的数据访问速度更快，具体来说，V8 引擎可以通过索引来直接访问到线性数据结构中的数据，但是如果 V8 引擎想要访问字典（基于散列表）中的数据，那么 V8 引擎就需要先通过哈希计算来得到目标数据的地址，然后再根据地址来访问到目标数据。
+
+> 使用散列表来实现字典的大致原理是：通过哈希函数来将字典的键转换为一个唯一的内存地址，然后将相应的值存储在该地址中。
+>
+> 如果需要访问字典的某个属性，那么就可以通过哈希函数来计算出该键所对应的内存地址，然后在该地址中找到相应的值。因为要进行哈希计算，所以字典（基于散列表）的数据访问速度没有数组的数据访问速度快。
+
+normal properties 是键值对格式的数据，
 
 ### Elements
 
