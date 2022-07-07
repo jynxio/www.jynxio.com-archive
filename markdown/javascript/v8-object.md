@@ -75,7 +75,25 @@ properties 的准确名称是 named properties，译为命名属性，是指使�
 
 首先，V8 引擎在创建 JavaScript 对象数组的时候，就会在该数组上预留一些空间来存储 properties，而这些被直接存储在 JavaScript 对象数组上的 properties 就被称为 in-object properties。
 
-通常，JavaScript 对象数组只能存储少量的 in-object properties，而超出的 properties 将会被存储在另一个独立的数据结构中，而这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 properties 称为 normal properties。
+JavaScript 对象数组的 in-object properties 容量取决于你创建 JavaScript 对象的方式，并且这个容量是不可改变的。而超出容量的 properties 将会被存储在另一个独立的数据结构中，这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 properties 称为 normal properties。
+
+比如，以字面量赋值的形式来创建具有 3 个命名属性的对象，那么这个对象的 in-object properties 容量就是 5，后续增加的命名属性都将会被存储在另一个独立的数据结构中，即作为 normal properties 来处理。
+
+```
+> node --allow-natives-syntax
+> const obj = { a: 1, b: 1, c: 1 };
+> %DebugPrint( obj );
+> obj.d = 1;
+> %DebugPrint( obj );
+```
+
+第一次 `%DebugPrint( obj )` 的输出如下，
+
+![In-object properties的容量](/static/image/markdown/javascript/in-object-properties-capacity-1.png)
+
+第二次
+
+![In-object properties的容量](/static/image/markdown/javascript/in-object-properties-capacity-2.png)
 
 > 根据 V8 官方的说法，JavaScript 对象数组所能存储的 in-object properties 的数量在 JavaScript 对象初始化的时候就确定好了，原文是 [“The number of in-object properties is predetermined by the initial size of the object”](https://v8.dev/blog/fast-properties)。
 >
