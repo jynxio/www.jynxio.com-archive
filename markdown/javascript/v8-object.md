@@ -77,7 +77,9 @@ properties 的准确名称是 named properties，译为命名属性，是指使�
 
 JavaScript 对象数组的 in-object properties 容量取决于你创建 JavaScript 对象的方式，并且这个容量是不可改变的。而超出容量的 properties 将会被存储在另一个独立的数据结构中，这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 properties 称为 normal properties。
 
-比如，以字面量赋值的形式来创建具有 3 个命名属性的对象，那么这个对象的 in-object properties 容量就是 5，后续增加的命名属性都将会被存储在另一个独立的数据结构中，即作为 normal properties 来处理。
+![In-object properties](/static/image/markdown/javascript/in-object-and-normal-properties.png)
+
+比如，以字面量赋值的形式来创建具有 3 个命名属性的对象，那么这个对象的 in-object properties 容量就是 3，后续增加的命名属性都将会被存储在另一个独立的数据结构中，即作为 normal properties 来处理。
 
 ```
 > node --allow-natives-syntax
@@ -87,23 +89,17 @@ JavaScript 对象数组的 in-object properties 容量取决于你创建 JavaScr
 > %DebugPrint( obj );
 ```
 
-第一次 `%DebugPrint( obj )` 的输出如下，
+第一次 `%DebugPrint( obj )` 的输出如下，此时，`obj` 的 in-object properties 容量为 3，`a`、`b`、`c` 属性都被当作 in-object properties 来处理，负责存储 normal properties 的 `FixedArray` 的长度为 0，这代表着 obj 中没有任何 normal properties。
 
 ![In-object properties的容量](/static/image/markdown/javascript/in-object-properties-capacity-1.png)
 
-第二次
+第二次 `%DebugPrint( obj )` 的输出如下，此时，obj 的 in-object properties 容量仍然为 3，`a`、`b`、`c` 属性仍然被当作 in-object properties 来处理，后续新增的 `d` 属性则被当作 normal properties 来处理，负责存储 normal properties 的 `PropertyArray` 的长度为 3。
 
 ![In-object properties的容量](/static/image/markdown/javascript/in-object-properties-capacity-2.png)
 
-> 根据 V8 官方的说法，JavaScript 对象数组所能存储的 in-object properties 的数量在 JavaScript 对象初始化的时候就确定好了，原文是 [“The number of in-object properties is predetermined by the initial size of the object”](https://v8.dev/blog/fast-properties)。
->
-> 根据实践，JavaScript 对象数组所能存储的 in-object properties 的数量似乎取决于创建 JavaScript 对象的方式，我并没有找到一个明显的规律，不过总的来说，JavaScript 对象数组只能存储寥寥几个 in-object properties。
->
-> 错了！！！居然能存 26 个！！！
-
 显然，in-object properties 的访问速度要比 normal properties 和 elements 的访问速度更快，因为 V8 引擎可以直接在 JavaScript 对象数组上找到 in-object properties。
 
-![In-object properties](/static/image/markdown/javascript/in-object-properties.png)
+TODO
 
 试想一下，如果我们经常使用仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被当作 in-object properties 来处理了，这正是 V8 引擎设计 in-object properties 的原因。
 
