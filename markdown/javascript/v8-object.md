@@ -107,17 +107,29 @@ normal properties 是指存储在独立的数据结构中的 properties，即非
 
 V8 引擎会使用数组或字典中的其中一种来存储 normal properties。具体来说，V8 引擎要么会使用 `FixedArray` 和 `PropertyArray` 等类来存储 normal properties，要么会使用 `NameDictionary` 等类来存储 normal properties。其中 `FixedArray` 和 `PropertyArray` 是由 V8 引擎自己实现的数组，`NameDictionary` 是由 V8 引擎自己实现的字典，并且该字典是基于散列表来实现的。
 
-如果 V8 引擎使用 `FixedArray` 或 `PropertyArray` 等数组数据结构来存储 normal properties，那么 V8 官方就会将这些 normal properties 称呼为 fast properties，如果 V8 引擎使用 `NameDictionary` 等字典数据结构来存储 normal properties，那么 V8 官方就会将这些 normal properties 称呼为 slow properties。因为数组的数据访问速度比字典的数据访问速度更快，所以 V8 官方将前者称呼为 fast properties，并将后者称呼为 slow properties。
+如果 V8 引擎使用 `FixedArray` 或 `PropertyArray` 等数组数据结构来存储 normal properties，那么 V8 官方就会将这些 normal properties 称呼为 fast properties，如果 V8 引擎使用 `NameDictionary` 等字典数据结构来存储 normal properties，那么 V8 官方就会将这些 normal properties 称呼为 slow properties 或 dictionary properties。因为数组的数据访问速度比字典的数据访问速度更快，所以 V8 官方将前者称呼为 fast properties，并将后者称呼为 slow properties。
 
 > V8 引擎可以通过索引来直接访问数组中的数据，但是如果 V8 想要访问字典（基于散列表）中的数据，那么 V8 引擎就需要先通过哈希计算来算出目标数据的地址，然后再根据这个地址来访问到目标数据。所以数组的数据访问速度比字典的数据访问速度更快。
 >
 > 具体来说，使用散列表来实现字典的大致原理是通过哈希函数来将字典的键转换为一个唯一的内存地址，然后将相应的值存储在该地址中，如果需要访问字典的某个属性，那么就要通过哈希函数来计算出该属性的键所对应的内存地址，然后在这个地址中找到相应的值。因为要进行哈希计算，所以字典（基于散列表）的数据访问速度没有数组的数据访问速度快。
 
-#### HiddenClass
+V8 引擎更青睐于将 normap properties 存储在数组中，因为 fast properties 的属性访问速度更快，并且 V8 引擎还为其做了额外的优化，来进一步加速它的属性访问速度，比如 [inline caches](https://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html)。不过，在增删属性时，fast properties 的性能会比 slow properties 的性能更差，并且如果 V8 引擎使用了 fast properties，那么在增删属性的时候，V8 引擎还需要额外的更新 hidden class。所以 V8 引擎才会支持使用字典来存储 normal properties，另外，inline caches 并不适用于 slow properties，这是 slow properties 的数据访问速度更慢的另一个原因。
 
-JavaScript 对象数组的第一个元素名为 HiddenClass，HiddenClass 存储了一些关于 JavaScript 对象的信息，比如 JavaScript 对象的属性数量、原型等。
+总的来说，fast properties 访问属性的速度更快，slow properties 增删属性的速度更快。另外，V8 引擎会视情况来决定应该使用 fast properties 还是 slow properties，并且也会视情况来决定是否将 fast properties 切换为 slow properties，或反之。
 
-另外，如果 V8 引擎使用 `FixedArray` 来存储 normal properties，那么就会衍生出一个额外的问题，具体来说，在 JavaScript 层面，因为对象是一个字典，所以我们会通过键来访问属性，而在
+> 我不清楚 V8 引擎在什么情况下才会将 fast properties 切换为 slow properties 或反之，不过，实践发现，如果我们 `delete` 了对象的一个 in-object properties，那么 V8 引擎就会将 fast properties 切换为 slow properties。
+
+#### hidden class
+
+JavaScript 对象数组的第一个元素存储了一些关于 JavaScript 对象自身的信息，比如它的属性数量、指向原型对象的指针等，V8 官方将这个元素称为 hidden class。
+
+hidden class 是 `HiddenClass` 类的实例。`HiddenClass` 是一个类似于面向对象编程语言中的类，它由 V8 引擎实现。hidden class 的 `bit filed 3` 属性存储了 JavaScript 对象的属性数量，以及一个指向 `descriptor array` 的指针。`descriptor array` 是一个 `FixedArray` 实例，它存储了 normal properties 的信息，比如键的名称和值的地址。
+
+`descriptor array` 是为 fast properties 服务的，具体来说，如果 V8 引擎使用数组来存储 normal properties，那么 V8 引擎是无法通过属性的键来推断出该属性的值到底存储在数组的哪个位置的。所以，V8 引擎需要将键的名称和该键所对应的值的地址关联起来，而 V8 引擎具体的做法就是将这些映射信息存储在 `descriptor array` 中。另外，由于 slow properties 是使用字典来存储数据的，所以对于 slow properties 而言，V8 引擎可以直接根据键名来在储存数据的字典中找到对应的值，所以 slow properties 不依赖 `descriptor array`。
+
+另外，`descriptor array` 不存储数组索引属性的信息。
+
+![hidden class](/static/image/markdown/javascript/hidden-class.png)
 
 ### elements
 
