@@ -97,23 +97,21 @@ JavaScript 对象数组的 in-object properties 容量取决于你创建 JavaScr
 
 ![In-object properties的容量](/static/image/markdown/javascript/in-object-properties-capacity-2.png)
 
-显然，in-object properties 的访问速度要比 normal properties 和 elements 的访问速度更快，因为 V8 引擎可以直接在 JavaScript 对象数组上找到 in-object properties。
+另外，in-object properties 的访问速度要比 normal properties 和 elements 的访问速度更快，因为如果 V8 引擎想要找到某个 in-object properties，那么 V8 引擎可以直接在 JavaScript 对象数组上找到，而如果 V8 引擎想要找到某个 normal properties 或 elements，那么 V8 引擎需要先在 JavaScript 对象数组上找到存储 normal properties 或 elements 的地址，然后再在这个地址中继续寻找目标属性。
 
-TODO
-
-试想一下，如果我们经常使用仅仅只有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被当作 in-object properties 来处理了，这正是 V8 引擎设计 in-object properties 的原因。
+最后，试想一下，如果我们经常采用字面量赋值的方式来创建仅仅拥有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被当作 in-object properties 来处理了，这正是 V8 引擎设计 in-object properties 的原因。
 
 #### normal properties
 
 normal properties 是指存储在独立的数据结构中的 properties，即非 in-object properties 的 properties。
 
-V8 引擎要么使用线性的数据结构来存储 normal properties，要么使用非线性的数据结构来存储 normal properties。其中，线性数据结构是指 `FixedArray`，这是一个由 V8 引擎自己实现的类似于数组的类，它和数组的区别在于它拥有更多的方法，而非线性数据结构则是指基于散列表的数组。
+V8 引擎会使用数组或字典中的其中一种来存储 normal properties。具体来说，V8 引擎要么会使用 `FixedArray` 和 `PropertyArray` 等类来存储 normal properties，要么会使用 `NameDictionary` 等类来存储 normal properties。其中 `FixedArray` 和 `PropertyArray` 是由 V8 引擎自己实现的数组，`NameDictionary` 是由 V8 引擎自己实现的字典，并且该字典是基于散列表来实现的。
 
-如果 V8 引擎使用 `FixedArray` 来存储 normal properties，那么 V8 引擎就会将这些 normal properties 称为 fast properties，即快属性。如果 V8 引擎使用散列表来存储 normal properties，那么 V8 引擎就会将这些 normal properties 称为 slow properties，即慢属性。V8 引擎之所以会把 normal properties 分别称呼为快属性或慢属性，是因为线性数据结构中的数据访问速度比非线性数据结构的数据访问速度更快，具体来说，V8 引擎可以通过索引来直接访问到线性数据结构中的数据，但是如果 V8 引擎想要访问字典（基于散列表）中的数据，那么 V8 引擎就需要先通过哈希计算来得到目标数据的地址，然后再根据地址来访问到目标数据。
+如果 V8 引擎使用 `FixedArray` 或 `PropertyArray` 等数组数据结构来存储 normal properties，那么 V8 官方就会将这些 normal properties 称呼为 fast properties，如果 V8 引擎使用 `NameDictionary` 等字典数据结构来存储 normal properties，那么 V8 官方就会将这些 normal properties 称呼为 slow properties。因为数组的数据访问速度比字典的数据访问速度更快，所以 V8 官方将前者称呼为 fast properties，并将后者称呼为 slow properties。
 
-> 使用散列表来实现字典的大致原理是：通过哈希函数来将字典的键转换为一个唯一的内存地址，然后将相应的值存储在该地址中。
+> V8 引擎可以通过索引来直接访问数组中的数据，但是如果 V8 想要访问字典（基于散列表）中的数据，那么 V8 引擎就需要先通过哈希计算来算出目标数据的地址，然后再根据这个地址来访问到目标数据。所以数组的数据访问速度比字典的数据访问速度更快。
 >
-> 如果需要访问字典的某个属性，那么就可以通过哈希函数来计算出该键所对应的内存地址，然后在该地址中找到相应的值。因为要进行哈希计算，所以字典（基于散列表）的数据访问速度没有数组的数据访问速度快。
+> 具体来说，使用散列表来实现字典的大致原理是通过哈希函数来将字典的键转换为一个唯一的内存地址，然后将相应的值存储在该地址中，如果需要访问字典的某个属性，那么就要通过哈希函数来计算出该属性的键所对应的内存地址，然后在这个地址中找到相应的值。因为要进行哈希计算，所以字典（基于散列表）的数据访问速度没有数组的数据访问速度快。
 
 #### HiddenClass
 
