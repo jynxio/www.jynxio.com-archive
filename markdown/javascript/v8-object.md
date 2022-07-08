@@ -8,31 +8,7 @@ typora-root-url: ..\..
 
 本文将会描述 V8 引擎是如何实现 JavaScript 对象的。
 
-## 对象
-
-JavaScript 中的对象和面向对象语言中的对象是不一样的，在 JavaScript 中，对象是一种字典类型的数据结构，比如 `{a: 1}`。其中，对象的键只能使用 `String` 或 `Symbol` 类型的值，对象的值则可以使用任意的数据类型。
-
-> 在 JavaScript 中有 2 个特别的内建对象，分别是 `Map` 和 `WeakMap`，它们都同样是字典类型的数据结构，其中，`Map` 可以使用任意数据类型来作为键，`WeakMap` 则只能使用对象来作为键。
-
-另外，如果我们遍历对象的属性，那么就会先按照索引值的升序顺序来输出对象的数组索引属性，然后再按照属性创建的先后顺序来输出其他属性，这是根据 ECMAScript 规范的要求来设计的。
-
-```js
-const obj = {};
-
-obj[ "2" ] = "";
-obj[ "1" ] = "";
-obj[ "0" ] = "";
-obj[ "a" ] = "";
-obj[ "b" ] = "";
-obj[ "c" ] = "";
-
-for ( let key in obj ) console.log( key );
-// 0 1 2 a b c
-```
-
-
-
-## 版本
+## 环境
 
 本文采用了 16.13.1 版本的 Node.js 来作为测试环境，该版本的 Node.js 所使用的 V8 的版本是  9.4.146.24。
 
@@ -55,27 +31,59 @@ internal information...           // output
 
 > 我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在 Chromium 中使用这些内建函数，因为这些运行时都使用了 V8 引擎。
 
+## 对象
+
+JavaScript 中的对象和面向对象语言中的对象是不一样的，在 JavaScript 中，对象是一种字典类型的数据结构，比如 `{a: 1}`。其中，对象的键只能使用 `String` 或 `Symbol` 类型的值，对象的值则可以使用任意的数据类型。
+
+> JavaScript 中有 2 个特别的内建 API，分别是 `Map` 和 `WeakMap`，它们都同样是字典类型的数据结构。和 JavaScript 对象不同的是，`Map` 可以使用任意数据类型来作为键，`WeakMap` 只能使用对象来作为键。
+
+另外，如果我们遍历对象的属性，那么就会先按照索引值的升序顺序来输出对象的数组索引属性，然后再按照属性创建的先后顺序来输出其他属性，这是根据 ECMAScript 规范的要求来设计的。
+
+```js
+const obj = {};
+
+obj[ "2" ] = "";
+obj[ "1" ] = "";
+obj[ "0" ] = "";
+obj[ "a" ] = "";
+obj[ "b" ] = "";
+obj[ "c" ] = "";
+
+for ( let key in obj ) console.log( key );
+// 0 1 2 a b c
+```
+
 ## 实现
 
-JavaScript 对象拥有两类属性，一类是命名属性（named property），一类是数组索引属性（array-indexed property）。 V8 官方将命名属性简称为 property，将数组索引属性简称为 element，本文会沿用 V8 官方的叫法，因为这种叫法更加简洁。
+### 总览
 
-V8 引擎是使用 C++ 来编写的，同时还使用到了 JavaScript 和汇编，不过在 C++ 中，并没有一种像 JavaScript 对象一样的 API，所以 V8 团队需要亲自实现 JavaScript 对象。
+首先，V8 引擎会申请一块连续的内存空间来存储 JavaScript 对象的信息，为方便起见，本文会将该内存空间称为 JavaScript 对象容器。
 
-具体来说，V8 引擎会创建一个定长数组来存储 JavaScript 对象，为方便起见，本文会将该数组称为 JavaScript 对象数组。不过 V8 引擎并不会直接将 property 和 element 直接存储在这个 JavaScript 对象数组上，而是将它们分别存储在另外两个独立的数据结构中，然后令 JavaScript 对象数组的第二个元素指向存储 property 的数据结构，令 JavaScript 对象数组的第三个元素指向存储 element 的数据结构，正如下图所示。
+V8 官方将 JavaScript 对象的属性分成两种类型，一种是 named property（命名属性），另一种是 array-indexed property（数组索引属性）。V8 官方将 named property 和 array-indexed property 分别简称为 property 和 element，本文会沿用这种叫法。
 
-![property和element](/static/image/markdown/javascript/property-and-element.png)
+对于 element，V8 引擎将它存储在另一个独立的内存空间中。对于 property，V8 引擎的做法则有一些复杂，首先，V8 引擎有可能会将一部分 property 直接存储在 JavaScript 对象容器上，然后将剩余的 property 存储在另一个独立的内存空间中，前者被称为 in-object property，后者被称为 normal property。
 
-下文将会详细描述 V8 引擎是如何存储 property 和 element 的。
+JavaScript 对象容器的前 3 个位置存储了 3 个指针，每个指针占 8 个字节（64位系统下）。其中，第一个指针指向 hidden class 的内存空间，第二个指针指向 normal property 的内存空间，第三个指针指向 element 的内存空间。
+
+关于 hidden class，它是 `HiddenClass` 类的实例，而 `HiddenClass` 则是一个由 V8 官方实现的标准的 C++ 类。hidden class 用于存储 JavaScript 对象的内部信息，比如属性的数量，原型的地址等，我们会在后文继续介绍 hidden class。
+
+![hidden class & property & element](/static/image/markdown/javascript/hiddenclass-property-element.png)
 
 ### property
 
-property 的准确名称是 named property，译为命名属性，是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `{ a: 1 }` 等，另外，使用 `Symbol` 类型的值来作为键的属性也属于 property。
+在介绍 hidden class 之前，我们需要先了解 property 来作为前置知识。
 
-#### in-object property
+property 的准确名称是 named property（命名属性），它是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 `{ a: 1 }` 等。另外，使用 `Symbol` 类型的值来作为键的属性也属属于 named property。下文将会使用 property 来指代 named property。
 
-首先，V8 引擎在创建 JavaScript 对象数组的时候，就会在该数组上预留一些空间来存储 property，而这些被直接存储在 JavaScript 对象数组上的 property 就被称为 in-object property。
+property 又分为 in-object property 和 normal property。
 
-JavaScript 对象数组的 in-object property 容量取决于你创建 JavaScript 对象的方式，并且这个容量是不可改变的。而超出容量的 property 将会被存储在另一个独立的数据结构中，这个数据结构的内存地址将会被存储在 JavaScript 对象数组的第二个元素上。V8 将这些存储在独立的数据结构中的 property 称为 normal property。
+### in-object property
+
+正如前文所述，V8 引擎“有可能”会将一部分的 property 直接存储在 JavaScript 对象容器上，V8 官方将这些 property 称为 in-object property。为方便起见，我们将 JavaScript 对象容器所能存储的 in-object property 的数量称为 in-object property 的容量。
+
+具体来说，V8 引擎在创建 JavaSript 对象容器的时候，就会预留一些内存空间来用于存储 in-object property，V8 引擎既可能会预留零个 in-object property 的位置，也有可能会预留几十上百个 in-object property 的位置。in-object property 的容量的大小完全取决于你创建 JavaScript 对象的方式，并且这个容量是不可改变的。
+
+其实，我不知道决定 in-object property 的容量的根本因素是什么。不过，实践证明，如果用字面量赋值的方式来创建的 JavaScript 对象的话，那么字面量中的命名属性就都会变成 in-object property，并且命名属性的数量就是 in-object property 的容量。比如，用 
 
 ![in-object property和normal property](/static/image/markdown/javascript/inobject-and-normal-property.png)
 
@@ -99,7 +107,7 @@ JavaScript 对象数组的 in-object property 容量取决于你创建 JavaScrip
 
 > 我不知道 V8 引擎究竟是根据什么来决定 in-object property 容量的，上述例子只是一个个例。
 
-另外，in-object property 的访问速度要比 normal property 和 element 的访问速度更快，因为如果 V8 引擎想要找到某个 in-object property，那么 V8 引擎可以直接在 JavaScript 对象数组上找到，而如果 V8 引擎想要找到某个 normal property 或 element，那么 V8 引擎需要先在 JavaScript 对象数组上找到存储 normal property 或 element 的地址，然后再在这个地址中继续寻找目标属性。
+另外，in-object property 的访问速度要比 normal property 和 element 的访问速度更快，因为如果 V8 引擎想要找到某个 in-object property，那么 V8 引擎可以直接在 JavaScript 对象容器上找到，而如果 V8 引擎想要找到某个 normal property 或 element，那么 V8 引擎需要先在 JavaScript 对象容器上找到存储 normal property 或 element 的地址，然后再在这个地址中继续寻找目标属性。
 
 最后，试想一下，如果我们经常采用字面量赋值的方式来创建仅仅拥有几个命名属性的小型对象，那么这些小型对象的属性访问效率将会很高，因为这些小型对象的命名属性都被当作 in-object property 来处理了，这正是 V8 引擎设计 in-object property 的原因。
 
@@ -123,7 +131,7 @@ V8 引擎更青睐于将 normap property 存储在数组中，因为 fast proper
 
 #### hidden class
 
-JavaScript 对象数组的第一个元素存储了一些关于 JavaScript 对象自身的信息，比如它的属性数量、指向原型对象的指针等，V8 官方将这个元素称为 hidden class。
+JavaScript 对象容器的第一个元素存储了一些关于 JavaScript 对象自身的信息，比如它的属性数量、指向原型对象的指针等，V8 官方将这个元素称为 hidden class。
 
 hidden class 是 `HiddenClass` 类的实例。`HiddenClass` 是一个类似于面向对象编程语言中的类，它由 V8 引擎实现。hidden class 的 `bit filed 3` 属性存储了 JavaScript 对象的属性数量，以及一个指向 `descriptor array` 的指针。`descriptor array` 是一个 `FixedArray` 实例，它存储了 normal property 的信息，比如键的名称和值的地址。
 
@@ -137,7 +145,7 @@ hidden class 是 `HiddenClass` 类的实例。`HiddenClass` 是一个类似于�
 
 element 的准确名称是 array-indexed property，翻译为数组索引属性，是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 property 而不是 element。
 
-不同于 property 的是，element 没有类似于 in-object property 的东西，所有的 element 都会直接存储在另一个独立的数据结构中，并且这个数据结构的地址将会被存储在 JavaScript 对象数组的第三个元素上。
+不同于 property 的是，element 没有类似于 in-object property 的东西，所有的 element 都会直接存储在另一个独立的数据结构中，并且这个数据结构的地址将会被存储在 JavaScript 对象容器的第三个元素上。
 
 与 property 相似的是，V8 引擎也会使用数组或字典中的其中一种来存储 element，对应的数组是 `FixedArray` 的实例，对应的字典是 `NumberDictionary` 的实例，其中 `NumberDictionary` 也是一个基于散列表来实现的字典。
 
