@@ -145,9 +145,7 @@ element 的准确名称是 array-indexed property，翻译为数组索引属性�
 
 当 V8 引擎使用数组来存储 element 时，如果 element 的键不是从 `0` 起算的，或者键与键之间不是连续的，那么对应的 `FixedArray` 实例就会是有孔的。打个比方，JavaScript 对象 `{ 1:1, 3:3 }` 所对应的 `FixedArray` 实例大概是 `[ , 1, , 3 ]` 这样的，这个数组有 2 个空元素，分别是 `0` 号元素和 `2` 号元素，我们把空元素称为数组的孔，并把有孔的数组称为稀疏数组。
 
-V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `FixedArray` 是有孔数组，那么对应的 element 就会被标记为 `HOLEY`，否则就会被标记为 `PACKED`。
-
-> 此处的 `PACKED` 译为 “密实的”，而非 “打包的”。
+V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `FixedArray` 是有孔数组，那么对应的 element 就会被标记为 `HOLEY`，否则就会被标记为 `PACKED`（译为 “满的”）。并且 V8 引擎会使用特殊的值来填补 `FixedArray` 中的孔，而这个特殊的值被称为 `the_hole`。
 
 另外，V8 引擎还会根据 `FixedArray` 实例所存储的值的数据类型来标记对应的 element，比如：
 
@@ -163,13 +161,15 @@ V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `Fi
 
 > `SMI` 是 `small integer` 的缩写。
 
-V8 引擎为具有不同标签的 element 进行了不同程度的优化，具体来说 `PACKED` 的 element 的效率比 `HOLEY` 的 element 的效率更高，标签语意更具体的 element 的效率比标签语意更模糊的 element 的效率更高，如下图所示。
+V8 引擎为具有不同标签的 element 进行了不同程度的优化，具体来说 `PACKED` 的 element 的效率比 `HOLEY` 的 element 的效率更高，标签语意更具体的 element 的效率比标签语意更模糊的 element 的效率更高。这是因为，`HOLEY` 的 
 
-事实上，V8 引擎一共划分了 21 种
+如果值的数据类型更加具体，那么 V8 就可以进行更细粒度的优化，并且 `PACKED` 的
 
-## TODO
+![element的标签与性能](/static/image/markdown/javascript/element-tag-performance.png)
 
-更新掉所有 propertis 的名字。
+> 事实上，V8 引擎划分出了了 21 种标签，并且每种标签都有不同程度的优化，详见 [这份源码](https://source.chromium.org/chromium/v8/v8.git/+/ec37390b2ba2b4051f46f153a8cc179ed4656f5d:src/elements-kind.h;l=14)。
+
+另外，element 的标签不是永恒不变的，而是可以进行转化的
 
 ## 参考
 
