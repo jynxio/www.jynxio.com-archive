@@ -84,9 +84,12 @@ property 又分为 in-object property 和 normal property。
 
 具体来说，V8 引擎在创建 JavaSript 对象容器的时候，就会预留一些内存空间来用于存储 in-object property，V8 引擎既可能会预留零个 in-object property 的位置，也有可能会预留几十上百个 in-object property 的位置。in-object property 的容量的大小完全取决于你创建 JavaScript 对象的方式，并且这个容量是不可改变的。
 
-其实，我不知道决定 in-object property 的容量的根本因素是什么。不过，实践证明，如果用字面量赋值的方式来创建的 JavaScript 对象的话，那么字面量中的命名属性就都会变成 in-object property，并且命名属性的数量就是 in-object property 的容量。
+其实，我不知道决定 in-object property 的容量的根本因素是什么，不过，实践证明：
 
-比如，如果我们使用字面量 `{ a:1, b:2, c:3 }` 来创建一个 JavaScript 对象，那么这个 JavaScript 对象的 in-object property 就是 `a`、`b`、`c`，它的 in-object property 的容量就是 3，并且后续追加的命名属性都会变成 normal property。你可以在 Node 运行时中依次键入下述命令来验证一下。
+- 空 JavaScript 对象的 in-object property 的容量是 4
+- 如果用字面量赋值的方式来创建的 JavaScript 对象的话，那么字面量中的命名属性就都会变成 in-object property，并且命名属性的数量就是 in-object property 的容量
+
+对于第二点，比如，如果我们使用字面量 `{ a:1, b:2, c:3 }` 来创建一个 JavaScript 对象，那么这个 JavaScript 对象的 in-object property 就是 `a`、`b`、`c`，它的 in-object property 的容量就是 3，并且后续追加的命名属性都会变成 normal property。你可以在 Node 运行时中依次键入下述命令来验证一下。
 
 ```
 node --allow-natives-syntax
@@ -142,15 +145,31 @@ hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原�
 
 ### element
 
-element 的准确名称是 array-indexed property，翻译为数组索引属性，是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 property 而不是 element。
+element 的准确名称是 array-indexed property（数组索引属性），它是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 property 而不是 element。
 
-不同于 property 的是，element 没有类似于 in-object property 的东西，所有的 element 都会直接存储在另一个独立的数据结构中，并且这个数据结构的地址将会被存储在 JavaScript 对象容器的第三个元素上。
+element 没有类似于 in-object property 的东西，所有的 element 都被直接存储在另一个独立的内存空间中。V8 引擎会采用数组或字典来存储 element，其中，V8 引擎所使用的数组是 `FixedArray` 实例，V8 引擎所使用的字典是 `NumberDictionary`，这是一个由 V8 引擎实现的基于散列表的字典数据结构。
 
-与 property 相似的是，V8 引擎也会使用数组或字典中的其中一种来存储 element，对应的数组是 `FixedArray` 的实例，对应的字典是 `NumberDictionary` 的实例，其中 `NumberDictionary` 也是一个基于散列表来实现的字典。
+另外，因为 element 属性的键都是数组索引字符串，所以不论 V8 引擎使用数组来存储 element，还是使用字典来存储 element，V8 引擎都可以直接将 element 属性的键和值一一对应的存储在数组或字典上。得益于这个特点，V8 引擎可以直接通过 element 的键来在数组或字典中找到对应的值，而不需要像 fast property 一样依赖 hidden class 的 descriptor array。
 
-当 V8 引擎使用数组来存储 element 时，element 的访问效率会更高。另外，因为 element 本身就是用数组索引来作为键的属性，所以对于一个 element 属性，V8 引擎会直接使用这个属性的键来作为这个属性在存储容器中的下标，比如，假设一个 element 属性的键是 `0`，那么这个属性在 `FixedArray` 实例中的下标就是 `0`。
+和 fast / slow property 相似的是，当 V8 引擎使用数组来存储 element 时，element 的访问速度会更快。
 
-当 V8 引擎使用数组来存储 element 时，如果 element 的键不是从 `0` 起算的，或者键与键之间不是连续的，那么对应的 `FixedArray` 实例就会是有孔的。打个比方，JavaScript 对象 `{ 1:1, 3:3 }` 所对应的 `FixedArray` 实例大概是 `[ , 1, , 3 ]` 这样的，这个数组有 2 个空元素，分别是 `0` 号元素和 `2` 号元素，我们把空元素称为数组的孔，并把有孔的数组称为稀疏数组。
+当 V8 引擎使用数组来存储 element 时，如果 element 的键不是从 `0` 起算的，或者键与键之间不是连续的，对应的数组就会产生空元素，我们把这些空元素称为这个数组的孔，我们把含有孔的数组称为稀疏数组。
+
+比如，我们使用下述代码来创建一个只含有一个 element 属性的 JavaScript 对象，然后通过 `%DebugPrint( obj )` 来打印该对象的内部信息。
+
+```
+node --allow-natives-syntax
+const obj = { 1:1 };
+%DebugPrint( obj );
+```
+
+如下图所示，V8 引擎使用一个长度为 19 的 `FixedArray` 实例来存储 element，这个 `FixedArray` 实例的 `0` 号以及 `2~18` 号元素的值都是 `<the_hole>`，这意味着 `0` 号以及 `2~18` 号元素都是空元素。其中，`<the_hole>` 是由 V8 引擎定义的一个特殊值，V8 引擎会使用这个值来填补稀疏数组中的孔。
+
+另外，你肯定很好奇为什么这个 `FixedArray` 实例的长度是 19 而不是 2，这是因为 V8 引擎需要主动预留一些额外的内存空间来给 `FixedArray` 实例的扩容做准备，以防止频繁的扩容。
+
+![稀疏数组](/static/image/markdown/javascript/sparse-array.png)
+
+
 
 V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `FixedArray` 是有孔数组，那么对应的 element 就会被标记为 `HOLEY`，否则就会被标记为 `PACKED`（译为 “满的”）。并且 V8 引擎会使用特殊的值来填补 `FixedArray` 中的孔，而这个特殊的值被称为 `the_hole`。
 
