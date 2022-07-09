@@ -130,17 +130,15 @@ V8 引擎更加青睐于使用 fast property，并且 V8 引擎还为其做了�
 
 #### hidden class
 
-TODO
-
-JavaScript 对象容器的第一个元素存储了一些关于 JavaScript 对象自身的信息，比如它的属性数量、指向原型对象的指针等，V8 官方将这个元素称为 hidden class。
-
-hidden class 是 `HiddenClass` 类的实例。`HiddenClass` 是一个类似于面向对象编程语言中的类，它由 V8 引擎实现。hidden class 的 `bit filed 3` 属性存储了 JavaScript 对象的属性数量，以及一个指向 `descriptor array` 的指针。`descriptor array` 是一个 `FixedArray` 实例，它存储了 normal property 的信息，比如键的名称和值的地址。
-
-`descriptor array` 是为 fast property 服务的，具体来说，如果 V8 引擎使用数组来存储 normal property，那么 V8 引擎是无法通过属性的键来推断出该属性的值到底存储在数组的哪个位置的。所以，V8 引擎需要将键的名称和该键所对应的值的地址关联起来，而 V8 引擎具体的做法就是将这些映射信息存储在 `descriptor array` 中。另外，由于 slow property 是使用字典来存储数据的，所以对于 slow property 而言，V8 引擎可以直接根据键名来在储存数据的字典中找到对应的值，所以 slow property 不依赖 `descriptor array`。
-
-另外，`descriptor array` 不存储数组索引属性的信息。
+hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原型的地址等。其中，hidden class 的 bit field 3 字段存储了 JavaScript 对象的属性数量，以及一个指向 descriptor array 的指针。descriptor array 是一个 `FixedArray` 实例，它存储了 normal property 的信息，比如键的名称与值的地址。
 
 ![hidden class](/static/image/markdown/javascript/hidden-class.png)
+
+当 V8 引擎使用数组来存储 normal property 时，V8 引擎就会将 normal property 的所有值存储在数组上，那么 V8 引擎该如何通过属性的键来找到属性的值呢？答案是，如果没有任何提示信息，仅凭属性的键，V8 引擎是无法推断出相对应的值存储在数组上的哪个位置的，而 descriptor array 就是这个提示信息。具体来说，descriptor array 存储了 normal property 的键和值的地址，当 V8 引擎需要查找某个 fast property 时，V8 引擎就可以通过查阅 descriptor array 来找到相对应的值的存储地址。显然，如果 V8 引擎要更新 fast property，那么它自然也需要更新 hidden class 和其中的 descriptor array，这是 fast property 的增删速度要比 slow property 的增删速度更慢的另一个原因。
+
+另外，descriptor array 是专为 fast property 服务的，具体来说，当 V8 引擎使用字典来存储命名属性时，V8 引擎会直接将命名属性的键和值一一对应的存进这个字典中，这样 V8 引擎就可以直接根据命名属性的键来在这个字典中找到相对应的值了。
+
+另外，descriptor array 不存储 element 的信息，因为 V8 引擎可以直接根据 element 的键来在对应的存储空间中找到相对应的值，我们会在下文详细介绍 element。
 
 ### element
 
