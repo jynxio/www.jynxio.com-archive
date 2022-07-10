@@ -115,9 +115,9 @@ obj.d = 4;
 
 超出 in-object property 容量的 property 会被存储在另一个独立的内存空间中，这些 property 就被称为 normal property。
 
-V8 引擎会采用数组或字典来存储 normal property。其中，V8 引擎所使用的数组是 `FixedArray` 实例或 `PropertyArray` 实例，它们是由 V8 引擎实现的数组数据结构。V8 引擎所使用的字典是 `NameDictionary` 实例，它是 V8 引擎实现的字典数据结构，另外 `NameDictionary` 是基于散列表来实现的。
+V8 引擎会采用数组数据结构或字典数据结构来存储 normal property，为避免混淆，在下文中，我们会把这个数组和字典称为 “数组容器” 和 “字典容器”。其中，V8 引擎所使用的数组容器是 `FixedArray` 实例或 `PropertyArray` 实例，它们是由 V8 引擎实现的数组数据结构。而 V8 引擎所使用的字典容器是 `NameDictionary` 实例，它是 V8 引擎实现的字典数据结构，另外 `NameDictionary` 是基于散列表来实现的。
 
-因为数组的访问速度要比字典的访问速度更快，所以 V8 引擎会把采用数组来存储的 normal property 称为 fast property，并把采用字典来存储的 normal property 称为 slow property。
+因为数组容器的访问速度要比字典容器的访问速度更快，所以 V8 引擎会把采用数组容器来存储的 normal property 称为 fast property，并把采用字典容器来存储的 normal property 称为 slow property。
 
 > 对于数组，我们可以通过下标来直接访问到数组的数据，对于基于散列表的字典，我们需要先进行哈希计算，然后才能访问到目标数据，所以数组的访问速度要更快。
 >
@@ -137,9 +137,9 @@ hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原�
 
 ![hidden class](/static/image/markdown/javascript/hidden-class.png)
 
-当 V8 引擎使用数组来存储 normal property 时，V8 引擎就会将 normal property 的所有值存储在数组上，那么 V8 引擎该如何通过属性的键来找到属性的值呢？答案是，如果没有任何提示信息，仅凭属性的键，V8 引擎是无法推断出相对应的值存储在数组上的哪个位置的，而 descriptor array 就是这个提示信息。具体来说，descriptor array 存储了 normal property 的键和值的地址，当 V8 引擎需要查找某个 fast property 时，V8 引擎就可以通过查阅 descriptor array 来找到相对应的值的存储地址。显然，如果 V8 引擎要更新 fast property，那么它自然也需要更新 hidden class 和其中的 descriptor array，这是 fast property 的增删速度要比 slow property 的增删速度更慢的另一个原因。
+当 V8 引擎使用数组容器来存储 normal property 时，V8 引擎就会将 normal property 的所有值存储在数组容器上，那么 V8 引擎该如何通过属性的键来找到属性的值呢？答案是，如果没有任何提示信息，仅凭属性的键，V8 引擎是无法推断出相对应的值存储在数组容器上的哪个位置的，而 descriptor array 就是这个提示信息。具体来说，descriptor array 存储了 normal property 的键和值的地址，当 V8 引擎需要查找某个 fast property 时，V8 引擎就可以通过查阅 descriptor array 来找到相对应的值的存储地址。显然，如果 V8 引擎要更新 fast property，那么它自然也需要更新 hidden class 和其中的 descriptor array，这是 fast property 的增删速度要比 slow property 的增删速度更慢的另一个原因。
 
-另外，descriptor array 是专为 fast property 服务的，具体来说，当 V8 引擎使用字典来存储命名属性时，V8 引擎会直接将命名属性的键和值一一对应的存进这个字典中，这样 V8 引擎就可以直接根据命名属性的键来在这个字典中找到相对应的值了。
+另外，descriptor array 是专为 fast property 服务的，具体来说，当 V8 引擎使用字典容器来存储命名属性时，V8 引擎会直接将命名属性的键和值一一对应的存进这个字典中，这样 V8 引擎就可以直接根据命名属性的键来在这个字典中找到相对应的值了。
 
 另外，descriptor array 不存储 element 的信息，因为 V8 引擎可以直接根据 element 的键来在对应的存储空间中找到相对应的值，我们会在下文详细介绍 element。
 
@@ -147,13 +147,17 @@ hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原�
 
 element 的准确名称是 array-indexed property（数组索引属性），它是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 property 而不是 element。
 
-element 没有类似于 in-object property 的东西，所有的 element 都被直接存储在另一个独立的内存空间中。V8 引擎会采用数组或字典来存储 element，其中，V8 引擎所使用的数组是 `FixedArray` 实例，V8 引擎所使用的字典是 `NumberDictionary`，这是一个由 V8 引擎实现的基于散列表的字典数据结构。
+#### 存储
 
-另外，因为 element 属性的键都是数组索引字符串，所以不论 V8 引擎使用数组来存储 element，还是使用字典来存储 element，V8 引擎都可以直接将 element 属性的键和值一一对应的存储在数组或字典上。得益于这个特点，V8 引擎可以直接通过 element 的键来在数组或字典中找到对应的值，而不需要像 fast property 一样依赖 hidden class 的 descriptor array。
+element 没有类似于 in-object property 的东西，所有的 element 都被直接存储在另一个独立的内存空间中。V8 引擎会采用数组数据结构或字典数据结构来存储 element，其中，V8 引擎所使用的数组容器是 `FixedArray` 实例，V8 引擎所使用的字典容器是 `NumberDictionary`，这是一个由 V8 引擎实现的基于散列表的字典数据结构。
 
-和 fast / slow property 相似的是，当 V8 引擎使用数组来存储 element 时，element 的访问速度会更快。
+另外，因为 element 属性的键都是数组索引字符串，所以不论 V8 引擎使用数组容器来存储 element，还是使用字典容器来存储 element，V8 引擎都可以直接将 element 属性的键和值一一对应的存储在数组容器或字典容器上。得益于这个特点，V8 引擎可以直接通过 element 的键来在数组容器或字典容器中找到对应的值，而不需要像 fast property 一样依赖 hidden class 的 descriptor array。
 
-当 V8 引擎使用数组来存储 element 时，如果 element 的键不是从 `0` 起算的，或者键与键之间不是连续的，对应的数组就会产生空元素，我们把这些空元素称为这个数组的孔，我们把含有孔的数组称为稀疏数组。
+和 fast / slow property 相似的是，当 V8 引擎使用数组容器来存储 element 时，element 的访问速度会更快。
+
+#### 稀疏数组
+
+当 V8 引擎使用数组容器来存储 element 时，如果 element 的键不是从 `0` 起算的，或者键与键之间不是连续的，对应的数组容器就会产生空元素，我们把数组中的空元素称为数组的孔，我们把含有孔的数组称为稀疏数组。
 
 比如，我们使用下述代码来创建一个只含有一个 element 属性的 JavaScript 对象，然后通过 `%DebugPrint( obj )` 来打印该对象的内部信息。
 
@@ -173,9 +177,24 @@ const obj = { 1:1 };
 >
 > 不过，V8 引擎有时候也会创建出容量刚好等于 element 数量的 `FixedArray` 实例，比如 `const array = [ 0, 1, 2 ]` 所创建出的 JavaScript 对象会使用 `FixedArray` 实例来存储 element，而这个 `FixedArray` 实例的容量就刚好等于 3。
 
-当 V8 引擎在存储 element 的数组上找到 `<the_hole>` 时，V8 引擎就可以立即断定出该 JavaScript 对象上不存在目标属性，然后 V8 引擎就可以开始从该 JavaScript 对象的原型链上继续查找目标属性了。
+当 V8 引擎在存储 element 的数组容器上找到 `<the_hole>` 时，V8 引擎就可以立即断定出该 JavaScript 对象上不存在目标属性，然后 V8 引擎就可以开始从该 JavaScript 对象的原型链上继续查找目标属性了。
 
 ![<the_hole>的用处](/static/image/markdown/javascript/the-hole-use.png)
+
+#### 种类
+
+当 V8 引擎使用数组容器来存储 element 时，V8 引擎会对这个数组容器进行分类，不同类别的数组容器的性能是不同的，因为 V8 引擎对不同类别的数组容器进行了不同程度的优化。
+
+具体来说，V8 引擎会根据数组容器是否是稀疏的来进行分类，也会根据数组容器的元素的数据类型来进行分类，具体分类如下：
+
+- 如果数组容器是无孔的：
+  - 且数组容器中元素都是整数，那么这个数组容器就会被标记为 `PACKED_SMI_ELEMENTS`
+  - 且数组容器中的元素
+- 如果数组容器是有孔的：
+
+当 V8 引擎使用数组容器来存储 element 时，V8 引擎会根据这个数组容器是否是稀疏的来将其分为 `PACKED` 和 `HOLEY` 两大类，其中 `PACKED` 的数组容器的性能更好，因为 V8 引擎可以对它进行更加积极的优化。
+
+另外，V8 引擎还会根据数组容器的元素的数据类型来对其进行分类，具体来说，如果数组容器的元素只包含整数，那么这个数组容器就会被标记为 `SMI`，其中 `SMI` 是 small integer 的缩写。如果数组容器的元素只包含整数和浮点数，那么这个数组容器就会被标记为 `DOUBLE`。如果数组容器的元素包含整数、浮点数和其他，那么这个数组容器就会被标记为
 
 V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `FixedArray` 是有孔数组，那么对应的 element 就会被标记为 `HOLEY`，否则就会被标记为 `PACKED`（译为 “满的”）。并且 V8 引擎会使用特殊的值来填补 `FixedArray` 中的孔，而这个特殊的值被称为 `the_hole`。
 
