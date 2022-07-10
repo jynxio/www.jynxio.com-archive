@@ -181,46 +181,30 @@ const obj = { 1:1 };
 
 ![<the_hole>的用处](/static/image/markdown/javascript/the-hole-use.png)
 
-#### 种类
+#### 类型
 
-当 V8 引擎使用数组容器来存储 element 时，V8 引擎会对这个数组容器进行分类，不同类别的数组容器的性能是不同的，因为 V8 引擎对不同类别的数组容器进行了不同程度的优化。
-
-具体来说，V8 引擎会根据数组容器是否是稀疏的来进行分类，也会根据数组容器的元素的数据类型来进行分类，具体分类如下：
+当 V8 引擎使用数组容器来存储 element 时，V8 引擎会根据数组容器是否是稀疏的，以及数组容器的元素的数据类型来进行分类，不同类型的数组容器的性能是不一样的，因为 V8 引擎可以对不同类型的数组容器进行不同程度的优化。比如，有这些类型：
 
 - 如果数组容器是无孔的：
-  - 且数组容器中元素都是整数，那么这个数组容器就会被标记为 `PACKED_SMI_ELEMENTS`
-  - 且数组容器中的元素
+  - 且数组容器中元素都是整数，那么类型就是 `PACKED_SMI_ELEMENTS`
+  - 且数组容器中的元素只包含整数和浮点数，那么类型就是 `PACKED_DOUBLE_ELEMENTS`
+  - 且数组容器中的元素包含整数、浮点数和其他，那么类型就是 `PACKED_ELEMENTS`
 - 如果数组容器是有孔的：
+  - 且数组容器中元素都是整数，那么类型就是 `HOLEY_SMI_ELEMENTS`
+  - 且数组容器中的元素只包含整数和浮点数，那么类型就是 `HOLEY_DOUBLE_ELEMENTS`
+  - 且数组容器中的元素包含整数、浮点数和其他，那么类型就是 `HOLEY_ELEMENTS`
 
-当 V8 引擎使用数组容器来存储 element 时，V8 引擎会根据这个数组容器是否是稀疏的来将其分为 `PACKED` 和 `HOLEY` 两大类，其中 `PACKED` 的数组容器的性能更好，因为 V8 引擎可以对它进行更加积极的优化。
+> 其中，SMI 是 small integer 的缩写。
 
-另外，V8 引擎还会根据数组容器的元素的数据类型来对其进行分类，具体来说，如果数组容器的元素只包含整数，那么这个数组容器就会被标记为 `SMI`，其中 `SMI` 是 small integer 的缩写。如果数组容器的元素只包含整数和浮点数，那么这个数组容器就会被标记为 `DOUBLE`。如果数组容器的元素包含整数、浮点数和其他，那么这个数组容器就会被标记为
+`PACKED` 数组容器的性能比 `HOLEY` 数组容器的性能更好，因为 V8 引擎可以对 `PACKED` 数组容器进行更加积极的优化。
 
-V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `FixedArray` 是有孔数组，那么对应的 element 就会被标记为 `HOLEY`，否则就会被标记为 `PACKED`（译为 “满的”）。并且 V8 引擎会使用特殊的值来填补 `FixedArray` 中的孔，而这个特殊的值被称为 `the_hole`。
+`PACKED_SMI_ELEMENTS`、`PACKED_DOUBLE_ELEMENTS`、`PACKED_ELEMENTS` 数组容器的性能依次降低，类似的，`HOLEY_SMI_ELEMENTS`、`HOLEY_DOUBLE_ELEMENTS`、`HOLEY_ELEMENTS` 数组容器的性能也依次下降。总的来说，如果数组容器的元素的数据类型越具体，那么数组容器的性能就越好，这是因为 V8 引擎可以对数据类型更加具体的数组容器进行更细粒度的优化。
 
-另外，V8 引擎还会根据 `FixedArray` 实例所存储的值的数据类型来标记对应的 element，比如：
+另外，数组容器的类型是可以转化的，不过只能从 `PACKED` 转化为 `HOLEY`，以及只能从具体类型转化为模糊类型，即这种转化是单向的。
 
-- 如果 `FixedArray` 实例所存储的值都是整数
-  - 且这个 `FixedArray` 实例是无孔的，那么对应的标签就是 `PACKED_SMI_ELEMENTS`
-  - 且这个 `FixedArray` 实例是有孔的，那么对应的标签就是 `HOLEY_SMI_ELEMENTS`
-- 如果 `FixedArray` 实例所存储的值都是整数和浮点数
-  - 且这个 `FixedArray` 实例是无孔的，那么对应的标签就是 `PACKED_DOUBLE_ELEMENTS`
-  - 且这个 `FixedArray` 实例是有孔的，那么对应的标签就是 `HOLEY_DOUBLE_ELEMENTS`
-- 如果 `FixedArray` 实例所存储的值都是整数和浮点数和其他
-  - 且这个 `FixedArray` 实例是无孔的，那么对应的标签就是 `PACKED_ELEMENTS`
-  - 且这个 `FixedArray` 实例是有孔的，那么对应的标签就是 `HOLEY_ELEMENTS`
+![数组容器的类型与性能](/static/image/markdown/javascript/type-translation.png)
 
-> `SMI` 是 `small integer` 的缩写。
-
-V8 引擎为具有不同标签的 element 进行了不同程度的优化，具体来说 `PACKED` 的 element 的效率比 `HOLEY` 的 element 的效率更高，标签语意更具体的 element 的效率比标签语意更模糊的 element 的效率更高。这是因为，`HOLEY` 的 
-
-如果值的数据类型更加具体，那么 V8 就可以进行更细粒度的优化，并且 `PACKED` 的
-
-![element的标签与性能](/static/image/markdown/javascript/element-tag-performance.png)
-
-> 事实上，V8 引擎划分出了了 21 种标签，并且每种标签都有不同程度的优化，详见 [这份源码](https://source.chromium.org/chromium/v8/v8.git/+/ec37390b2ba2b4051f46f153a8cc179ed4656f5d:src/elements-kind.h;l=14)。
-
-另外，element 的标签不是永恒不变的，而是可以进行转化的
+> 实际上，V8 引擎一共划分了 21 种不同类型的数组容器，本文只讨论了其中 6 种，你可以通过这份 [源码](https://source.chromium.org/chromium/v8/v8.git/+/ec37390b2ba2b4051f46f153a8cc179ed4656f5d:src/elements-kind.h;l=14) 来查看其他类型的数组容器。
 
 ## 参考
 
