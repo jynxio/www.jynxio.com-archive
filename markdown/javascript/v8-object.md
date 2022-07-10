@@ -163,13 +163,19 @@ const obj = { 1:1 };
 %DebugPrint( obj );
 ```
 
-如下图所示，V8 引擎使用一个长度为 19 的 `FixedArray` 实例来存储 element，这个 `FixedArray` 实例的 `0` 号以及 `2~18` 号元素的值都是 `<the_hole>`，这意味着 `0` 号以及 `2~18` 号元素都是空元素。其中，`<the_hole>` 是由 V8 引擎定义的一个特殊值，V8 引擎会使用这个值来填补稀疏数组中的孔。
-
-另外，你肯定很好奇为什么这个 `FixedArray` 实例的长度是 19 而不是 2，这是因为 V8 引擎需要主动预留一些额外的内存空间来给 `FixedArray` 实例的扩容做准备，以防止频繁的扩容。
+如下图所示，V8 引擎使用一个长度为 19 的 `FixedArray` 实例来存储 element，这个 `FixedArray` 实例的 `0` 号以及 `2~18` 号元素的值都是 `<the_hole>`，这是一个由 V8 引擎定义的特殊值，它代表着该元素为空。
 
 ![稀疏数组](/static/image/markdown/javascript/sparse-array.png)
 
+> 你应该会很好奇为什么上图中的 `FixedArray` 实例的长度是 19 而不是 2，具体来说，如果 element 的数量超出了 `FixedArray` 实例的容量（即长度），那么 V8 引擎就需要对 `FixedArray` 实例进行扩容。如果 `FixedArray` 实例的容量总是刚好等于 element 的数量的话，那么每次新增 element 时，V8 引擎都需要扩充 `FixedArray` 实例的容量。然而，这个扩容是一个耗时的行为，为了避免频繁的扩容，V8 引擎会在初始化和扩容 `FixedArray` 实例的时候，就多申请一些额外的存储空间，用来存储新增的 element，这样 V8 引擎就只需要在 `FixedArray` 实例容量不足时再进行扩容就可以了。
+>
+> 另外，这个扩容的大致原理是，V8 引擎创建一个新的 `FixedArray` 实例，这个新的 `FixedArray` 实例有更大的容量，然后再将旧的 `FixedArray` 实例的数据，和新增的 element 的数据，一起拷贝到新的 `FixedArray` 实例中去。
+>
+> 不过，V8 引擎有时候也会创建出容量刚好等于 element 数量的 `FixedArray` 实例，比如 `const array = [ 0, 1, 2 ]` 所创建出的 JavaScript 对象会使用 `FixedArray` 实例来存储 element，而这个 `FixedArray` 实例的容量就刚好等于 3。
 
+当 V8 引擎在存储 element 的数组上找到 `<the_hole>` 时，V8 引擎就可以立即断定出该 JavaScript 对象上不存在目标属性，然后 V8 引擎就可以开始从该 JavaScript 对象的原型链上继续查找目标属性了。
+
+![<the_hole>的用处](/static/image/markdown/javascript/the-hole-use.png)
 
 V8 引擎会根据 `FixedArray` 实例是否有孔来标记 element，如果 `FixedArray` 是有孔数组，那么对应的 element 就会被标记为 `HOLEY`，否则就会被标记为 `PACKED`（译为 “满的”）。并且 V8 引擎会使用特殊的值来填补 `FixedArray` 中的孔，而这个特殊的值被称为 `the_hole`。
 
