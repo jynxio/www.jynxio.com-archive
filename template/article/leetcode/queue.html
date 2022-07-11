@@ -14,22 +14,22 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=d0ae70b4-df78-4cd3-a11b-720854a4603f>概述</p>
-        <p data-target-id=ccb3ee9c-2695-4bad-a6dc-bf90d7850e2d>普通队列</p>
-        <p data-target-id=fc2619d0-5aff-4b24-bbaf-dc655b8f2e06>实现普通队列</p>
-        <p data-target-id=37902d3a-98bc-466d-b318-731789ab3d15>双端队列</p>
-        <p data-target-id=d886521f-730e-4308-81b1-46aa3d7291be>实现双端队列</p>
-        <p data-target-id=c0151154-4607-4e9a-a86e-dc8f225ea2d0>用队列解决问题</p>
+        <p data-target-id=fd52913d-cd3e-4925-abee-2b8d54d5b135>概述</p>
+        <p data-target-id=885da222-448b-407b-acc2-a02c20b02f5b>普通队列</p>
+        <p data-target-id=c4fd1fcc-1fd3-4081-a630-6f93125025b2>实现普通队列</p>
+        <p data-target-id=117daca8-de44-4c9d-90ee-5b27c4db2951>双端队列</p>
+        <p data-target-id=5b956ed3-dcc7-466d-ba2e-f737e756770a>实现双端队列</p>
+        <p data-target-id=e7837ca3-ead7-4670-8c9f-ebdd32ca2ad7>用队列解决问题</p>
     </aside>
     <article>
         <h1>队列</h1>
-        <p id="last-updated">Last Updated: 24/06/2022</p>
-        <h2 id="d0ae70b4-df78-4cd3-a11b-720854a4603f">概述</h2>
+        <p id="last-updated">Last Updated: 12/07/2022</p>
+        <h2 id="fd52913d-cd3e-4925-abee-2b8d54d5b135">概述</h2>
         <p>本文将会讲述两种队列，一种是普通队列，另一种是双端队列。</p>
-        <h2 id="ccb3ee9c-2695-4bad-a6dc-bf90d7850e2d">普通队列</h2>
+        <h2 id="885da222-448b-407b-acc2-a02c20b02f5b">普通队列</h2>
         <p>普通队列是遵循先进先出（FIFO）原则的有序集合，“先进先出”是指最先入列的数据会最先出列，最后入列的数据会最后出列。</p>
         <p>举例来说，普通队列就像现实生活中的排队，早来的人会排在队伍的前面，后来会排在队伍的后面，队首的人会优先获得服务并离队，队尾的人只能最后获得服务再离队，如果有新人加入，那么新人必须排在队伍的最后，其中队伍代表队列，人代表数据。</p>
-        <h2 id="fc2619d0-5aff-4b24-bbaf-dc655b8f2e06">实现普通队列</h2>
+        <h2 id="c4fd1fcc-1fd3-4081-a630-6f93125025b2">实现普通队列</h2>
         <p>JavaScript 中没有普通队列这种数据结构，我们将使用对象来实现一个普通队列。其实我们也可以使用数组来实现普通队列，不过考虑到基于数组的普通队列有可能会触发某些遍历操作，而为了获得更好的性能，我们需要避免这种情况，所以我们最终采用了对象。</p>
         <p>我们实现的普通队列将会拥有以下方法和属性：</p>
         <table>
@@ -72,7 +72,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 id="2379bd53-0b08-40ea-a450-03f82cf4011d">第一步：明确实现的思路</h3>
+        <h3 id="7e3a18ae-7e15-4c2b-8522-e573b894a72e">第一步：明确实现的思路</h3>
         <p>我们会创建一个名为 <code>Queue</code> 的类来代表队列，在 <code>Queue</code> 的内部，我们会创建一个名为 <code>#elements</code> 的内部属性，它是一个普通的 JavaScript 对象，比如 <code>{}</code>，我们用它来存储普通队列中的元素。具体来说，<code>#elements</code> 对象使用键值对来存储普通队列中的元素，其中键是元素的序号字符串，值就是元素。</p>
         <p><img src="/static/image/markdown/leetcode/queue/elements-property.png" alt="#elements内部属性"></p>
         <p>如果我们修改了普通队列，那么我们就需要更新 <code>#elements</code> 的键值对，在说明如何更新 <code>#elements</code> 之前，我们需要先了解一下 <code>#elements</code> 是如何存储普通队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 <code>#from</code>，另一个名为 <code>#to</code>，指针 <code>#from</code> 会指向队首元素在 <code>#elements</code> 中的位置，指针 <code>#to</code> 会指向队尾元素在 <code>#elements</code> 中的位置的 <strong>下一个位置</strong>，就像下图这样。</p>
@@ -84,7 +84,7 @@
         <p>这种设计的好处之一是我们可以基于 <code>#from</code> 和 <code>#to</code> 的值来推算出 <code>#elements</code> 中所有的键值对（即队列中所有的元素），另一个好处是我们只需要移动指针的位置（即改变指针的值）即可实现移除和添加元素，而不需要像数组的 <code>splice</code> 方法那样重排所有元素的序号。举个例子，如果我们要移除掉队首的 <code>&quot;John&quot;</code> 和向队尾添加 <code>&quot;Jynx&quot;</code> 和 <code>&quot;Neo&quot;</code>，那么我们只需要将 <code>#from</code> 和 <code>#to</code> 各自向下移动 1 格和 2 格就可以了，就像下图这样。</p>
         <p><img src="/static/image/markdown/leetcode/queue/change-queue-by-pointer.png" alt="使用指针来修改队列"></p>
         <p>明确了实现普通队列的核心思路后，就可以开始实现我们的普通队列了。</p>
-        <h3 id="047480b8-ce09-41a9-ba70-181117b49cdf">第二步：创建队列的类</h3>
+        <h3 id="0442146d-15ab-4ffb-a497-768affdd3d25">第二步：创建队列的类</h3>
         <p>从这一步开始，我们就要正式开始创建我们的普通队列了，简明的代码比啰嗦的文字要更加易懂，所以请直接来看代码吧！</p>
         <pre><code class="language-js">class Queue {
     
@@ -144,9 +144,9 @@
     
 }
 </code></pre>
-        <h2 id="37902d3a-98bc-466d-b318-731789ab3d15">双端队列</h2>
+        <h2 id="117daca8-de44-4c9d-90ee-5b27c4db2951">双端队列</h2>
         <p>双端队列的英文名称是 double ended queue，简称为 deque，它与普通队列的区别是，它的队首和队尾都能移除和添加元素。</p>
-        <h2 id="d886521f-730e-4308-81b1-46aa3d7291be">实现双端队列</h2>
+        <h2 id="5b956ed3-dcc7-466d-ba2e-f737e756770a">实现双端队列</h2>
         <p>双端队列的实现思路与普通队列的实现思路是一样的，不过双端队列还有 3 个额外的方法，分别用于向队首添加元素、从队尾移除元素、查询队尾元素。最终，我们实现的双端队列将会拥有以下方法和属性：</p>
         <table>
             <thead>
@@ -291,8 +291,8 @@
     
 }
 </code></pre>
-        <h2 id="c0151154-4607-4e9a-a86e-dc8f225ea2d0">用队列解决问题</h2>
-        <h3 id="d3451c21-66f6-4511-b22a-6800acc50445">击鼓传花</h3>
+        <h2 id="e7837ca3-ead7-4670-8c9f-ebdd32ca2ad7">用队列解决问题</h2>
+        <h3 id="e1a27c12-909a-4245-abe2-d73a5ee76112">击鼓传花</h3>
         <p>击鼓传花（hot potato）的游戏规则是：n 个人围成一圈，大家沿着同一时针方向来传递手绢（从第一个人开始），然后在某个随机的时刻暂停传递，并淘汰掉彼刻的手绢持有者，如此往复直至最后只剩下一个人。</p>
         <p>我们可以使用普通队列来模拟击鼓传花这个游戏，具体的实现思路是：我们不断的将队首的元素移动到队尾，直至达到某个随机的次数后，就淘汰掉彼时的队首元素，如此往复直至队列中只剩下一个元素为止。具体的实现代码如下。</p>
         <pre><code class="language-js">function play ( ... elements ) {
@@ -332,7 +332,7 @@
 // -&gt; 淘汰者：Lina
 // -&gt; 胜利者：Eva
 </code></pre>
-        <h3 id="2e42bdb2-c0dd-4f9b-95e6-6d7b3f047462">回文检查器</h3>
+        <h3 id="164ee068-5ac6-4126-803c-6d29395ce8de">回文检查器</h3>
         <p>回文（palindrome）是指正序和反序都相同的字符串，比如 <code>&quot;madam&quot;</code>、<code>&quot;racecar&quot;</code>、<code>&quot;人人为我，我为人人&quot;</code>。检查一个字符串是不是回文的方法有很多，最容易想到的办法就是比较反转后的字符串是否与原字符串相等，此时就可以用栈来解决这个问题，比如：</p>
         <p><img src="/static/image/markdown/leetcode/queue/reverse-string-by-stack.png" alt="使用栈来反转字符串"></p>
         <blockquote>

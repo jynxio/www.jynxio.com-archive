@@ -14,6 +14,7 @@ const createJavascriptInfo = _ => {
         { name: "code-structure", alias: "代码结构" },
         { name: "operators", alias: "运算符" },
         { name: "strict-mode", alias: "严格模式" },
+        { name: "v8-object", alias: "V8 Object" },
     ];
     const options = {
         name,

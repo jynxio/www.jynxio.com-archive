@@ -14,20 +14,20 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=8adc6a4a-3c02-411e-bad1-51cdccc67862>概述</p>
-        <p data-target-id=7bab9a01-8e2e-4f39-94dd-806c59f82f77>实现</p>
-        <p data-target-id=fff1afa3-7a56-4898-b475-fd1cc8107764>Map API</p>
+        <p data-target-id=58578a8d-716b-4251-816b-d28df7b07e49>概述</p>
+        <p data-target-id=4df71e88-a580-46b2-9972-48fe99103de6>实现</p>
+        <p data-target-id=5bdc2fde-c608-4be0-8ac6-a5beb684ad7d>Map API</p>
     </aside>
     <article>
         <h1>字典</h1>
-        <p id="last-updated">Last Updated: 24/06/2022</p>
-        <h2 id="8adc6a4a-3c02-411e-bad1-51cdccc67862">概述</h2>
+        <p id="last-updated">Last Updated: 12/07/2022</p>
+        <h2 id="58578a8d-716b-4251-816b-d28df7b07e49">概述</h2>
         <p>字典是指用键值对来存储数据的数据结构，它又称为映射、符号表、关联数组，JavaScript 的普通对象 <code>{}</code> 就是字典。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>字典不等于散列表，因为散列表只是字典的一种实现方式，而不是字典本身。字典还可以基于树和二维数组来实现，并且散列表不仅可以用来实现字典，还可以用来实现集合。可见，字典这一概念更侧重“外部的形式”，散列表这一概念更侧重“内部的实现”。简而言之，任何一种在形式上使用键值对来存储数据的数据结构都属于字典，而无论该数据结构的内部是通过何种方式来实现的。</p>
         </blockquote>
-        <h2 id="7bab9a01-8e2e-4f39-94dd-806c59f82f77">实现</h2>
+        <h2 id="4df71e88-a580-46b2-9972-48fe99103de6">实现</h2>
         <p>我们实现的字典将会拥有以下方法和属性。</p>
         <table>
             <thead>
@@ -200,7 +200,7 @@
 
 }
 </code></pre>
-        <h2 id="fff1afa3-7a56-4898-b475-fd1cc8107764">Map API</h2>
+        <h2 id="5bdc2fde-c608-4be0-8ac6-a5beb684ad7d">Map API</h2>
         <p>JavaScript 中有 2 种内建的字典，一种是普通对象 <code>{}</code>，另一种是 <code>Map</code>，其中 <code>Map</code> 来源于 ECMAScript 2015，它是一种比普通对象更强大的字典，比如可以使用任意数据类型作为键，可以按照键值对的插入顺序来迭代，拥有更高的增删性能等，如果你想进一步了解 <code>Map</code>，那么你可以阅读 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map">这篇文章</a> 。</p>
         <p>另外，JavaScript 还实现了一种特别的字典，名为 <code>WeakMap</code>，你可以通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">这篇文章</a> 来了解它。</p>
         <blockquote>
