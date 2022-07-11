@@ -181,7 +181,7 @@ const obj = { 1:1 };
 
 ![<the_hole>的用处](/static/image/markdown/javascript/the-hole-use.png)
 
-#### 类型
+#### 数组容器的类型
 
 当 V8 引擎使用数组容器来存储 element 时，V8 引擎会根据数组容器是否是稀疏的，以及数组容器的元素的数据类型来进行分类，不同类型的数组容器的性能是不一样的，因为 V8 引擎可以对不同类型的数组容器进行不同程度的优化。比如，有这些类型：
 
@@ -194,17 +194,39 @@ const obj = { 1:1 };
   - 且数组容器中的元素只包含整数和浮点数，那么类型就是 `HOLEY_DOUBLE_ELEMENTS`
   - 且数组容器中的元素包含整数、浮点数和其他，那么类型就是 `HOLEY_ELEMENTS`
 
-> 其中，SMI 是 small integer 的缩写。
+> SMI 是 small integer 的缩写。
+>
+> 实际上，V8 引擎一共划分了 21 种不同类型的数组容器，本文只讨论了其中 6 种，你可以通过这份 [源码](https://source.chromium.org/chromium/v8/v8.git/+/ec37390b2ba2b4051f46f153a8cc179ed4656f5d:src/elements-kind.h;l=14) 来查看其他类型的数组容器。
 
 `PACKED` 数组容器的性能比 `HOLEY` 数组容器的性能更好，因为 V8 引擎可以对 `PACKED` 数组容器进行更加积极的优化。
 
 `PACKED_SMI_ELEMENTS`、`PACKED_DOUBLE_ELEMENTS`、`PACKED_ELEMENTS` 数组容器的性能依次降低，类似的，`HOLEY_SMI_ELEMENTS`、`HOLEY_DOUBLE_ELEMENTS`、`HOLEY_ELEMENTS` 数组容器的性能也依次下降。总的来说，如果数组容器的元素的数据类型越具体，那么数组容器的性能就越好，这是因为 V8 引擎可以对数据类型更加具体的数组容器进行更细粒度的优化。
 
-另外，数组容器的类型是可以转化的，不过只能从 `PACKED` 转化为 `HOLEY`，以及只能从具体类型转化为模糊类型，即这种转化是单向的。
+这种性能差异的具体表现之一是，在调用 JavaScript 数组对象的内置方法时，V8 引擎会针对不同类型的数组容器来调用不同版本的内置方法，不同版本的内置方法的性能是不同的，原因正如上文所说，是因为 V8 引擎进行了不同程度的优化。
 
-![数组容器的类型与性能](/static/image/markdown/javascript/type-translation.png)
+![不同类型的数组容器会调用不同版本的内置方法](/static/image/markdown/javascript/array-type-function.png)
 
-> 实际上，V8 引擎一共划分了 21 种不同类型的数组容器，本文只讨论了其中 6 种，你可以通过这份 [源码](https://source.chromium.org/chromium/v8/v8.git/+/ec37390b2ba2b4051f46f153a8cc179ed4656f5d:src/elements-kind.h;l=14) 来查看其他类型的数组容器。
+> 因为 JavaScript 数组和 JavaScript 对象采用了一模一样的存储方法，所以这个例子可以使用 JavaScript 数组来替代 JavaScript 对象。
+
+另外，`%DebugPrint` 函数可以查看数组容器的类型。比如，我创建了下列 6 种 JavaScript 对象，并打印了它们的内部信息，最后再把它们的内部信息的片段汇总到下图中，我们可以从该图中清晰的看到数组容器的类型。其中，`COW` 是 [copy on write](https://en.wikipedia.org/wiki/Copy-on-write) 的缩写，这是另一种优化技术，你可以忽略它们。
+
+```
+const packed_smi_elements = [ 0, 1, 2 ];
+const packed_double_elements = [ 0, 1.1, 2 ];
+const packed_elements = [ 0, "1", 2 ];
+
+const holey_smi_elements = [ , 1, 2 ];
+const holey_double_elements = [ , 1.1, 2 ];
+const holey_elements = [ , "1", 2 ];
+```
+
+![数组容器的类型](/static/image/markdown/javascript/array-type.png)
+
+> 因为通过字面量赋值的方式来创建的 JavaScript 数组的数组容器的容量刚好等于字面量数组中的元素数量，所以这个例子使用了 JavaScript 数组来替代 JavaScript 对象。
+
+最后，数组容器的类型是可以转化的，不过只能从 `PACKED` 转化为 `HOLEY`，以及只能从具体类型转化为模糊类型，即这种转化是单向的。
+
+![数组容器的类型与性能](/static/image/markdown/javascript/array-type-translation-performance.png)
 
 ## 参考
 
