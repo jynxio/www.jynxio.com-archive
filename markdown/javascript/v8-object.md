@@ -133,21 +133,31 @@ V8 引擎更加青睐于使用 fast property，并且 V8 引擎还为其做了�
 
 #### hidden class
 
-hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原型的地址等。其中，hidden class 的 bit field 3 字段存储了 JavaScript 对象的属性数量，以及一个指向 descriptor array 的指针。descriptor array 是一个 `FixedArray` 实例，它存储了 normal property 的信息，比如键的名称与值的地址。
+hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原型的地址等。其中，hidden class 的 bit field 3 字段存储了 JavaScript 对象的属性数量，以及一个指向 descriptor array 的指针，descriptor array 存储了 fast property 的键、值地址、属性描述符。
 
 ![hidden class](/static/image/markdown/javascript/hidden-class.png)
 
-当 V8 引擎使用数组容器来存储 normal property 时，V8 引擎就会将 normal property 的所有值存储在数组容器上，那么 V8 引擎该如何通过属性的键来找到属性的值呢？答案是，如果没有任何提示信息，仅凭属性的键，V8 引擎是无法推断出相对应的值存储在数组容器上的哪个位置的，而 descriptor array 就是这个提示信息。具体来说，descriptor array 存储了 normal property 的键和值的地址，当 V8 引擎需要查找某个 fast property 时，V8 引擎就可以通过查阅 descriptor array 来找到相对应的值的存储地址。显然，如果 V8 引擎要更新 fast property，那么它自然也需要更新 hidden class 和其中的 descriptor array，这是 fast property 的增删速度要比 slow property 的增删速度更慢的另一个原因。
+descriptor array 是一个 `FixedArray` 实例，它用于帮助 V8 引擎找到 fast property 的值。具体来说，所有 fast property 的值都被存储在一个数组容器中，如果 fast property 的键和值之间缺少了映射关系，那么 V8 引擎就无法根据键来找到对应的值。打个比方，对于 `{a: 1, b: 2, ... }` 而言，如果 V8 引擎要查询属性 `a`，那么 V8 引擎该怎么知道值 `1` 存储在数组容器的哪个位置呢？为了解决这个问题，V8 引擎将键与值的地址存储在了 descriptor array 中，如此一来，V8 引擎就可以通过键来在 descriptor array 中找到对应的值的地址了。所以 descriptor array 就相当于一个地址簿，V8 引擎通过被呼人的名字（键）来在这个地址簿上找到被呼人的住址（值的地址），最后再找到被呼人本身（值）。
 
-另外，descriptor array 是专为 fast property 服务的，具体来说，当 V8 引擎使用字典容器来存储命名属性时，V8 引擎会直接将命名属性的键和值一一对应的存进这个字典中，这样 V8 引擎就可以直接根据命名属性的键来在这个字典中找到相对应的值了。
+显然的是，如果 V8 引擎要更新 fast property，那么它自然也就需要更新 hidden class 和其中的 descriptor array，这是 fast property 的增删速度要比 slow property 的增删速度更慢的另一个原因。
 
-另外，descriptor array 不存储 element 的信息，因为 V8 引擎可以直接根据 element 的键来在对应的存储空间中找到相对应的值，我们会在下文详细介绍 element。
+![descriptor array服务于fast property](/static/image/markdown/javascript/fast-property-descriptor-array.png)
+
+> 对于上图，实际上，我不确定属性描述符是否会真的存储在 `detail` 中，这只是我的推测。
+
+另外，descriptor array 不服务于 slow property。因为当 V8 引擎使用字典容器来存储 normal property 的时候，V8 引擎就会直接将属性的键、值、属性描述符一一对应的存进这个字典中，然后 V8 引擎可以直接根据属性的键来在这个字典中找到对应的值，而不需要使用到 descriptor array。
+
+![descriptor array不服务于slow property](/static/image/markdown/javascript/slow-property-descriptor-array.png)
+
+> 你可以通过 [这篇文章](https://zh.javascript.info/property-descriptors) 来了解属性描述符。
+
+最后，descriptor array 也不会存储 element 的信息，因为对于 element 而言，V8 引擎总是可以将键和值关联在一起，详见下文。
 
 ### element
 
 element 的准确名称是 array-indexed property（数组索引属性），它是指使用正整数字符串来作为键的属性，比如 `"0"`、`"1"` 等。需要注意的是，`"+0"`、`"-0"`、`"+1"`、`"-1"` 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 property 而不是 element。
 
-#### 存储
+#### 存储方式
 
 element 没有类似于 in-object property 的东西，所有的 element 都被直接存储在另一个独立的内存空间中。V8 引擎会采用数组数据结构或字典数据结构来存储 element，其中，V8 引擎所使用的数组容器是 `FixedArray` 实例，V8 引擎所使用的字典容器是 `NumberDictionary`，这是一个由 V8 引擎实现的基于散列表的字典数据结构。
 
@@ -155,7 +165,7 @@ element 没有类似于 in-object property 的东西，所有的 element 都被�
 
 和 fast / slow property 相似的是，当 V8 引擎使用数组容器来存储 element 时，element 的访问速度会更快。
 
-#### 稀疏数组
+#### 用数组来存储 —— 稀疏数组
 
 当 V8 引擎使用数组容器来存储 element 时，如果 element 的键不是从 `0` 起算的，或者键与键之间不是连续的，对应的数组容器就会产生空元素，我们把数组中的空元素称为数组的孔，我们把含有孔的数组称为稀疏数组。
 
@@ -173,7 +183,7 @@ const obj = { 1:1 };
 
 > 你应该会很好奇为什么上图中的 `FixedArray` 实例的长度是 19 而不是 2，具体来说，如果 element 的数量超出了 `FixedArray` 实例的容量（即长度），那么 V8 引擎就需要对 `FixedArray` 实例进行扩容。如果 `FixedArray` 实例的容量总是刚好等于 element 的数量的话，那么每次新增 element 时，V8 引擎都需要扩充 `FixedArray` 实例的容量。然而，这个扩容是一个耗时的行为，为了避免频繁的扩容，V8 引擎会在初始化和扩容 `FixedArray` 实例的时候，就多申请一些额外的存储空间，用来存储新增的 element，这样 V8 引擎就只需要在 `FixedArray` 实例容量不足时再进行扩容就可以了。
 >
-> 另外，这个扩容的大致原理是，V8 引擎创建一个新的 `FixedArray` 实例，这个新的 `FixedArray` 实例有更大的容量，然后再将旧的 `FixedArray` 实例的数据，和新增的 element 的数据，一起拷贝到新的 `FixedArray` 实例中去。
+> 另外，这个扩容的大致原理是，V8 引擎创建一个新的 `FixedArray` 实例，这个新的 `FixedArray` 实例有更大的容量，然后再将旧的 `FixedArray` 实例的数据，和新增的 element 的数据，一起拷贝到新的 `FixedArray` 实例中去。你可以通过 [这篇文章](https://zhuanlan.zhihu.com/p/26388217) 来进一步了解 V8 引擎是如何实现这个扩容和收缩的。
 >
 > 不过，V8 引擎有时候也会创建出容量刚好等于 element 数量的 `FixedArray` 实例，比如 `const array = [ 0, 1, 2 ]` 所创建出的 JavaScript 对象会使用 `FixedArray` 实例来存储 element，而这个 `FixedArray` 实例的容量就刚好等于 3。
 
@@ -181,7 +191,7 @@ const obj = { 1:1 };
 
 ![<the_hole>的用处](/static/image/markdown/javascript/the-hole-use.png)
 
-#### 数组容器的类型
+#### 用数组来存储 —— 数组容器的类型
 
 当 V8 引擎使用数组容器来存储 element 时，V8 引擎会根据数组容器是否是稀疏的，以及数组容器的元素的数据类型来进行分类，不同类型的数组容器的性能是不一样的，因为 V8 引擎可以对不同类型的数组容器进行不同程度的优化。比如，有这些类型：
 
@@ -228,11 +238,54 @@ const holey_elements = [ , "1", 2 ];
 
 ![数组容器的类型与性能](/static/image/markdown/javascript/array-type-translation-performance.png)
 
+#### 用数组来存储 —— 性能优化
+
+当你的 JavaScript 对象使用数组来存储 element 时，遵循下述行为规范有助于获得更好的性能。
+
+行为规范一：因为数组容器的类型转化是单向的，所以为了更好的性能，请尽可能的使用 `PACKED` 和数据类型更具体的 element，并且不轻易的向 element 中引入孔或向其添加其他数据类型的值。另外，`-0`、`NaN`、`Infinity` 这 3 个值都可以将 `PACKED_SMI_ELEMENTS` 转化为 `PACKED_DOUBLE_ELEMENTS`，同理于 `HOLEY_SMI_ELEMENTS`。
+
+行为规范二：避免越界读取 JavaScript 对象的 element，或者避免越界读取 JavaScript 数组的属性，因为这种越界读取的行为会使得这个 JavaScript 对象或 JavaScript 数组的性能永远变差一些。具体来说，这是因为当 V8 引擎遇到越界读取时，V8 引擎就会在这个 JavaScript 对象或 JavaScript 数组的原型链上查找越界读取的属性，而搜索原型链是一件耗时的事情，并且 V8 引擎会认为这个 javaScript 对象或 JavaScript 数组在未来还会发生同样的事，然后就会将其标记为“总是需要进行特殊处理”的对象，这就导致了 V8 引擎以后在处理这个 JavaScript 对象或 JavaScript 数组的时候，总是要做一些额外的处理。
+
+行为规范三：使用数组来替代类数组。虽然我们可以通过 `Array.property.forEach.call( array_like, ( value, index ) => {} )` 的方式来在类数组身上调用数组的内置方法，但是这些内置方法在数组身上的运行效率要高得多。
+
+#### 用字典来存储
+
+如果 V8 引擎遇到了以下三种情况中的任何一种，V8 引擎都会使用字典来存储 element，另外，这个字典是一个 `键-值-属性描述符` 格式的字典。最后，使用字典来存储 element 的好处是可以节省存储空间，坏处是访问的速度较慢。
+
+情况一：如果 element 中有大量的孔，那么 V8 引擎就会使用字典来存储 element。比如，下述代码会创建一个使用字典来存储 element 的 JavaScript 对象。
+
+```js
+const obj = { 999: 999 };
+```
+
+又比如，下述代码会把一个原本使用数组来存储 element 的 JavaScript 对象，改为使用字典来存储 element。
+
+```js
+const obj = { 0: 0 };
+
+obj[ 999 ] = 999;
+```
+
+你可以通过 [这篇文章](https://zhuanlan.zhihu.com/p/192468212) 来进一步了解，当 element 中出现了多少孔时，V8 引擎才会用字典容器来替换数组容器，以及当 element 中的孔减少到多少时，V8 引擎才会用数组容器来替代字典容器。
+
+情况二：如果使用 `Object.defineProperty` API 来创建一个新的数组索引属性，那么 V8 引擎就会使用字典来存储 element。比如，下述代码创建一个使用字典来存储 element 的 JavaScript 对象。
+
+```js
+const obj = {};
+
+Object.defineProperty( obj, "0", { value: 0 } );
+```
+
+情况三：如果使用 `Object.defineProperty` API 来修改一个已存在的数组索引属性的 `enumarable` 和 `configurable`，那么 V8 引擎就会使用字典来存储 element。比如，下述代码会将一个原本使用数组来存储 element 的 JavaScript 对象变为使用字典来存储 element 的 JavaScript 对象。
+
+```js
+const obj = { "0": 0 };
+
+Object.defineProperty( obj, "0", { enumerable: false } );
+```
+
 ## 参考
 
-- [阅读V8（一）：V8底层如何实现JSArray](https://zhuanlan.zhihu.com/p/192468212)
-- [（更新）从Chrome源码看JS Object的实现](https://zhuanlan.zhihu.com/p/26169639)
-- [从Chrome源码看JS Array的实现](https://zhuanlan.zhihu.com/p/26388217)
 - [Fast properties in V8](https://v8.dev/blog/fast-properties)
 - [Elements kinds in V8](https://v8.dev/blog/elements-kinds)
 - [[V8 Deep Dives] Understanding Array Internals](https://itnext.io/v8-deep-dives-understanding-array-internals-5b17d7a28ecc)
