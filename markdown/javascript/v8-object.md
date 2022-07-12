@@ -68,7 +68,7 @@ JavaScript 对象容器的前 3 个位置存储了 3 个指针，每个指针占
 
 关于 hidden class，它是 `HiddenClass` 类的实例，而 `HiddenClass` 则是一个由 V8 官方实现的标准的 C++ 类。hidden class 用于存储 JavaScript 对象的内部信息，比如属性的数量，原型的地址等，我们会在后文继续介绍 hidden class。
 
-![hidden class & property & element](/static/image/markdown/javascript/hiddenclass-property-element.png)
+![hidden class & property & element](/static/image/markdown/javascript/v8-object/hiddenclass-property-element.png)
 
 ### property
 
@@ -101,11 +101,11 @@ obj.d = 4;
 
 第一次 `%DebugPrint( obj )` 的输出如下，可见，in-object property 的容量为 3（见 `inobject properties: 3`），normal property 的容量为 0（见 `<FixedArray[0]>`），并且属性 `a`、`b`、`c` 都是 in-object property。
 
-![in-object property的容量](/static/image/markdown/javascript/in-object-properties-capacity-1.png)
+![in-object property的容量](/static/image/markdown/javascript/v8-object/in-object-properties-capacity-1.png)
 
 第二次 `%DebugPrint( obj )` 的输出如下，可见，in-object property 的容量没有变化，不过追加的 `d` 属性成为了 normal property。
 
-![in-object property的容量](/static/image/markdown/javascript/in-object-properties-capacity-2.png)
+![in-object property的容量](/static/image/markdown/javascript/v8-object/in-object-properties-capacity-2.png)
 
 最后，in-object property 的访问速度要比 normal property 的更快，因为 V8 引擎在查找命名属性时，会先查找 in-object property，然后再查找 normal property。另外，哪怕 V8 引擎同时在 in-object property 和 normal property 中查找目标属性，in-object property 的访问速度也会更快，这是因为 in-object property 的访问路径更短。
 
@@ -135,19 +135,19 @@ V8 引擎更加青睐于使用 fast property，并且 V8 引擎还为其做了�
 
 hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原型的地址等。其中，hidden class 的 bit field 3 字段存储了 JavaScript 对象的属性数量，以及一个指向 descriptor array 的指针，descriptor array 存储了 fast property 的键、值地址、属性描述符。
 
-![hidden class](/static/image/markdown/javascript/hidden-class.png)
+![hidden class](/static/image/markdown/javascript/v8-object/hidden-class.png)
 
 descriptor array 是一个 `FixedArray` 实例，它用于帮助 V8 引擎找到 fast property 的值。具体来说，所有 fast property 的值都被存储在一个数组容器中，如果 fast property 的键和值之间缺少了映射关系，那么 V8 引擎就无法根据键来找到对应的值。打个比方，对于 `{a: 1, b: 2, ... }` 而言，如果 V8 引擎要查询属性 `a`，那么 V8 引擎该怎么知道值 `1` 存储在数组容器的哪个位置呢？为了解决这个问题，V8 引擎将键与值的地址存储在了 descriptor array 中，如此一来，V8 引擎就可以通过键来在 descriptor array 中找到对应的值的地址了。所以 descriptor array 就相当于一个地址簿，V8 引擎通过被呼人的名字（键）来在这个地址簿上找到被呼人的住址（值的地址），最后再找到被呼人本身（值）。
 
 显然的是，如果 V8 引擎要更新 fast property，那么它自然也就需要更新 hidden class 和其中的 descriptor array，这是 fast property 的增删速度要比 slow property 的增删速度更慢的另一个原因。
 
-![descriptor array服务于fast property](/static/image/markdown/javascript/fast-property-descriptor-array.png)
+![descriptor array服务于fast property](/static/image/markdown/javascript/v8-object/fast-property-descriptor-array.png)
 
 > 对于上图，实际上，我不确定属性描述符是否会真的存储在 `detail` 中，这只是我的推测。
 
 另外，descriptor array 不服务于 slow property。因为当 V8 引擎使用字典容器来存储 normal property 的时候，V8 引擎就会直接将属性的键、值、属性描述符一一对应的存进这个字典中，然后 V8 引擎可以直接根据属性的键来在这个字典中找到对应的值，而不需要使用到 descriptor array。
 
-![descriptor array不服务于slow property](/static/image/markdown/javascript/slow-property-descriptor-array.png)
+![descriptor array不服务于slow property](/static/image/markdown/javascript/v8-object/slow-property-descriptor-array.png)
 
 > 你可以通过 [这篇文章](https://zh.javascript.info/property-descriptors) 来了解属性描述符。
 
@@ -179,7 +179,7 @@ const obj = { 1:1 };
 
 如下图所示，V8 引擎使用一个长度为 19 的 `FixedArray` 实例来存储 element，这个 `FixedArray` 实例的 `0` 号以及 `2~18` 号元素的值都是 `<the_hole>`，这是一个由 V8 引擎定义的特殊值，它代表着该元素为空。
 
-![稀疏数组](/static/image/markdown/javascript/sparse-array.png)
+![稀疏数组](/static/image/markdown/javascript/v8-object/sparse-array.png)
 
 > 你应该会很好奇为什么上图中的 `FixedArray` 实例的长度是 19 而不是 2，具体来说，如果 element 的数量超出了 `FixedArray` 实例的容量（即长度），那么 V8 引擎就需要对 `FixedArray` 实例进行扩容。如果 `FixedArray` 实例的容量总是刚好等于 element 的数量的话，那么每次新增 element 时，V8 引擎都需要扩充 `FixedArray` 实例的容量。然而，这个扩容是一个耗时的行为，为了避免频繁的扩容，V8 引擎会在初始化和扩容 `FixedArray` 实例的时候，就多申请一些额外的存储空间，用来存储新增的 element，这样 V8 引擎就只需要在 `FixedArray` 实例容量不足时再进行扩容就可以了。
 >
@@ -189,7 +189,7 @@ const obj = { 1:1 };
 
 当 V8 引擎在存储 element 的数组容器上找到 `<the_hole>` 时，V8 引擎就可以立即断定出该 JavaScript 对象上不存在目标属性，然后 V8 引擎就可以开始从该 JavaScript 对象的原型链上继续查找目标属性了。
 
-![<the_hole>的用处](/static/image/markdown/javascript/the-hole-use.png)
+![<the_hole>的用处](/static/image/markdown/javascript/v8-object/the-hole-use.png)
 
 #### 用数组来存储 —— 数组容器的类型
 
@@ -214,7 +214,7 @@ const obj = { 1:1 };
 
 这种性能差异的具体表现之一是，在调用 JavaScript 数组对象的内置方法时，V8 引擎会针对不同类型的数组容器来调用不同版本的内置方法，不同版本的内置方法的性能是不同的，原因正如上文所说，是因为 V8 引擎进行了不同程度的优化。
 
-![不同类型的数组容器会调用不同版本的内置方法](/static/image/markdown/javascript/array-type-function.png)
+![不同类型的数组容器会调用不同版本的内置方法](/static/image/markdown/javascript/v8-object/array-type-function.png)
 
 > 因为 JavaScript 数组和 JavaScript 对象采用了一模一样的存储方法，所以这个例子可以使用 JavaScript 数组来替代 JavaScript 对象。
 
@@ -230,13 +230,13 @@ const holey_double_elements = [ , 1.1, 2 ];
 const holey_elements = [ , "1", 2 ];
 ```
 
-![数组容器的类型](/static/image/markdown/javascript/array-type.png)
+![数组容器的类型](/static/image/markdown/javascript/v8-object/array-type.png)
 
 > 因为通过字面量赋值的方式来创建的 JavaScript 数组的数组容器的容量刚好等于字面量数组中的元素数量，所以这个例子使用了 JavaScript 数组来替代 JavaScript 对象。
 
 最后，数组容器的类型是可以转化的，不过只能从 `PACKED` 转化为 `HOLEY`，以及只能从具体类型转化为模糊类型，即这种转化是单向的。
 
-![数组容器的类型与性能](/static/image/markdown/javascript/array-type-translation-performance.png)
+![数组容器的类型与性能](/static/image/markdown/javascript/v8-object/array-type-translation-performance.png)
 
 #### 用数组来存储 —— 性能优化
 
