@@ -8,7 +8,9 @@ typora-root-url: ..\..
 
 字典是指用键值对来存储数据的数据结构，它又称为映射、符号表、关联数组，JavaScript 的普通对象 `{}` 就是字典。
 
-> 字典不等于散列表，因为散列表只是字典的一种实现方式，而不是字典本身。字典还可以基于树和二维数组来实现，并且散列表不仅可以用来实现字典，还可以用来实现集合。可见，字典这一概念更侧重“外部的形式”，散列表这一概念更侧重“内部的实现”。简而言之，任何一种在形式上使用键值对来存储数据的数据结构都属于字典，而无论该数据结构的内部是通过何种方式来实现的。
+> 字典不等于散列表，因为散列表只是字典的一种实现方式，而不是字典本身。比如，我们可以使用树或二维数组来实现字典，或者使用散列表来实现集合。
+>
+> 简而言之，任何一种在形式上使用键值对来存储数据的数据结构都属于字典，而无论该数据结构的内部是通过何种方式来实现的。
 
 ## 实现
 
@@ -157,22 +159,8 @@ class Dictionary {
 }
 ```
 
-## Map API
+## Map 和 WeakMap
 
-JavaScript 中有 2 种内建的字典，一种是普通对象 `{}`，另一种是 `Map`，其中 `Map` 来源于 ECMAScript 2015，它是一种比普通对象更强大的字典，比如可以使用任意数据类型作为键，可以按照键值对的插入顺序来迭代，拥有更高的增删性能等，如果你想进一步了解 `Map`，那么你可以阅读 [这篇文章](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map) 。
+`Map` 是 ECMAScript 2015 的 API，它是比普通对象更加强大的字典，比如它可以使用任意数据类型的值来作为键、可以按照键值对的插入顺序来迭代、拥有更高的增删性能等，你可以通过阅读 [这篇文章](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map) 来进一步了解这个 API。
 
-另外，JavaScript 还实现了一种特别的字典，名为 `WeakMap`，你可以通过 [这篇文章](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) 来了解它。
-
-> V8 团队在 [这篇文章](https://v8.dev/blog/hash-code) 中表示 `Set`、`Map`、`WeakSet`、`WeakMap` 的底层都使用了散列表，但是 `Map` 的 [ECMAScript 规范](https://tc39.es/ecma262/#sec-map-objects) 却表示 `Map` 的多种方法都是通过遍历来实现的，比如 `Map.prototype.get` 方法的实现逻辑就是通过遍历每个键来找到相应的值，规范原文如下。
->
-> ```
-> 1. Let M be the this value.
-> 2. Perform ? RequireInternalSlot(M, [[MapData]]).
-> 3. Let entries be the List that is M.[[MapData]].
-> 4. For each Record { [[Key]], [[Value]] } p of entries, do
-> a. If p.[[Key]] is not empty and SameValueZero(p.[[Key]], key) is true, return p.[[Value]].
-> 5. Return undefined.
-> ```
->
-> 另外，`Map.prototype.has`、`Map.prototype.set`、`Map.prototype.delete` 等方法也是使用遍历来实现的。那么，`Map` 等 API 究竟是如何实现的呢？
-
+另外，`WeakMap` 是一个类似于 `Map` 的 API，它同样源自于 ECMAScript 2015，它的特别之处在于只能使用复杂数据类型的值来作为键，并且它的键都是 “弱引用” 的，你可以通过阅读 [这篇文章](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) 来进一步了解这个 API。
