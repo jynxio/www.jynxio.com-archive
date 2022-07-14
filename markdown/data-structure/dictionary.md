@@ -31,7 +31,7 @@ typora-root-url: ..\..
 
 具体来说，我们会使用 2 个 `DoublyLinkedList` 来实现一个字典，其中一个用于存储键，另一个用于存储值，最后通过节点的序号来将两个双向链表关联在一起。
 
-![双链表结构](/static/image/markdown/leetcode/dictionary/double-linked-list-structure.png)
+![双链表结构](/static/image/markdown/data-structure/dictionary/double-linked-list-structure.png)
 
 不过，这样实现的字典的性能不高，比如它的 `has`、`get`、`set`、`delete`、`toArray` 方法的时间复杂度都是 `O(n)`，并且它也需要占用比较多的内存空间。
 

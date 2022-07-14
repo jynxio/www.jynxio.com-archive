@@ -80,20 +80,23 @@ blockquote {
 }
 
 /* 滚动条 */
-html {
+html, aside {
     scrollbar-color: var( --grey ) transparent;
 }
 
-html::-webkit-scrollbar {
+html::-webkit-scrollbar,
+aside::-webkit-scrollbar {
     background-color: transparent;
 }
 
-html::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb {
     border-radius: var( --border-radius );
     background-color: var( --grey );
 }
 
-html::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover,
+aside::-webkit-scrollbar-thumb:hover {
     background-color: var( --purple );
 }
 
@@ -149,9 +152,12 @@ header > button > a > strong {
 /* ------------------------------------------------------------------------------------------------- */
 aside {
     visibility: hidden;
+    overflow: auto;
     position: fixed;
     top: 50%;
     left: calc( 50vw + var( --article-width ) / 2 );
+    max-height: 70vh;
+    padding-right: 1rem;
     transform: translateY( -50% );
     cursor: pointer;
     user-select: none;
@@ -217,12 +223,11 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     color: var( --white );
-    font-size: 2.5rem;
+    font-size: 3rem;
     text-align: center;
 }
 
 h2 {
-    /* margin-top: 2em; */
     font-size: 2.25rem;
 }
 
@@ -236,13 +241,6 @@ h4, h5, h6 {
 
 h5, h6 {
     font-weight: normal;
-}
-
-/* 日期 */
-/* ------------------------------------------------------------------------------------------------- */
-p#last-updated {
-    color: var( --white );
-    text-align: center;
 }
 
 /* 代码 */
@@ -263,6 +261,8 @@ pre > code {
 
 pre {
     overflow: auto;
+    margin: 0.5em 0;
+	padding: 1.25em 1em;
     border-radius: var( --border-radius );
     background-color: var( --grey );
 }

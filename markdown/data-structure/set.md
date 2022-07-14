@@ -126,7 +126,7 @@ class MySet {
 
 集合运算是指“针对集合的运算”，具体来说，集合运算包括并集、交集、差集、子集，它们的定义如图所示。
 
-![集合运算](/static/image/markdown/leetcode/set/set-operation.png)
+![集合运算](/static/image/markdown/data-structure/set/set-operation.png)
 
 我们会在 `MySet` 的基础上以纯函数的形式来继续实现这 4 个方法，纯函数是指没有副作用的函数，具体来说，纯函数不会修改调用者与入参，只会生成一个新的结果。
 

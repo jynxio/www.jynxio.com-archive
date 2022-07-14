@@ -35,17 +35,17 @@ JavaScript 中没有普通队列这种数据结构，我们将使用对象来实
 
 我们会创建一个名为 `Queue` 的类来代表队列，在 `Queue` 的内部，我们会创建一个名为 `#elements` 的内部属性，它是一个普通的 JavaScript 对象，比如 `{}`，我们用它来存储普通队列中的元素。具体来说，`#elements` 对象使用键值对来存储普通队列中的元素，其中键是元素的序号字符串，值就是元素。
 
-![#elements内部属性](/static/image/markdown/leetcode/queue/elements-property.png)
+![#elements内部属性](/static/image/markdown/data-structure/queue/elements-property.png)
 
 如果我们修改了普通队列，那么我们就需要更新 `#elements` 的键值对，在说明如何更新 `#elements` 之前，我们需要先了解一下 `#elements` 是如何存储普通队列中的元素的。具体来说，我们会先创建 2 个指针，其中一个名为 `#from`，另一个名为 `#to`，指针 `#from` 会指向队首元素在 `#elements` 中的位置，指针 `#to` 会指向队尾元素在 `#elements` 中的位置的 **下一个位置**，就像下图这样。
 
 > `#from` 和 `#to` 不是 C 语言中的指针，在这个例子中，`#from` 和 `#to` 中存储的值是序号字符串。
 
-![指针#from和#to](/static/image/markdown/leetcode/queue/pointer-from-and-to.png)
+![指针#from和#to](/static/image/markdown/data-structure/queue/pointer-from-and-to.png)
 
 这种设计的好处之一是我们可以基于 `#from` 和 `#to` 的值来推算出 `#elements` 中所有的键值对（即队列中所有的元素），另一个好处是我们只需要移动指针的位置（即改变指针的值）即可实现移除和添加元素，而不需要像数组的 `splice` 方法那样重排所有元素的序号。举个例子，如果我们要移除掉队首的 `"John"` 和向队尾添加 `"Jynx"` 和 `"Neo"`，那么我们只需要将 `#from` 和 `#to` 各自向下移动 1 格和 2 格就可以了，就像下图这样。
 
-![使用指针来修改队列](/static/image/markdown/leetcode/queue/change-queue-by-pointer.png)
+![使用指针来修改队列](/static/image/markdown/data-structure/queue/change-queue-by-pointer.png)
 
 明确了实现普通队列的核心思路后，就可以开始实现我们的普通队列了。
 
@@ -283,7 +283,7 @@ play( "John", "Jack", "Camila", "Lina", "Jynx", "Neo", "Eva", "Robin", "Haber", 
 
 回文（palindrome）是指正序和反序都相同的字符串，比如 `"madam"`、`"racecar"`、`"人人为我，我为人人"`。检查一个字符串是不是回文的方法有很多，最容易想到的办法就是比较反转后的字符串是否与原字符串相等，此时就可以用栈来解决这个问题，比如：
 
-![使用栈来反转字符串](/static/image/markdown/leetcode/queue/reverse-string-by-stack.png)
+![使用栈来反转字符串](/static/image/markdown/data-structure/queue/reverse-string-by-stack.png)
 
 > 因为 JavaScript 中的 `String.prototype` 没有 `reverse` 方法，所以我们才需要自己来手动反转字符串，基于栈来进行回文检查的程序的时间复杂度是 `O(n)`。
 
@@ -294,7 +294,7 @@ play( "John", "Jack", "Camila", "Lina", "Jynx", "Neo", "Eva", "Robin", "Haber", 
 - 如果入参是一个字符串，且长度为 `1`，则返回 `true`，因为只有一个字符的字符串肯定是回文
 - 如果入参是一个字符串，且长度大于 `1`，那么就使用双端队列来存储每个字符，然后移除队首与队尾的元素，并比较这两个元素是否严格相等，一旦不相等就直接返回 `false`，否则就继续重复这个移除与比较的步骤，直至队列中只剩下 `1` 个或 `0` 个元素，然后就返回 `true`
 
-![使用双端队列来检查回文](/static/image/markdown/leetcode/queue/check-palindrome-by-deque.png)
+![使用双端队列来检查回文](/static/image/markdown/data-structure/queue/check-palindrome-by-deque.png)
 
 它的实现代码如下。
 

@@ -35,7 +35,7 @@ function createInfo( {
         const its_alias = md_file.alias;
         const its_md_path = mdPath + "/" + its_name + ".md";
         const its_html_path = htmlPath + "/" + its_name + ".html";
-        const its_build_path = buildPath + "/" + createUuid() + ".html";
+        const its_build_path = buildPath + "/" + its_name + ".html";
 
         return ( {
             name: its_name,

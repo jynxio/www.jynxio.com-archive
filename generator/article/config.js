@@ -9,7 +9,7 @@ const createJavascriptInfo = _ => {
     const alias = "JavaScript";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
+    const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
         { name: "code-structure", alias: "代码结构" },
         { name: "operators", alias: "运算符" },
@@ -35,7 +35,7 @@ const createBrowserInfo = _ => {
     const alias = "Browser";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
+    const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
         { name: "network-protocol", alias: "网络协议" },
         { name: "browser-architecture", alias: "浏览器的架构" },
@@ -56,13 +56,13 @@ const createBrowserInfo = _ => {
 
 };
 
-const createLeetcodeInfo = _ => {
+const createDataStructureInfo = _ => {
 
-    const name = "leetcode";
-    const alias = "LeetCode";
+    const name = "data-structure";
+    const alias = "Data structure";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
+    const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
         { name: "time-space-complexity", alias: "时间和空间复杂度" },
         { name: "stack", alias: "栈" },
@@ -90,7 +90,7 @@ const createBabelInfo = _ => {
     const alias = "Babel";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
+    const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
         { name: "babel", alias: "Babel7" },
     ];
@@ -113,33 +113,9 @@ const createWebpackInfo = _ => {
     const alias = "Webpack";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
+    const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
         { name: "webpack", alias: "Webpack5" },
-    ];
-    const options = {
-        name,
-        alias,
-        children,
-        mdPath: md_path,
-        htmlPath: html_path,
-        buildPath: build_path,
-    };
-
-    return createInfo( options );
-
-};
-
-const createNpmInfo = _ => {
-
-    const name = "npm";
-    const alias = "NPM";
-    const md_path = BASE_MD_PATH + "/" + name;
-    const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
-    const children = [
-        { name: "npm-base", alias: "npm 基础" },
-        { name: "npm-command", alias: "npm 命令" },
     ];
     const options = {
         name,
@@ -160,9 +136,11 @@ const createOtherInfo = _ => {
     const alias = "Others";
     const md_path = BASE_MD_PATH + "/" + name;
     const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH;
+    const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
         { name: "semantic-versioning", alias: "语义化版本控制" },
+        { name: "npm-base", alias: "npm 基础" },
+        { name: "npm-command", alias: "npm 命令" },
     ];
     const options = {
         name,
@@ -182,8 +160,7 @@ const createAllInfo = _ => {
     return ( [
         createJavascriptInfo(),
         createBrowserInfo(),
-        createLeetcodeInfo(),
-        createNpmInfo(),
+        createDataStructureInfo(),
         createBabelInfo(),
         createWebpackInfo(),
         createOtherInfo(),

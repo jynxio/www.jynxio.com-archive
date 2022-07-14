@@ -140,7 +140,7 @@ class Stack {
 
 十进制转二进制有这样一个规律：将一个十进制数不断的除以 2 来获得整数商和整数余，直至商数为 0 为止，然后按照计算的先后顺序来将每一轮计算得到的余数依次压入栈中，最后以连接字符串的形式来连接栈顶至栈底的数字就能得到转换后的二进制数了。将十进制数 10 转换为二进制数的过程就如下图所示。
 
-![二进制转十进制](/static/image/markdown/leetcode/stack/decimal-to-binary.png)
+![二进制转十进制](/static/image/markdown/data-structure/stack/decimal-to-binary.png)
 
 易得，该公式的实现代码如下。
 
@@ -181,7 +181,7 @@ function decimalTobinary( decimal_number ) {
 
 将十进制数 65432 转换为十六进制数的过程就如下图所示。
 
-![十进制转十六进制](/static/image/markdown/leetcode/stack/decimal-to-any-base.png)
+![十进制转十六进制](/static/image/markdown/data-structure/stack/decimal-to-any-base.png)
 
 该公式的实现代码如下：
 

@@ -27,7 +27,7 @@ typora-root-url: ..\..
 
 单向链表就像一列火车，火车由一个车头和零至多节车厢组成，车头可以通过其尾部的钩子来连接第一节车厢，车厢可以装载货物并用其尾部的钩子来连接下一节车厢。这列火车就代表单向链表，其中车头代表链表的 `head`，车厢代表链表的节点，车厢上的货物代表节点的数据，车厢尾部的钩子代表节点的指针，这个指针用来指向下一个节点。
 
-![链表的结构](/static/image/markdown/leetcode/linked-list/singly-linked-list-structure.png)
+![链表的结构](/static/image/markdown/data-structure/linked-list/singly-linked-list-structure.png)
 
 ## 双向链表
 
@@ -37,23 +37,23 @@ typora-root-url: ..\..
 
 > 你可以自由的决定是否为你的双向链表添加 `tail` 指针，因为 `tail` 指针不是双向链表的必需品。另外，其实你也可以给你的单向链表添加 `tail` 指针。
 
-![双向链表的结构](/static/image/markdown/leetcode/linked-list/doubly-linked-list-structure.png)
+![双向链表的结构](/static/image/markdown/data-structure/linked-list/doubly-linked-list-structure.png)
 
 ## 循环链表
 
 循环链表的特点是其尾节点的指针会指向头节点。循环链表既可以基于单向链表来实现，也可以基于双向链表来实现。
 
-![循环链表的结构](/static/image/markdown/leetcode/linked-list/circular-linked-list-structure.png)
+![循环链表的结构](/static/image/markdown/data-structure/linked-list/circular-linked-list-structure.png)
 
 ## 有序链表
 
 有序链表的特点是其节点是按照顺序来排列的，具体来说，有序链表的节点们会根据自身的值与某种排序规律来进行排列，比如下图就是一个有序链表，这个链表中的节点是按照 `data` 值从小到大的顺序来排列的。
 
-![有序链表的结构](/static/image/markdown/leetcode/linked-list/ordered-linked-list-structure.png)
+![有序链表的结构](/static/image/markdown/data-structure/linked-list/ordered-linked-list-structure.png)
 
 因为有序链表的节点的排列顺序是有要求的，所以我们还需要在插入新节点之前就计算出新节点的插入位置，为此我们可以通过遍历并比较链表上节点来找到合适的位置，再把新节点插入到这个位置上，此时有序链表的插入操作的时间复杂度是 `O(n)`。不过，我们还可以使用其它的方法来计算新节点的插入位置，比如二分查找，这样就可以将插入操作的时间复杂度降低到 `O(logn)`。
 
-![有序链表插入新节点](/static/image/markdown/leetcode/linked-list/ordered-linked-list-insert-node.png)
+![有序链表插入新节点](/static/image/markdown/data-structure/linked-list/ordered-linked-list-insert-node.png)
 
 有序链表的优点是可以快速的移除极值节点，因为只需要移除头节点或尾节点即可，因此有序链表适用于那些需要频繁存取极值且不怎么需要存取中间值的场景。
 
@@ -106,11 +106,11 @@ while ( current_node ) {
 
 关于插入节点，其对应的方法是 `insert`、`push`、`unshift`，其中后两者都是基于 `insert` 来实现的，插入节点的核心逻辑如下。
 
-![单向链表插入节点](/static/image/markdown/leetcode/linked-list/singly-linked-list-insert.png)
+![单向链表插入节点](/static/image/markdown/data-structure/linked-list/singly-linked-list-insert.png)
 
 关于移除节点，其对应的方法是 `remove`、`pop`、`shift`，其中后两者都是基于 `remove` 来实现的，移除节点的核心逻辑如下。
 
-![单向链表移除节点](/static/image/markdown/leetcode/linked-list/singly-linked-list-remove.png)
+![单向链表移除节点](/static/image/markdown/data-structure/linked-list/singly-linked-list-remove.png)
 
 ### 实现 SinglyNode
 

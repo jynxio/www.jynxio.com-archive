@@ -148,11 +148,10 @@ function translateCore( input_path, output_path ) {
         if ( level === 1 ) {
 
             const h = `<h1>${ content }</h1>`;
-            const p = `<p id="last-updated">Last Updated: ${ getDate() }</p>`;
 
             h1_content = content;
 
-            return ( h + p );
+            return ( h );
 
         }
 
