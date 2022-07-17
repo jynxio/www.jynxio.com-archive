@@ -71,6 +71,8 @@ typora-root-url: ..\..
 >
 > 另外，你可以通过本文章的第一张图像来理解为什么存储容器会有天生的孔洞。
 
+![线性探查的原理](/static/image/markdown/data-structure/hash-table/linear-probing.png)
+
 ## 参考文献
 
 - [关于散列表的一些思考 - 掘金 (13/03/2019)](https://juejin.cn/post/6844903795495796744)
