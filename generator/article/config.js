@@ -70,6 +70,7 @@ const createDataStructureInfo = _ => {
         { name: "linked-list", alias: "链表" },
         { name: "set", alias: "集合" },
         { name: "dictionary", alias: "字典" },
+        { name: "hash-table", alias: "散列表" },
     ];
     const options = {
         name,
