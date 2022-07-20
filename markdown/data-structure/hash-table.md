@@ -81,6 +81,32 @@ JavaScript 对象本身就是字典数据结构，如果我们使用 JavaScript 
 
 为了深刻理解散列表是如何实现的，我们需要尽可能的像使用 C++ 一样来使用 JavaScript，更具体来说，我们会使用定长的 JavaScript 数组来存储散列表的数据，并且为其实现扩容和收缩机制，来让我们的散列表可以在必要的时候自动扩容或收缩。
 
+### 选择散列函数
+
+散列函数是散列表的核心，一个好的散列函数应当尽可能少的触发散列冲突，且具有高效的执行速度。因为每次对散列表进行增删改查的时候都需要执行散列函数，因此如果散列函数太过于复杂以致于其执行速度低下的话，那么就会直接拖慢每次增删改查的效率。
+
+本文选用了 djb2 散列函数，它符合上述的两个要求。不过，因为 djb2 是字符串散列函数，它只能处理字符串，因此我们的散列表只能使用字符串类型的值来作为属性的键，你可以通过阅读 [这份资料](http://www.cse.yorku.ca/~oz/hash.html) 来进一步了解 djb2 散列函数。
+
+djb2 散列函数的 JavaScript 版本如下：
+
+```js
+/**
+ * djb2散列函数。
+ * @param { string } string - 字符串。
+ * @returns { number } - 散列码。
+ */
+function djb2( string ) {
+
+    let hash_code = 5381;
+    let string_length = Array.from( string ).length;
+
+    for ( let i = 0; i < string_length; i++ ) hash_code = ( hash_code * 33 ) + string.codePointAt( i );
+
+    return hash_code;
+
+}
+```
+
 ### 解决散列冲突
 
 在这里，我们会选用线性探查来解决散列冲突。之所以没有选择分离链接，是因为分离链接需要使用到链表，而我们从前实现的链表中含有 JavaScript 对象，为了避免使用含有 JavaScript 对象的链表，同时也为了避免花费多余的时间来重新实现一个不含有 JavaScript 对象的链表，所以我们选用了线性探查。
@@ -96,13 +122,247 @@ JavaScript 对象本身就是字典数据结构，如果我们使用 JavaScript 
 | `get( key )`        | 从散列表中获取一个键为 `key` 的属性的值。                    |
 | `put( key, value )` | 向散列表追加一个属性或修改一个既有属性的属性值，然后返回更新后的散列表。 |
 | `remove( key )`     | 从散列表中移除一个键为 `key` 的属性，然后返回一个代表其是否移除成功的布尔值。 |
-| `debug()`           | 打印散列表的容量、使用量、存储容器的详细情况，用于 debug。   |
 
 | 属性名 | 描述       |
 | ------ | ---------- |
 | `size` | 属性的数量 |
 
-## 参考文献
+### 代码
 
-- [关于散列表的一些思考 - 掘金 (13/03/2019)](https://juejin.cn/post/6844903795495796744)
-- [面试官：哈希表都不知道，你是怎么看懂HashMap的？ - 掘金 (25/09/2020)](https://juejin.cn/post/6876105622274703368)
+```js
+class HashTable {
+
+    #container;   // 存储容器
+    #capacity;    // 存储容器的容量
+    #consumption; // 存储容器的使用量
+
+    /**
+     * HashTable的构造函数。
+     * @returns { Object } - HashTable实例。
+     */
+    constructor() {
+
+        this.#capacity = 64;                               // 初始容量
+        this.#container = new Array( this.#capacity * 2 );
+        this.#consumption = 0;
+
+    }
+
+    /**
+     * djb2散列函数，只用于处理字符串，详见http://www.cse.yorku.ca/~oz/hash.html。
+     * @param { string } string - 字符串。
+     * @returns { number } - 散列码。
+     */
+    djb2( string ) {
+
+        let hash_code = 5381;
+        let string_length = Array.from( string ).length;
+
+        for ( let i = 0; i < string_length; i++ ) hash_code = ( hash_code * 33 ) + string.codePointAt( i );
+
+        return hash_code;
+
+    }
+
+    /**
+     * 获取属性键的存储地址。
+     * @param { string } key - 属性键。
+     * @returns { number } - 存储地址。
+     */
+    getKeyIndex( key ) {
+
+        const hash_code = this.djb2( key );
+        const key_index = hash_code % this.#capacity * 2;
+
+        return key_index;
+
+    }
+
+    /**
+     * 根据属性键来获取属性值。
+     * @param { string } key - 属性键。
+     * @returns { * } - 属性值。
+     */
+    get( key ) {
+
+        let key_index = this.getKeyIndex( key );
+        let item = this.#container[ key_index ];
+
+        while ( item !== undefined && item !== key ) {
+
+            key_index += 2;
+
+            if ( key_index >= this.#container.length ) key_index = 0;
+
+            item = this.#container[ key_index ];
+
+        }
+
+        if ( item === undefined ) return undefined;
+
+        return this.#container[ key_index + 1 ];
+
+    }
+
+    /**
+     * 追加一个新属性或修改既有属性，然后返回更新后的散列表。
+     * @param { string } key - 属性键。
+     * @param { * } value - 属性值。
+     * @returns { Object } - 更新后的散列表。
+     */
+    put( key, value ) {
+
+        let key_index = this.getKeyIndex( key );
+        let item = this.#container[ key_index ];
+
+        while ( item !== undefined && item !== key ) {
+
+            key_index += 2;
+
+            if ( key_index >= this.#container.length ) key_index = 0;
+
+            item = this.#container[ key_index ];
+
+        }
+
+        if ( item === undefined ) {
+
+            this.#container[ key_index ] = key;
+            this.#container[ key_index + 1 ] = value;
+
+            this.#consumption ++;
+
+            if ( this.#consumption / this.#capacity > 0.8 ) this.changeCapacity();
+
+            return this;
+
+        }
+
+        this.#container[ key_index + 1 ] = value;
+
+        return this;
+
+    }
+
+    /**
+     * 移除一个属性，然后返回一个代表其是否移除成功的布尔值。
+     * @param { key } - 属性键。
+     * @returns { boolean } - 如果返回值为true，则代表散列表中存在目标属性，并已被移除；
+     * 如果返回值为false，则代表散列表中不存在目标属性，该方法就不会对散列表进行任何的修改。
+     */
+    remove( key ) {
+
+        let key_index = this.getKeyIndex( key );
+        let item = this.#container[ key_index ];
+
+        while ( item !== undefined && item !== key ) {
+
+            key_index += 2;
+
+            if ( key_index >= this.#container.length ) key_index = 0;
+
+            item = this.#container[ key_index ];
+
+        }
+
+        if ( item === undefined ) return false;
+
+        delete this.#container[ key_index ];
+        delete this.#container[ key_index + 1 ];
+
+        this.#consumption --;
+
+        if ( this.#consumption / this.#capacity < 0.2 ) this.changeCapacity();
+        else this.rearrange( key_index );
+
+        return true;
+
+    }
+
+    /**
+     * 将散列表的容量调整为使用量的两倍，然后返回更新后的散列表。
+     * @returns { Object } - 更新后的散列表。
+     */
+    changeCapacity() {
+
+        const new_capacity = this.#capacity === 0 ? 2 : this.#consumption * 2;
+        const new_container = new Array( new_capacity * 2 );
+        const old_container = this.#container;
+
+        this.#capacity = new_capacity;
+        this.#container = new_container;
+
+        for ( let i = 0; i < old_container.length; i += 2 ) {
+
+            const key = old_container[ i ];
+
+            if ( key === undefined ) continue;
+
+            const value = old_container[ i + 1 ];
+
+            this.put( key, value );
+            this.#consumption --;
+
+        }
+
+        return this;
+
+    }
+
+    /**
+     * 从holy_key_index开始，通过重排后续的属性，来移除由remove操作所产生的孔。
+     * @param { number } holy_key_index - 属性键的存储地址，且该属性键是孔。
+     * @returns { Object } - 更新后的散列表。
+     */
+    rearrange( holy_key_index ) {
+
+        let next_key_index = holy_key_index + 2;
+
+        if ( next_key_index >= this.#container.length ) next_key_index = 0;
+
+        let next_key = this.#container[ next_key_index ];
+
+        while ( next_key !== undefined ) {
+
+            const right_key_index = this.getKeyIndex( next_key );
+
+            if ( right_key_index <= holy_key_index || right_key_index > next_key_index ) {
+
+                const next_value = this.#container[ next_key_index + 1 ];
+
+                this.#container[ holy_key_index ] = next_key;
+                this.#container[ holy_key_index + 1 ] = next_value;
+
+                delete this.#container[ next_key_index ];
+                delete this.#container[ next_key_index + 1 ];
+
+                const new_holy_key_index = next_key_index;
+
+                this.rearrange( new_holy_key_index );
+
+                break;
+
+            }
+
+            next_key_index += 2;
+
+            if ( next_key_index >= this.#container.length ) next_key_index = 0;
+
+            next_key = this.#container[ next_key_index ];
+
+        }
+
+        return this;
+
+    }
+
+}
+```
+
+## 更好的选择
+
+因为 JavaScript 对象本身就是一个基于散列表和 C++ 数组来实现的字典，如果你想要在 JavaScript 这门语言中使用散列表，那么就请直接使用 JavaScript 对象吧，而不要使用本文实现的 `HashTable`，因为它没有实用价值（只有学习价值）。
+
+另外，ECMAScript 2015 推出的 `Map` 也是一个基于散列表来实现的字典，相比于普通的 JavaScript 对象，`Map` 的增删效率更高，它也是一个很好的选择。
+
+如果你想要知道 JavaScript 对象是如何基于散列表和 C++ 数组来实现的话，那么就请阅读本博客的另一篇文章《V8 Objec》。
