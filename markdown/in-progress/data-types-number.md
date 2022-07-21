@@ -2,13 +2,21 @@
 
 ## 概述
 
-`number` 是基于 IEEE-754 标准的双精度 64 位二进制格式的值，可以安全的存储 `[ -2^53+1, 2^53-1 ]` 范围的值，显然 ECMAScript 中没有整数的数字类型，只有浮点数。除了常规的数字， ECMAScript 还包括一些特殊数值，具体是： `Infinity` 、 `-Infinity` 、 `NaN` 。
+`number` 是基于 IEEE 754 标准的双精度 64 位二进制格式的值，其中的 52 位用于存储整数，11 位用于存储小数，1 位用于存储符号，它可以安全的存储 `[ -2^53+1, 2^53-1 ]` 范围的数字值。
+
+ECMAScript 只有 Number 这一种数字值类型，且 Number 是浮点数类型，ECMAScript 中的整数都是用浮点数来表示的。
+
+除了常规的数字值外，ECMAScript 还规定了一些特殊数字值，具体来说分别是 `Infinity` 和 `NaN`，前者表示无穷，后者表示计算错误（NaN 就是 not a number 的缩写）。
+
+> ECMAScript 是 JavaScript 的规范，JavaScript 是 ECMAScript 的一种实现，你可以近似的认为 ECMAScript 等同于 JavaScript。
 
 ## 极值
 
-浮点数的最大值是 `Number.MAX_VALUE` ，约为 `1.798e+308` ，最小值是 `Number.MIN_VALUE` ， 约为 `5e-324` ，注意最小浮点数并不等于 `0` ，而是无限接近于 `0` 。
+在 ECMAScript 中，最大的数字值是 `Number.MAX_VALUE`，约为 `1.798e+308` ，最小的数字值是 `Number.MIN_VALUE` ， 约为 `5e-324` 。需要注意的是，`Number.MIN_VALUE` 并不等于 `0`，而是极其接近 `0`，所以 ECMAScript 中的 `0` 值都是使用这个近似值来模拟的。
 
 整数的最大值是 `Number.MAX_SAFE_INTEGER` ，即 `2^53-1` 或 `9007199254740991` ，最小值是 `Number.MIN_SAFE_INTEGER` ，即 `-2^53-1` 或 `-9007199254740991` 。
+
+> TODO：看着 MDN 来改。
 
 ## NaN
 
