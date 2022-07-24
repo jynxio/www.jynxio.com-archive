@@ -14,12 +14,12 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=7761bb63-8f35-4458-bf33-beb42ba50aa3>前置知识</p>
-        <p data-target-id=5c1d1a24-1d05-4087-9d3d-880d0a90da22>V8 引擎</p>
+        <p data-target-id=4cb7282b-6b7f-4eef-b90c-79a0121c9b7e>前置知识</p>
+        <p data-target-id=92da66e8-bf8d-48ac-9fd8-98bd8f155eb9>V8 引擎</p>
     </aside>
     <article>
         <h1>V8 引擎是如何执行 JavaScript 的</h1>
-        <h2 id="7761bb63-8f35-4458-bf33-beb42ba50aa3">前置知识</h2>
+        <h2 id="4cb7282b-6b7f-4eef-b90c-79a0121c9b7e">前置知识</h2>
         <p>CPU 只能执行二进制代码，我们把这些二进制代码称为机器指令，工程师们为 CPU 定义了许多有用的机器指令，我们把这些机器指令的集合称为指令集。</p>
         <p>由于机器指令难以阅读和记忆，为了提升开发的效率，工程师们又将机器指令转换为易于阅读和记忆的汇编指令，我们把汇编指令的集合称为汇编指令集。</p>
         <pre><code>1000100111011000 // 机器指令
@@ -36,7 +36,7 @@ mov ax,bx        // 汇编指令
             <li>高级语言的代码经处理后，由解释器直接执行，然后输出结果。</li>
             <li>高级语言的代码经处理后，由编译器编译为机器代码，然后由 CPU 执行，最后输出结果。</li>
         </ul>
-        <h2 id="5c1d1a24-1d05-4087-9d3d-880d0a90da22">V8 引擎</h2>
+        <h2 id="92da66e8-bf8d-48ac-9fd8-98bd8f155eb9">V8 引擎</h2>
         <p>V8 是用于执行 JavaScript 的引擎，它被用在 Chromium 和 Node 中。V8 引擎在内部使用 JIT（just in time）编译器来执行 JavaScript 并输出结果。JIT 不仅仅是一个编译器，实际上，JIT 是编译器和解释器的混合体。其中，编译执行的启动速度慢、执行速度快，解释执行的启动速度快、执行速度慢。</p>
         <p>V8 引擎执行 JavaScript 的大致流程如下：</p>
         <ul>
