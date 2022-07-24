@@ -15,6 +15,8 @@ Welcome to my [blog](https://www.jynxio.com).
 
 This project uses the [Attribution-NonCommercial-NoDerivatives (BY-NC-ND) 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode).
 
+<br/>
+
 ## 简介
 
 我使用 markdown 来书写笔记，为了能够轻松的发布它们，我才建立了这个项目。这个项目是我的博客脚手架，它能够：
