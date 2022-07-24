@@ -24,7 +24,9 @@ mov ax,bx        // 汇编指令
 
 ## V8 引擎
 
-V8 是用于执行 JavaScript 的引擎，它被用在 Chromium 和 Node 中。V8 引擎在内部使用 JIT（just in time）编译器来执行 JavaScript 并输出结果。JIT 不仅仅是一个编译器，实际上，JIT 是编译器和解释器的混合体。V8 引擎执行 JavaScript 的大致流程如下：
+V8 是用于执行 JavaScript 的引擎，它被用在 Chromium 和 Node 中。V8 引擎在内部使用 JIT（just in time）编译器来执行 JavaScript 并输出结果。JIT 不仅仅是一个编译器，实际上，JIT 是编译器和解释器的混合体。其中，编译执行的启动速度慢、执行速度快，解释执行的启动速度快、执行速度慢。
+
+V8 引擎执行 JavaScript 的大致流程如下：
 
 - 首先，JavaScript 代码会被编译成 AST（abstract syntax tree，抽象语法树）。
 - 然后解释器会将 AST 编译成字节码。
