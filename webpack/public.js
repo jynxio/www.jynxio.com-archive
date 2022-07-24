@@ -23,12 +23,14 @@ module.exports = {
         new HtmlWebpackPlugin( {
             filename: "index.html",
             template: "./template/home/index.html",
+            favicon: "./static/image/favicon/favicon.ico",
             chunks: [ "home" ],
         } ),
         // Catalogue
         new HtmlWebpackPlugin( {
             filename: "catalogue.html",
             template: "./template/catalogue/index.html",
+            favicon: "./static/image/favicon/favicon.ico",
             chunks: [ "catalogue" ],
         } ),
         // Article
@@ -36,6 +38,7 @@ module.exports = {
             new HtmlWebpackPlugin( {
                 filename: path.filename,
                 template: path.template,
+                favicon: "./static/image/favicon/favicon.ico",
                 chunks: [ "article" ],
             } )
         ) ),
