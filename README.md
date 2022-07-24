@@ -9,9 +9,13 @@ This is a blog environment built by myself, it can:
 
 Welcome to my [blog](https://www.jynxio.com).
 
+<br/>
+
 # License
 
 This project uses the [Attribution-NonCommercial-NoDerivatives (BY-NC-ND) 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode).
+
+<br/>
 
 # 简介
 
@@ -24,6 +28,8 @@ This project uses the [Attribution-NonCommercial-NoDerivatives (BY-NC-ND) 4.0 In
 期间，我创建了 [font-caster](https://github.com/jynxio/font-caster) 项目来满足我的特别的字体自己化需求，它有清晰的中英文档，你可以通过 `npm install font-caster` 来使用它。我还设计了这个博客的封面与皮肤，其中，封面是使用 three.js 与着色器来编写的。
 
 欢迎你访问我的[博客](https://www.jynxio.com)，欢迎你通过 issue 来提交反馈。
+
+<br/>
 
 # 许可
 
