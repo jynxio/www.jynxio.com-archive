@@ -197,9 +197,14 @@ const PENDING_STATE = "pending";
 const FULFILLED_STATE = "fulfilled";
 const REJECTED_STATE = "rejected";
 
+/**
+ * 通过 Promises/A+ 测试的 Promise polyfill。
+ * @param   { Function } execute - 该入参等同于原生Promise的入参。
+ * @returns { Object } - Yeensin实例，等同于Promise实例。
+ */
 function Yeensin ( execute ) {
 
-    /*  */
+    /* Yeensin实例的内部数据。 */
     const self = this;
 
     self._state = PENDING_STATE;
@@ -213,7 +218,11 @@ function Yeensin ( execute ) {
     /*  */
     execute( resolve, reject );
 
-    /*  */
+    /**
+     * resolve函数，用于敲定Yeensin实例。
+     * @param   { * } fulfilled_value Yeensin实例的fulfilled值，代表敲定后的值。
+     * @returns { undefined } - undefined。
+     */
     function resolve ( fulfilled_value ) {
 
         if ( self._state !== PENDING_STATE ) return;
@@ -228,9 +237,13 @@ function Yeensin ( execute ) {
             globalThis.queueMicrotask( microtask );
 
         } );
-
     };
 
+    /**
+     * rejecte函数，用于拒绝Yeensin实例。
+     * @param   { * } rejected_value - Yeensin实例的rejected值，代表被拒绝的原因。
+     * @returns { undefined } - undefined。
+     */
     function reject ( rejected_value ) {
 
         if ( self._state !== PENDING_STATE ) return;
@@ -250,6 +263,12 @@ function Yeensin ( execute ) {
 
 }
 
+/**
+ * then方法。
+ * @param { Function } handleFulfilled - Yeensin实例的fulfilled订阅函数。
+ * @param { Function } handleRejected  - Yeensin实例的rejected订阅函数。
+ * @returns { Object } - 一个新的Yeensin实例或一个新的thenable对象。
+ */
 Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
     /*  */
@@ -274,6 +293,11 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
     }
 
+    /**
+     * handleFulfilled函数的代理者。
+     * @param { * } fulfilled_value - Yeensin实例的fulfilled值。
+     * @returns { undefined } - undefined。
+     */
     function handleFulfilledAndYeensin ( fulfilled_value ) {
 
         if ( typeof handleFulfilled === "function" ) {
@@ -311,6 +335,11 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
     }
 
+    /**
+     * handleRejected函数的代理者
+     * @param { * } rejected_value - Yeensin实例的rejected值。
+     * @returns { undefined } - undefined。
+     */
     function handleRejectedAndYeensin ( rejected_value ) {
 
         if ( typeof handleRejected === "function" ) {
@@ -338,6 +367,12 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
     }
 
     /* [[Resolve]]( yeensin, x ) */
+    /**
+     * The Promise Resolution Procedure，详见规范的2.3。
+     * @param { Object } yeensin - Yeensin实例或thenable对象。
+     * @param { * } x - handleFulfilled函数或handleRejected函数的返回值。
+     * @returns { undefined } - undefine。
+     */
     function yeensinResolutionProcedure ( yeensin, x ) {
 
         if ( x === null ) {
@@ -427,7 +462,6 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 }
 
 module.exports = Yeensin;
-
 ```
 
 ## 测试
