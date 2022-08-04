@@ -17,7 +17,7 @@ const createJavascriptInfo = _ => {
         { name: "data-type-number", alias: "Number" },
         { name: "v8-jit", alias: "V8 JIT" },
         { name: "v8-object", alias: "V8 Object" },
-        { name: "promisesaplus", alias: "实现Promise/A+" },
+        { name: "promisesaplus", alias: "实现Promises/A+" },
     ];
     const options = {
         name,
