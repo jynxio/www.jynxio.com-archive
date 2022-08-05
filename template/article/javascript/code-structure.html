@@ -14,19 +14,19 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=9db1ccc9-0acb-42b7-a215-8bd16d95a78e>语句</p>
-        <p data-target-id=4bedf6da-480b-43ee-b298-165ddf889f95>表达式</p>
-        <p data-target-id=b8505fcf-8a5c-4b67-b05b-7fd7b38f5ddb>分号</p>
-        <p data-target-id=b273bee7-54f6-42d9-ad16-58ebe7235543>注释</p>
-        <p data-target-id=5cb8151d-43fd-48d5-99d7-17c1bcf8290d>变量</p>
+        <p data-target-id=e6e64b7b-8df8-49c8-b90c-76f71fc5af60>语句</p>
+        <p data-target-id=0917ffc6-8633-45a5-88f5-b0fe456faa92>表达式</p>
+        <p data-target-id=0e23d70a-76dd-4708-af41-3febeed9a7ca>分号</p>
+        <p data-target-id=2d6583a6-9ecd-46ac-9229-5e668c1e3392>注释</p>
+        <p data-target-id=a381542e-b7b5-46a3-ab70-ef7ca69ae592>变量</p>
     </aside>
     <article>
         <h1>代码结构</h1>
-        <h2 id="9db1ccc9-0acb-42b7-a215-8bd16d95a78e">语句</h2>
+        <h2 id="e6e64b7b-8df8-49c8-b90c-76f71fc5af60">语句</h2>
         <p>语句由变量、字面值、操作符构成，比如这就是一条语句：</p>
         <pre><code class="language-js">alert( &quot;Hello World.&quot; );
 </code></pre>
-        <h2 id="4bedf6da-480b-43ee-b298-165ddf889f95">表达式</h2>
+        <h2 id="0917ffc6-8633-45a5-88f5-b0fe456faa92">表达式</h2>
         <pre><code class="language-js">a = b * 2;
 </code></pre>
         <p>对于上例语句：</p>
@@ -47,16 +47,16 @@
         <p>下例则是一条调用表达式：</p>
         <pre><code class="language-js">alert( a );
 </code></pre>
-        <h2 id="b8505fcf-8a5c-4b67-b05b-7fd7b38f5ddb">分号</h2>
+        <h2 id="0e23d70a-76dd-4708-af41-3febeed9a7ca">分号</h2>
         <p>JavaScript 有 <a href="https://tc39.es/ecma262/#sec-rules-of-automatic-semicolon-insertion">自动分号插入机制</a>，在大多数情况下，它会自动的将分号插入到源码的 token stream 中，因此你可以省略语句结尾的分号。但是自动分号插入机制不是完全可靠的，当语句以 <code>(</code> 或 <code>[</code>或、 <code>+</code>或、 <code>-</code>或、 <code>正则开头的斜杠</code> 或 <code>模版字符串</code> 开头时，该机制会失灵，因此你必须手动的为上一行语句添加分号。</p>
         <p>代码块的结尾则不需要使用分号。</p>
-        <h2 id="b273bee7-54f6-42d9-ad16-58ebe7235543">注释</h2>
+        <h2 id="2d6583a6-9ecd-46ac-9229-5e668c1e3392">注释</h2>
         <pre><code class="language-js">// 单行注释
 /* 多行注释 */
 &lt;!-- 单行注释，极不推荐
 </code></pre>
         <p>注释应当简洁准确的描述代码，无用的注释比没有注释更加糟糕。多行注释对于正则表达式来说是危险的，故要小心使用。</p>
-        <h2 id="5cb8151d-43fd-48d5-99d7-17c1bcf8290d">变量</h2>
+        <h2 id="a381542e-b7b5-46a3-ab70-ef7ca69ae592">变量</h2>
         <p>变量是数据的标志，在 JavaScript 中，变量的命名需要遵循下述规则：</p>
         <ul>
             <li>只能使用字母、数字、美元符号 <code>$</code>、下划线 <code>_</code> 。</li>

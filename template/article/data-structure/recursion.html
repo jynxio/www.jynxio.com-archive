@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>递归</title>
+</head>
+
+<body>
+    <header>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+    </header>
+    <aside>
+        <p>In this article</p>
+        <p data-target-id=819412e8-623c-47cc-a47c-7aad401d56a6>概述</p>
+        <p data-target-id=8963fd4b-d197-4cb4-8727-d8cf3480008b>基线条件</p>
+        <p data-target-id=0cd90425-b2ad-4407-b0a7-ca4444025ee2>阶乘</p>
+        <p data-target-id=da0f226f-a0b0-416b-a958-82f4a47c5a35>斐波那契数列</p>
+        <p data-target-id=cc86da6b-023b-4490-9862-ec8366b45009>意义</p>
+    </aside>
+    <article>
+        <h1>递归</h1>
+        <h2 id="819412e8-623c-47cc-a47c-7aad401d56a6">概述</h2>
+        <p>递归函数是一种会调用自身的函数，比如这个 <code>loop</code> 函数就是一个递归函数。</p>
+        <pre><code class="language-js">function loop () {
+
+    console.log( 1 );
+
+    loop();
+
+}
+</code></pre>
+        <h2 id="8963fd4b-d197-4cb4-8727-d8cf3480008b">基线条件</h2>
+        <p>基线条件是指递归函数停止递归的条件，如果递归函数没有基线条件，那么递归函数就会无限的执行下去。一个无限递归的递归函数容易造成“爆栈”，最终导致程序被杀死，比如上文中的 <code>loop</code> 函数就会造成“爆栈”。</p>
+        <pre><code class="language-js">loop(); // RangeError: Maximum call stack size exceeded
+</code></pre>
+        <p>编写递归函数是一项需要经验和灵感的工作，如果你不知道该如何开始编写一个递归函数，那么我建议你先找到递归函数的基线条件，这可以帮助你更快的找到头绪。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>如果你想了解什么是“爆栈”，那么你可以读读下面这则短文。</p>
+            <p>JavaScript 引擎在执行一个函数之前，都会创建一个函数执行上下文，并将这个函数执行上下文推入调用栈中，直至函数执行完成之后，调用栈才会弹出该函数执行上下文。</p>
+            <p>调用栈只能容纳有限的执行上下文，这是因为执行上下文是需要消耗内存空间的，而调用栈所拥有的内存空间又是有限的。当 JavaScript 引擎执行 <code>loop()</code> 时，引擎就会不断的向调用栈推入新创建的函数执行上下文，最终调用栈就会因为超出了承载上限而不得不停止执行，并抛出一个 <code>RangeError</code> 错误，这便是爆栈。</p>
+            <p>如果你熟悉事件循环，那么你就可以通过一些奇技淫巧来避免“爆栈”，就像下面这个 <code>loop</code> 函数，它可以无限的执行下去，而不会爆栈。</p>
+            <pre><code class="language-js">function loop () {
+
+    console.log( 1 );
+
+    setTimeout( loop, 0 );
+
+}
+</code></pre>
+            <p>另外，或许你还听过“尾调用优化”，这是另一种防止爆栈的手段。不过，请你忘掉它吧，因为它已经是一个名存实亡的东西了，因为许多 JavaScript 引擎厂商因为争议而拒绝实现“尾调用优化”。（我还得去查查资料，才能确定这一句话）</p>
+        </blockquote>
+        <h2 id="0cd90425-b2ad-4407-b0a7-ca4444025ee2">阶乘</h2>
+        <h3 id="7d58fa84-53de-43ae-99ae-02b354c4bb7b">概念</h3>
+        <p>在数学中，正整数的阶乘是所有小于及等于该数的正整数的积，表示为 <code>n!</code>。比如 <code>5</code> 的阶乘表示为 <code>5!</code>，其值为 <code>120</code>，因为：</p>
+        <pre><code>5! = 1 * 2 * 3 * 4 * 5 = 120
+</code></pre>
+        <p>另外，<code>1</code> 和 <code>0</code> 的阶乘都等于 <code>1</code>。</p>
+        <h3 id="d0e43c02-8648-4152-bcaa-726f1129479d">实现</h3>
+        <p>灵感乍现，令我一下子找到了 <code>calculateFactorial</code> 函数的基线条件，然后顺势编写好了整个函数。</p>
+        <pre><code class="language-js">function calculateFactorial( n ) {
+    
+    if ( n === 0 || n === 1 ) return 1; // 基线条件
+    
+    return n * calculateFactorial( n - 1 );
+    
+}
+</code></pre>
+        <h2 id="da0f226f-a0b0-416b-a958-82f4a47c5a35">斐波那契数列</h2>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>真怀念啊！我记得我的第一个 DOM 程序就是一个汉诺塔动画的网页，她还很兴奋的鼓励了我呢！</p>
+        </blockquote>
+        <h3 id="30fb3956-db3d-4d72-a058-d8eebc640b71">概念</h3>
+        <p>斐波那契数列是一个特殊的数列，它的规律是：</p>
+        <ul>
+            <li><code>0号元素 = 0</code></li>
+            <li><code>1号元素 = 1</code></li>
+            <li><code>2号元素 = 1</code></li>
+            <li><code>n号元素 = n-1号元素 + n-2号元素</code></li>
+        </ul>
+        <h3 id="9da7173f-2cad-45cf-80b0-d513b86d4983">实现</h3>
+        <p>这是第二次灵感乍现。</p>
+        <pre><code class="language-js">function calculateFibonacci ( n ) {
+    
+    if ( n === 0 ) return 0;
+    if ( n === 1 || n === 2 ) return 1;
+    
+    return calculateFibonacci( n - 1 ) + calculateFibonacci( n - 2 );
+    
+}
+</code></pre>
+        <h3 id="2263cc15-758f-46cb-8b5e-813740e8cf09">优化</h3>
+        <p>这是 <code>calculateFibonacci</code> 函数的优化版本，你分别使用旧版与新版的 <code>calculateFibonacci</code> 函数来计算 <code>20</code> 的斐波那契数，便会发现新版本的计算速度要快的多。</p>
+        <pre><code class="language-js">const calculateFibonacci = createFibonacciCalculator();
+
+function createFibonacciCalculator () {
+
+    const cache = [ 0, 1, 1 ];
+    
+    return function calculateFibonacci ( n ) {
+
+        if ( cache[ n ] !== undefined ) return cache[ n ];
+
+        return cache[ n ] = calculateFibonacci( n - 1 ) + calculateFibonacci( n - 2 );
+
+    }
+
+}
+</code></pre>
+        <p>新版的 <code>calculateFibonacci</code> 函数之所以会更快，是因为它缓存了曾经计算过的斐波那契数，从而减少了很多重复的计算。</p>
+        <h2 id="cc86da6b-023b-4490-9862-ec8366b45009">意义</h2>
+        <p>递归函数的意义在于提高函数的可读性，如果你仔细阅读了上述两个例子的代码，你就会发现它们都是自解释的。</p>
+        <p>不过，如果你期望得到的是高性能的函数，那么你可以尝试把递归函数改造成普通的迭代函数，迭代函数往往会比递归函数更快，这是因为创建额外的函数执行上下文会带来额外的性能负荷。</p>
+    </article>
+</body>
+
+</html>
