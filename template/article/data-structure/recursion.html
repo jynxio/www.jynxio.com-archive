@@ -14,15 +14,15 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=819412e8-623c-47cc-a47c-7aad401d56a6>概述</p>
-        <p data-target-id=8963fd4b-d197-4cb4-8727-d8cf3480008b>基线条件</p>
-        <p data-target-id=0cd90425-b2ad-4407-b0a7-ca4444025ee2>阶乘</p>
-        <p data-target-id=da0f226f-a0b0-416b-a958-82f4a47c5a35>斐波那契数列</p>
-        <p data-target-id=cc86da6b-023b-4490-9862-ec8366b45009>意义</p>
+        <p data-target-id=040f970b-0f90-4828-90e4-dbf6453f2577>概述</p>
+        <p data-target-id=68681af5-06af-49c5-9d20-8c36c64c71de>基线条件</p>
+        <p data-target-id=859cfb70-8834-4f4e-8f88-2c08f20d177a>阶乘</p>
+        <p data-target-id=9132e61d-dd8c-43c3-a2da-ca7207174460>斐波那契数列</p>
+        <p data-target-id=3f7c5be6-afda-4190-b19e-45d3b34f9a03>意义</p>
     </aside>
     <article>
         <h1>递归</h1>
-        <h2 id="819412e8-623c-47cc-a47c-7aad401d56a6">概述</h2>
+        <h2 id="040f970b-0f90-4828-90e4-dbf6453f2577">概述</h2>
         <p>递归函数是一种会调用自身的函数，比如这个 <code>loop</code> 函数就是一个递归函数。</p>
         <pre><code class="language-js">function loop () {
 
@@ -32,7 +32,7 @@
 
 }
 </code></pre>
-        <h2 id="8963fd4b-d197-4cb4-8727-d8cf3480008b">基线条件</h2>
+        <h2 id="68681af5-06af-49c5-9d20-8c36c64c71de">基线条件</h2>
         <p>基线条件是指递归函数停止递归的条件，如果递归函数没有基线条件，那么递归函数就会无限的执行下去。一个无限递归的递归函数容易造成“爆栈”，最终导致程序被杀死，比如上文中的 <code>loop</code> 函数就会造成“爆栈”。</p>
         <pre><code class="language-js">loop(); // RangeError: Maximum call stack size exceeded
 </code></pre>
@@ -51,15 +51,15 @@
 
 }
 </code></pre>
-            <p>另外，或许你还听过“尾调用优化”，这是另一种防止爆栈的手段。不过，请你忘掉它吧，因为它已经是一个名存实亡的东西了，因为许多 JavaScript 引擎厂商因为争议而拒绝实现“尾调用优化”。（我还得去查查资料，才能确定这一句话）</p>
+            <p>另外，或许你还听说过“尾调用优化”，这是另一种防止爆栈并提升递归性能的手段，不过请忘了它吧，因为除了 Apple 之外的浏览器厂商都拒绝实现该特性。</p>
         </blockquote>
-        <h2 id="0cd90425-b2ad-4407-b0a7-ca4444025ee2">阶乘</h2>
-        <h3 id="7d58fa84-53de-43ae-99ae-02b354c4bb7b">概念</h3>
+        <h2 id="859cfb70-8834-4f4e-8f88-2c08f20d177a">阶乘</h2>
+        <h3 id="94946ea0-c5c8-48e3-a544-18d3315485dc">概念</h3>
         <p>在数学中，正整数的阶乘是所有小于及等于该数的正整数的积，表示为 <code>n!</code>。比如 <code>5</code> 的阶乘表示为 <code>5!</code>，其值为 <code>120</code>，因为：</p>
         <pre><code>5! = 1 * 2 * 3 * 4 * 5 = 120
 </code></pre>
         <p>另外，<code>1</code> 和 <code>0</code> 的阶乘都等于 <code>1</code>。</p>
-        <h3 id="d0e43c02-8648-4152-bcaa-726f1129479d">实现</h3>
+        <h3 id="7d1288c0-97c7-4d20-91a2-a0c4dd9cb6c3">实现</h3>
         <p>灵感乍现，令我一下子找到了 <code>calculateFactorial</code> 函数的基线条件，然后顺势编写好了整个函数。</p>
         <pre><code class="language-js">function calculateFactorial( n ) {
     
@@ -69,12 +69,12 @@
     
 }
 </code></pre>
-        <h2 id="da0f226f-a0b0-416b-a958-82f4a47c5a35">斐波那契数列</h2>
+        <h2 id="9132e61d-dd8c-43c3-a2da-ca7207174460">斐波那契数列</h2>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>真怀念啊！我记得我的第一个 DOM 程序就是一个汉诺塔动画的网页，她还很兴奋的鼓励了我呢！</p>
         </blockquote>
-        <h3 id="30fb3956-db3d-4d72-a058-d8eebc640b71">概念</h3>
+        <h3 id="f818f61e-9b2a-44b9-b2b6-e00410507bd4">概念</h3>
         <p>斐波那契数列是一个特殊的数列，它的规律是：</p>
         <ul>
             <li><code>0号元素 = 0</code></li>
@@ -82,7 +82,7 @@
             <li><code>2号元素 = 1</code></li>
             <li><code>n号元素 = n-1号元素 + n-2号元素</code></li>
         </ul>
-        <h3 id="9da7173f-2cad-45cf-80b0-d513b86d4983">实现</h3>
+        <h3 id="fc5ace5d-53f8-4361-a637-0ea04eb5a3db">实现</h3>
         <p>这是第二次灵感乍现。</p>
         <pre><code class="language-js">function calculateFibonacci ( n ) {
     
@@ -93,7 +93,7 @@
     
 }
 </code></pre>
-        <h3 id="2263cc15-758f-46cb-8b5e-813740e8cf09">优化</h3>
+        <h3 id="c728ec8f-cdeb-4b17-bbbb-03063714e45d">优化</h3>
         <p>这是 <code>calculateFibonacci</code> 函数的优化版本，你分别使用旧版与新版的 <code>calculateFibonacci</code> 函数来计算 <code>20</code> 的斐波那契数，便会发现新版本的计算速度要快的多。</p>
         <pre><code class="language-js">const calculateFibonacci = createFibonacciCalculator();
 
@@ -112,7 +112,7 @@ function createFibonacciCalculator () {
 }
 </code></pre>
         <p>新版的 <code>calculateFibonacci</code> 函数之所以会更快，是因为它缓存了曾经计算过的斐波那契数，从而减少了很多重复的计算。</p>
-        <h2 id="cc86da6b-023b-4490-9862-ec8366b45009">意义</h2>
+        <h2 id="3f7c5be6-afda-4190-b19e-45d3b34f9a03">意义</h2>
         <p>递归函数的意义在于提高函数的可读性，如果你仔细阅读了上述两个例子的代码，你就会发现它们都是自解释的。</p>
         <p>不过，如果你期望得到的是高性能的函数，那么你可以尝试把递归函数改造成普通的迭代函数，迭代函数往往会比递归函数更快，这是因为创建额外的函数执行上下文会带来额外的性能负荷。</p>
     </article>
