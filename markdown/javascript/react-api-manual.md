@@ -85,7 +85,7 @@ custom hook 是一种复用代码的技巧，具体来说，如果多个组件�
 ```react
 function Component1 () {
     
-	const [ state, setState ] = useSomething();
+    const [ state, setState ] = useSomething();
     
     return <div></div>;
     
@@ -93,7 +93,7 @@ function Component1 () {
 
 function Component2 () {
     
-	const [ state, setState ] = useState();
+    const [ state, setState ] = useState();
     
     return <div></div>
     
