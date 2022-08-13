@@ -65,9 +65,78 @@ useEffect( _ => {}, [] );
 useEffect( _ => {}, [ a, b ] );
 ```
 
-## Custom Hook
+## useRef
 
-### 概述
+`useRef` 返回一个普通的对象，该对象只有一个 `current` 属性，`current` 属性的值就是 `initial_value`。这个普通的对象会在组件的整个生命周期内持续存在。
+
+```js
+const reference = useRef( initial_value );
+```
+
+> `useRef` 是 `useState` 的语法糖，因为 React 官方说我们可以认为 `useRef` 是这么实现的：
+>
+> ```js
+> function useRef ( initial_value ) {
+>     
+>     const [ reference, setReference ] = useState( { current: initial_value } );
+>     
+>     return reference;
+>     
+> }
+> ```
+
+### 存储数据
+
+因为 `useRef` 所返回的普通对象（`reference`）将会在组件的整个生命周期内持续存在，所以我们可以在 `reference` 上存储历史数据，另外，开发者们通常都在 `reference` 的 `current` 属性上存储数据。
+
+下例使用 `reference` 来存储定时函数的 id，以方便随时取消定时函数。
+
+```react
+function Clock () {
+    
+    const reference = useRef();
+    
+    function handleStartClick () {
+        
+        reference.current = setInterval( _ => console.log( "running..." ), 500 );
+        
+    }
+    
+    function handleStopClick () {
+        
+        if ( ! reference.current ) return;
+        
+        clearInterval( reference.current );
+        
+    }
+    
+    return (
+    	<>
+            <button onClick={ handleStartClick }>start</button>
+            <button onClick={ handleStopClick }>stop</button>
+        </>
+    );
+    
+}
+```
+
+### 获取 DOM
+
+`useRef` 的另一个用处是获取 DOM 元素，如下所示。
+
+```react
+function Component () {
+    
+    const reference = useRef();
+    
+    return <div ref={ reference }></div>;
+    
+}
+```
+
+在 `reference` 创建之初，其 `current` 属性的值为 `undefined`，直至 React 创建了真实的 `div` 元素之后，React 就会将 `div` 元素链接至 `current` 属性。另外，如果 React 卸载了 `div` 元素，那么 React 就会将 `current` 属性赋值为 `null`。
+
+## Custom Hook
 
 custom hook 是一个函数，它和普通函数之间的唯二区别是：
 
@@ -147,3 +216,75 @@ function Player2 () {
 }
 ```
 
+## Ref Callback
+
+JSX 元素的 `ref` 属性可以接收一个函数，我们把这个函数称为 ref callback，其语法如下所示。
+
+```react
+function Component () {
+    
+    const refCallback = element => console.log( element );
+    
+    return <div ref={ refCallback }></div>
+    
+}
+```
+
+当 React 创建 `div` 元素时，React 就会调用 `refCallback`，并向其传入 `div` 元素作为入参。当 React 卸载 `div` 元素时，React 就会调用 `refCallback`，并向其传入 `null` 作为入参。
+
+另外，如果 React 重新渲染了 `Component` 组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着会触发两次 `refCallback`，第一次触发是因为卸载旧的 `div` 元素，第二次触发是因为创建新的 `div` 元素。
+
+## forwardRef
+
+React 不允许通过下述方式来在 `Parent` 组件中获取 `Son` 组件的 DOM，因为 React 认为这是一种不安全的编程范式。
+
+```react
+function Parent () {
+    
+    const reference = useRef();
+    
+    return <Son ref={ reference }/>;
+    
+}
+```
+
+不过，React 提供了另一种途径来获取 `Son` 组件的 DOM，那就是通过 `forwardRef` API 来将 `Parent` 组件的 `reference` 转发给 `Son` 组件，然后再获取 `Son` 组件的 DOM，具体操作如下。
+
+```react
+Son = forwardRef( Son );
+
+function Parent () {
+    
+    const reference = useRef();
+    
+    return <Son ref={ reference } />
+    
+}
+
+function Son ( properties, reference ) {
+    
+    return <div ref={ reference }></div>
+    
+}
+```
+
+> 其实，所有组件一直都可以接收到 2 个参数，第一个是 `properties`，第二个是 `reference`。
+>
+> ```react
+> function Component ( properties, reference ) {
+>     
+>     console.log( properties ); // {}
+>     console.log( reference );  // {}
+>     
+>     return <div></div>
+>     
+> }
+> ```
+>
+> 只是在默认情况下，所有组件的第二个参数都总是为空对象 `{}`，这是因为 React 故意不将上游的 `reference` 数据转发给组件。仅当开发者通过 `Component = forwardRef( Component )` 这种方式来“改造”了组件之后，React 才会将上游的 `reference` 数据转发给组件。
+>
+> 所以我们可以把 `forwardRef` 当作一个开关，这个开关可以将组件从默认状态切换至非默认状态。
+
+## useImperativeHandle
+
+`useImperativeHandle` 需要搭配 `forwardRef` 一起来使用，
