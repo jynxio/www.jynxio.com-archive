@@ -134,7 +134,14 @@ function Component () {
 }
 ```
 
-在 `reference` 创建之初，其 `current` 属性的值为 `undefined`，直至 React 创建了真实的 `div` 元素之后，React 就会将 `div` 元素链接至 `current` 属性。另外，如果 React 卸载了 `div` 元素，那么 React 就会将 `current` 属性赋值为 `null`。
+在 React 中，更新页面分为 2 个阶段：
+
+1. 渲染阶段：调用组件
+2. 提交阶段：更新 DOM
+
+直至提交阶段之后，React 才会将 `div` 元素赋值给 `current` 属性，在提交阶段之前，`current` 属性的值都是 `undefined`。
+
+另外，如果 `div` 元素被卸载了，那么 React 就会在提交阶段之后，将 `null` 赋值给 `current` 属性。
 
 ## Custom Hook
 
@@ -230,38 +237,41 @@ function Component () {
 }
 ```
 
-当 React 创建 `div` 元素时，React 就会调用 `refCallback`，并向其传入 `div` 元素作为入参。当 React 卸载 `div` 元素时，React 就会调用 `refCallback`，并向其传入 `null` 作为入参。
+无论是挂载还是卸载 `div` 元素，React 都会在提交阶段之后再调用 `refCallback`。
 
-另外，如果 React 重新渲染了 `Component` 组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着会触发两次 `refCallback`，第一次触发是因为卸载旧的 `div` 元素，第二次触发是因为创建新的 `div` 元素。
+- 对于挂载，React 会向 `refCallback` 传入 `div` 元素作为入参。
+- 对于卸载，React 会向 `refCallback` 传入 `null` 作为入参。
+
+> 另外，如果 React 重新渲染了 `Component` 组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着会触发两次 `refCallback`，第一次触发是因为卸载旧的 `div` 元素，第二次触发是因为创建新的 `div` 元素。
 
 ## forwardRef
 
-React 不允许通过下述方式来在 `Parent` 组件中获取 `Son` 组件的 DOM，因为 React 认为这是一种不安全的编程范式。
+React 不允许通过下述方式来在 `Parent` 组件中获取 `Child` 组件的 DOM，因为 React 认为这是一种不安全的编程范式。
 
 ```react
 function Parent () {
     
     const reference = useRef();
     
-    return <Son ref={ reference }/>;
+    return <Child ref={ reference }/>;
     
 }
 ```
 
-不过，React 提供了另一种途径来获取 `Son` 组件的 DOM，那就是通过 `forwardRef` API 来将 `Parent` 组件的 `reference` 转发给 `Son` 组件，然后再获取 `Son` 组件的 DOM，具体操作如下。
+不过，React 提供了另一种途径来获取 `Child` 组件的 DOM，那就是通过 `forwardRef` API 来将 `Parent` 组件的 `reference` 转发给 `Child` 组件，然后再获取 `Child` 组件的 DOM，具体操作如下。
 
 ```react
-Son = forwardRef( Son );
+Child = forwardRef( Child );
 
 function Parent () {
     
     const reference = useRef();
     
-    return <Son ref={ reference } />
+    return <Child ref={ reference } />
     
 }
 
-function Son ( properties, reference ) {
+function Child ( properties, reference ) {
     
     return <div ref={ reference }></div>
     
@@ -284,7 +294,112 @@ function Son ( properties, reference ) {
 > 只是在默认情况下，所有组件的第二个参数都总是为空对象 `{}`，这是因为 React 故意不将上游的 `reference` 数据转发给组件。仅当开发者通过 `Component = forwardRef( Component )` 这种方式来“改造”了组件之后，React 才会将上游的 `reference` 数据转发给组件。
 >
 > 所以我们可以把 `forwardRef` 当作一个开关，这个开关可以将组件从默认状态切换至非默认状态。
+>
+> 从技术上来说，哪怕没有 `forwardRef`，我们也可以实现相同的效果，只要把 `reference` 包裹在 `properties` 中就可以了。
+>
+> ```react
+> function Parent () {
+>     
+>     const reference = useRef();
+>     
+>     return <Child secret={ reference }/>
+>     
+> }
+> 
+> function Child ( properties ) {
+>     
+>     return <div ref={ properties.secret }></div>
+>     
+> }
+> ```
 
 ## useImperativeHandle
 
-`useImperativeHandle` 需要搭配 `forwardRef` 一起来使用，
+`useImperativeHandle` 需要搭配 `forwardRef` 一起来使用，它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
+
+具体来说，`useImperativeHandle` 函数接收 2 个参数，第一个参数是 `Parent` 组件的 `reference`，第二个参数是无参函数，该函数的返回值将会作为 `reference` 的 `current` 属性的值。
+
+```react
+function Parent () {
+    
+    const reference = useRef();
+    
+    return <Child ref={ reference }/>
+    
+}
+
+Child = forwardRef( Child );
+
+function Child ( properties, reference ) {
+    
+    useImperativeHandle(
+    	reference,
+        function writeReference () {
+            
+            return 1; // 该返回值将会作为reference.current的值。
+            
+        }
+    );
+    
+    return <div ref={ reference }></div>
+    
+}
+```
+
+> 从技术上来说，哪怕没有 `useImperativeHanlde`，我们也可以实现相同的效果，只要使用 ref callback 就可以了。
+>
+> ```react
+> function Child ( properties, reference ) {
+>     
+>     function writeReference () {
+>         
+>         reference.current = 1;
+>         
+>     }
+>     
+>     return <div ref={ writeReference }></div>;
+>     
+> }
+> ```
+>
+> 这种实现反而更加简洁。
+
+## flushSync
+
+`flushSync` 是一个来自于 `react-dom` 的 API，它可以让 React 立即更新 DOM，其语法如下。
+
+```js
+import { flushSync } from "react-dom";
+
+flushSync( function sync () {} );
+```
+
+`flushSync` 接收并立即执行一个回调函数，待回调函数执行结束之后，React 就会立即更新 DOM。
+
+你可以观察下面这个例子。
+
+```react
+function Component () {
+    
+    const reference = useRef();
+    const [ visible, setVisible ] = useState( false );
+    
+    function handleClick () {
+        
+        flushSync( _ => setVisible( ! visible ) );
+        
+        console.log( reference.current );
+        
+    }
+    
+    return (
+    	<>
+            <button onClick={ handleClick }>reverse</button>
+            <div ref={ reference }></div>
+        </>
+    );
+    
+}
+```
+
+在 `handleClick` 函数中，`flushSync( _ => setVisible( ! visible ) )` 会重新渲染 `Component` 组件并立即更新 DOM，而在提交阶段之后，React 就会将 `div` 元素赋值给 `reference.current` 属性，所以在挂载或卸载了 `div` 元素之后，`console.log( reference.current )` 总能正确的输出 `div` 元素或 `null`。
