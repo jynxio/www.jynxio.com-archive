@@ -14,19 +14,19 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=5970355c-8ddd-4aa9-a968-e346d14478c8>常用命令</p>
-        <p data-target-id=31598cee-768e-44a3-9eea-436536ef0bcf>安装与更新</p>
-        <p data-target-id=e4639dbc-cb61-4870-b11a-f39e6bd103e6>公共包</p>
-        <p data-target-id=5f90df77-e004-49af-9531-40a8b34dbf29>私有包</p>
-        <p data-target-id=1af0e8c4-76d6-4d39-ac31-a8e1c333be0f>package.json</p>
-        <p data-target-id=b645f900-3df9-4e72-9f29-bbdbcbbb7d3f>安装本地包</p>
-        <p data-target-id=ecbdd89d-8ca3-48e8-a7cb-307d834f2369>版本符号与更新规则</p>
-        <p data-target-id=05bad4b0-e2ee-43cf-a204-280430bbbcbe>源管理</p>
-        <p data-target-id=a917dac7-67a2-4cd5-b8b3-97cc14c1c60f>文件结构</p>
+        <p data-target-id=950a911c-fc89-4efa-822a-4465761561f5>常用命令</p>
+        <p data-target-id=91a2d242-864e-4f22-b8a1-9003dca39497>安装与更新</p>
+        <p data-target-id=cd7a68f9-6654-499e-bb91-b5e5af7e04fc>公共包</p>
+        <p data-target-id=d06bddd1-a86f-4520-8d11-14a65b82cc76>私有包</p>
+        <p data-target-id=fd0adbf2-f57c-4c6f-a5fe-7a76b13796d7>package.json</p>
+        <p data-target-id=d2974b1c-2f2c-42aa-bb34-2dd1ba926d37>安装本地包</p>
+        <p data-target-id=2902e5de-6ab7-4cc2-9aa2-aa7c87b5cf3a>版本符号与更新规则</p>
+        <p data-target-id=f8e262f3-3c7e-41de-a806-6c331741f653>源管理</p>
+        <p data-target-id=9a09ca21-fc90-43f8-b522-21fcb259f0e3>文件结构</p>
     </aside>
     <article>
         <h1>NPM 基础</h1>
-        <h2 id="5970355c-8ddd-4aa9-a968-e346d14478c8">常用命令</h2>
+        <h2 id="950a911c-fc89-4efa-822a-4465761561f5">常用命令</h2>
         <pre><code># npm
 npm -v                          // 查询版本
 npm install --global npm@latest // 升级版本：最新稳定版
@@ -57,20 +57,20 @@ npm view &lt;packagename&gt; [&lt;key&gt;]  // 查看包的字段信息
 npm view &lt;packagename&gt; version  // 查看包的最新版本
 npm view &lt;packagename&gt; versions // 查看包的所有版本
 </code></pre>
-        <h2 id="31598cee-768e-44a3-9eea-436536ef0bcf">安装与更新</h2>
+        <h2 id="91a2d242-864e-4f22-b8a1-9003dca39497">安装与更新</h2>
         <p>推荐安装 LTS 版本的 node.js 安装包，因为它会内置安装全局的 npm，你也可以通过执行下述命令检查 npm 的版本号，或更新 npm 的版本：</p>
         <pre><code>npm -v                    // 查看本地npm的版本号
 npm view npm version      // 查看npm的最新版本号
 npm install -g npm@latest // 将npm更新至最新的稳定版
 npm install -g npm@next   // 将npm更新至最新的测试版
 </code></pre>
-        <h2 id="e4639dbc-cb61-4870-b11a-f39e6bd103e6">公共包</h2>
+        <h2 id="cd7a68f9-6654-499e-bb91-b5e5af7e04fc">公共包</h2>
         <p>公共包（public packages）是发布在 npm 公共注册表的包，每个公共包的名称都必须是唯一的。公共包可以分为 <code>Unscoped</code> 和 <code>Scoped</code>。</p>
         <p><code>Unscoped</code> 表示直接将包发布在公共注册表中，该包将会占用公共命名空间的一个名称名额，我们可以直接通过该包的名称来下载它，譬如 <code>core-js</code>。</p>
         <p><code>Scoped</code> 表示将一至多个包都发布在公共注册表中，但是它们一起占用公共命名空间的一个名称名额，这相当于在公共命名空间中创建一个更小的命名空间，并将这些包收纳在这个更小的命名空间中，而这个更小的命名空间就相当于一个域，即 scoped。将一系列相关的包都发布在同一个域下有助于凸显它们之间的关联，同时也节省了公共命名空间，还减少了与其他公共包发生命名冲突或被恶意抢注命名的概率。譬如 Babel7 将所有的包都发布在了一个名为 <code>babel</code> 的域下，这些包都具有 <code>@babel/</code> 的前缀，比如 <code>@babel/cli</code>、<code>@babel/core</code>、<code>@babel/preset-env</code>。</p>
-        <h2 id="5f90df77-e004-49af-9531-40a8b34dbf29">私有包</h2>
+        <h2 id="d06bddd1-a86f-4520-8d11-14a65b82cc76">私有包</h2>
         <p>私有包仅供付费用户与组织用户使用，本文不介绍它。</p>
-        <h2 id="1af0e8c4-76d6-4d39-ac31-a8e1c333be0f">package.json</h2>
+        <h2 id="fd0adbf2-f57c-4c6f-a5fe-7a76b13796d7">package.json</h2>
         <p><code>package.json</code> 文件记录了项目的依赖情况，该文件至少包含 <code>name</code> 和 <code>version</code> 字段。<code>name</code> 表示该项目的名称，其只能使用小写，且不能使用空格，不过可以使用 <code>-</code> 和 <code>_</code>，<code>version</code>表示该项目的版本，建议遵循 <a href="https://semver.org/">Semantic Versioning 2.0.0</a>。</p>
         <p>执行下述命令，将以问卷的形式来创建 <code>package.json</code> 文件，该文件会被保存在当前文件夹的根目录中。</p>
         <pre><code>npm init
@@ -79,7 +79,7 @@ npm install -g npm@next   // 将npm更新至最新的测试版
         <pre><code>npm init -y
 npm init --yes
 </code></pre>
-        <h2 id="b645f900-3df9-4e72-9f29-bbdbcbbb7d3f">安装本地包</h2>
+        <h2 id="d2974b1c-2f2c-42aa-bb34-2dd1ba926d37">安装本地包</h2>
         <p>执行下述命令来下载指定的包，包将存储在 <code>node_modules</code> 文件夹中。</p>
         <pre><code>npm install &lt;packagename&gt;
 npm install &lt;@scopename/packagename&gt;
@@ -94,7 +94,7 @@ npm install &lt;@scopename/packagename@version&gt;
         <p>比如：</p>
         <pre><code>npm install --save-dev @babel/core@7.0.0
 </code></pre>
-        <h2 id="ecbdd89d-8ca3-48e8-a7cb-307d834f2369">版本符号与更新规则</h2>
+        <h2 id="2902e5de-6ab7-4cc2-9aa2-aa7c87b5cf3a">版本符号与更新规则</h2>
         <p><code>npm install</code> 和 <code>npm update</code> 都可以更新包，包的更新行为取决于包在 <code>package.json</code> 文件中的声明方式，主要有 3 种声明方式：</p>
         <ul>
             <li>精确的版本号，如 <code>1.0.0</code></li>
@@ -106,29 +106,29 @@ npm install &lt;@scopename/packagename@version&gt;
             <p><strong>Note</strong></p>
             <p>注：零号版本是指 <code>0.y.z</code> ，非零号版本是指 <code>&gt;=1.0.0</code> 。</p>
         </blockquote>
-        <h2 id="05bad4b0-e2ee-43cf-a204-280430bbbcbe">源管理</h2>
+        <h2 id="f8e262f3-3c7e-41de-a806-6c331741f653">源管理</h2>
         <p>执行下述命令来查询 npm 的下载源：</p>
         <pre><code>npm config get registry
 </code></pre>
         <p>执行下述命令来修改 npm 的下载源：</p>
         <pre><code>npm config set registry=&quot;https://registry.npmmirror.com&quot;
 </code></pre>
-        <h2 id="a917dac7-67a2-4cd5-b8b3-97cc14c1c60f">文件结构</h2>
+        <h2 id="9a09ca21-fc90-43f8-b522-21fcb259f0e3">文件结构</h2>
         <p>假定：</p>
         <ol>
             <li>基于 Windows 系统。</li>
             <li>node.js 安装与 <code>D：\nodejs</code> 目录。</li>
             <li>在 <code>E:\web</code> 中执行命令。</li>
         </ol>
-        <h3 id="e0a22716-7b2c-48b9-9217-63759638cc58">prefix</h3>
+        <h3 id="0b37a147-6a35-46f3-ae26-01d68c88afb9">prefix</h3>
         <p>指 <code>node_modules</code> 文件夹的父文件夹。对于本地环境，它是打开命令行窗口的那个文件夹。对于全局环境，它是 <code>npm</code> 的安装文件夹。比如：</p>
         <ul>
             <li>本地环境的 <code>prefix</code> 就是 <code>E:\web</code>。</li>
             <li>全局环境的 <code>prefix</code> 就是 <code>D:\nodejs\node_modules\npm</code>。</li>
         </ul>
-        <h3 id="f5532980-2bef-49ad-81c7-235cb28d9534">root</h3>
+        <h3 id="a65511f1-2629-4f4d-8468-2868a5c10621">root</h3>
         <p>是指 <code>node_modules</code> 文件夹。</p>
-        <h3 id="ab3e9fa3-6a65-4be9-b2a8-98f25b2e5a3a">executables</h3>
+        <h3 id="f0513eeb-79f6-43f3-9c56-19f98ea9d7ec">executables</h3>
         <p>是指存储可执行程序的文件夹，比如：</p>
         <ul>
             <li>本地环境的 <code>executables</code> 就是 <code>E:\web\node_modules\.bin</code>。</li>

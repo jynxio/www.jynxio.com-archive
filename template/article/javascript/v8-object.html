@@ -14,20 +14,20 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=ab49e6da-4c29-4963-8590-797b0c3a7ffc>概述</p>
-        <p data-target-id=cd7efc53-3050-47ef-b4b5-77c6b96b924a>环境</p>
-        <p data-target-id=772ce26c-ec1b-4910-9d30-492a928ec32d>调试</p>
-        <p data-target-id=a204f26e-1a9a-488d-9d3c-827cc7466dbe>对象</p>
-        <p data-target-id=3a9b12d7-f252-42cd-a334-c19e5c1bd426>实现</p>
-        <p data-target-id=4d9b2475-0ce3-4d7a-8f07-c7960042aa5b>参考</p>
+        <p data-target-id=a4eabfc4-3a43-4355-b981-5386f759ff34>概述</p>
+        <p data-target-id=77ac9995-113f-48c2-8e2d-55b792a3b2f8>环境</p>
+        <p data-target-id=d959bbf6-b6a1-403b-b73e-4a5aa75955d2>调试</p>
+        <p data-target-id=46afa322-b786-4b41-b5cd-aa6ca215b026>对象</p>
+        <p data-target-id=1d48f4aa-264d-41d2-89a0-23a6b14bd444>实现</p>
+        <p data-target-id=1e1f5b3d-7946-4b82-a2e9-a2ceb5d31581>参考</p>
     </aside>
     <article>
         <h1>JavaScript 对象在 V8 引擎中的实现</h1>
-        <h2 id="ab49e6da-4c29-4963-8590-797b0c3a7ffc">概述</h2>
+        <h2 id="a4eabfc4-3a43-4355-b981-5386f759ff34">概述</h2>
         <p>本文将会描述 V8 引擎是如何实现 JavaScript 对象的。</p>
-        <h2 id="cd7efc53-3050-47ef-b4b5-77c6b96b924a">环境</h2>
+        <h2 id="77ac9995-113f-48c2-8e2d-55b792a3b2f8">环境</h2>
         <p>本文使用 Node 运行时来作为测试环境，其版本为 16.13.1。该 Node 运行时所使用的 V8 引擎的版本是 9.4.146.24。</p>
-        <h2 id="772ce26c-ec1b-4910-9d30-492a928ec32d">调试</h2>
+        <h2 id="d959bbf6-b6a1-403b-b73e-4a5aa75955d2">调试</h2>
         <p>在 V8 引擎中，有一些内建的函数可以帮助开发者进行 debug，其中有一个名为 <code>%DebugPrint</code> 的函数可以帮助开发者观察 JavaScript 值的内部信息。不过，在使用 <code>%DebugPrint</code> 之类的内建函数之前，我们必须先执行 <code>--allow-natives-syntax</code> 命令。</p>
         <p>具体来说，在 Node 运行时中，我们可以通过如下做法来调用 <code>%DebugPrint</code> 函数，并让其打印字面量 <code>{a: 1}</code> 的内部信息。</p>
         <pre><code>node --allow-natices-syntax       // input
@@ -43,7 +43,7 @@ internal information...           // output
             <p><strong>Note</strong></p>
             <p>我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在 Chromium 中使用这些内建函数，因为这些运行时都使用了 V8 引擎。</p>
         </blockquote>
-        <h2 id="a204f26e-1a9a-488d-9d3c-827cc7466dbe">对象</h2>
+        <h2 id="46afa322-b786-4b41-b5cd-aa6ca215b026">对象</h2>
         <p>JavaScript 中的对象和面向对象语言中的对象是不一样的，在 JavaScript 中，对象是一种字典类型的数据结构，比如 <code>{a: 1}</code>。其中，对象的键只能使用 <code>String</code> 或 <code>Symbol</code> 类型的值，对象的值则可以使用任意的数据类型。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -62,19 +62,19 @@ obj[ &quot;c&quot; ] = &quot;&quot;;
 for ( let key in obj ) console.log( key );
 // 0 1 2 a b c
 </code></pre>
-        <h2 id="3a9b12d7-f252-42cd-a334-c19e5c1bd426">实现</h2>
-        <h3 id="a3f0fa37-d275-4c42-a922-616d4a26cd20">总览</h3>
+        <h2 id="1d48f4aa-264d-41d2-89a0-23a6b14bd444">实现</h2>
+        <h3 id="08a703e8-f72c-4df7-a6a1-14b0099ae9b2">总览</h3>
         <p>首先，V8 引擎会申请一块连续的内存空间来存储 JavaScript 对象的信息，为方便起见，本文会将该内存空间称为 JavaScript 对象容器。</p>
         <p>V8 官方将 JavaScript 对象的属性分成两种类型，一种是 named property（命名属性），另一种是 array-indexed property（数组索引属性）。V8 官方将 named property 和 array-indexed property 分别简称为 property 和 element，本文会沿用这种叫法。</p>
         <p>对于 element，V8 引擎将它存储在另一个独立的内存空间中。对于 property，V8 引擎的做法则有一些复杂，首先，V8 引擎有可能会将一部分 property 直接存储在 JavaScript 对象容器上，然后将剩余的 property 存储在另一个独立的内存空间中，前者被称为 in-object property，后者被称为 normal property。</p>
         <p>JavaScript 对象容器的前 3 个位置存储了 3 个指针，每个指针占 8 个字节（64位系统下）。其中，第一个指针指向 hidden class 的内存空间，第二个指针指向 normal property 的内存空间，第三个指针指向 element 的内存空间。</p>
         <p>关于 hidden class，它是 <code>HiddenClass</code> 类的实例，而 <code>HiddenClass</code> 则是一个由 V8 官方实现的标准的 C++ 类。hidden class 用于存储 JavaScript 对象的内部信息，比如属性的数量，原型的地址等，我们会在后文继续介绍 hidden class。</p>
         <p><img src="/static/image/markdown/javascript/v8-object/hiddenclass-property-element.png" alt="hidden class &amp; property &amp; element"></p>
-        <h3 id="40ab97c5-1fbe-4124-8e36-109ee3f8cf02">property</h3>
+        <h3 id="5d5b4641-5412-4fc2-a44b-7a6898ea795b">property</h3>
         <p>在介绍 hidden class 之前，我们需要先了解 property 来作为前置知识。</p>
         <p>property 的准确名称是 named property（命名属性），它是指使用除了正整数字符串之外的其他字符串来作为键的属性，比如 <code>{ a: 1 }</code> 等。另外，使用 <code>Symbol</code> 类型的值来作为键的属性也属属于 named property。下文将会使用 property 来指代 named property。</p>
         <p>property 又分为 in-object property 和 normal property。</p>
-        <h4 id="7eb6ced1-d59f-412c-bc85-f7a8b3a30bf8">in-object property</h4>
+        <h4 id="0013895d-69bd-4c64-9e94-d9c29707ca44">in-object property</h4>
         <p>正如前文所述，V8 引擎“有可能”会将一部分的 property 直接存储在 JavaScript 对象容器上，V8 官方将这些 property 称为 in-object property。为方便起见，我们将 JavaScript 对象容器所能存储的 in-object property 的数量称为 in-object property 的容量。</p>
         <p>具体来说，V8 引擎在创建 JavaSript 对象容器的时候，就会预留一些内存空间来用于存储 in-object property，V8 引擎既可能会预留零个 in-object property 的位置，也有可能会预留几十上百个 in-object property 的位置。in-object property 的容量的大小完全取决于你创建 JavaScript 对象的方式，并且这个容量是不可改变的。</p>
         <p>其实，我不知道决定 in-object property 的容量的根本因素是什么，不过，实践证明：</p>
@@ -95,7 +95,7 @@ obj.d = 4;
         <p><img src="/static/image/markdown/javascript/v8-object/in-object-properties-capacity-2.png" alt="in-object property的容量"></p>
         <p>最后，in-object property 的访问速度要比 normal property 的更快，因为 V8 引擎在查找命名属性时，会先查找 in-object property，然后再查找 normal property。另外，哪怕 V8 引擎同时在 in-object property 和 normal property 中查找目标属性，in-object property 的访问速度也会更快，这是因为 in-object property 的访问路径更短。</p>
         <p>当我们经常采用字面量赋值的方式来创建仅拥有少量命名属性的小型对象时，这些小型对象的属性访问速度都会很快，这是因为这些小型对象的命名属性都被当作 in-object property 来存储了，这正是 V8 官方设计 in-object property 的原因之一。</p>
-        <h4 id="98177bcd-2298-4588-876d-59b3cc4d752f">normal property</h4>
+        <h4 id="a9b12e3c-bb8a-463f-be36-a807c321ecfb">normal property</h4>
         <p>超出 in-object property 容量的 property 会被存储在另一个独立的内存空间中，这些 property 就被称为 normal property。</p>
         <p>V8 引擎会采用数组数据结构或字典数据结构来存储 normal property，为避免混淆，在下文中，我们会把这个数组和字典称为 “数组容器” 和 “字典容器”。其中，V8 引擎所使用的数组容器是 <code>FixedArray</code> 实例或 <code>PropertyArray</code> 实例，它们是由 V8 引擎实现的数组数据结构。而 V8 引擎所使用的字典容器是 <code>NameDictionary</code> 实例，它是 V8 引擎实现的基于散列函数的字典数据结构，即散列表。</p>
         <p>因为数组容器的访问速度要比字典容器的访问速度更快，所以 V8 引擎会把采用数组容器来存储的 normal property 称为 fast property，并把采用字典容器来存储的 normal property 称为 slow property。</p>
@@ -106,7 +106,7 @@ obj.d = 4;
         <p>V8 引擎更加青睐于使用 fast property，并且 V8 引擎还为其做了额外的优化，来进一步提升它的访问性能，比如 <a href="https://mrale.ph/blog/2012/06/03/explaining-js-vms-in-js-inline-caches.html">inline caches</a>。</p>
         <p>虽然 fast property 的访问速度更快，但是在涉及到属性的增加和删除时，slow property 的性能则会更好，这就是 V8 还额外支持 slow property 的原因。另外，inline caches 并不适用于 slow property。</p>
         <p>最后，V8 引擎会视情况来决定到底是使用 fast property 还是 slow property，并且也会视情况来决定是否要切换至 fast property 或 slow property。我不清楚其中的规律，不过实践发现，如果我们 <code>delete</code> 了对象的某个 in-object property，那么 V8 引擎就会将 fast property 切换为 slow property。</p>
-        <h4 id="18da3daf-b91d-4f96-a032-bf1926b1b555">hidden class</h4>
+        <h4 id="fb50987d-a9a4-4317-b8e0-7b50c061a818">hidden class</h4>
         <p>hidden class 存储了 JavaScript 对象的信息，比如属性的数量、原型的地址等。其中，hidden class 的 bit field 3 字段存储了 JavaScript 对象的属性数量，以及一个指向 descriptor array 的指针，descriptor array 存储了 fast property 的键、值地址、属性描述符。</p>
         <p><img src="/static/image/markdown/javascript/v8-object/hidden-class.png" alt="hidden class"></p>
         <p>descriptor array 是一个 <code>FixedArray</code> 实例，它用于帮助 V8 引擎找到 fast property 的值。具体来说，所有 fast property 的值都被存储在一个数组容器中，如果 fast property 的键和值之间缺少了映射关系，那么 V8 引擎就无法根据键来找到对应的值。打个比方，对于 <code>{a: 1, b: 2, ... }</code> 而言，如果 V8 引擎要查询属性 <code>a</code>，那么 V8 引擎该怎么知道值 <code>1</code> 存储在数组容器的哪个位置呢？为了解决这个问题，V8 引擎将键与值的地址存储在了 descriptor array 中，如此一来，V8 引擎就可以通过键来在 descriptor array 中找到对应的值的地址了。所以 descriptor array 就相当于一个地址簿，V8 引擎通过被呼人的名字（键）来在这个地址簿上找到被呼人的住址（值的地址），最后再找到被呼人本身（值）。</p>
@@ -123,13 +123,13 @@ obj.d = 4;
             <p>你可以通过 <a href="https://zh.javascript.info/property-descriptors">这篇文章</a> 来了解属性描述符。</p>
         </blockquote>
         <p>最后，descriptor array 也不会存储 element 的信息，因为对于 element 而言，V8 引擎总是可以将键和值关联在一起，详见下文。</p>
-        <h3 id="e8700d84-3bf3-4ecf-aee9-404abf1e4161">element</h3>
+        <h3 id="ef53562b-b7c8-40a9-b76d-24681e385d20">element</h3>
         <p>element 的准确名称是 array-indexed property（数组索引属性），它是指使用正整数字符串来作为键的属性，比如 <code>&quot;0&quot;</code>、<code>&quot;1&quot;</code> 等。需要注意的是，<code>&quot;+0&quot;</code>、<code>&quot;-0&quot;</code>、<code>&quot;+1&quot;</code>、<code>&quot;-1&quot;</code> 等都不属于正整数字符串，如果你使用它们来作为属性的键，那么这个属性就属于 property 而不是 element。</p>
-        <h4 id="98fece4e-d5fd-4fa0-be09-9cf118ba58dc">存储方式</h4>
+        <h4 id="d2bdc3fa-a720-4ff2-8ea5-bc48daa5fc37">存储方式</h4>
         <p>element 没有类似于 in-object property 的东西，所有的 element 都被直接存储在另一个独立的内存空间中。V8 引擎会采用数组数据结构或字典数据结构来存储 element，其中，V8 引擎所使用的数组容器是 <code>FixedArray</code> 实例，V8 引擎所使用的字典容器是 <code>NumberDictionary</code>，这是一个由 V8 引擎实现的散列表。</p>
         <p>另外，因为 element 属性的键都是数组索引字符串，所以不论 V8 引擎使用数组容器来存储 element，还是使用字典容器来存储 element，V8 引擎都可以直接将 element 属性的键和值一一对应的存储在数组容器或字典容器上。得益于这个特点，V8 引擎可以直接通过 element 的键来在数组容器或字典容器中找到对应的值，而不需要像 fast property 一样依赖 hidden class 的 descriptor array。</p>
         <p>和 fast / slow property 相似的是，当 V8 引擎使用数组容器来存储 element 时，element 的访问速度会更快。</p>
-        <h4 id="82d9b1e5-3350-4e57-9abf-acb69be46f7a">用数组来存储 —— 稀疏数组</h4>
+        <h4 id="2671de5a-5177-4297-b6d1-bb4d4a0a44e3">用数组来存储 —— 稀疏数组</h4>
         <p>当 V8 引擎使用数组容器来存储 element 时，如果 element 的键不是从 <code>0</code> 起算的，或者键与键之间不是连续的，对应的数组容器就会产生空元素，我们把数组中的空元素称为数组的孔，我们把含有孔的数组称为稀疏数组。</p>
         <p>比如，我们使用下述代码来创建一个只含有一个 element 属性的 JavaScript 对象，然后通过 <code>%DebugPrint( obj )</code> 来打印该对象的内部信息。</p>
         <pre><code>node --allow-natives-syntax
@@ -146,7 +146,7 @@ const obj = { 1:1 };
         </blockquote>
         <p>当 V8 引擎在存储 element 的数组容器上找到 <code>&lt;the_hole&gt;</code> 时，V8 引擎就可以立即断定出该 JavaScript 对象上不存在目标属性，然后 V8 引擎就可以开始从该 JavaScript 对象的原型链上继续查找目标属性了。</p>
         <p><img src="/static/image/markdown/javascript/v8-object/the-hole-use.png" alt="&lt;the_hole&gt;的用处"></p>
-        <h4 id="1672de50-0d78-4056-a84c-ae531a135147">用数组来存储 —— 数组容器的类型</h4>
+        <h4 id="89c5562e-5720-446b-aada-84d854bec3ac">用数组来存储 —— 数组容器的类型</h4>
         <p>当 V8 引擎使用数组容器来存储 element 时，V8 引擎会根据数组容器是否是稀疏的，以及数组容器的元素的数据类型来进行分类，不同类型的数组容器的性能是不一样的，因为 V8 引擎可以对不同类型的数组容器进行不同程度的优化。比如，有这些类型：</p>
         <ul>
             <li>如果数组容器是无孔的：<ul>
@@ -191,12 +191,12 @@ const holey_elements = [ , &quot;1&quot;, 2 ];
         </blockquote>
         <p>最后，数组容器的类型是可以转化的，不过只能从 <code>PACKED</code> 转化为 <code>HOLEY</code>，以及只能从具体类型转化为模糊类型，即这种转化是单向的。</p>
         <p><img src="/static/image/markdown/javascript/v8-object/array-type-translation-performance.png" alt="数组容器的类型与性能"></p>
-        <h4 id="b4a32c80-007b-4696-a6c3-2ecc55368833">用数组来存储 —— 性能优化</h4>
+        <h4 id="84a7cb35-954f-4db5-b6d9-07831cf907a5">用数组来存储 —— 性能优化</h4>
         <p>当你的 JavaScript 对象使用数组来存储 element 时，遵循下述行为规范有助于获得更好的性能。</p>
         <p>行为规范一：因为数组容器的类型转化是单向的，所以为了更好的性能，请尽可能的使用 <code>PACKED</code> 和数据类型更具体的 element，并且不轻易的向 element 中引入孔或向其添加其他数据类型的值。另外，<code>-0</code>、<code>NaN</code>、<code>Infinity</code> 这 3 个值都可以将 <code>PACKED_SMI_ELEMENTS</code> 转化为 <code>PACKED_DOUBLE_ELEMENTS</code>，同理于 <code>HOLEY_SMI_ELEMENTS</code>。</p>
         <p>行为规范二：避免越界读取 JavaScript 对象的 element，或者避免越界读取 JavaScript 数组的属性，因为这种越界读取的行为会使得这个 JavaScript 对象或 JavaScript 数组的性能永远变差一些。具体来说，这是因为当 V8 引擎遇到越界读取时，V8 引擎就会在这个 JavaScript 对象或 JavaScript 数组的原型链上查找越界读取的属性，而搜索原型链是一件耗时的事情，并且 V8 引擎会认为这个 javaScript 对象或 JavaScript 数组在未来还会发生同样的事，然后就会将其标记为“总是需要进行特殊处理”的对象，这就导致了 V8 引擎以后在处理这个 JavaScript 对象或 JavaScript 数组的时候，总是要做一些额外的处理。</p>
         <p>行为规范三：使用数组来替代类数组。虽然我们可以通过 <code>Array.property.forEach.call( array_like, ( value, index ) =&gt; {} )</code> 的方式来在类数组身上调用数组的内置方法，但是这些内置方法在数组身上的运行效率要高得多。</p>
-        <h4 id="e22ded76-0df9-4254-a30d-9b5fb35333a7">用字典来存储</h4>
+        <h4 id="5d8208a5-e03a-4994-a2eb-89b25bf5932f">用字典来存储</h4>
         <p>如果 V8 引擎遇到了以下三种情况中的任何一种，V8 引擎都会使用字典来存储 element，另外，这个字典是一个 <code>键-值-属性描述符</code> 格式的字典。最后，使用字典来存储 element 的好处是可以节省存储空间，坏处是访问的速度较慢。</p>
         <p>情况一：如果 element 中有大量的孔，那么 V8 引擎就会使用字典来存储 element。比如，下述代码会创建一个使用字典来存储 element 的 JavaScript 对象。</p>
         <pre><code class="language-js">const obj = { 999: 999 };
@@ -217,7 +217,7 @@ Object.defineProperty( obj, &quot;0&quot;, { value: 0 } );
 
 Object.defineProperty( obj, &quot;0&quot;, { enumerable: false } );
 </code></pre>
-        <h2 id="4d9b2475-0ce3-4d7a-8f07-c7960042aa5b">参考</h2>
+        <h2 id="1e1f5b3d-7946-4b82-a2e9-a2ceb5d31581">参考</h2>
         <ul>
             <li><a href="https://v8.dev/blog/fast-properties">Fast properties in V8</a></li>
             <li><a href="https://v8.dev/blog/elements-kinds">Elements kinds in V8</a></li>

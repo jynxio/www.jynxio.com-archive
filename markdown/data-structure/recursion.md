@@ -48,33 +48,31 @@ loop(); // RangeError: Maximum call stack size exceeded
 
 ### 概念
 
-在数学中，正整数的阶乘是所有小于及等于该数的正整数的积，表示为 `n!`。比如 `5` 的阶乘表示为 `5!`，其值为 `120`，因为：
+在数学中，正整数的阶乘是所有小于及等于该数的正整数的积，我们把它表示为 `n!`，另外 `1` 和 `0` 的阶乘都等于 `1`。让我们来举个例子，`5` 的阶乘表示为 `5!`，其值为 `120`，因为：
 
 ```
 5! = 1 * 2 * 3 * 4 * 5 = 120
 ```
 
-另外，`1` 和 `0` 的阶乘都等于 `1`。
-
 ### 实现
 
-灵感乍现，令我一下子找到了 `calculateFactorial` 函数的基线条件，然后顺势编写好了整个函数。
+灵感乍现，我一下子找到了 `calculateFactorial` 函数的基线条件，然后顺势编写好了整个函数。
 
 ```js
 function calculateFactorial( n ) {
-    
+
     if ( n === 0 || n === 1 ) return 1; // 基线条件
-    
+
     return n * calculateFactorial( n - 1 );
-    
+
 }
 ```
 
-## 斐波那契数列
+## 斐波那契
 
 > 真怀念啊！我记得我的第一个 DOM 程序就是一个汉诺塔动画的网页，她还很兴奋的鼓励了我呢！
 
-### 概念
+#### 概念
 
 斐波那契数列是一个特殊的数列，它的规律是：
 
@@ -83,22 +81,24 @@ function calculateFactorial( n ) {
 - `2号元素 = 1`
 - `n号元素 = n-1号元素 + n-2号元素`
 
-### 实现
+#### 实现
 
 这是第二次灵感乍现。
 
 ```js
 function calculateFibonacci ( n ) {
-    
+
+    /* 基线条件 */
     if ( n === 0 ) return 0;
     if ( n === 1 || n === 2 ) return 1;
-    
+
+    /*  */
     return calculateFibonacci( n - 1 ) + calculateFibonacci( n - 2 );
-    
+
 }
 ```
 
-### 优化
+#### 优化
 
 这是 `calculateFibonacci` 函数的优化版本，你分别使用旧版与新版的 `calculateFibonacci` 函数来计算 `20` 的斐波那契数，便会发现新版本的计算速度要快的多。
 
@@ -108,10 +108,10 @@ const calculateFibonacci = createFibonacciCalculator();
 function createFibonacciCalculator () {
 
     const cache = [ 0, 1, 1 ];
-    
+
     return function calculateFibonacci ( n ) {
 
-        if ( cache[ n ] !== undefined ) return cache[ n ];
+        if ( cache[ n ] !== undefined ) return cache[ n ]; // 基线条件
 
         return cache[ n ] = calculateFibonacci( n - 1 ) + calculateFibonacci( n - 2 );
 
@@ -121,6 +121,30 @@ function createFibonacciCalculator () {
 ```
 
 新版的 `calculateFibonacci` 函数之所以会更快，是因为它缓存了曾经计算过的斐波那契数，从而减少了很多重复的计算。
+
+## 深拷贝
+
+这是一个深拷贝的简单实现，它可以深拷贝普通对象和数组。
+
+```js
+function deepCopy ( source ) {
+
+    /* 基线条件 */
+    if ( source === null ) return source;
+    if ( typeof source !== "object" ) return source;
+
+    /*  */
+    const target = source instanceof Array ? [] : {};
+    const keys = Object.keys( source );
+
+    keys.forEach( key => target[ key ] = deepCopy( source[ key ] ) );
+
+    return target;
+
+}
+```
+
+> `deepCopy` 只有练习价值，没有实用价值，因为它没有考虑到不可枚举属性、Setter/Getter、自循环引用、函数、Error 等情况。如果你想在生产环境中使用深拷贝，那么请使用 [structuredClone API](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)，这是一个由 HTML5 规范定义的深拷贝方法，浏览器和 Node 运行时都自建了该方法。或许你也可以使用其他第三方库，比如 [immutable.js](https://github.com/immutable-js/immutable-js)。
 
 ## 意义
 
