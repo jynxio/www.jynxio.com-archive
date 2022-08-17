@@ -157,6 +157,8 @@ Parent: useEffect( _ => {} )
 Parent: useEffect( _ => {}, [ visible ] )
 ```
 
+> 为什么 `Child: render start` 会出现在 `Parent: render end` 之后？
+
 然后，点击 `0` 按钮后，控制台输出如下：
 
 ```
