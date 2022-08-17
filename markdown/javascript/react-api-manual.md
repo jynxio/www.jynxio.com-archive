@@ -13,29 +13,40 @@ typora-root-url: ..\..
 
 ## useState
 
-`useState` 有 2 种调用方式，分别是：
+`useState` 是一种用来控制组件状态的 Hook，它有 2 种调用方式，分别是：
 
 ```js
+/* 方式一 */
 const [ state, setState ] = useState( initial_state );
+
+/* 方式二 */
 const [ state, setState ] = useState( function createInitialState () { return initial_state } );
 ```
 
-`createInitialState` 函数会在组件首次渲染之前调用，该函数的返回值会作为 `state` 的初始值。不过，在以后重新渲染组件的时候，`createInitialState` 函数都不会再被调用。
+对于方式二，`createInitialState` 函数只会在挂载组件时被调用，该函数的返回值会被作为 `state` 的初始值，因为该函数的作用就是为了给 `state` 提供一个初始值。在未来更新组件和卸载组件的时候，该函数都不会再被调用，不过如果重新挂载组件，那么该函数就会被再次调用。
 
-> 渲染组件是指调用组件构造器。
+### setState
 
-`setState` 是 `state` 的更新器，它也有 2 种使用方式，分别是：
+`setState` 是 `state` 的更新器，它用于更新组件的状态，并命令 React 更新组件。它也有 2 种调用方式，分别是：
 
 ```js
+/* 方式一 */
 setState( next_state );
+
+/* 方式二 */
 setState( function createNextState ( previous_state ) { return next_state } );
 ```
 
-- 调用一次 `setState` 函数，React 就会创建一个异步任务并准备重新渲染组件，异步任务会在下一次组件渲染之前更新 `state`。
-- 如果 `next_state` 和 `previous_state` 一样（React 使用 `Object.is` 来进行相等判断），React 就不会重新渲染组件。
-- 调用多次 `setState` 函数，React 就会创建多个异步任务，并将这些异步任务放进一个任务队列中去（按照 `setState` 的调用顺序），React 会依次执行这些任务。有时候，React 执行一个任务，就会更新一次 DOM，有时候，React 会连续执行多个任务，但只更新一次 DOM。
+它的运行机制如下：
+
+- 如果调用 `setState` 函数，那么 React 就会异步的更新组件，并且 `next_state` 将会作为组件下一次更新时的新 `state` 值。不过，如果 `next_state` 和 `previous_state` 一样，那么 React 就不会更新组件。
+- 如果多次调用 `setState` 函数，那么 React 就会按照 `setState` 的调用顺序，来将更新组件的任务有序的放入一个任务队列中，然后依次出队执行任务队列中的更新任务。有时候，React 执行一个更新任务，就会更新一次 DOM，有时候，React 会连续执行多个更新任务，才更新一次 DOM。
+
+> React 使用 `Object.is` 来执行相等判断。
 
 ## useEffect
+
+`useEffect` 用于执行带有副作用的操作，其语法如下：
 
 ```js
 useEffect(
@@ -44,207 +55,164 @@ useEffect(
 );
 ```
 
-- 如果挂载或更新了组件，那么 `effect` 函数就会执行，执行时机是页面更新之后。
-- `effect` 函数只能返回 `undefined` 或另一个函数（称为 `clean` 函数，即清理器），如果返回了其它值，React 就会抛出错误。
-- 如果更新了组件，那么 `clean` 函数就会执行，执行时机是页面更新之后、`effect` 函数执行之前。如果卸载了组件，那么 `clean` 函数也会执行，执行时机是页面更新之后。
-- `dependency_array` 是可选的，React 依赖它来决定是否调用 `effect` 函数，具体规则如下：
+其中：
+
+- `effect` 函数用于装载具有副作用的操作，如果挂载或更新了组件，那么 React 就会执行 `effect` 函数，并且执行时机是在页面更新之后。
+- `dependency_array` 数组用于决定是否执行 `effect` 和 `clean` 函数。
+
+### clean
+
+`clean` 是由 `effect` 函数所返回的另一个函数，它用于清除副作用，它的运行机制如下：
+
+- 如果更新了组件，那么 React 就会在页面更新之后、`effect` 函数执行之前，就执行 `clean` 函数，这么做是为了消除上一次调用 `effect` 函数时所产生的副作用，否则组件在多次更新之后，副作用就会累积。
+- 如果卸载了组件，那么 React 就会在页面更新之后执行 `clean` 函数，这么做时为了消除死亡节点所遗留的副作用。
+
+> 事实上，`effect` 函数除了可以返回函数之外，还可以返回 `undefined`，所以 `clean` 是可选的。不过，如果 `effect` 函数返回了其他数据类型的值，那么 React 就会报错。
+
+### dependency_array
+
+`dependency_array` 数组用于决定是否执行 `effect` 和 `clean` 函数，具体来说：
 
 ```js
-// 挂载或更新组件之后，effect函数都会执行。
-useEffect( _ => {} );
+/**
+ * 方式一：
+ * 如果挂载或更新了组件，那么effect函数就会执行。
+ * 如果卸载或更新了组件，那么clean 函数就会执行。
+ */
+useEffect(
+    function effect () { return function clean () {} },
+);
 
-// 挂载组件之后，effect函数才会执行。
-useEffect( _ => {}, [] );
+/**
+ * 方式二：
+ * 如果挂载了组件，那么effect函数就会执行。
+ * 如果卸载了组件，那么clean 函数就会执行。
+ */
+useEffect(
+    function effect () { return function clean () {} },
+    [],
+);
 
-// 挂载组件之后，effect函数就会执行。
-// 更新组件之后，仅当a或b发生了变化时，effect函数才会执行。
-useEffect( _ => {}, [ a, b ] );
+/**
+ * 方式三：
+ * 如果挂载了组件，那么effect函数就会执行；如果更新了组件且state发生了变化，那么effect函数就会执行。
+ * 如果卸载了组件，那么clean 函数就会执行；如果更新了组件且state发生了变化，那么clean 函数就会执行。
+ */
+useEffect(
+    function effect () { return function clean () {} },
+    [ state ],
+);
 ```
+
+> 对于方式三，React 使用 `Object.js` 来比较新旧 `state` 是否发生了变化。
 
 ## useRef
 
-`useRef` 返回一个普通的对象，该对象只有一个 `current` 属性，`current` 属性的值就是 `initial_value`。这个普通的对象会在组件的整个生命周期内持续存在。
+`useRef` 用于提供一个数据仓库，这个数据仓库会伴随组件的整个生命周期，这意味着开发者可以在数据仓库中存储一些历史数据，另外我们也常常用这个数据仓库来存储 DOM 节点。
+
+具体来说 `useRef` 会返回一个只有 `current` 属性的普通对象，比如 `{ current: initial_value }`，其语法如下：
 
 ```js
-const reference = useRef( initial_value );
+const reference = useRef( initial_value ); // { current: initial_value }
 ```
 
-> `useRef` 是 `useState` 的语法糖，因为 React 官方说我们可以认为 `useRef` 是这么实现的：
+> 我们可以认为 `useRef` 是 `useState` 的语法糖，因为 React 官方说 `useRef` 大概是这么实现的：
 >
-> ```js
+> ```react
 > function useRef ( initial_value ) {
->     
+> 
 >     const [ reference, setReference ] = useState( { current: initial_value } );
->     
+> 
 >     return reference;
->     
+> 
 > }
 > ```
 
-### 存储数据
+## ref property
 
-因为 `useRef` 所返回的普通对象（`reference`）将会在组件的整个生命周期内持续存在，所以我们可以在 `reference` 上存储历史数据，另外，开发者们通常都在 `reference` 的 `current` 属性上存储数据。
-
-下例使用 `reference` 来存储定时函数的 id，以方便随时取消定时函数。
+React 元素具有一个 `ref` 属性，`ref` 属性用于捕获元素节点，它有 2 种调用方式：
 
 ```react
-function Clock () {
-    
-    const reference = useRef();
-    
-    function handleStartClick () {
-        
-        reference.current = setInterval( _ => console.log( "running..." ), 500 );
-        
-    }
-    
-    function handleStopClick () {
-        
-        if ( ! reference.current ) return;
-        
-        clearInterval( reference.current );
-        
-    }
-    
-    return (
-    	<>
-            <button onClick={ handleStartClick }>start</button>
-            <button onClick={ handleStopClick }>stop</button>
-        </>
-    );
-    
-}
+/* 方式一 */
+<div ref={ { current: undefined } }></div>
+
+/* 方式二 */
+<div ref={ element => {} }></div>
 ```
 
-### 获取 DOM
+### 方式一
 
-`useRef` 的另一个用处是获取 DOM 元素，如下所示。
+`ref` 属性可以接收一个 `{ current: * }` 格式的普通对象，此时其运行机制如下：
+
+- React 会在创建了 `div` 元素之后，将 `div` 元素赋值给 `current` 属性。
+- React 会在移除了 `div` 元素之后，将 `null` 赋值给 `current` 属性。
+
+> 直至调用了 `ReactDOM.createRoot( dom ).render` 方法之后，React 才会创建 DOM 元素。
+
+如果把 `useRef` 的返回值传递给 `ref` 属性，那么我们就可以持久的存储 DOM 元素了：
 
 ```react
 function Component () {
-    
+
     const reference = useRef();
-    
-    return <div ref={ reference }></div>;
-    
+
+    return <div ref={ reference }></div>
+
 }
 ```
 
-在 React 中，更新页面分为 2 个阶段：
+### 方式二
 
-1. 渲染阶段：调用组件
-2. 提交阶段：更新 DOM
+`ref` 属性也可以接收一个函数，我们把这个函数称为 `refCallback`，此时其运行机制如下：
 
-直至提交阶段之后，React 才会将 `div` 元素赋值给 `current` 属性，在提交阶段之前，`current` 属性的值都是 `undefined`。
+- React 会在创建了 `div` 元素之后，调用 `refCallback` 函数，并将 `div` 元素作为入参传递给 `refCallback`。
+- React 会在移除了 `div` 元素之后，调用 `refCallback` 函数，并将 `null` 作为入参传递给 `refCallback`。
 
-另外，如果 `div` 元素被卸载了，那么 React 就会在提交阶段之后，将 `null` 赋值给 `current` 属性。
-
-> TODO
->
-> 渲染阶段
->
-> 清理阶段
+> 如果 React 更新了组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着 React 将会调用两次 `refCallback`，第一次调用是因为移除了旧的 `div` 元素，第二次调用时因为创建了新的 `div` 元素。
 
 ## Custom Hook
 
-custom hook 是一个函数，它和普通函数之间的唯二区别是：
+custom hook 是一个用于封装 hook 的函数，并且 React 要求 custom hook 的命名必须以 `use` 开头。
 
-- custom hook 内部用到了 hook，普通函数的内部没有用到 hook。
-- custom hook 的命名必须以 `use` 开头，普通函数的命名没有限制。
+> React 要检查 custom hook 内的 hook 使用是否符合规范，为了方便分辨出哪些函数才是 custom hook，React 便要求 custom hook 的命名必须以 `use` 开头。
 
-从 React 的角度来看，custom hook 就是一个普通的函数，因为 React 不会对 custom hook 做特殊的处理，执行一个 custom hook 和执行一个普通函数是没有任何区别的。
-
-custom hook 是一种复用代码的技巧，具体来说，如果多个组件的内部都使用了相同的逻辑，那么我们就可以把这部分重复的逻辑提取到一个独立的函数中去，然后让多个组件直接调用这个函数。如果这个函数的内部用到了 hook，那么这个函数就是 custom hook，否则就是普通函数。
-
-> custom hook 的命名之所以要以 `use` 开头，是因为 React 要通过函数名来判断该函数是否使用了 hook，然后 React 要对使用了 hook 的函数进行检查，检查其 hook 的使用是否符合规范。
-
-在 custom hook 内，用 `useState` API 所创建出来的状态不是跟随 custom hook 的，而是跟随调用 custom hook 的组件的，其他的内建 hook 也同理。为了便于理解，你可以认为下例中的 `Component1` 等价于 `Component2`。
+### 示例
 
 ```react
-function Component1 () {
-    
-    const [ state, setState ] = useSomething();
-    
-    return <div></div>;
-    
+function Name () {
+
+    const [ name, setName ] = useLocalStorageState( "name", "Jynxio" );
+
+    return <input value={ name } onChange={ event => setName( event.target.value ) } />;
+
 }
 
-function Component2 () {
-    
-    const [ state, setState ] = useState();
-    
-    return <div></div>
-    
-}
+function useLocalStorageState ( key, initial_value ) {
 
-function useSomething () {
-    
-    return useState();
-    
+    const [ state, setState ] = React.useState(
+        JSON.parse( globalThis.localStorage.getItem( key ) ) || initial_value
+    );
+
+    React.useEffect( _ => {
+
+        globalThis.localStorage.setItem( key, JSON.stringify( state ) );
+
+        return _ => globalThis.localStorage.removeItem( key );
+
+    }, [ key, state ] );
+
+    return [ state, setState ];
+
 }
 ```
 
-下面是一个实际应用 custom hook 的例子。
+### 原理
 
-```react
-function usePlaying ( reference ) {
-    
-    const [ state, setState ] = useState( false );
-    const reverse = _ => setState( ! state );
-    
-    useEffect( _ => {
-        
-        state ? reference.current.play() : reference.current.pause();
-        
-    } );
-    
-    return reverse;
-    
-}
+为了减少代码的冗余或增强代码的可读性，我们会把代码从原处提取出来，封装到一个函数中去，custom hook 就是这么一种产物，只不过其内的代码包含了 hook 而已。
 
-function Player1 () {
-    
-    const reference = useRef();
-    const reverse = usePlaying();
-    
-    // 此处将会编写一些专属于Player1的代码。
-    
-    return <video ref={ reference } onClick={ reverse }></video>
-    
-}
+所以 custom hook 和普通函数其实没有本质的区别，在组件内调用一个 custom hook 就和调用一个普通函数一样。
 
-function Player2 () {
-    
-    const reference = useRef();
-    const reverse = usePlaying();
-    
-    // 此处将会编写一些专属于Player2的代码。
-    
-    return <video ref={ reference } onClick={ reverse }></video>
-    
-}
-```
-
-## Ref Callback
-
-JSX 元素的 `ref` 属性可以接收一个函数，我们把这个函数称为 ref callback，其语法如下所示。
-
-```react
-function Component () {
-    
-    const refCallback = element => console.log( element );
-    
-    return <div ref={ refCallback }></div>
-    
-}
-```
-
-无论是挂载还是卸载 `div` 元素，React 都会在提交阶段之后再调用 `refCallback`。
-
-- 对于挂载，React 会向 `refCallback` 传入 `div` 元素作为入参。
-- 对于卸载，React 会向 `refCallback` 传入 `null` 作为入参。
-
-> 另外，如果 React 重新渲染了 `Component` 组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着会触发两次 `refCallback`，第一次触发是因为卸载旧的 `div` 元素，第二次触发是因为创建新的 `div` 元素。
+不过需要提醒的是，在 custom hook 内，用 `useState` 所创建出来的状态不是跟随 custom hook 的，而是跟随调用 custom hook 的组件的，其他的内建 hook 也同理。之所以会有这种现象，我猜测是因为由 `useState` 所创建出来的状态会自动吸附到组件上。
 
 ## forwardRef
 
@@ -260,91 +228,98 @@ function Parent () {
 }
 ```
 
-不过，React 提供了另一种途径来获取 `Child` 组件的 DOM，那就是通过 `forwardRef` API 来将 `Parent` 组件的 `reference` 转发给 `Child` 组件，然后再获取 `Child` 组件的 DOM，具体操作如下。
+不过，React 提供了另一种途径来获取 `Child` 组件的 DOM，那就是通过 `forwardRef` API 来将 `Parent` 组件的 `reference` 转发给 `Child` 组件，然后再获取 `Child` 组件的 DOM。
+
+### 语法
+
+`forwardRef` 就像一个开关，经它改造的组件，将可以接收到第二个参数 `reference`。
 
 ```react
 Child = forwardRef( Child );
 
 function Parent () {
-    
+
     const reference = useRef();
-    
-    return <Child ref={ reference } />
-    
+
+    return <Child ref={ reference }/>
+
 }
 
 function Child ( properties, reference ) {
-    
-    return <div ref={ reference }></div>
-    
+
+    return <div ref={ reference }></div>;
+
 }
 ```
 
-> 其实，所有组件一直都可以接收到 2 个参数，第一个是 `properties`，第二个是 `reference`。
->
-> ```react
-> function Component ( properties, reference ) {
->     
->     console.log( properties ); // {}
->     console.log( reference );  // {}
->     
->     return <div></div>
->     
-> }
-> ```
->
-> 只是在默认情况下，所有组件的第二个参数都总是为空对象 `{}`，这是因为 React 故意不将上游的 `reference` 数据转发给组件。仅当开发者通过 `Component = forwardRef( Component )` 这种方式来“改造”了组件之后，React 才会将上游的 `reference` 数据转发给组件。
->
-> 所以我们可以把 `forwardRef` 当作一个开关，这个开关可以将组件从默认状态切换至非默认状态。
->
-> 从技术上来说，哪怕没有 `forwardRef`，我们也可以实现相同的效果，只要把 `reference` 包裹在 `properties` 中就可以了。
+### 原理
+
+其实，在经 `forwardRef` 改造之前，组件也可以接收到第二个参数 `reference`，只不过这个参数总是一个空对象 `{}`。
+
+```react
+function Child ( properties, reference ) {
+
+    console.log( reference );  // {}
+
+    return <div></div>
+
+}
+```
+
+这是因为 React 故意不让组件接收到来自上游的 `reference` 数据，仅当开发者使用 `forwardRef` 改造了组件之后，组件才能接收到来自上游的 `reference` 数据，所以 `forwardRef` 就像一个开关。
+
+> 另外，哪怕没有 `forwardRef`，我们也可以把 `reference` 数据传递给下游组件，只要把 `reference` 数据包裹在 `properties` 中就可以了：
 >
 > ```react
 > function Parent () {
->     
+> 
 >     const reference = useRef();
->     
+> 
 >     return <Child secret={ reference }/>
->     
+> 
 > }
 > 
 > function Child ( properties ) {
->     
+> 
 >     return <div ref={ properties.secret }></div>
->     
+> 
 > }
 > ```
 
 ## useImperativeHandle
 
-`useImperativeHandle` 需要搭配 `forwardRef` 一起来使用，它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
+`useImperativeHandle` 需要和 `forwardRef` 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
 
-具体来说，`useImperativeHandle` 函数接收 2 个参数，第一个参数是 `Parent` 组件的 `reference`，第二个参数是无参函数，该函数的返回值将会作为 `reference` 的 `current` 属性的值。
+### 语法
+
+`useImperativeHandle` 函数接收 2 个参数：
+
+1. 第一个是上游组件的 `reference`。
+2. 第二个是无参函数，无参函数的返回值将作为 `reference` 的 `current` 属性的值。
 
 ```react
-function Parent () {
-    
-    const reference = useRef();
-    
-    return <Child ref={ reference }/>
-    
-}
+useImperativeHandle( parent_reference, _ => parent_reference_current_value );
+```
 
+### 示例
+
+```react
 Child = forwardRef( Child );
 
+function Parent () {
+
+    const reference = useRef();
+
+    return <Child ref={ reference }/>
+
+}
+
 function Child ( properties, reference ) {
-    
-    useImperativeHandle(
-    	reference,
-        function writeReference () {
-            
-            return 1; // 该返回值将会作为reference.current的值。
-            
-        }
-    );
-    
-    return <div ref={ reference }></div>
-    
+
+    useImperativeHandle( reference, _ => 1 );
+
+    return <div></div>;
+
 }
 ```
 
@@ -353,13 +328,7 @@ function Child ( properties, reference ) {
 > ```react
 > function Child ( properties, reference ) {
 >     
->     function writeReference () {
->         
->         reference.current = 1;
->         
->     }
->     
->     return <div ref={ writeReference }></div>;
+>     return <div ref={ _ => reference.current = 1 }></div>;
 >     
 > }
 > ```
@@ -368,40 +337,42 @@ function Child ( properties, reference ) {
 
 ## flushSync
 
-`flushSync` 是一个来自于 `react-dom` 的 API，它可以让 React 立即更新 DOM，其语法如下。
+`flushSync` 用于让 React 立即更新 DOM，它来自于 `react-dom`。
+
+### 语法
+
+`flushSync` 接收并立即执行一个回调函数，待回调函数执行结束之后，React 就会立即更新 DOM。
 
 ```js
 import { flushSync } from "react-dom";
 
-flushSync( function sync () {} );
+flushSync( _ => {} );
 ```
 
-`flushSync` 接收并立即执行一个回调函数，待回调函数执行结束之后，React 就会立即更新 DOM。
+### 示例
 
-你可以观察下面这个例子。
+`(1)` 会同步的更新组件，并在更新好后立即更新 DOM，所以挂载或卸载 `div` 元素之后，`(2)` 行代码总是可以正确的输出 `div` 元素或 `null`。
 
 ```react
 function Component () {
-    
+
     const reference = useRef();
     const [ visible, setVisible ] = useState( false );
-    
+
     function handleClick () {
-        
-        flushSync( _ => setVisible( ! visible ) );
-        
-        console.log( reference.current );
-        
+
+        flushSync( _ => setVisible( ! visible ) ); // (1)
+
+        console.log( reference.current );          // (2)
+
     }
-    
+
     return (
     	<>
             <button onClick={ handleClick }>reverse</button>
             <div ref={ reference }></div>
         </>
     );
-    
+
 }
 ```
-
-在 `handleClick` 函数中，`flushSync( _ => setVisible( ! visible ) )` 会重新渲染 `Component` 组件并立即更新 DOM，而在提交阶段之后，React 就会将 `div` 元素赋值给 `reference.current` 属性，所以在挂载或卸载了 `div` 元素之后，`console.log( reference.current )` 总能正确的输出 `div` 元素或 `null`。
