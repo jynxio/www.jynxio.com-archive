@@ -14,17 +14,17 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=a105866d-0a82-45a6-80d7-c5ae24a35206>概述</p>
-        <p data-target-id=d3659456-d7b6-49a5-ab43-4b4be027afa7>实现</p>
-        <p data-target-id=8c125a0c-4253-4289-8063-582bdc1a1518>集合运算</p>
-        <p data-target-id=181596d5-affc-4af2-ae6e-8245b8efc865>Set API</p>
-        <p data-target-id=2a0fa2ed-ab74-4ac3-8ed1-32a6c5360568>多重集</p>
+        <p data-target-id=43613e80-725e-4ecc-9b51-9cf09d0db045>概述</p>
+        <p data-target-id=08863f32-8068-43b6-963b-ea38a26120d8>实现</p>
+        <p data-target-id=0423ab6c-ed28-4a3d-ba84-fdfa41b5552d>集合运算</p>
+        <p data-target-id=fbaf4527-6a00-45e1-a569-cee9ec792716>Set API</p>
+        <p data-target-id=e12f981a-0803-47b8-8083-5663f5dbd0e3>多重集</p>
     </aside>
     <article>
         <h1>集合</h1>
-        <h2 id="a105866d-0a82-45a6-80d7-c5ae24a35206">概述</h2>
+        <h2 id="43613e80-725e-4ecc-9b51-9cf09d0db045">概述</h2>
         <p>集合是一种存储唯一值的数据结构，在数学上，一个包含数字 <code>1</code>、<code>2</code>、<code>3</code> 的集合是这样表示的 <code>{ 1, 2, 3 }</code>，另外，不包含任何元素的集合被称为空集，空集是这样表示的 <code>{}</code>。在本文中，我们会从头开始来实现一个集合，并命名为 <code>MySet</code>。</p>
-        <h2 id="d3659456-d7b6-49a5-ab43-4b4be027afa7">实现</h2>
+        <h2 id="08863f32-8068-43b6-963b-ea38a26120d8">实现</h2>
         <p>我们将会实现一个名为 <code>MySet</code> 的集合，它将会拥有以下方法和属性。</p>
         <table>
             <thead>
@@ -165,11 +165,11 @@
 
 }
 </code></pre>
-        <h2 id="8c125a0c-4253-4289-8063-582bdc1a1518">集合运算</h2>
+        <h2 id="0423ab6c-ed28-4a3d-ba84-fdfa41b5552d">集合运算</h2>
         <p>集合运算是指“针对集合的运算”，具体来说，集合运算包括并集、交集、差集、子集，它们的定义如图所示。</p>
         <p><img src="/static/image/markdown/data-structure/set/set-operation.png" alt="集合运算"></p>
         <p>我们会在 <code>MySet</code> 的基础上以纯函数的形式来继续实现这 4 个方法，纯函数是指没有副作用的函数，具体来说，纯函数不会修改调用者与入参，只会生成一个新的结果。</p>
-        <h3 id="8a3a6578-cb6e-405f-b34c-e204065aff13">并集</h3>
+        <h3 id="b0ee902c-ef41-4483-a5eb-d90f3f26dbd4">并集</h3>
         <pre><code class="language-js">class MySet {
 
     // ...
@@ -192,7 +192,7 @@
 
 }
 </code></pre>
-        <h3 id="94caffd0-253d-470b-b9e7-78333def3bd9">交集</h3>
+        <h3 id="99417aff-cfe0-4065-b9fe-68005d0830c5">交集</h3>
         <pre><code class="language-js">class MySet {
 
     // ...
@@ -214,7 +214,7 @@
 
 }
 </code></pre>
-        <h3 id="d504eda2-5e0e-483d-8eba-2cb13c3a71cd">差集</h3>
+        <h3 id="a0bcc0ee-550f-44bc-9641-d23f43d6214c">差集</h3>
         <pre><code class="language-js">class MySet {
 
     // ...
@@ -236,7 +236,7 @@
 
 }
 </code></pre>
-        <h3 id="cbf832b0-bdcf-4387-9910-a6259921af5a">子集</h3>
+        <h3 id="2ae6fda8-74e5-440e-9c24-8bdc4ba08a7f">子集</h3>
         <pre><code class="language-js">class MySet {
 
     // ...
@@ -262,10 +262,10 @@
 
 }
 </code></pre>
-        <h2 id="181596d5-affc-4af2-ae6e-8245b8efc865">Set API</h2>
+        <h2 id="fbaf4527-6a00-45e1-a569-cee9ec792716">Set API</h2>
         <p>其实，JavaScript 早已在语言层面上实现了集合这一数据结构，对应的 API 就叫做 <code>Set</code>，它是来自于 ECMAScript 2015 的特性。比如，我们可以通过 <code>new Set()</code> 来创建一个集合、通过 <code>add</code> 方法来向集合添加元素、通过 <code>delete</code> 方法来从集合中移除元素等等，你可以通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set">这篇文章</a> 来了解它的使用方法。</p>
         <p><code>Set</code> 与 <code>MySet</code> 的区别在于前者的性能要快的多，不过前者并未实现集合运算。另外，JavaScript 还实现了一种特别的集合，名为 <code>WeakSet</code>，你可以通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakSet">这篇文章</a> 来了解它。</p>
-        <h2 id="2a0fa2ed-ab74-4ac3-8ed1-32a6c5360568">多重集</h2>
+        <h2 id="e12f981a-0803-47b8-8083-5663f5dbd0e3">多重集</h2>
         <p>集合内的每个元素都是唯一的，不过，在数学中，有一个叫做多重集（multiset，又称袋）的概念，它允许我们向集合中插入已有的元素。多重集可用于统计集合中的元素的出现次数。</p>
     </article>
 </body>
