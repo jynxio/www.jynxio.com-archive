@@ -75,6 +75,7 @@ const createDataStructureInfo = _ => {
         { name: "dictionary", alias: "字典" },
         { name: "hash-table", alias: "散列表" },
         { name: "recursion", alias: "递归" },
+        { name: "tree", alias: "树" },
     ];
     const options = {
         name,
