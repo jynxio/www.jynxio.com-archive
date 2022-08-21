@@ -320,11 +320,13 @@ table * {
 tr > th:first-child,
 tr > td:first-child {
     padding-left: 1rem;
+    padding-right: 0.5rem;
 }
 
 tr > th:last-child,
 tr > td:last-child {
     padding-right: 1rem;
+    padding-left: 0.5rem;
 }
 
 th {

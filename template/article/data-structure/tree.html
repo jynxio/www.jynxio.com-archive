@@ -14,37 +14,37 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=764e3d03-12e7-4652-9b4f-314d88f298a0>概述</p>
-        <p data-target-id=ded78830-bc68-4fc2-a852-c43ad5601e62>二叉树</p>
-        <p data-target-id=4d97c406-a408-4215-8598-f3d98e3a9cc0>完全二叉树</p>
-        <p data-target-id=8a7bf7fe-ba88-4c72-893e-371fef22d1ac>满二叉树</p>
-        <p data-target-id=3af63658-0b1f-4b56-a476-57ba46d55e21>平衡二叉树</p>
-        <p data-target-id=75394ad9-1cd6-499b-a283-ba06a085d97d>二叉搜索树</p>
-        <p data-target-id=fd2ffe08-6c58-489d-a084-6caca3cff1ff>AVL 树</p>
-        <p data-target-id=529c3ae9-9e20-47a6-88dd-3feebf0a58f0>红黑树</p>
-        <p data-target-id=5d0f05b7-594d-4c43-951a-02a5036cc65a>实现二叉搜索树</p>
-        <p data-target-id=01d6d22b-5d7e-4e94-a71f-4443b1126fe6>实现 AVL 树</p>
-        <p data-target-id=a041a23b-b1e7-4a71-92f5-e8bec53a52b6>源码</p>
+        <p data-target-id=581282c7-8007-4547-bcd4-ebb18ccd2fac>概述</p>
+        <p data-target-id=d649d05a-6c37-43c2-81b3-99ba7bb7d1b2>二叉树</p>
+        <p data-target-id=67885240-5321-4d5b-a545-abf5addb7308>完全二叉树</p>
+        <p data-target-id=33a3ed6c-a075-4357-9050-15cb1b43da78>满二叉树</p>
+        <p data-target-id=6a7fe424-86fb-4d16-bb80-e31c39c94ee6>平衡二叉树</p>
+        <p data-target-id=82e16ed9-64b4-4f6b-999a-d15dddaf0765>二叉搜索树</p>
+        <p data-target-id=a49d9e33-2113-4c4b-a529-ecff288afe76>AVL 树</p>
+        <p data-target-id=65bc5836-26ef-4df4-8b4a-d73f29352c8b>红黑树</p>
+        <p data-target-id=828bd182-bc9f-4766-8e7f-f3e1dfdb4b61>实现二叉搜索树</p>
+        <p data-target-id=d2618aab-9c30-4eec-a1c6-9822f2fe9ba0>实现 AVL 树</p>
+        <p data-target-id=eb2d233f-bead-4e34-adf1-58227dca0717>源码</p>
     </aside>
     <article>
         <h1>树</h1>
-        <h2 id="764e3d03-12e7-4652-9b4f-314d88f298a0">概述</h2>
+        <h2 id="581282c7-8007-4547-bcd4-ebb18ccd2fac">概述</h2>
         <p>树是一种树状的数据结构，它由 n（n &gt; 0）个有限的节点组成，比如族谱、公司职级架构就是典型的树数据结构。</p>
         <p>树中的每个元素都叫做节点。其中，没有父节点的节点叫做根节点，根节点位于树的顶部。没有子节点的节点叫做叶节点，叶节点位于每条路径的底部。</p>
         <p>我们可以对树进行分层，其中根节点位于第 0 层，根节点的子节点位于第 1 层，以此类推。而树的高度就等于最大层数。</p>
         <p><img src="/static/image/markdown/data-structure/tree/tree.png" alt="树"></p>
-        <h2 id="ded78830-bc68-4fc2-a852-c43ad5601e62">二叉树</h2>
+        <h2 id="d649d05a-6c37-43c2-81b3-99ba7bb7d1b2">二叉树</h2>
         <p>二叉树是树的一种，二叉树中的每个节点最多只有 2 个子节点，其中一个是左侧子节点，另一个是右侧子节点。</p>
         <p><img src="/static/image/markdown/data-structure/tree/binary-tree.png" alt="二叉树"></p>
-        <h2 id="4d97c406-a408-4215-8598-f3d98e3a9cc0">完全二叉树</h2>
+        <h2 id="67885240-5321-4d5b-a545-abf5addb7308">完全二叉树</h2>
         <p>完全二叉树是二叉树的一种特殊形态，其定义为：对于一个高度为 h 的二叉树，除了第 h 层外，其余各层的节点数都达到了最大值，且第 h 层的所有节点是从左到右连续排列的。</p>
         <p><img src="/static/image/markdown/data-structure/tree/complete-binary-tree.png" alt="完全二叉树"></p>
-        <h2 id="8a7bf7fe-ba88-4c72-893e-371fef22d1ac">满二叉树</h2>
+        <h2 id="33a3ed6c-a075-4357-9050-15cb1b43da78">满二叉树</h2>
         <p>满二叉树是完全二叉树的一种特殊形态，其定义为：每一层的节点数都达到了最大值。</p>
         <p><img src="/static/image/markdown/data-structure/tree/full-binary-tree.png" alt="满二叉树"></p>
-        <h2 id="3af63658-0b1f-4b56-a476-57ba46d55e21">平衡二叉树</h2>
+        <h2 id="6a7fe424-86fb-4d16-bb80-e31c39c94ee6">平衡二叉树</h2>
         <p>如果一棵二叉树的任意节点的左侧子树和右侧子树的高度差不大于 1，那么我们就称这棵二叉树为平衡二叉树。平衡二叉树是二叉树的一种特殊形态。</p>
-        <h2 id="75394ad9-1cd6-499b-a283-ba06a085d97d">二叉搜索树</h2>
+        <h2 id="82e16ed9-64b4-4f6b-999a-d15dddaf0765">二叉搜索树</h2>
         <p>二叉搜索树是二叉树的一种子类，它是一种按照特定规则来放置节点的二叉树，具体来说：左侧子节点的值必须比父节点的值小，右侧子节点的值必须比父节点的值大。下图所示的是一棵满的二叉搜索树。</p>
         <p><img src="/static/image/markdown/data-structure/tree/binary-search-tree.png" alt="满二叉搜索树"></p>
         <blockquote>
@@ -52,7 +52,7 @@
             <p>本文将会使用数字值来作为二叉搜索树的节点的值，因为数字值与数字值之间天然就可以比较大小。</p>
             <p>如果你可以定义一个规则，来比较其他类型的值与其他类型的值之间的大小，那么你也可以用其他类型的值来作为二叉搜索树的节点的值。比如，如果你使用 JavaScript 来实现二叉搜索树，那么你可以在节点中存储字符串，因为在 JavaScript 中，字符串与字符串之间会隐式的通过转换为 ASCII 码来比较大小。</p>
         </blockquote>
-        <h3 id="c3cbbcbc-f2c1-42de-877c-cc716c4ed449">时间复杂度</h3>
+        <h3 id="732e09e5-4bc1-4761-8bc5-e1e5b54d8e9f">时间复杂度</h3>
         <p>在理想情况下（即满二叉搜索树时），二叉搜索树的新增、删除、搜索节点的时间复杂度均为 <code>O(logn)</code>。</p>
         <p>在最坏情况下（即退化成链表时），二叉搜索树的新增、删除、搜索节点的时间复杂度就会变成 <code>O(n)</code>。</p>
         <p><img src="/static/image/markdown/data-structure/tree/binary-search-tree-time-complexity.png" alt="两种情况下的时间复杂度"></p>
@@ -75,19 +75,19 @@
 </code></pre>
             <p>对于一棵满二叉搜索树而言，其在最坏情况下的搜索操作的时间频度就等于 <code>h+1</code>，即 <code>log2( n + 1 )</code>，因此其搜索操作的时间复杂度就等于 <code>O(logn)</code>，而新增与删除操作同理。</p>
         </blockquote>
-        <h2 id="fd2ffe08-6c58-489d-a084-6caca3cff1ff">AVL 树</h2>
+        <h2 id="a49d9e33-2113-4c4b-a529-ecff288afe76">AVL 树</h2>
         <p>AVL 树（Adelson-Velskii-Landi Tree）是计算机科学中最早被发明的自平衡二叉搜索树。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>自平衡二叉搜索树是一种会自动保持平衡的二叉搜索树，具体来说，每当新增或删除节点之后，自平衡二叉搜索树都会检查自身是否仍然平衡，如果不平衡了，那么它就会通过平衡操作来使自己变回平衡状态。</p>
         </blockquote>
         <p>相对于二叉搜索树，AVL 树的新增、删除、搜索操作在平均和最坏情况下的时间复杂度都是 <code>O(logn)</code>，因为 AVL 树的任意节点的左子树和右子树的高度差都不会超过 1，这意味着 AVL 树总会保持一种比较接近满二叉树的状态。</p>
-        <h3 id="767cd80a-29bc-4c70-b511-e6630d733073">平衡因子</h3>
+        <h3 id="d5506823-6ec9-491e-9edb-bf1ef8d7d03f">平衡因子</h3>
         <p>AVL 树在每次新增和移除节点之后，都要检查每个节点是否处于平衡状态，而平衡因子（Balance Factor）就是量化平衡状态的指标。</p>
         <p>平衡因子的定义非常简单，它就等于节点左子树的高度减去右子树的高度（或相反）。如果 AVL 树中任意一个节点的平衡因子的绝对值大于了 <code>1</code>，那么就意味着该节点的左子树和右子树的高度差超过了 <code>1</code>，此时就要进行平衡操作来使其该节点回归平衡状态。</p>
         <p>下图展示了一棵二叉树的各个节点的高度（<code>h</code>）和平衡因子（<code>bc</code>）。</p>
         <p><img src="/static/image/markdown/data-structure/tree/avl-tree-balance-factor.png" alt="AVL树的平衡因子"></p>
-        <h3 id="b7121c33-06f0-4682-ae89-686fe62227ba">平衡操作</h3>
+        <h3 id="6e16ac97-f05e-4b7c-b4ba-98ba2f9ec1f0">平衡操作</h3>
         <p>当 AVL 树新增或移除一个节点之后，如果某些节点变得不平衡了，那么我们就需要“自下向上”对以这些节点作为根节点的子树进行平衡操作，来使这些子树统统回归到平衡状态。而这个平衡操作就是旋转，旋转的具体含义就是改变树的形态，来使其变得平衡。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -106,7 +106,7 @@
         </ol>
         <p><img src="/static/image/markdown/data-structure/tree/avl-tree-rotation-example.png" alt="AVL树的平衡操作"></p>
         <p>AVL 树的旋转分为 4 种类型：左旋、右旋、左旋再右旋、右旋再左旋。</p>
-        <h3 id="72cb1bcd-32fb-4190-bc50-db38c2082005">左旋</h3>
+        <h3 id="eca0ad61-8f6c-43c3-9803-f783312f2e5f">左旋</h3>
         <p>当树呈现右-右形态时，我们就需要使用左旋。其中，右-右形态是指：树的平衡因子为 <code>-2</code>，且右侧子节点的平衡因子为 <code>0</code> 或 <code>-1</code>。而左旋的具体操作是：</p>
         <ol>
             <li>右侧子节点替代根节点，成为新的根节点。</li>
@@ -114,7 +114,7 @@
             <li>旧根节点成为新根节点的左侧子节点。</li>
         </ol>
         <p><img src="/static/image/markdown/data-structure/tree/avl-tree-rotate-left.png" alt="左旋"></p>
-        <h3 id="9049ff99-9d15-4ac5-a6c6-39ce834aba3e">右旋</h3>
+        <h3 id="379221ea-cce2-4a30-9630-fe05cb1fc2c0">右旋</h3>
         <p>当树呈现左-左形态时，我们就需要使用右旋。其中，左-左形态是指：树的平衡因子为 <code>2</code>，且左侧子节点的平衡因子为 <code>0</code> 或 <code>1</code>。而右旋的具体操作是：</p>
         <ol>
             <li>左侧子节点替代根节点，成为新的根节点。</li>
@@ -122,21 +122,21 @@
             <li>旧根节点成为新根节点的右侧子节点。</li>
         </ol>
         <p><img src="/static/image/markdown/data-structure/tree/avl-tree-rotate-right.png" alt="右旋"></p>
-        <h3 id="820c65bf-8e4c-42a7-904f-73ab768b3707">左旋再右旋</h3>
+        <h3 id="86006690-544e-44d2-9654-4c1dc10b6ec1">左旋再右旋</h3>
         <p>当树呈现左-右形态时，我们就需要先使用左旋，再使用右旋。其中，左-右形态是指：树的平衡因子为 <code>2</code>，且左侧子节点的平衡因子为 <code>-1</code>。旋转的具体操作是：</p>
         <ol>
             <li>对树的左侧子节点进行左旋，来将树转换成左-左形态。</li>
             <li>对树进行右旋。</li>
         </ol>
         <p><img src="/static/image/markdown/data-structure/tree/avl-tree-rotate-left-right.png" alt="左旋再右旋"></p>
-        <h3 id="ba00799b-739e-401c-b38c-544d078a0e8d">右旋再左旋</h3>
+        <h3 id="2798dcf2-bf8a-4de0-a0a8-eec5f052596e">右旋再左旋</h3>
         <p>当树呈现右-左形态时，我们就需要先使用右旋，再使用左旋。其中，右-左形态是指：树的平衡因子为 <code>-2</code>，且右侧子节点的平衡因子为 <code>1</code>。旋转的具体操作是：</p>
         <ol>
             <li>对树的右侧子节点进行右旋，来将树转换成右-右形态。</li>
             <li>对树进行左旋。</li>
         </ol>
         <p><img src="/static/image/markdown/data-structure/tree/avl-tree-rotate-right-left.png" alt="右旋再左旋"></p>
-        <h2 id="529c3ae9-9e20-47a6-88dd-3feebf0a58f0">红黑树</h2>
+        <h2 id="65bc5836-26ef-4df4-8b4a-d73f29352c8b">红黑树</h2>
         <p>红黑树也是一种自平衡的二叉搜索树，红黑树的新增和删除性能比 AVL 树更好，AVL 树的搜索性能比红黑树更好。红黑树比 AVL 树要复杂的多，树中的每个节点都需要遵循以下规则：</p>
         <ul>
             <li>节点是红色或黑色的。</li>
@@ -149,7 +149,7 @@
             <p><strong>Note</strong></p>
             <p>暂未实现红黑树。</p>
         </blockquote>
-        <h2 id="5d0f05b7-594d-4c43-951a-02a5036cc65a">实现二叉搜索树</h2>
+        <h2 id="828bd182-bc9f-4766-8e7f-f3e1dfdb4b61">实现二叉搜索树</h2>
         <p>我们的二叉搜索树将会拥有以下方法：</p>
         <table>
             <thead>
@@ -185,7 +185,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 id="c7090cae-9fac-438e-9cff-14c8ce102afc">创建节点类</h3>
+        <h3 id="29f58c12-d641-4720-9cb1-c0639df116c1">创建节点类</h3>
         <p>二叉搜索树的节点拥有 3 个属性，分别是值、左侧子节点的指针、右侧子节点的指针。为了方便创建节点，我们可以先构造一个节点类 <code>BinarySearchTreeNode</code>。</p>
         <pre><code class="language-js">class BinarySearchTreeNode {
 
@@ -199,7 +199,7 @@
 
 }
 </code></pre>
-        <h3 id="c520f15e-f3f1-4c50-9dd2-bcd3d4ce11b5">创建二叉搜索树类</h3>
+        <h3 id="76a04657-c094-441a-b014-f6fbecda8a07">创建二叉搜索树类</h3>
         <p>接下来，让我们来创建二叉搜索树的类 <code>BinarySearchTree</code>，它目前只有构造器方法，我们会在后续为其继续补充剩余的方法。</p>
         <pre><code class="language-js">class BinarySearchTree {
 
@@ -211,7 +211,7 @@
 
 }
 </code></pre>
-        <h3 id="5fdc32fd-76e8-4485-9927-98f811f58143">创建插入方法</h3>
+        <h3 id="65f5c85e-caf7-4b03-b823-1d9c6b0323d7">创建插入方法</h3>
         <p><code>insert</code> 方法的实现思路如下：</p>
         <ol>
             <li>首先易知，向二叉搜索树插入的新节点必然会成为它的叶节点。</li>
@@ -262,7 +262,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="7f6e7167-acac-4bd5-a3d0-6c788cfd2e0c">创建移除方法</h3>
+        <h3 id="cbbdcb5d-6326-414c-9a9f-b8fbb8266569">创建移除方法</h3>
         <p><code>remove</code> 方法的实现比 <code>insert</code> 方法更难，其实现思路如下：</p>
         <ol>
             <li>如果根节点为空，那么就直接结束该方法。</li>
@@ -333,7 +333,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="9e29a510-dccf-4368-b28f-be34cb846af8">创建搜索方法</h3>
+        <h3 id="6ffd7992-e238-4a34-b354-9eb6e0dc6206">创建搜索方法</h3>
         <p><code>search</code> 方法是最简单的，其实现思路如下：</p>
         <ol>
             <li>如果搜索节点的值小于根节点的值，那么就把根节点的左侧子节点当作一棵新的二叉搜索树，然后在这棵新的二叉搜索树中去搜索这个搜索节点。</li>
@@ -371,7 +371,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="889f1eb9-fbd1-4cac-982f-f44697ddf9cb">创建中序遍历方法</h3>
+        <h3 id="821edd6c-6cd1-4858-b95f-1efbf0c0b347">创建中序遍历方法</h3>
         <p>中序遍历的遍历顺序如下图所示：</p>
         <p><img src="/static/image/markdown/data-structure/tree/binary-search-tree-inorder-traverse.png" alt="inorderTraverse方法"></p>
         <blockquote>
@@ -404,7 +404,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="863cdd1e-8931-4c55-a69e-6460645968cb">创建前序遍历方法</h3>
+        <h3 id="6747e84c-2087-46dc-be96-80c00dda9415">创建前序遍历方法</h3>
         <p>先序遍历的遍历顺序如下图所示：</p>
         <p><img src="/static/image/markdown/data-structure/tree/binary-search-tree-preorder-traverse.png" alt="preorderTraverse方法"></p>
         <p>只需稍稍修改一下中序遍历，就能实现先序遍历了，其实现代码如下：</p>
@@ -433,7 +433,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="d97c44c9-27ff-4111-9055-2827fa8738e8">创建后序遍历方法</h3>
+        <h3 id="e5516f7e-1095-4f9e-a8e8-536d9855c90b">创建后序遍历方法</h3>
         <p>后序遍历的遍历顺序如下图所示：</p>
         <p><img src="/static/image/markdown/data-structure/tree/binary-search-tree-postorder-traverse.png" alt="postorderTraverse方法"></p>
         <p>同样的，只需稍稍修改一下中序遍历，就能实现后序遍历了，其实现代码如下：</p>
@@ -462,9 +462,9 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h2 id="01d6d22b-5d7e-4e94-a71f-4443b1126fe6">实现 AVL 树</h2>
+        <h2 id="d2618aab-9c30-4eec-a1c6-9822f2fe9ba0">实现 AVL 树</h2>
         <p>我们实现的 AVL 树将会拥有和二叉搜索树一样的方法，所以我们可以让 AVL 树继承二叉搜索树。不过，我们需要重写 AVL 树中的 <code>insert</code> 和 <code>remove</code> 方法，来实现自平衡的特性。</p>
-        <h3 id="a9e11a69-d7f4-46d1-a27d-f2857a01b0e0">创建 AVL 树类</h3>
+        <h3 id="90e77e9d-c3da-4aed-8fdc-d08062d15dcc">创建 AVL 树类</h3>
         <p>首先，让我们来创建 AVL 树的类 <code>AdelsonVelskiiLandiTree</code>，它目前只有构造器方法，我们会在后续为其继续补充剩余的方法。</p>
         <pre><code class="language-js">class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
@@ -476,7 +476,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="be569d1f-7f51-454f-9e4e-d680b373f617">创建 _balance 方法</h3>
+        <h3 id="d9db4d95-4f45-41da-bd49-d719b2789b96">创建 _balance 方法</h3>
         <p>我们将平衡操作封装成一个名为 <code>_balance</code> 的内部方法，这样我们的 <code>insert</code> 方法和 <code>remove</code> 方法就可以直接调用该方法来对树进行平衡处理。</p>
         <p><code>_balance</code> 方法是 <code>AdelsonVelskiiLandiTree</code> 类实现自平衡的关键方法，它的内部包含了：计算节点的高度、计算节点的平衡因子、左旋、右旋、左旋再右旋、右旋再左旋等子方法。</p>
         <pre><code class="language-js">// Note：该实现省略了构造器方法与其他方法。
@@ -620,7 +620,7 @@ class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="49e9a34c-883b-4539-aa9d-357f7eee516b">重写 insert 方法</h3>
+        <h3 id="151e7d52-ade4-46a6-aab1-6515e6ee189f">重写 insert 方法</h3>
         <pre><code class="language-js">// Note：该实现省略了构造器方法与其他方法。
 class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
@@ -659,7 +659,7 @@ class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="ad66bef0-59d2-481b-92a6-4a2ff5a356f5">重写 remove 方法</h3>
+        <h3 id="97bd6d13-a364-440f-81ee-d3a2a202e811">重写 remove 方法</h3>
         <pre><code class="language-js">// Note：该实现省略了构造器方法与其他方法。
 class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
@@ -721,7 +721,7 @@ class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
 }
 </code></pre>
-        <h2 id="a041a23b-b1e7-4a71-92f5-e8bec53a52b6">源码</h2>
+        <h2 id="eb2d233f-bead-4e34-adf1-58227dca0717">源码</h2>
         <p>本文已将实现链表的源码上传至该 <a href="https://github.com/jynxio/leetcode-everyday">库</a> 的 <a href="https://github.com/jynxio/leetcode-everyday/blob/main/Tree.js">Tree.js</a> 文件中。</p>
     </article>
 </body>
