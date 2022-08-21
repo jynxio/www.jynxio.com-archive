@@ -348,6 +348,12 @@ li {
     margin-left: 2rem;
 }
 
+li > ul,
+li > ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 /* 无序列表 */
 ul > li:not(.check-li)::before {
     --length: calc( 1rem * var( --line-height ) * 0.25 );
