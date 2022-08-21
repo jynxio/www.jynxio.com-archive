@@ -1009,5 +1009,5 @@ class Deque {
 
 ## 源码
 
-本文已将实现链表的源码上传至该 [库](https://github.com/jynxio/leetcode-everyday/blob/main/linked-list.js) 中。
+本文已将实现链表的源码上传至该 [库](https://github.com/jynxio/leetcode-everyday) 的 [LinkedList.js](https://github.com/jynxio/leetcode-everyday/blob/main/LinkedList.js) 文件中。
 
