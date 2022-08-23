@@ -10,32 +10,122 @@ typora-root-url: ..\..
 
 - 直白易懂
 - 总是最新
+- 专属于我
 
 ## useState
 
-`useState` 是一种用来控制组件状态的 Hook，它有 2 种调用方式，分别是：
+`useState` 用于声明、存储、更新组件的内部状态，其语法如下：
 
 ```js
-/* 方式一 */
+/* 语法一 */
 const [ state, setState ] = useState( initial_state );
 
-/* 方式二 */
+/* 语法二 */
 const [ state, setState ] = useState( function createInitialState () { return initial_state } );
 ```
 
-对于方式二，`createInitialState` 函数只会在挂载组件时被调用，该函数的返回值会被作为 `state` 的初始值，因为该函数的作用就是为了给 `state` 提供一个初始值。在未来更新组件和卸载组件的时候，该函数都不会再被调用，不过如果重新挂载组件，那么该函数就会被再次调用。
-
-### setState
-
-`setState` 是 `state` 的更新器，它用于更新组件的状态，并命令 React 更新组件。它也有 2 种调用方式，分别是：
+其中，`setState` 是状态的更新器，其语法如下：
 
 ```js
-/* 方式一 */
+/* 语法一 */
 setState( next_state );
 
-/* 方式二 */
+/* 语法二 */
 setState( function createNextState ( previous_state ) { return next_state } );
 ```
+
+具体来说，`setState` 的作用有 2 个，分别是：
+
+- 异步的更新组件。
+- 立即将入参推入状态的任务队列。
+
+### 原理
+
+React 通过调用组件构造器来创建 React Element，在每一次调用组件构造器的期间，`useState` 函数都会被执行。`useState` 函数会返回一个代表组件当前状态的值（`state`），和一个用于更新状态的函数（`setState`）。
+
+不过，`useState` 函数在组件挂载和更新时的行为是有区别的：
+
+- 挂载时：`useState` 函数会根据入参的类型来决定返回值：
+
+  - 如果入参是一个函数，那么 React 就会立即调用这个函数，并用该函数的返回值来作为自己的第一个返回值。
+
+  - 否则，React 就会直接用入参来作为自己的第一个返回值。
+
+- 更新时：`useState` 函数会忽略入参，并通过特殊手段来计算出一个值，然后再用这个值来作为自己的第一个返回值，关于“特殊手段”，详见下文。
+
+> 其中，“挂载”代表 React 首次调用组件构造器，“更新”代表 React 非首次调用组件构造器。
+>
+> 因为传入 `useState` 的入参只会在挂载阶段被使用，所以我把传入 `useState` 的函数入参命名为 `createInitialState`，以表明该函数仅用于生成组件的初始状态。
+
+#### 无效更新
+
+无论 `setState` 的入参是一个函数，还是一个非函数的值，只要 `Object.is( previous_state, next_state )` 返回 `true`，那么该 `setState` 就不会触发组件的更新。
+
+不过，哪怕 `setState` 不会触发更新，这个 `setState` 的入参也会被推入状态的任务队列。
+
+```react
+function Button () {
+
+    console.log( "Rerender" )
+
+    const [ count, setCount ] = useState( 0 );
+
+    function handleClick () {
+
+        console.log( "Click" );
+
+        setCount( function uselessUpdate ( previous_count ) {
+
+            console.log( "Run the useless updater" );
+
+            return previous_count;
+
+        } );
+
+        setCount( function usefulUpdate ( previous_count ) {
+
+            console.log( "Run the useful updater" );
+
+            return previous_count + 1;
+
+        } );
+
+    }
+
+    return <button onClick={ handleClick }>{ count }</button>;
+
+}
+```
+
+上例中，每次点击 `button` 元素，控制台都会依次输出：
+
+```
+Click
+Rerender
+Run the useless update
+Run the useful update
+```
+
+这表明，没有触发更新的 `setState`，也会把它的入参推入到状态的任务队列中去。
+
+> 不过，第一次点击 `button` 元素时，控制台会依次输出：
+>
+> ```
+> Click
+> Run the useless update
+> Run the useful update
+> Rerender
+> ```
+
+#### 状态的任务队列
+
+![状态的任务队列](/static/image/markdown/javascript/react-api-manual/setstate-queue.png)
+
+#### 异步更新与批处理
+
+
+
+
 
 它的运行机制如下：
 
@@ -43,6 +133,28 @@ setState( function createNextState ( previous_state ) { return next_state } );
 - 如果多次调用 `setState` 函数，那么 React 就会按照 `setState` 的调用顺序，来将更新组件的任务有序的放入一个任务队列中，然后依次出队执行任务队列中的更新任务。有时候，React 执行一个更新任务，就会更新一次 DOM，有时候，React 会连续执行多个更新任务，才更新一次 DOM。
 
 > React 使用 `Object.is` 来执行相等判断。
+
+### batching
+
+React processes state updates after event handlers have finished running. This is called batching.
+
+一次性更新多个状态变量是 batching
+
+一次性多次更新同一个状态变量却不是 batching
+
+原来，React 是在调用 `useState` 的时候来更新组件的状态的，比如我调用了 `setState`，但是状态可不会立即被更新，待更新的值或更新函数会被放入到一个任务队列中（每个状态变量都会维护一个单独的队列），然后等到下一次执行组件函数的时候，当执行到 `useState` 的时候，就会把任务队列全都拿出来执行，计算出更新后的状态值，然后继续向下执行组件函数的剩余部分。！太棒了，这个细节！
+
+> Setting state does not change the variable in the existing render, but it requests a new render.
+>
+> It is a function. React adds it to a queue.
+>
+> During the next render, React goes through the queue and gives you the final updated state.
+>
+> When you call `useState` during the next render, React goes through the queue. 
+>
+> React stores `3` as the final result and returns it from `useState`.
+>
+> In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes.
 
 ## useEffect
 
