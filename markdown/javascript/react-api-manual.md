@@ -24,24 +24,7 @@ const [ state, setState ] = useState( initial_state );
 const [ state, setState ] = useState( function createInitialState () { return initial_state } );
 ```
 
-其中，`setState` 是状态的更新器，其语法如下：
-
-```js
-/* 语法一 */
-setState( next_state );
-
-/* 语法二 */
-setState( function createNextState ( previous_state ) { return next_state } );
-```
-
-具体来说，`setState` 的作用有 2 个，分别是：
-
-- 异步的更新组件。
-- 立即将入参推入状态的任务队列。
-
-### 原理
-
-React 通过调用组件构造器来创建 React Element，在每一次调用组件构造器的期间，`useState` 函数都会被执行。`useState` 函数会返回一个代表组件当前状态的值（`state`），和一个用于更新状态的函数（`setState`）。
+在每一次调用组件构造器的期间，`useState` 函数都会被执行。而 `useState` 函数会返回一个代表组件当前状态的值（`state`），和一个用于更新状态的函数（`setState`）。
 
 不过，`useState` 函数在组件挂载和更新时的行为是有区别的：
 
@@ -53,108 +36,41 @@ React 通过调用组件构造器来创建 React Element，在每一次调用组
 
 - 更新时：`useState` 函数会忽略入参，并通过特殊手段来计算出一个值，然后再用这个值来作为自己的第一个返回值，关于“特殊手段”，详见下文。
 
-> 其中，“挂载”代表 React 首次调用组件构造器，“更新”代表 React 非首次调用组件构造器。
+> “挂载”代表 React 首次调用组件构造器，“更新”代表 React 非首次调用组件构造器。
 >
 > 因为传入 `useState` 的入参只会在挂载阶段被使用，所以我把传入 `useState` 的函数入参命名为 `createInitialState`，以表明该函数仅用于生成组件的初始状态。
+
+### setState
+
+`setState` 用于更新状态、更新组件，其语法如下：
+
+```js
+/* 语法一 */
+setState( next_state );
+
+/* 语法二 */
+setState( function createNextState ( previous_state ) { return next_state } );
+```
+
+调用 `setState` 之后，`setState` 的入参就会被推入状态的任务队列，并创建一个异步的任务（宏/微任务）来更新组件。在更新组件的期间，`useState` 函数就会通过处理状态的任务队列，来计算出状态的值，然后返回这个值。
+
+### 更新原理
+
+比如，触发 `click` 事件之后，`handleClick` 函数会多次调用 `setA` 和 `setB`，它们的入参会被依次推入各自的任务队列中去。另外，`setA` 和 `setB` 也触发了组件的更新（异步的）。
+
+![状态的任务队列](/static/image/markdown/javascript/react-api-manual/setstate-queue-create.png)
+
+更新组件时，`useState` 函数会依次处理任务队列中的任务，然后计算出状态的值，然后返回这个值。
+
+![计算状态值](/static/image/markdown/javascript/react-api-manual/setstate-queue-calculate.png)
+
+> 我们多次调用了 `setState` 函数，但是 React 只更新了一次组件，React 把这种批处理 `setState` 函数的特性成为 batching。
 
 #### 无效更新
 
 无论 `setState` 的入参是一个函数，还是一个非函数的值，只要 `Object.is( previous_state, next_state )` 返回 `true`，那么该 `setState` 就不会触发组件的更新。
 
 不过，哪怕 `setState` 不会触发更新，这个 `setState` 的入参也会被推入状态的任务队列。
-
-```react
-function Button () {
-
-    console.log( "Rerender" )
-
-    const [ count, setCount ] = useState( 0 );
-
-    function handleClick () {
-
-        console.log( "Click" );
-
-        setCount( function uselessUpdate ( previous_count ) {
-
-            console.log( "Run the useless updater" );
-
-            return previous_count;
-
-        } );
-
-        setCount( function usefulUpdate ( previous_count ) {
-
-            console.log( "Run the useful updater" );
-
-            return previous_count + 1;
-
-        } );
-
-    }
-
-    return <button onClick={ handleClick }>{ count }</button>;
-
-}
-```
-
-上例中，每次点击 `button` 元素，控制台都会依次输出：
-
-```
-Click
-Rerender
-Run the useless update
-Run the useful update
-```
-
-这表明，没有触发更新的 `setState`，也会把它的入参推入到状态的任务队列中去。
-
-> 不过，第一次点击 `button` 元素时，控制台会依次输出：
->
-> ```
-> Click
-> Run the useless update
-> Run the useful update
-> Rerender
-> ```
-
-#### 状态的任务队列
-
-![状态的任务队列](/static/image/markdown/javascript/react-api-manual/setstate-queue.png)
-
-#### 异步更新与批处理
-
-
-
-
-
-它的运行机制如下：
-
-- 如果调用 `setState` 函数，那么 React 就会异步的更新组件，并且 `next_state` 将会作为组件下一次更新时的新 `state` 值。不过，如果 `next_state` 和 `previous_state` 一样，那么 React 就不会更新组件。
-- 如果多次调用 `setState` 函数，那么 React 就会按照 `setState` 的调用顺序，来将更新组件的任务有序的放入一个任务队列中，然后依次出队执行任务队列中的更新任务。有时候，React 执行一个更新任务，就会更新一次 DOM，有时候，React 会连续执行多个更新任务，才更新一次 DOM。
-
-> React 使用 `Object.is` 来执行相等判断。
-
-### batching
-
-React processes state updates after event handlers have finished running. This is called batching.
-
-一次性更新多个状态变量是 batching
-
-一次性多次更新同一个状态变量却不是 batching
-
-原来，React 是在调用 `useState` 的时候来更新组件的状态的，比如我调用了 `setState`，但是状态可不会立即被更新，待更新的值或更新函数会被放入到一个任务队列中（每个状态变量都会维护一个单独的队列），然后等到下一次执行组件函数的时候，当执行到 `useState` 的时候，就会把任务队列全都拿出来执行，计算出更新后的状态值，然后继续向下执行组件函数的剩余部分。！太棒了，这个细节！
-
-> Setting state does not change the variable in the existing render, but it requests a new render.
->
-> It is a function. React adds it to a queue.
->
-> During the next render, React goes through the queue and gives you the final updated state.
->
-> When you call `useState` during the next render, React goes through the queue. 
->
-> React stores `3` as the final result and returns it from `useState`.
->
-> In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes.
 
 ## useEffect
 
