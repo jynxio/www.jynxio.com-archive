@@ -83,8 +83,6 @@ useEffect(
 );
 ```
 
-其中：
-
 - `effect` 函数用于装载具有副作用的操作，如果挂载或更新了组件，那么 React 就会执行 `effect` 函数，并且执行时机是在页面更新之后。
 - `dependency_array` 数组用于决定是否执行 `effect` 和 `clean` 函数。
 
@@ -404,3 +402,71 @@ function Component () {
 
 }
 ```
+
+## Error Boundary
+
+error boundary 是指定义了 `getDerivedStateFromError` 或 `componentDidCatch` 方法的 class 组件。
+
+如果 error boundary 组件的后代组件发生了崩溃，那么崩溃信息就会传递给 error boundary 组件，这时你可以用 `componentDidCatch` 方法来打印崩溃信息，用 `getDerivedStateFromError` 方法来渲染降级 UI。
+
+### getDerivedStateFromError
+
+error boundary 组件的 `static` 方法，该方法会在渲染阶段被调用，该方法接收 1 个入参 `error`，代表后代组件所抛出的错误，该方法的返回值会更新 error boundary 组件的 `state`。
+
+```js
+function getDerivedStateFromError ( error ) {
+
+    return new_state;
+
+}
+```
+
+### componentDidCatch
+
+error boundary 组件的方法，该方法会在提交阶段被调用，该方法接收 2 个入参 `error` 和 `info`，`error` 代表后代组件所抛出的错误，`information` 是一个带有 `componentStack` 属性的对象，`componentStack` 属性是一个字符串，该字符串记录了抛出错误的后代组件的栈信息。
+
+```js
+function componentDidCatch ( error, information ) {
+
+    postErrorToService( information.componentStack );
+
+}
+```
+
+> 开发环境下，被 `componentDidCatch` 捕获的错误会冒泡至浏览器根对象 `window`。生产环境下，则不会冒泡。
+
+### 示例
+
+```react
+class ErrorBoundary extends React.Component {
+
+    constructor ( properties ) {
+
+        super( properties );
+        this.state = { hasError: false };
+
+    }
+
+    static getDerivedStateFromError ( error ) {
+
+        /* 更新state，以渲染降级UI。 */
+        return { hasError: true };
+
+    }
+
+    componentDidCatch ( error, information ) {
+
+        /* 反馈错误信息给服务器。 */
+        postErrorToService( information.componentStack ); 
+
+    }
+
+    render () {
+
+        return this.state.hasError ? <div>降级UI</div> : this.props.children;
+
+    }
+    
+}
+```
+
