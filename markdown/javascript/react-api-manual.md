@@ -470,3 +470,30 @@ class ErrorBoundary extends React.Component {
 }
 ```
 
+## write something about key
+
+When you give a component state, you might think the state “lives” inside the component. But the state is actually held inside React. React associates each piece of state it’s holding with the correct component by where that component sits in the UI tree.
+
+> Remember that it’s the position in the UI tree—not in the JSX markup
+
+Also, when you render a different component in the same position, it resets the state of its entire subtree.
+
+> When the child `div` was removed from the DOM, the whole tree below it (including the `Counter` and its state) was destroyed as well.
+>
+> UI tree 不等于 DOM tree 吧？那么 UI tree 是什么呢？好像是因为：⬇️
+>
+> State is not kept in JSX tags. It’s associated with the tree position in which you put that JSX.
+
+React preserves a component’s state for as long as it’s being rendered at its position in the UI tree.If it gets removed, or a different component gets rendered at the same position, React discards its state.
+
+> In detail, React destroys state when it removes a component from the tree.
+
+Notice how the moment you stop rendering the second counter, its state disappears completely. That’s because when React removes a component, it destroys its state.
+
+When you tick “Render the second counter,” a second `Counter` and its state are initialized from scratch (`score = 0`) and added to the DOM.
+
+You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a *first* counter, or a *second* counter, but a specific counter—for example, *Taylor’s* counter.
+
+Specifying a `key` tells React to use the `key` itself as part of the position, instead of their order within the parent. 
+
+> Remember that keys are not globally unique. They only specify the position *within the parent*.
