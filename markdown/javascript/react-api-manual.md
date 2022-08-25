@@ -470,30 +470,25 @@ class ErrorBoundary extends React.Component {
 }
 ```
 
-## write something about key
+## UI 树与状态
 
-When you give a component state, you might think the state “lives” inside the component. But the state is actually held inside React. React associates each piece of state it’s holding with the correct component by where that component sits in the UI tree.
+组件的状态就是一份用于描述组件状况的数据，然而这份数据却并不存在于组件的内部，而是存在于 React 之中，直至组件构造器被调用的时候，React 才会将属于组件的状态数据派发给组件。
 
-> Remember that it’s the position in the UI tree—not in the JSX markup
+特别的是，React 并没有直接将状态数据和组件绑定在一起，而是将状态数据和 UI 树关联在一起，更具体的说，React 将状态数据和位置、种类、`key` 值绑定在了一起。
 
-Also, when you render a different component in the same position, it resets the state of its entire subtree.
+1. 如果 React 在 UI 树上的 `p` 位置新增了一个种类为 `t` 且 `key` 值为 `k` 的组件，那么 React 就会新建一份状态数据，并将这份状态数据和 `p`、`t`、`k` 关联在一起。
+2. 如果 React 移除了 UI 树上 `p` 位置的组件，那么 React 就会销毁掉与 `p` 位置所对应的状态数据。
+3. 如果 React 更新了 UI 树上 `p` 位置的组件的种类 `t`，那么就相当于先执行步骤 2 再执行步骤 1。
+4. 如果 React 更新了 UI 树上 `p` 位置的组件的 `key` 值 `k`，那么就相当于先执行步骤 2 再执行步骤 1。
 
-> When the child `div` was removed from the DOM, the whole tree below it (including the `Counter` and its state) was destroyed as well.
+得益于步骤 4，我们可以通过更新组件的 `key` 属性来重置组件。
+
+> 创建组件时，如果我们为组件的 `key` 属性指定了一个值，那么组件的 `key` 属性就会使用这个指定值。否则，组件的 `key` 属性就会使用默认值，这个默认值是组件在父组件中的序号，比如 `first`、`second` 等。
 >
-> UI tree 不等于 DOM tree 吧？那么 UI tree 是什么呢？好像是因为：⬇️
->
-> State is not kept in JSX tags. It’s associated with the tree position in which you put that JSX.
+> 另外，如果移除了一个组件，那么该组件的后代组件也都会被移除，所以被移除的组件的后代组件也都会执行步骤 2。
 
-React preserves a component’s state for as long as it’s being rendered at its position in the UI tree.If it gets removed, or a different component gets rendered at the same position, React discards its state.
+### UI 树
 
-> In detail, React destroys state when it removes a component from the tree.
+UI 树类似于 DOM 树，DOM 树描述了每个节点的位置关系，而 UI 树则描述了每个 react element 的位置关系。React 通过 JSX 来构建 UI 树，并通过 UI 树来更新 DOM 树。
 
-Notice how the moment you stop rendering the second counter, its state disappears completely. That’s because when React removes a component, it destroys its state.
-
-When you tick “Render the second counter,” a second `Counter` and its state are initialized from scratch (`score = 0`) and added to the DOM.
-
-You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a *first* counter, or a *second* counter, but a specific counter—for example, *Taylor’s* counter.
-
-Specifying a `key` tells React to use the `key` itself as part of the position, instead of their order within the parent. 
-
-> Remember that keys are not globally unique. They only specify the position *within the parent*.
+![UI树](/static/image/markdown/javascript/react-api-manual/ui-tree.png)
