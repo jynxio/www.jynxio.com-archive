@@ -407,66 +407,144 @@ function Component () {
 
 error boundary 是指定义了 `getDerivedStateFromError` 或 `componentDidCatch` 方法的 class 组件。
 
-如果 error boundary 组件的后代组件发生了崩溃，那么崩溃信息就会传递给 error boundary 组件，这时你可以用 `componentDidCatch` 方法来打印崩溃信息，用 `getDerivedStateFromError` 方法来渲染降级 UI。
+一旦 error boundary 组件的后代组件发生了崩溃，那么这个崩溃就会冒泡至 error boundary 组件，这时 Reacy 就会依次调用 error boundary 组件的 `getDerivedStateFromError`、`render`、`componentDidCatch` 方法。而我们就可以通过操纵 `getDerivedStateFromError` 方法来渲染降级的 UI，用 `componentDidCatch` 方法来向服务器发送崩溃日志。
+
+如果 error boundary 组件的后代组件没有发生崩溃，那么 React 就不会调用 error boundary 的 `getDericedStateFromError` 和 `componentDidCatch` 方法。
 
 ### getDerivedStateFromError
 
-error boundary 组件的 `static` 方法，该方法会在渲染阶段被调用，该方法接收 1 个入参 `error`，代表后代组件所抛出的错误，该方法的返回值会更新 error boundary 组件的 `state`。
+`getDerivedStateFromError` 是 error boundary 组件的静态方法，该方法先于 `render` 方法被调用。该方法接收一个入参 `error`，其代表后代组件所抛出的错误，而该方法的返回值会更新 error boundary 组件的 `state`。
 
-```js
-function getDerivedStateFromError ( error ) {
+如果后代组件没有发生崩溃，React 就不会调用该方法。
 
-    return new_state;
+```react
+class ErrorBoundary {
+
+    /*
+     * @param { Error } - 后代组件所抛出的错误。
+     * @returns { * }   - 该返回值会更新error boundary组件的state。
+     */
+    static getDerivedStateFromError ( error ) { return new_state }
 
 }
 ```
 
 ### componentDidCatch
 
-error boundary 组件的方法，该方法会在提交阶段被调用，该方法接收 2 个入参 `error` 和 `info`，`error` 代表后代组件所抛出的错误，`information` 是一个带有 `componentStack` 属性的对象，`componentStack` 属性是一个字符串，该字符串记录了抛出错误的后代组件的栈信息。
+`componentDidCatch` 是 error boundary 组件的原型方法，该方法后于 `render` 方法被调用。该方法接收 2 个入参，分别是 `error` 和 `information`，`error` 代表后代组件所抛出的错误，`information` 是一个带有 `componentStack` 属性的普通对象，`componentStack` 属性是一个字符串，该字符串记录了抛出错误的后代组件的栈信息。
+
+如果后代组件没有发生崩溃，React 就不会调用该方法。
 
 ```js
-function componentDidCatch ( error, information ) {
+class ErrorBoundary {
 
-    postErrorToService( information.componentStack );
+    /*
+     * @param { Error }  - 后代组件所抛出的错误。
+     * @param { Object } - 抛出错误的后代组件的栈信息。
+     */
+    componentDidCatch ( error, information ) {}
 
 }
 ```
 
-> 开发环境下，被 `componentDidCatch` 捕获的错误会冒泡至浏览器根对象 `window`。生产环境下，则不会冒泡。
+> 在开发环境下，被 `componentDidCatch` 方法所捕获的错误会冒泡至浏览器根对象 `window`，而在生产环境下，则不会发生冒泡。
 
 ### 示例
 
 ```react
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
 
-    constructor ( properties ) {
+    constructor ( props ) {
 
-        super( properties );
-        this.state = { hasError: false };
+        super( props );
+        
+        this.state = { error: undefined };
 
     }
 
     static getDerivedStateFromError ( error ) {
 
-        /* 更新state，以渲染降级UI。 */
-        return { hasError: true };
+        /* 更新state。 */
+        return { error };
 
     }
 
     componentDidCatch ( error, information ) {
 
-        /* 反馈错误信息给服务器。 */
-        postErrorToService( information.componentStack ); 
+        /* 反馈错误。 */
+        postErrorToService( error.message );
+        postErrorToService( information.componentStack );
 
     }
 
     render () {
 
-        return this.state.hasError ? <div>降级UI</div> : this.props.children;
+        if ( ! this.state.error ) this.props.children;
+
+        return <pre>{ this.state.error.message }</pre>;
 
     }
-    
+
+}
+
+function App () {
+
+    return <ErrorBoundary><Bomb/></ErrorBoundary>;
+
+}
+
+function Bomb () {
+
+    throw new Error( "Bomb!" );
+
+}
+```
+
+### react-error-boundary
+
+[react-error-boundary](https://github.com/bvaughn/react-error-boundary#readme) 是一个 `ErrorBoundary` 库，它可以让你免于手动编写 `ErrorBoundary` 类，并且它还提供了一些额外的特性。
+
+```react
+import { ErrorBoundary } from "react-error-boundary";
+
+function App () {
+
+    const [ key, setKey ] = useState( 0 );
+	const handleReset = _ => setKey( key + 1 ); // 重置ErrorBoundary组件。
+
+    return (
+    	<ErrorBoundary
+            key={ key }
+            onReset={ handleReset }
+            FallbackComponent={ ErrorFallback }
+        >
+            <Bomb/>
+        </ErrorBoundary>
+    );
+
+}
+
+/*
+ * ErrorBoundary的fallback函数。
+ * @param { Error }    - 冒泡至ErrorBoundary的Error对象。
+ * @param { Function } - ErrorBoundary的onReset参数的值。
+ * @returns { * }      - 其返回值将会作为ErrorBoundary的getDerivedStateFromError方法的返回值。
+ */
+function ErrorFallback ( { error, resetErrorBoundary } ) {
+
+    return (
+    	<div>
+            <pre>{ error.message }</pre>
+            <button onClick={ resetErrorBoundary }></button>
+        </div>
+    );
+
+}
+
+function Bomb () {
+
+    throw new Error( "Bomb!" );
+
 }
 ```
 
