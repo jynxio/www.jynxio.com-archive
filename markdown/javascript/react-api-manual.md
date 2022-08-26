@@ -72,6 +72,64 @@ setState( function createNextState ( previous_state ) { return next_state } );
 
 不过，哪怕 `setState` 不会触发更新，这个 `setState` 的入参也会被推入状态的任务队列。
 
+## useReducer
+
+> 虽然 `useReducer` 可以“减少”组件内的代码，但这不是它叫 `useReducer` 的原因。React 官方解释到，reducer 的含义不是减少，而是累积，它的含义援引自 JavaScript 中的 Array 的 reduce 方法。
+>
+> ```js
+> [ 1, 2, 3, 4, 5 ].reduce(
+>     ( previous_value, current_value ) => previous_value + current_value,
+>     0,
+> ); // 1 + 2 + 3 + 4 + 5 = 15
+> ```
+>
+> Array 的 reduce 方法的作用之一累加值，又或者可以是：通过前一个值，来推断下一个值，然后再继续推断下下个值，直至推断出最终值。
+>
+> 当你把更新状态的逻辑抽离出来，并用 action 来驱动这些逻辑的时候，就经常会发生一件这样的事情：你需要频繁的更新状态，甚至是在更新组件之前，就多次更新了同一个状态，这时候，就是你派发了多个 action，而 reducer 的作用，就是依次根据 action 来执行状态的更新，这时候就需要用第一个 action 和第一个状态值，来推断出下一个状态值，然后用下一个状态值和下一个 action 来推断出下下个状态值，直至推断出最终的状态值。
+>
+> 真是拗口的逻辑。
+
+Reducers are a different way to handle state. You can migrate from `useState` to `useReducer` in three steps:
+
+1. **Move** from setting state to dispatching actions.
+2. **Write** a reducer function.
+3. **Use** the reducer from your component.
+
+The object you pass to `dispatch` is called an “action:”
+
+传递给 `dispatch` 函数的对象被称为 `action`。虽然你可以完全自定义 `action` 的内容，不过 React 建议你至少为其创建一个 `type` 属性，用来描述这个行为的类型。
+
+```js
+function handleDeleteTask(taskId) {
+
+    const action = { type: "deleted", id: task_id };
+    
+    dispatch( action );
+
+}
+```
+
+把更新状态的逻辑卸载 `reducer` 函数内，这个函数会接收 2 个参数，第一个参数是当前的状态，第二个参数是 `action`，该函数的返回值会作为新的状态。React 会帮你把 `reducer` 函数的返回值设置为组件的新状态。
+
+```js
+function yourReducer( previous_state, action ) {
+
+    switch ( action.type ) {
+            
+        case "added": return next_state_1;
+        case "changed": return next_state_2;
+        default: throw new Error( "It's impossible!" );
+    }
+
+}
+```
+
+当组件内的 `setState` 很少的时候，用 `useState` 更划算，因为这个事件 `useState` 的含义可以做到一目了然，而且代码量会相对于使用 `useReducer` 更少。
+
+当 `setState` 很多的时候，`useState` 就让人眼花缭乱无法一眼看懂逻辑了，这时候使用 `useReducer` 可以让更新状态的逻辑更清晰，而且也能节省代码，因为更新状态都被集中的塞进了 reduce 函数中。而且，由于吧更新状态的逻辑都集中到了一起，这个时候更容易 debugger，因为你可以直接打印出是哪个 action 出了错误，而不是在每一个 setState 中打印一下。
+
+最后，reduce 函数的代码可以直接放到独立的文件中去，这可是一个大好处呢！
+
 ## useEffect
 
 `useEffect` 用于执行带有副作用的操作，其语法如下：
