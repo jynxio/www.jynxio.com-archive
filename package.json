@@ -7,7 +7,7 @@
         "html-loader": "^4.1.0",
         "html-webpack-plugin": "^5.5.0",
         "js-beautify": "^1.14.6",
-        "marked": "^4.0.18",
+        "marked": "^4.0.19",
         "mini-css-extract-plugin": "^2.6.1",
         "readline-sync": "^1.4.10",
         "style-loader": "^3.3.1",
@@ -28,8 +28,8 @@
         "deploy": "vercel --prod"
     },
     "dependencies": {
-        "prismjs": "^1.28.0",
+        "prismjs": "^1.29.0",
         "three": "^0.143.0",
-        "vercel": "^28.1.0"
+        "vercel": "^28.2.0"
     }
 }
