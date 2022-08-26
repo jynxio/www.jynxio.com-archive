@@ -35,6 +35,12 @@ html, body {
     background-color: var( --black );
 }
 
+/* 选中样式 */
+::selection {
+    color: var( --white );
+    background-color: var( --purple );
+}
+
 /* 滚动条 */
 html {
     scrollbar-color: var( --grey ) transparent;
