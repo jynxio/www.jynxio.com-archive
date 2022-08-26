@@ -67,7 +67,7 @@ const createDataStructureInfo = _ => {
     const html_path = BASE_HTML_PATH + "/" + name;
     const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
-        { name: "time-space-complexity", alias: "时间和空间复杂度" },
+        { name: "time-space-complexity", alias: "时间/空间复杂度" },
         { name: "stack", alias: "栈" },
         { name: "queue", alias: "队列" },
         { name: "linked-list", alias: "链表" },
@@ -76,6 +76,8 @@ const createDataStructureInfo = _ => {
         { name: "hash-table", alias: "散列表" },
         { name: "recursion", alias: "递归" },
         { name: "tree", alias: "树" },
+        { name: "binary-search-tree", alias: "二叉搜索树" },
+        { name: "avl-tree", alias: "avl 树" },
     ];
     const options = {
         name,
