@@ -77,7 +77,7 @@ const createDataStructureInfo = _ => {
         { name: "recursion", alias: "递归" },
         { name: "tree", alias: "树" },
         { name: "binary-search-tree", alias: "二叉搜索树" },
-        { name: "avl-tree", alias: "avl 树" },
+        { name: "avl-tree", alias: "AVL 树" },
     ];
     const options = {
         name,
