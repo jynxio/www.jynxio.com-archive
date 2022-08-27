@@ -96,40 +96,40 @@ function reduce ( previous_state, action ) { return next_state }
 ### 范例
 
 ```react
-/* initial_state */
-const initialState = { count: 0 };
+function Counter ( {
+    step = 3,
+    initialCount: initial_count = 0,
+} ) {
 
-/* reduce function */
-function reduce ( previous_state, action ) {
-
-    switch ( action.type ) {
-
-        case: "increment": return handleIncrementTask();
-        case: "decrement": return handleDecrementTask();
-        default: return handleUnexpectedTask();
-
-    }
-
-    function handleIncrementTask () { return { count: previous_state.count + 1 } }
-    function handleDecrementTask () { return { count: previous_state.count - 1 } }
-    function handleUnexpectedTask () { throw new Error( "The unexpected action" ) }
-
-}
-
-/* Component */
-function Counter () {
-
-    const [ state, dispatch ] = useReducer( reduce, initialState );
-    const handleIncrement = _ => dispatch( { type: "increment" } );
-    const handleDecrement = _ => dispatch( { type: "decrement" } );
+    const [ state, dispatch ] = useReducer( reduce, { count: initial_count } );
 
     return (
         <>
             <p>{ state.count }</p>
-            <button onClick={ handleIncrement }>Add</button>
-            <button onClick={ handleDecrement }>Sub</button>
+            <button onClick={ handleAddClick }>Add</button>
+            <button onClick={ handleSubClick }>Sub</button>
         </>
     );
+
+    function handleAddClick () { dispatch( { type: "INCREMENT", step } ) }
+    function handleSubClick () { dispatch( { type: "DECREMENT", step } ) }
+
+}
+
+function reduce ( previous_state, action ) {
+
+    switch ( action.type ) {
+
+        case "INCREMENT":
+            return { count: previous_state.count + action.step };
+
+        case "DECREMENT":
+            return { count: previous_state.count - action.step };
+
+        default:
+            throw new Error( `Unsupported action type: ${ action.type }` );
+
+    }
 
 }
 ```
