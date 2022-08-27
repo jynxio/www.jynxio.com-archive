@@ -250,47 +250,66 @@ const reference = useRef( initial_value ); // { current: initial_value }
 > }
 > ```
 
-## ref property
+## useCallback
 
-React 元素具有一个 `ref` 属性，`ref` 属性用于捕获元素节点，它有 2 种调用方式：
+if you have to pass them through many components in the middle, or if many components in your app need the same information. 
+
+*Context* lets the parent component make some information available to any component in the tree below it—no matter how deep (“teleport” data 远程传送数据)—without passing it explicitly through props.
+
+and [lifting state up that high can lead to a situation sometimes called “prop drilling.”
+
+Wouldn’t it be great if there were a way to “teleport” data to the components in the tree that need it without passing props? 
+
+Props 的替代方案。
+
+## useImperativeHandle
+
+`useImperativeHandle` 需要和 `forwardRef` 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
+
+### 语法
+
+`useImperativeHandle` 函数接收 2 个参数：
+
+1. 第一个是上游组件的 `reference`。
+2. 第二个是无参函数，无参函数的返回值将作为 `reference` 的 `current` 属性的值。
 
 ```react
-/* 方式一 */
-<div ref={ { current: undefined } }></div>
-
-/* 方式二 */
-<div ref={ element => {} }></div>
+useImperativeHandle( parent_reference, _ => parent_reference_current_value );
 ```
 
-### 方式一
-
-`ref` 属性可以接收一个 `{ current: * }` 格式的普通对象，此时其运行机制如下：
-
-- React 会在创建了 `div` 元素之后，将 `div` 元素赋值给 `current` 属性。
-- React 会在移除了 `div` 元素之后，将 `null` 赋值给 `current` 属性。
-
-> 直至调用了 `ReactDOM.createRoot( dom ).render` 方法之后，React 才会创建 DOM 元素。
-
-如果把 `useRef` 的返回值传递给 `ref` 属性，那么我们就可以持久的存储 DOM 元素了：
+### 示例
 
 ```react
-function Component () {
+Child = forwardRef( Child );
+
+function Parent () {
 
     const reference = useRef();
 
-    return <div ref={ reference }></div>
+    return <Child ref={ reference }/>
+
+}
+
+function Child ( properties, reference ) {
+
+    useImperativeHandle( reference, _ => 1 );
+
+    return <div></div>;
 
 }
 ```
 
-### 方式二
-
-`ref` 属性也可以接收一个函数，我们把这个函数称为 `refCallback`，此时其运行机制如下：
-
-- React 会在创建了 `div` 元素之后，调用 `refCallback` 函数，并将 `div` 元素作为入参传递给 `refCallback`。
-- React 会在移除了 `div` 元素之后，调用 `refCallback` 函数，并将 `null` 作为入参传递给 `refCallback`。
-
-> 如果 React 更新了组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着 React 将会调用两次 `refCallback`，第一次调用是因为移除了旧的 `div` 元素，第二次调用时因为创建了新的 `div` 元素。
+> 从技术上来说，哪怕没有 `useImperativeHanlde`，我们也可以实现相同的效果，只要使用 ref callback 就可以了。
+>
+> ```react
+> function Child ( properties, reference ) {
+>     
+>     return <div ref={ _ => reference.current = 1 }></div>;
+>     
+> }
+> ```
+>
+> 这种实现反而更加简洁。
 
 ## Custom Hook
 
@@ -335,6 +354,48 @@ function useLocalStorageState ( key, initial_value ) {
 所以 custom hook 和普通函数其实没有本质的区别，在组件内调用一个 custom hook 就和调用一个普通函数一样。
 
 不过需要提醒的是，在 custom hook 内，用 `useState` 所创建出来的状态不是跟随 custom hook 的，而是跟随调用 custom hook 的组件的，其他的内建 hook 也同理。之所以会有这种现象，我猜测是因为由 `useState` 所创建出来的状态会自动吸附到组件上。
+
+## ref property
+
+React 元素具有一个 `ref` 属性，`ref` 属性用于捕获元素节点，它有 2 种调用方式：
+
+```react
+/* 方式一 */
+<div ref={ { current: undefined } }></div>
+
+/* 方式二 */
+<div ref={ element => {} }></div>
+```
+
+### 方式一
+
+`ref` 属性可以接收一个 `{ current: * }` 格式的普通对象，此时其运行机制如下：
+
+- React 会在创建了 `div` 元素之后，将 `div` 元素赋值给 `current` 属性。
+- React 会在移除了 `div` 元素之后，将 `null` 赋值给 `current` 属性。
+
+> 直至调用了 `ReactDOM.createRoot( dom ).render` 方法之后，React 才会创建 DOM 元素。
+
+如果把 `useRef` 的返回值传递给 `ref` 属性，那么我们就可以持久的存储 DOM 元素了：
+
+```react
+function Component () {
+
+    const reference = useRef();
+
+    return <div ref={ reference }></div>
+
+}
+```
+
+### 方式二
+
+`ref` 属性也可以接收一个函数，我们把这个函数称为 `refCallback`，此时其运行机制如下：
+
+- React 会在创建了 `div` 元素之后，调用 `refCallback` 函数，并将 `div` 元素作为入参传递给 `refCallback`。
+- React 会在移除了 `div` 元素之后，调用 `refCallback` 函数，并将 `null` 作为入参传递给 `refCallback`。
+
+> 如果 React 更新了组件，那么 React 就会创建一个新的 `div` 元素来替代旧的 `div` 元素，这意味着 React 将会调用两次 `refCallback`，第一次调用是因为移除了旧的 `div` 元素，第二次调用时因为创建了新的 `div` 元素。
 
 ## forwardRef
 
@@ -407,55 +468,6 @@ function Child ( properties, reference ) {
 > 
 > }
 > ```
-
-## useImperativeHandle
-
-`useImperativeHandle` 需要和 `forwardRef` 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
-
-### 语法
-
-`useImperativeHandle` 函数接收 2 个参数：
-
-1. 第一个是上游组件的 `reference`。
-2. 第二个是无参函数，无参函数的返回值将作为 `reference` 的 `current` 属性的值。
-
-```react
-useImperativeHandle( parent_reference, _ => parent_reference_current_value );
-```
-
-### 示例
-
-```react
-Child = forwardRef( Child );
-
-function Parent () {
-
-    const reference = useRef();
-
-    return <Child ref={ reference }/>
-
-}
-
-function Child ( properties, reference ) {
-
-    useImperativeHandle( reference, _ => 1 );
-
-    return <div></div>;
-
-}
-```
-
-> 从技术上来说，哪怕没有 `useImperativeHanlde`，我们也可以实现相同的效果，只要使用 ref callback 就可以了。
->
-> ```react
-> function Child ( properties, reference ) {
->     
->     return <div ref={ _ => reference.current = 1 }></div>;
->     
-> }
-> ```
->
-> 这种实现反而更加简洁。
 
 ## flushSync
 
