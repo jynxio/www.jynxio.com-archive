@@ -260,7 +260,13 @@ and [lifting state up that high can lead to a situation sometimes called “prop
 
 Wouldn’t it be great if there were a way to “teleport” data to the components in the tree that need it without passing props? 
 
-Props 的替代方案。
+是 Props 的替代方案。
+
+ **`useContext` tells React that the `Heading` component wants to read the `LevelContext`.**
+
+useContext 是一把双刃剑，虽然它可以便捷的向子树传递数据，但也意味着数据的流动路径被隐藏了，这意味着你需要翻越更多的代码和文件才能搞懂数据是怎么传递的，很显然这并不利于维护。所以你需要权衡到底是使用 useContext 还是 props，props 的好处就是数据的流动路径很明确。
+
+`<MyContext.Provider></MyContext.Provider>` 可以当作 `<></>` 来使用。
 
 ## useImperativeHandle
 
