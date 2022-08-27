@@ -24,21 +24,7 @@ const [ state, setState ] = useState( initial_state );
 const [ state, setState ] = useState( function createInitialState () { return initial_state } );
 ```
 
-在每一次调用组件构造器的期间，`useState` 函数都会被执行。而 `useState` 函数会返回一个代表组件当前状态的值（`state`），和一个用于更新状态的函数（`setState`）。
-
-不过，`useState` 函数在组件挂载和更新时的行为是有区别的：
-
-- 挂载时：`useState` 函数会根据入参的类型来决定返回值：
-
-  - 如果入参是一个函数，那么 React 就会立即调用这个函数，并用该函数的返回值来作为自己的第一个返回值。
-
-  - 否则，React 就会直接用入参来作为自己的第一个返回值。
-
-- 更新时：`useState` 函数会忽略入参，并通过特殊手段来计算出一个值，然后再用这个值来作为自己的第一个返回值，关于“特殊手段”，详见下文。
-
-> “挂载”代表 React 首次调用组件构造器，“更新”代表 React 非首次调用组件构造器。
->
-> 因为传入 `useState` 的入参只会在挂载阶段被使用，所以我把传入 `useState` 的函数入参命名为 `createInitialState`，以表明该函数仅用于生成组件的初始状态。
+因为第二种语法可以动态的创建状态的初始值，所以 React 官方把第二种语法称为“惰性初始化（lazy initialize）”，把 `createInitialState` 称为“惰性初始化器（lazy initializer）”。
 
 ### setState
 
@@ -54,7 +40,21 @@ setState( function createNextState ( previous_state ) { return next_state } );
 
 调用 `setState` 之后，`setState` 的入参就会被推入状态的任务队列，并创建一个异步的任务（宏/微任务）来更新组件。在更新组件的期间，`useState` 函数就会通过处理状态的任务队列，来计算出状态的值，然后返回这个值。
 
-### 更新原理
+### 原理
+
+在每一次调用组件构造器的期间，`useState` 函数都会被执行，而 `useState` 函数会返回一个代表组件当前状态的值（`state`），和一个用于更新状态的函数（`setState`）。
+
+不过，`useState` 函数在组件挂载时和更新时的行为是有区别的：
+
+- 挂载时：`useState` 函数会根据入参的类型来决定返回值：
+
+  - 如果入参是一个函数，那么 React 就会立即调用这个函数，并用该函数的返回值来作为自己的第一个返回值。
+
+  - 否则，React 就会直接用入参来作为自己的第一个返回值。
+
+- 更新时：`useState` 函数会忽略入参，并通过特殊手段来计算出一个值，然后再用这个值来作为自己的第一个返回值，关于“特殊手段”，详见下例。
+
+> 其中，“挂载”代表 React 首次调用组件构造器，“更新”代表 React 非首次调用组件构造器。
 
 比如，触发 `click` 事件之后，`handleClick` 函数会多次调用 `setA` 和 `setB`，它们的入参会被依次推入各自的任务队列中去。另外，`setA` 和 `setB` 也触发了组件的更新（异步的）。
 
@@ -64,9 +64,9 @@ setState( function createNextState ( previous_state ) { return next_state } );
 
 ![计算状态值](/static/image/markdown/javascript/react-api-manual/setstate-queue-calculate.png)
 
-> 我们多次调用了 `setState` 函数，但是 React 只更新了一次组件，React 把这种批处理 `setState` 函数的特性成为 batching。
+虽然我们多次调用了 `setState` 函数，但是 React 只更新了一次组件，React 官方把这种批处理 `setState` 函数的特性称为 batching。
 
-#### 无效更新
+### 无效更新
 
 无论 `setState` 的入参是一个函数，还是一个非函数的值，只要 `Object.is( previous_state, next_state )` 返回 `true`，那么该 `setState` 就不会触发组件的更新。
 
@@ -74,61 +74,95 @@ setState( function createNextState ( previous_state ) { return next_state } );
 
 ## useReducer
 
-> 虽然 `useReducer` 可以“减少”组件内的代码，但这不是它叫 `useReducer` 的原因。React 官方解释到，reducer 的含义不是减少，而是累积，它的含义援引自 JavaScript 中的 Array 的 reduce 方法。
->
-> ```js
-> [ 1, 2, 3, 4, 5 ].reduce(
->     ( previous_value, current_value ) => previous_value + current_value,
->     0,
-> ); // 1 + 2 + 3 + 4 + 5 = 15
-> ```
->
-> Array 的 reduce 方法的作用之一累加值，又或者可以是：通过前一个值，来推断下一个值，然后再继续推断下下个值，直至推断出最终值。
->
-> 当你把更新状态的逻辑抽离出来，并用 action 来驱动这些逻辑的时候，就经常会发生一件这样的事情：你需要频繁的更新状态，甚至是在更新组件之前，就多次更新了同一个状态，这时候，就是你派发了多个 action，而 reducer 的作用，就是依次根据 action 来执行状态的更新，这时候就需要用第一个 action 和第一个状态值，来推断出下一个状态值，然后用下一个状态值和下一个 action 来推断出下下个状态值，直至推断出最终的状态值。
->
-> 真是拗口的逻辑。
-
-Reducers are a different way to handle state. You can migrate from `useState` to `useReducer` in three steps:
-
-1. **Move** from setting state to dispatching actions.
-2. **Write** a reducer function.
-3. **Use** the reducer from your component.
-
-The object you pass to `dispatch` is called an “action:”
-
-传递给 `dispatch` 函数的对象被称为 `action`。虽然你可以完全自定义 `action` 的内容，不过 React 建议你至少为其创建一个 `type` 属性，用来描述这个行为的类型。
+`useReducer` 是 `useState` 的替代品，区别在于 `useReducer` 可以把更新状态的逻辑代码从组件中抽离出来。选择何者？如果更新状态的逻辑代码多/复杂，那么就使用 `useReducer`，否则使用 `useState`。
 
 ```js
-function handleDeleteTask(taskId) {
+/* 语法一 */
+const [ state, dispatch ] = useReducer( reduce, initial_state );
 
-    const action = { type: "deleted", id: task_id };
-    
-    dispatch( action );
+/* 语法二 */
+const [ state, dispatch ] = useReducer(
+    reduce,
+    initial_data,
+    function initialize ( initial_data ) { return initial_state },
+);
 
-}
+/* reduce */
+function reduce ( previous_state, action ) { return next_state }
 ```
 
-把更新状态的逻辑卸载 `reducer` 函数内，这个函数会接收 2 个参数，第一个参数是当前的状态，第二个参数是 `action`，该函数的返回值会作为新的状态。React 会帮你把 `reducer` 函数的返回值设置为组件的新状态。
+对于第二种语法，`initialize` 函数的返回值会作为状态的初始值，而该函数在调用时会接收一个入参，这个入参就是 `useReducer` 的第二个参数。React 官方把这种语法称为“惰性初始化（lazy initialize）”，理由同 `useState` 的惰性初始化。
 
-```js
-function yourReducer( previous_state, action ) {
+### 范例
+
+```react
+/* initial_state */
+const initialState = { count: 0 };
+
+/* reduce function */
+function reduce ( previous_state, action ) {
 
     switch ( action.type ) {
-            
-        case "added": return next_state_1;
-        case "changed": return next_state_2;
-        default: throw new Error( "It's impossible!" );
+
+        case: "increment": return handleIncrementTask();
+        case: "decrement": return handleDecrementTask();
+        default: return handleUnexpectedTask();
+
     }
+
+    function handleIncrementTask () { return { count: previous_state.count + 1 } }
+    function handleDecrementTask () { return { count: previous_state.count - 1 } }
+    function handleUnexpectedTask () { throw new Error( "The unexpected action" ) }
+
+}
+
+/* Component */
+function Counter () {
+
+    const [ state, dispatch ] = useReducer( reduce, initialState );
+    const handleIncrement = _ => dispatch( { type: "increment" } );
+    const handleDecrement = _ => dispatch( { type: "decrement" } );
+
+    return (
+        <>
+            <p>{ state.count }</p>
+            <button onClick={ handleIncrement }>Add</button>
+            <button onClick={ handleDecrement }>Sub</button>
+        </>
+    );
 
 }
 ```
 
-当组件内的 `setState` 很少的时候，用 `useState` 更划算，因为这个事件 `useState` 的含义可以做到一目了然，而且代码量会相对于使用 `useReducer` 更少。
+### 原理
 
-当 `setState` 很多的时候，`useState` 就让人眼花缭乱无法一眼看懂逻辑了，这时候使用 `useReducer` 可以让更新状态的逻辑更清晰，而且也能节省代码，因为更新状态都被集中的塞进了 reduce 函数中。而且，由于吧更新状态的逻辑都集中到了一起，这个时候更容易 debugger，因为你可以直接打印出是哪个 action 出了错误，而不是在每一个 setState 中打印一下。
+`useReducer` 的原理和 `useState` 的原理差不多，只不过在 `useReducer` 的任务队列中，排队的是 `action`。另外，你可以认为 `useReducer` 是这么实现的：
 
-最后，reduce 函数的代码可以直接放到独立的文件中去，这可是一个大好处呢！
+```react
+function useReducer ( reduce, initial_state ) {
+
+    const [ state, setState ] = useState( initial_state );
+    const dispatch = action => setState( previous_state => reduce( previous_state, action ) );
+
+    return [ state, dispatch ];
+
+}
+```
+
+### 名称起源
+
+虽然 `useReducer` 可以减少组件内的代码，但这并不是它叫 `reducer` 的原因。它之所以叫 `reducer`，是因为它的工作原理和 `Array.prototype.reduce` 一样。
+
+```js
+[ 1, 2, 3 ].reduce( ( previous, current ) => previous + current ); // 1 + 2 + 3
+```
+
+如上所示，`Array.prototype.reduce` 会基于前一次调用的返回值和当前元素的值，来推断出本次调用的返回值，然后继续如此向后处理，直至推断出最终的值。如果我们连续 `dispatch` 了多个 `action`，那么 `useReducer` 就会做相似的事情：
+
+- 通过原始状态值和第一个 `action` 来推断出第一次变化后的状态值。
+- 通过第一次变化后的状态值和第二个 `action` 来推断出第二次变化后的状态值。
+- ...
+- 直至推断出最终的状态值。
 
 ## useEffect
 
@@ -179,8 +213,10 @@ useEffect(
 
 /**
  * 方式三：
- * 如果挂载了组件，那么effect函数就会执行；如果更新了组件且state发生了变化，那么effect函数就会执行。
- * 如果卸载了组件，那么clean 函数就会执行；如果更新了组件且state发生了变化，那么clean 函数就会执行。
+ * 如果挂载了组件，那么effect函数就会执行；
+ * 如果更新了组件且state变量发生了变化，那么effect函数就会执行。
+ * 如果卸载了组件，那么clean 函数就会执行；
+ * 如果更新了组件且state变量发生了变化，那么clean 函数就会执行。
  */
 useEffect(
     function effect () { return function clean () {} },
@@ -188,7 +224,9 @@ useEffect(
 );
 ```
 
-> 对于方式三，React 使用 `Object.js` 来比较新旧 `state` 是否发生了变化。
+其中，React 使用 `Object.js` 来比较新旧 `state` 是否发生了变化。
+
+另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
 ## useRef
 
