@@ -16,7 +16,7 @@ typora-root-url: ..\..
 
 `useState` 用于声明、存储、更新组件的内部状态，其语法如下：
 
-```js
+```jsx
 /* 语法一 */
 const [ state, setState ] = useState( initial_state );
 
@@ -30,7 +30,7 @@ const [ state, setState ] = useState( function createInitialState () { return in
 
 `setState` 用于更新状态、更新组件，其语法如下：
 
-```js
+```jsx
 /* 语法一 */
 setState( next_state );
 
@@ -76,7 +76,7 @@ setState( function createNextState ( previous_state ) { return next_state } );
 
 `useReducer` 是 `useState` 的替代品，区别在于 `useReducer` 可以把更新状态的逻辑代码从组件中抽离出来。选择何者？如果更新状态的逻辑代码多/复杂，那么就使用 `useReducer`，否则使用 `useState`。
 
-```js
+```jsx
 /* 语法一 */
 const [ state, dispatch ] = useReducer( reduce, initial_state );
 
@@ -95,7 +95,7 @@ function reduce ( previous_state, action ) { return next_state }
 
 ### 范例
 
-```react
+```jsx
 function Counter ( {
     step = 3,
     initialCount: initial_count = 0,
@@ -138,7 +138,7 @@ function reduce ( previous_state, action ) {
 
 `useReducer` 的原理和 `useState` 的原理差不多，只不过在 `useReducer` 的任务队列中，排队的是 `action`。另外，你可以认为 `useReducer` 是这么实现的：
 
-```react
+```jsx
 function useReducer ( reduce, initial_state ) {
 
     const [ state, setState ] = useState( initial_state );
@@ -153,7 +153,7 @@ function useReducer ( reduce, initial_state ) {
 
 虽然 `useReducer` 可以减少组件内的代码，但这并不是它叫 `reducer` 的原因。它之所以叫 `reducer`，是因为它的工作原理和 `Array.prototype.reduce` 一样。
 
-```js
+```jsx
 [ 1, 2, 3 ].reduce( ( previous, current ) => previous + current ); // 1 + 2 + 3
 ```
 
@@ -168,7 +168,7 @@ function useReducer ( reduce, initial_state ) {
 
 `useEffect` 用于执行带有副作用的操作，其语法如下：
 
-```js
+```jsx
 useEffect(
     function effect () { return function clean () {} },
     dependency_array
@@ -191,7 +191,7 @@ useEffect(
 
 `dependency_array` 数组用于决定是否执行 `effect` 和 `clean` 函数，具体来说：
 
-```js
+```jsx
 /**
  * 方式一：
  * 如果挂载或更新了组件，那么effect函数就会执行。
@@ -234,13 +234,13 @@ useEffect(
 
 具体来说 `useRef` 会返回一个只有 `current` 属性的普通对象，比如 `{ current: initial_value }`，其语法如下：
 
-```js
+```jsx
 const reference = useRef( initial_value ); // { current: initial_value }
 ```
 
 > 我们可以认为 `useRef` 是 `useState` 的语法糖，因为 React 官方说 `useRef` 大概是这么实现的：
 >
-> ```react
+> ```jsx
 > function useRef ( initial_value ) {
 > 
 >     const [ reference, setReference ] = useState( { current: initial_value } );
@@ -260,13 +260,13 @@ const reference = useRef( initial_value ); // { current: initial_value }
 
 第一步：创建一个 `CountContext`。
 
-```react
+```jsx
 const CountContext = createContext( initial_value );
 ```
 
 第二步：在组件内订阅 `CountContext`，然后该组件会沿着 UI 树，向上寻找距离最近的 `CountContext.Provider`，如果找到了，那么就使用 `CountContext.Provider` 的 `value` 值，否则就使用 `CountContext` 的初始值 `initial_value`。
 
-```react
+```jsx
 function Counter () {
 
     const count = useContext( CountContext );
@@ -278,7 +278,7 @@ function Counter () {
 
 第三步（可选）：在上层组件中，使用 `CountContext.Provider` 来向下层组件发布一个新值。下例中的第一个 `<Counter/>` 将会返回`<p>0</p>`，第二个 `<Counter/>` 将会返回 `<p>1</p>`。
 
-```react
+```jsx
 function App () {
 
     return (
@@ -316,13 +316,13 @@ React 官方把这种数据传递路径很长的情况称为“prop drilling（�
 1. 第一个是上游组件的 `reference`。
 2. 第二个是无参函数，无参函数的返回值将作为 `reference` 的 `current` 属性的值。
 
-```react
+```jsx
 useImperativeHandle( parent_reference, _ => parent_reference_current_value );
 ```
 
 ### 示例
 
-```react
+```jsx
 Child = forwardRef( Child );
 
 function Parent () {
@@ -344,7 +344,7 @@ function Child ( properties, reference ) {
 
 > 从技术上来说，哪怕没有 `useImperativeHanlde`，我们也可以实现相同的效果，只要使用 ref callback 就可以了。
 >
-> ```react
+> ```jsx
 > function Child ( properties, reference ) {
 >     
 >     return <div ref={ _ => reference.current = 1 }></div>;
@@ -362,7 +362,7 @@ custom hook 是一个用于封装 hook 的函数，并且 React 要求 custom ho
 
 ### 示例
 
-```react
+```jsx
 function Name () {
 
     const [ name, setName ] = useLocalStorageState( "name", "Jynxio" );
@@ -402,7 +402,7 @@ function useLocalStorageState ( key, initial_value ) {
 
 React 元素具有一个 `ref` 属性，`ref` 属性用于捕获元素节点，它有 2 种调用方式：
 
-```react
+```jsx
 /* 方式一 */
 <div ref={ { current: undefined } }></div>
 
@@ -421,7 +421,7 @@ React 元素具有一个 `ref` 属性，`ref` 属性用于捕获元素节点，�
 
 如果把 `useRef` 的返回值传递给 `ref` 属性，那么我们就可以持久的存储 DOM 元素了：
 
-```react
+```jsx
 function Component () {
 
     const reference = useRef();
@@ -444,7 +444,7 @@ function Component () {
 
 React 不允许通过下述方式来在 `Parent` 组件中获取 `Child` 组件的 DOM，因为 React 认为这是一种不安全的编程范式。
 
-```react
+```jsx
 function Parent () {
     
     const reference = useRef();
@@ -460,7 +460,7 @@ function Parent () {
 
 `forwardRef` 就像一个开关，经它改造的组件，将可以接收到第二个参数 `reference`。
 
-```react
+```jsx
 Child = forwardRef( Child );
 
 function Parent () {
@@ -482,7 +482,7 @@ function Child ( properties, reference ) {
 
 其实，在经 `forwardRef` 改造之前，组件也可以接收到第二个参数 `reference`，只不过这个参数总是一个空对象 `{}`。
 
-```react
+```jsx
 function Child ( properties, reference ) {
 
     console.log( reference );  // {}
@@ -496,7 +496,7 @@ function Child ( properties, reference ) {
 
 > 另外，哪怕没有 `forwardRef`，我们也可以把 `reference` 数据传递给下游组件，只要把 `reference` 数据包裹在 `properties` 中就可以了：
 >
-> ```react
+> ```jsx
 > function Parent () {
 > 
 >     const reference = useRef();
@@ -520,7 +520,7 @@ function Child ( properties, reference ) {
 
 `flushSync` 接收并立即执行一个回调函数，待回调函数执行结束之后，React 就会立即更新 DOM。
 
-```js
+```jsx
 import { flushSync } from "react-dom";
 
 flushSync( _ => {} );
@@ -530,7 +530,7 @@ flushSync( _ => {} );
 
 `(1)` 会同步的更新组件，并在更新好后立即更新 DOM，所以挂载或卸载 `div` 元素之后，`(2)` 行代码总是可以正确的输出 `div` 元素或 `null`。
 
-```react
+```jsx
 function Component () {
 
     const reference = useRef();
@@ -568,7 +568,7 @@ error boundary 是指定义了 `getDerivedStateFromError` 或 `componentDidCatch
 
 如果后代组件没有发生崩溃，React 就不会调用该方法。
 
-```react
+```jsx
 class ErrorBoundary {
 
     /*
@@ -586,7 +586,7 @@ class ErrorBoundary {
 
 如果后代组件没有发生崩溃，React 就不会调用该方法。
 
-```js
+```jsx
 class ErrorBoundary {
 
     /*
@@ -602,7 +602,7 @@ class ErrorBoundary {
 
 ### 示例
 
-```react
+```jsx
 class ErrorBoundary extends Component {
 
     constructor ( props ) {
@@ -655,7 +655,7 @@ function Bomb () {
 
 [react-error-boundary](https://github.com/bvaughn/react-error-boundary#readme) 是一个 `ErrorBoundary` 库，它可以让你免于手动编写 `ErrorBoundary` 类，并且它还提供了一些额外的特性。
 
-```react
+```jsx
 import { ErrorBoundary } from "react-error-boundary";
 
 function App () {
