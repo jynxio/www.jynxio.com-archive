@@ -28,7 +28,6 @@
         "deploy": "vercel --prod"
     },
     "dependencies": {
-        "prismjs": "^1.29.0",
         "three": "^0.143.0",
         "vercel": "^28.2.0"
     }
