@@ -293,21 +293,17 @@ function App () {
 }
 ```
 
-### 远距离传输数据
+### 优点和缺点
 
-and lifting state up that high can lead to a situation sometimes called “prop drilling.”
+想象一下，当曾曾曾祖父组件需要向曾曾曾孙组件传递数据时，如果我们使用 `properties` 方案，那么数据就需要从曾曾曾祖父组件开始向下传递，依次流经曾曾祖父组件、曾祖父组件、祖父组件、父组件，最后才能到达曾曾曾孙组件。
 
-### 大范围发布数据
+当我们使用 `properties` 方案时，如果数据传递的路径非常长，那么就会给维护带来不小的麻烦，因为一旦我们需要修改传递的数据，比如更名、新增、移除，我们就需要对传递路径上的每一个环节做修改。
 
+React 官方把这种数据传递路径很长的情况称为“prop drilling（钻探）”。
 
+`context` 可以直接解决这个问题，因为 `context` 可以“一步到位”的向下传递数据。不过，由于 `context` 会隐藏数据的传递路径，所以你需要翻阅更多的代码才能看清数据是如何传递的，这意味着代码的可读性会下降。
 
-
-
- **`useContext` tells React that the `Heading` component wants to read the `LevelContext`.**
-
-useContext 是一把双刃剑，虽然它可以便捷的向子树传递数据，但也意味着数据的流动路径被隐藏了，这意味着你需要翻越更多的代码和文件才能搞懂数据是怎么传递的，很显然这并不利于维护。所以你需要权衡到底是使用 useContext 还是 props，props 的好处就是数据的流动路径很明确。
-
-`<MyContext.Provider></MyContext.Provider>` 可以当作 `<></>` 来使用。
+`context` 的另一个好处是可以大范围的发布数据，但我并不打算展开细说。
 
 ## useImperativeHandle
 
