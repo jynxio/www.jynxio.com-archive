@@ -18,6 +18,7 @@ const createJavascriptInfo = _ => {
         { name: "v8-jit", alias: "V8 JIT" },
         { name: "v8-object", alias: "V8 Object" },
         { name: "promisesaplus", alias: "Promises/A+" },
+        { name: "react-api-manual", alias: "React 手册" },
     ];
     const options = {
         name,
