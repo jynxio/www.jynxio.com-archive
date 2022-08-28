@@ -14,33 +14,33 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=7797e154-fdb5-46dd-baf4-11512c60fb2b>概述</p>
-        <p data-target-id=f190138f-d21f-4b54-9488-33ffc6e71a95>第 1 步：构建 DOM</p>
-        <p data-target-id=628b3b8e-34ff-4ef6-803c-e7dae005fa80>第 2 步：计算样式</p>
-        <p data-target-id=934ec5f6-0fd5-49cc-8f1d-b7c3e5c59f1a>第 3 步：计算布局</p>
-        <p data-target-id=5f4d1f10-2f64-4945-8b1d-0c131380ba2b>第 4 步：创建绘图指令</p>
-        <p data-target-id=3b6e996f-dff8-46c6-b2dd-f8465482fa72>插播：如何绘制页面</p>
-        <p data-target-id=c2441341-2cc0-4caf-9b45-c227857cc5f5>第 5 步：分层</p>
-        <p data-target-id=a5382b40-145b-43b3-9ca7-670285e53aed>第 6 步：分块</p>
-        <p data-target-id=4b29e83a-c5f1-480e-8035-8688fed3eea5>第 7 步：光栅化</p>
-        <p data-target-id=98904abd-bf94-4506-b8ee-1a2282af20e2>第 8 步：合成</p>
-        <p data-target-id=fb905790-bed8-4340-b466-abd5bb5e8cda>参考资料</p>
+        <p data-target-id=f52bd221-ed02-4a2a-acd6-3afd883cca6d>概述</p>
+        <p data-target-id=969d3438-11b5-418d-aadc-be8409a3f62f>第 1 步：构建 DOM</p>
+        <p data-target-id=d5a03cea-9adf-46fc-8395-c9794f5d21ee>第 2 步：计算样式</p>
+        <p data-target-id=283b2c7a-24b1-4850-b0d2-a4d3c14f3fa5>第 3 步：计算布局</p>
+        <p data-target-id=e1b8bdd6-37c3-4c4f-9d83-202e87c1ffb2>第 4 步：创建绘图指令</p>
+        <p data-target-id=045609ad-eaf4-4569-8a0a-9e252e6f9046>插播：如何绘制页面</p>
+        <p data-target-id=3b591cf1-431d-4a57-a921-3c2049fb7d6c>第 5 步：分层</p>
+        <p data-target-id=c180a865-4006-49ad-8efd-21884a7c94e6>第 6 步：分块</p>
+        <p data-target-id=8cd6bdc1-7dbf-4e36-8e4c-3ea6771379af>第 7 步：光栅化</p>
+        <p data-target-id=b848c61f-1b56-4baf-ad9b-d2e531c2bac6>第 8 步：合成</p>
+        <p data-target-id=6048f1dc-5807-4513-85d1-25b1285ef8db>参考资料</p>
     </aside>
     <article>
         <h1>页面的渲染</h1>
-        <h2 id="7797e154-fdb5-46dd-baf4-11512c60fb2b">概述</h2>
+        <h2 id="f52bd221-ed02-4a2a-acd6-3afd883cca6d">概述</h2>
         <p>本文讲解 Chrome 的渲染进程是将 HTML、CSS、JavaScript 转换为可交互的页面的，该过程即是页面的渲染，其中也会稍微涉及到浏览器进程和 GPU。</p>
-        <h2 id="f190138f-d21f-4b54-9488-33ffc6e71a95">第 1 步：构建 DOM</h2>
+        <h2 id="969d3438-11b5-418d-aadc-be8409a3f62f">第 1 步：构建 DOM</h2>
         <p>当渲染进程接收到“提交导航”消息后，就会开始接收 HTML 数据，同时渲染进程的主线程就会开始解析接收到的文本字符串（即 HTML），并转换为 DOM，该过程由 HTML 解析器来完成。</p>
         <p>其中，DOM 是 Document Object Model 的简写，它是一个树形结构的数据，用来描述和操纵页面的 HTML 结构。</p>
-        <h3 id="0d69db47-22aa-4d07-ba85-5febe7e187a9">额外：永不报错的 HTML</h3>
+        <h3 id="c7b49777-a47b-4844-90d4-ac783ba65288">额外：永不报错的 HTML</h3>
         <p>想必你肯定已经注意到，无论 HTML 的内容如何错漏百出，浏览器都永远不会就此抛出错误，这是因为 HTML 规范已经想好了该如何处理 HTML 中的错误，比如这个错误的 HTML 片段 <code>&lt;b&gt;&lt;i&gt;&lt;/b&gt;&lt;/i&gt;</code> 会被纠正成 <code>&lt;b&gt;&lt;i&gt;&lt;/i&gt;&lt;/b&gt;&lt;i&gt;&lt;/i&gt;</code>，你可以通过阅读 <a href="https://html.spec.whatwg.org/multipage/parsing.html#an-introduction-to-error-handling-and-strange-cases-in-the-parser">这篇文章</a> 来了解它是怎么纠错的。</p>
-        <h3 id="bc81d423-eb9b-4811-819a-5e4c4b8a34a0">额外：子资源加载</h3>
+        <h3 id="81869b4d-5a0a-448e-952c-bdfe7f8587a1">额外：子资源加载</h3>
         <p>通常，网页都会使用到诸如图像、CSS 和 JavaScript 等的外部资源，而这些外部资源都是需要从网络或缓存中加载的。</p>
         <p>主线程在构建 DOM 的过程中会发现这些外部资源，然后请求加载它们。不过，为了加速这个过程，在主线程构建 DOM 的同时，渲染进程会并发的运行一个名为 preload scanner 的东西。preload scanner 会查看从 HTML 所生成 token 来寻找诸如 <code>&lt;img&gt;</code>、<code>&lt;link&gt;</code> 等之类的标签，然后向浏览器进程中的网络线程发送请求来加载这些资源。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/build-dom-tree.png" alt="构建DOM树"></p>
         <p>外部资源的加载和 DOM 的构建是两个并发运行的过程，不过有的时候 DOM 的构建会停下来等待外部资源的加载，我们把这种情况称为阻塞。</p>
-        <h3 id="8e6e259e-66d1-4e29-acf4-469a31a7daea">额外：阻塞 DOM 的构建</h3>
+        <h3 id="024d9cb9-8fba-43dc-a5a0-39eae7306851">额外：阻塞 DOM 的构建</h3>
         <p>在构建 DOM 的过程中，如果 HTML 解析器发现了 <code>&lt;script&gt;</code>，那么 HTML 解析器就会暂停工作，直至加载和执行完 JavaScript 代码后才会重新运行。HTML 解析器之所以要这么做，是因为 JavaScript 拥有可以改变 DOM 的能力，比如 <code>document.write()</code> API。</p>
         <p>具体来说，如果 HTML 解析器发现的 <code>&lt;script&gt;</code> 是一个内联的脚本，那么它就会暂停工作，直至主线程执行完该 JS 脚本后再重新工作。</p>
         <pre><code class="language-html">&lt;script&gt;
@@ -50,15 +50,15 @@
         <p>如果 HTML 解析器发现的 <code>&lt;script&gt;</code> 指向一个外部的 JS 脚本，那么它也会暂停工作，直至加载并执行完这个 JS 脚本后再重新工作，其中加载脚本由浏览器进程的网络线程来负责，执行脚本由渲染进程的主线程来负责。</p>
         <pre><code class="language-html">&lt;script src=&quot;/index.js&quot;&gt;&lt;/script&gt;
 </code></pre>
-        <h3 id="412a6861-f241-4656-8f4d-6d0c631f39c0">额外：提示浏览器该如何加载资源</h3>
+        <h3 id="80d17b8f-6345-461e-8636-2015f471c064">额外：提示浏览器该如何加载资源</h3>
         <p>如果你的 JS 脚本中没有使用类似 <code>document.write()</code> 这样会改变 DOM 的 API，那就可以为 <code>&lt;script&gt;</code> 添加 <code>async</code> 或 <code>defer</code> 属性，这样做的好处是浏览器会异步的加载和运行 JS 代码，并且完全不会阻塞 DOM 的构建。</p>
         <p>另外，你也可以使用 <code>&lt;link rel=&quot;preload&quot;&gt;</code> 来通知浏览器尽快下载该资源。</p>
         <p>你可以通过阅读 <a href="https://web.dev/fast/#prioritize-resources">这篇文章</a> 来了解更多加速网页加载的方法，其中就包含了该如何让浏览器更快速的加载资源。</p>
-        <h2 id="628b3b8e-34ff-4ef6-803c-e7dae005fa80">第 2 步：计算样式</h2>
+        <h2 id="d5a03cea-9adf-46fc-8395-c9794f5d21ee">第 2 步：计算样式</h2>
         <p>只有 DOM 还不足以了解页面的外观，除了 DOM 外，我们还需要知道每个元素的样式。主线程会解析 CSS 样式表来确定每个元素的最终样式，具体过程是主线程会根据继承和层叠的规则来确定最终哪些样式会应用到元素上，并将相对的 CSS 属性值（如 <code>1em</code>）尽可能的转换为绝对的 CSS 属性值（如 <code>16px</code>）。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/style-calculation.png" alt="样式计算"></p>
         <p>你可以通过 DevTools 的 Elements 选项卡下的 Computed 栏来查看元素的具体样式。</p>
-        <h2 id="934ec5f6-0fd5-49cc-8f1d-b7c3e5c59f1a">第 3 步：计算布局</h2>
+        <h2 id="283b2c7a-24b1-4850-b0d2-a4d3c14f3fa5">第 3 步：计算布局</h2>
         <p>现在，渲染进程已经知道了页面的结构（DOM）和元素的样式，不过它还不知道元素在页面中的位置。如果渲染进程不知道应该将元素绘制在页面的哪个地方，那么渲染进程就无法绘制页面。</p>
         <p>因此，渲染进程就需要计算元素的位置信息（类似于 xy 坐标），而在本质上元素在页面的位置是基于元素的大小和元素在 DOM 中的位置来推算的，因此渲染进程还必须先计算出元素的包围盒尺寸。</p>
         <p>布局阶段的作用就是计算元素的几何和位置信息，它的具体做法是让主线程遍历 DOM 和元素的样式，来创建一棵类似于 DOM 树的布局树（layout tree），布局树和 DOM 树的区别是：</p>
@@ -68,7 +68,7 @@
         </ul>
         <p><img src="/static/image/markdown/browser/page-rendering/build-layout-tree.png" alt="构建布局树"></p>
         <p>计算页面的布局是一件非常复杂的工作，你可以通过 <a href="https://www.youtube.com/watch?v=Y5Xa4H2wtVA">这个视频</a> 来了解布局的细节过程。</p>
-        <h2 id="5f4d1f10-2f64-4945-8b1d-0c131380ba2b">第 4 步：创建绘图指令</h2>
+        <h2 id="e1b8bdd6-37c3-4c4f-9d83-202e87c1ffb2">第 4 步：创建绘图指令</h2>
         <p>除了 DOM、样式信息和布局信息外，渲染进程还需要知道绘图的指令才能绘制页面，绘图指令用来告诉渲染进程应该先画什么、再画什么、最后画什么，它类似于：</p>
         <ol>
             <li>第一步，在 (x,y) 处绘制一个宽高为 (w,h) 的红色矩形。</li>
@@ -80,7 +80,7 @@
         <p><img src="/static/image/markdown/browser/page-rendering/paint-wrong-page.png" alt="页面画错了"></p>
         <p>在该阶段中，主线程会通过遍历布局树来计算和创建绘图指令。其实 Chrome 官方没有使用过“绘图指令”这个术语，而是使用“paint record”这个术语，我只是个人倾向于使用前者。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/generate-paint-record.png" alt="创建绘制指令"></p>
-        <h2 id="3b6e996f-dff8-46c6-b2dd-f8465482fa72">插播：如何绘制页面</h2>
+        <h2 id="045609ad-eaf4-4569-8a0a-9e252e6f9046">插播：如何绘制页面</h2>
         <p>现在，渲染进程已经知道了页面的结构、样式信息、几何信息还有绘图指令，它已经能够绘制页面了，不过它到底是怎样绘制的呢？</p>
         <p>在开始介绍之前，我们需要先了解“光栅化”这个概念，它的意思就是将信息转换为位图，在这里的具体含义就是根据上述信息来生成页面的位图。之所以将生成位图这种行为称为光栅化，是因为位图又被称为光栅图或栅格图。另外，Chrome 的页面其实就是一幅位图，Chrome 的 UI 界面也是一幅位图，你之所以可以和 UI 界面或网页页面交互，是因为 Chrome 会根据你的行为来立即更新对应的位图，从而让你感觉到 Chrome 响应了自己的动作。</p>
         <p>在 Chrome 首次发布的时候，它绘制页面的策略是这样的：首先光栅化视窗内的画面，如果用户滚动了页面，那就继续光栅化视窗内未光栅化的画面。</p>
@@ -90,14 +90,14 @@
         <p>显然，相比于旧的绘制策略，这种绘制策略更加先进。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/compositing-animation.png" alt="合成"></p>
         <p>总的来说，合成一共包含：分层、分块、光栅化、合成共 4 个步骤。</p>
-        <h2 id="c2441341-2cc0-4caf-9b45-c227857cc5f5">第 5 步：分层</h2>
+        <h2 id="3b591cf1-431d-4a57-a921-3c2049fb7d6c">第 5 步：分层</h2>
         <p>分层的作用是将单层的页面拆分成多个图层，它的具体做法是：主线程遍历布局树上的元素，然后智能的为需要的元素创建专属的图层，而没有专属图层的元素将会依附于父元素的图层，最后布局树中的每个元素都会依附于某个图层，并且主线程还会根据图层的结构来创建一棵图层树（layer tree）。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/generate-layer-tree.png" alt="生成图层树"></p>
         <p>通常情况下，主线程会自动的为使用了层叠上下文属性的元素或发生了裁剪的元素创建专属的图层。另外，我们也可以通过主动的为元素应用 <code>will-change</code> 属性来通知主线程为该元素创建一个专属图层。</p>
         <p>主线程是如何判断一个元素是否需要创建专属图层的呢？答案是 <code>will-change</code>。具体来说，其实页面中的每个元素都会默认应用 <code>will-change: auto</code>，此时主线程就会根据元素的其他 CSS 属性（如层叠上下文属性）和行为（如裁剪）来判断是否应该为其创建专属图层。并且，你可以通过修改 <code>will-change</code> 的属性来强制让主线程为该元素创建专属的图层，比如如果元素使用了 <code>will-change: transform</code>，那么主线程就一定会为该元素创建专属的图层，并提前做好准备来应对该元素将来发生的 transform 动作，以加速页面的渲染速度。</p>
         <p>但是创建图层是有代价的，因为图层是需要消耗 GPU 内存的，更多的图层就意味着需要消耗更多的 GPU 内存。具体原因是，当页面有 n 个图层时，GPU 就需要生成 n 幅位图，并且这些位图会存储在 GPU 的内存中。另外，更多的图层就需要消耗更多的 CPU 和 GPU 之间的带宽。你可以从 <a href="https://web.dev/stick-to-compositor-only-properties-and-manage-layer-count/">这篇文章</a> 来进一步了解创建图层的代价。</p>
         <p>如果创建了过多的图层，那么其带来的性能负荷将可能远远超过其带来的好处。因此请不要滥用图层，而是只为需要的元素创建图层。</p>
-        <h3 id="1f879bc3-d3ab-45c6-b489-6a396dc4d82f">额外：元素裁剪</h3>
+        <h3 id="6b691746-b299-4ff6-a893-d3b729dacd0f">额外：元素裁剪</h3>
         <p>如果某个元素应用了 <code>overflow: auto</code>，且该元素的内容超出了元素的尺寸，那么该元素就会隐藏超出的内容并创建滚动条。在这种情况下，主线程就会为该元素创建专属的图层，显然创建图层的目的是为了更快速的响应滚动事件（即当滚动查看元素的内容时，可以加速页面的渲染）。</p>
         <p>比如，如果 DIV 元素没有应用 <code>overflow: auto</code>，那么整个页面就只有 1 个图层，即根元素图层，DIV 元素将依附于该图层。</p>
         <pre><code class="language-css">div {
@@ -120,21 +120,21 @@
         <p>另外，如果你激活了 Layers 选项卡中的 Show internel layers 特性，那么就能看到图层的内部图层，其中 DIV 元素图层有 2 个内部图层，其中一个内部图层的尺寸是 <code>200px*183px</code>，它代表了 DIV 元素的可见范围，另一个内部图层的尺寸是 <code>478px*187px</code>，它代表了 DIV 元素内容的实际尺寸。</p>
         <p>在渲染页面时，浏览器进程只会渲染前一个内部图层范围内的画面，而后一个图层的超出部分则会被裁掉。如果 DIV 元素的内容发生了滚动，那么就只需要平移后一个内部图层的位置，然后再截取前一个内部图层范围内的画面，最后再合成所有图层，就能完成页面的渲染了。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/multi-layer-internel.png" alt="激活Show internel layers"></p>
-        <h2 id="a5382b40-145b-43b3-9ca7-670285e53aed">第 6 步：分块</h2>
+        <h2 id="c180a865-4006-49ad-8efd-21884a7c94e6">第 6 步：分块</h2>
         <p>接下来，主线程会将图层树与绘制指令发送给合成器线程，合成器线程是渲染进程内的另一个线程，它负责图层分块、光栅化、合成。</p>
         <p>由于一个图层可能会有整个页面那么大，为了更快的光栅化，合成器线程首先会将图层分割成小块，然后再将图块发送给光栅线程。</p>
         <p>另外，合成器线程还会设置光栅化线程的优先级，这样就可以优先光栅化在 viewport 内（或在 viewport 附近）的图块。并且，同一个图块还有多种版本，每种版本的区别是分辨率不同，这是为了应对浏览器的放大缩小操作。</p>
-        <h2 id="4b29e83a-c5f1-480e-8035-8688fed3eea5">第 7 步：光栅化</h2>
+        <h2 id="8cd6bdc1-7dbf-4e36-8e4c-3ea6771379af">第 7 步：光栅化</h2>
         <p>光栅化线程负责将图块转换为位图，渲染进程的内部有不止一个光栅化线程，每个光栅化线程一次可以处理一个图块，同时使用多个光栅化线程可以提高光栅化的效率。最后，光栅化线程会将生成的位图存储在 GPU 的内存中。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/raster-thread.png" alt="光栅化线程"></p>
-        <h2 id="98904abd-bf94-4506-b8ee-1a2282af20e2">第 8 步：合成</h2>
+        <h2 id="b848c61f-1b56-4baf-ad9b-d2e531c2bac6">第 8 步：合成</h2>
         <p>当光栅化线程生成了足够显示页面的位图后，合成器线程就会收集这些位图的信息，这个信息是指位图在 GPU 内存中的地址，以及位图要放置在页面的哪个位置。Chrome 将这些信息称为 <code>draw quads</code>，一个位图对应一份 <code>draw quads</code>。</p>
         <p>然后合成器线程会将这些 <code>draw quads</code> 的集合通过 IPC 发送给浏览器进程，Chrome 将这些 <code>draw quads</code> 的集合称为 <code>Compositor frame</code>，它不是真正的位图，而是对图块位图的映射。</p>
         <p>接下来，浏览器进程会将 <code>Compositor frame</code> 转发给 GPU，GPU 会根据 <code>Compositor frame</code> 中的 <code>draw quads</code> 来在自己的内存中找到相应的位图，并通过组合这些位图来生成最终的页面位图，最后 GPU 会在屏幕上绘制出我们最终看到的页面。</p>
         <p>当页面发生滚动或动画时，合成器线程就会创建另一个新的 <code>Compositor frame</code> 来发送给 GPU，最后 GPU 就会更新页面。</p>
         <p><img src="/static/image/markdown/browser/page-rendering/compositing.png" alt="合成"></p>
         <p>Chrome 官方的博客并没有说明 GPU 是如何组合这些位图来生成最终的页面位图的，我推测这个组合的过程是这样的：<code>draw quads</code> 包含了位图在页面中的位置信息，这些位置信息类似于 x、y、z 坐标，GPU 会根据位图的位置来摆放这些位图，这些位图既会平铺和排列在一个平面上，也会在垂直方向上发生层叠和遮盖，最后 GPU 就像一个相机一样，沿着垂直于这个平面的方向来拍摄一张快照，这张快照便是最终的页面位图。</p>
-        <h2 id="fb905790-bed8-4340-b466-abd5bb5e8cda">参考资料</h2>
+        <h2 id="6048f1dc-5807-4513-85d1-25b1285ef8db">参考资料</h2>
         <ul>
             <li><a href="https://developer.chrome.com/blog/inside-browser-part1/">Inside look at modern web browser (part 1)</a></li>
             <li><a href="https://developer.chrome.com/blog/inside-browser-part2/">Inside look at modern web browser (part 2)</a></li>
