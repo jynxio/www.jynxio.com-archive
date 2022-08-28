@@ -1,8 +1,14 @@
+// -------------------------------------------------------------------------------------------------
+// 声明：
+// npm的prism.js仅仅支持html、css、js的语法高亮，若需添加更多语言的语法高亮，则需使用从官网定制的prism.js。
+// 定制链接：https://prismjs.com/download.html。
+// -------------------------------------------------------------------------------------------------
+
 import "/style/public/reset.css";
 import "/style/public/font.css";
 import "/style/article/index.css";
-import "/style/article/code-highlight.css";
-import "prismjs";
+import "/style/article/prism.css"; // 自制的语法高亮样式。
+import "./prism";                  // 定制自官网的prism.js，支持html、css、js、jsx语法高亮。
 
 /**
  * 目录
