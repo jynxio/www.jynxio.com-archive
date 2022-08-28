@@ -250,17 +250,58 @@ const reference = useRef( initial_value ); // { current: initial_value }
 > }
 > ```
 
-## useCallback
+## useContext
 
-if you have to pass them through many components in the middle, or if many components in your app need the same information. 
+`context` 是 `properties` 的替代品，它是另一种传递数据的方案，它可用于远距离传输数据和大范围发布数据。
 
-*Context* lets the parent component make some information available to any component in the tree below it—no matter how deep (“teleport” data 远程传送数据)—without passing it explicitly through props.
+> `properties` 是指组件构造器的第一个入参，从父组件中传递下来的数据，都会保存在这个参数中。
 
-and [lifting state up that high can lead to a situation sometimes called “prop drilling.”
+### 使用
 
-Wouldn’t it be great if there were a way to “teleport” data to the components in the tree that need it without passing props? 
+第一步：创建一个 `CountContext`。
 
-是 Props 的替代方案。
+```react
+const CountContext = createContext( initial_value );
+```
+
+第二步：在组件内订阅 `CountContext`，然后该组件会沿着 UI 树，向上寻找距离最近的 `CountContext.Provider`，如果找到了，那么就使用 `CountContext.Provider` 的 `value` 值，否则就使用 `CountContext` 的初始值 `initial_value`。
+
+```react
+function Counter () {
+
+    const count = useContext( CountContext );
+
+    return <p>{ count }</p>;
+
+}
+```
+
+第三步（可选）：在上层组件中，使用 `CountContext.Provider` 来向下层组件发布一个新值。下例中的第一个 `<Counter/>` 将会返回`<p>0</p>`，第二个 `<Counter/>` 将会返回 `<p>1</p>`。
+
+```react
+function App () {
+
+    return (
+        <>
+            <Counter/>
+            <CountContext.Provider value={ next_value }>
+                <Counter/>
+            </CountContext.Provider>
+        </>
+    );
+
+}
+```
+
+### 远距离传输数据
+
+and lifting state up that high can lead to a situation sometimes called “prop drilling.”
+
+### 大范围发布数据
+
+
+
+
 
  **`useContext` tells React that the `Heading` component wants to read the `LevelContext`.**
 
