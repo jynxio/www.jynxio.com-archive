@@ -14,48 +14,48 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=418ab879-bb70-4adf-a5ca-6e882ddf6751>概述</p>
-        <p data-target-id=7deef6b5-b337-4da3-93c7-f9300fb9c854>useState</p>
-        <p data-target-id=b332fe23-26a8-45df-81fc-96e1a0c38d79>useReducer</p>
-        <p data-target-id=46e6f4ef-972e-4af8-bb5a-17e91680adc5>useEffect</p>
-        <p data-target-id=04fa7bc8-5be0-40c4-ba1e-7effb08158b2>useRef</p>
-        <p data-target-id=02dd6c73-f7df-42ea-b0af-09add4929c93>useContext</p>
-        <p data-target-id=ff0d9c41-984d-4dfc-97c1-4341d3cfe8af>useImperativeHandle</p>
-        <p data-target-id=7e16c740-ec8c-4791-88b6-1b8003378737>Custom Hook</p>
-        <p data-target-id=a29db275-d334-474f-a4a3-a7cab42aab5c>ref property</p>
-        <p data-target-id=25d31297-4cf2-4fb3-9440-7d8872d46605>forwardRef</p>
-        <p data-target-id=e5f27e78-b526-4128-a898-7fbb5b10a42c>flushSync</p>
-        <p data-target-id=56d2c6b9-8427-4d53-95d6-03eb663dd8b4>Error Boundary</p>
-        <p data-target-id=519c1ebd-073c-47c3-8d32-5693f5ec3b2a>UI 树与状态</p>
+        <p data-target-id=be2b98a7-a7b3-4ee0-bf2f-9abf16335337>概述</p>
+        <p data-target-id=e606d852-65cd-467f-98d7-a885ae3cdafd>useState</p>
+        <p data-target-id=07b09b1c-b1ae-48ee-93a2-91698c7e4102>useReducer</p>
+        <p data-target-id=369e2d97-bdff-4fcf-bcae-698ec7a45349>useEffect</p>
+        <p data-target-id=dab2d326-c385-4386-84d2-b775b21ef939>useRef</p>
+        <p data-target-id=026b32e8-6260-4e11-881c-ade543b96a8e>useContext</p>
+        <p data-target-id=c2d52d19-7c14-4145-a179-051f2bc98a7b>useImperativeHandle</p>
+        <p data-target-id=7aacb39d-72ac-4dc6-a105-933b1a12fc1f>Custom Hook</p>
+        <p data-target-id=26fbb64a-45ba-4b63-8205-1b270b35ba84>ref property</p>
+        <p data-target-id=89dbd5d7-4610-4b22-be3d-c5a36d5f5f04>forwardRef</p>
+        <p data-target-id=26b8e1b3-491c-4f5a-b12a-fa1f700537a4>flushSync</p>
+        <p data-target-id=8d0750f4-424f-4670-82c6-c1e5281da0b0>Error Boundary</p>
+        <p data-target-id=aac5e9c2-6018-4cc0-a8cf-2ecd2b706248>UI 树与状态</p>
     </aside>
     <article>
         <h1>React API 手册</h1>
-        <h2 id="418ab879-bb70-4adf-a5ca-6e882ddf6751">概述</h2>
+        <h2 id="be2b98a7-a7b3-4ee0-bf2f-9abf16335337">概述</h2>
         <p>此文用于记录 React API，并遵循下列准则：</p>
         <ul>
             <li>直白易懂</li>
             <li>总是最新</li>
             <li>专属于我</li>
         </ul>
-        <h2 id="7deef6b5-b337-4da3-93c7-f9300fb9c854">useState</h2>
+        <h2 id="e606d852-65cd-467f-98d7-a885ae3cdafd">useState</h2>
         <p><code>useState</code> 用于声明、存储、更新组件的内部状态，其语法如下：</p>
-        <pre><code class="language-js">/* 语法一 */
+        <pre><code class="language-jsx">/* 语法一 */
 const [ state, setState ] = useState( initial_state );
 
 /* 语法二 */
 const [ state, setState ] = useState( function createInitialState () { return initial_state } );
 </code></pre>
         <p>因为第二种语法可以动态的创建状态的初始值，所以 React 官方把第二种语法称为“惰性初始化（lazy initialize）”，把 <code>createInitialState</code> 称为“惰性初始化器（lazy initializer）”。</p>
-        <h3 id="20eb4500-ed50-474e-b0b7-85c2b0989fab">setState</h3>
+        <h3 id="c3ace783-793f-4ce3-a9b9-5a5b37670ce2">setState</h3>
         <p><code>setState</code> 用于更新状态、更新组件，其语法如下：</p>
-        <pre><code class="language-js">/* 语法一 */
+        <pre><code class="language-jsx">/* 语法一 */
 setState( next_state );
 
 /* 语法二 */
 setState( function createNextState ( previous_state ) { return next_state } );
 </code></pre>
         <p>调用 <code>setState</code> 之后，<code>setState</code> 的入参就会被推入状态的任务队列，并创建一个异步的任务（宏/微任务）来更新组件。在更新组件的期间，<code>useState</code> 函数就会通过处理状态的任务队列，来计算出状态的值，然后返回这个值。</p>
-        <h3 id="830c9305-562f-4a2e-95c4-86eeb57487b2">原理</h3>
+        <h3 id="f6d74217-3085-4e9c-b100-347cdf6c7cba">原理</h3>
         <p>在每一次调用组件构造器的期间，<code>useState</code> 函数都会被执行，而 <code>useState</code> 函数会返回一个代表组件当前状态的值（<code>state</code>），和一个用于更新状态的函数（<code>setState</code>）。</p>
         <p>不过，<code>useState</code> 函数在组件挂载时和更新时的行为是有区别的：</p>
         <ul>
@@ -83,12 +83,12 @@ setState( function createNextState ( previous_state ) { return next_state } );
         <p>更新组件时，<code>useState</code> 函数会依次处理任务队列中的任务，然后计算出状态的值，然后返回这个值。</p>
         <p><img src="/static/image/markdown/javascript/react-api-manual/setstate-queue-calculate.png" alt="计算状态值"></p>
         <p>虽然我们多次调用了 <code>setState</code> 函数，但是 React 只更新了一次组件，React 官方把这种批处理 <code>setState</code> 函数的特性称为 batching。</p>
-        <h3 id="b97fbb44-40f8-4f1b-b50d-d08457d5379b">无效更新</h3>
+        <h3 id="11b68d99-9c86-4701-a21c-ca856618ad98">无效更新</h3>
         <p>无论 <code>setState</code> 的入参是一个函数，还是一个非函数的值，只要 <code>Object.is( previous_state, next_state )</code> 返回 <code>true</code>，那么该 <code>setState</code> 就不会触发组件的更新。</p>
         <p>不过，哪怕 <code>setState</code> 不会触发更新，这个 <code>setState</code> 的入参也会被推入状态的任务队列。</p>
-        <h2 id="b332fe23-26a8-45df-81fc-96e1a0c38d79">useReducer</h2>
+        <h2 id="07b09b1c-b1ae-48ee-93a2-91698c7e4102">useReducer</h2>
         <p><code>useReducer</code> 是 <code>useState</code> 的替代品，区别在于 <code>useReducer</code> 可以把更新状态的逻辑代码从组件中抽离出来。选择何者？如果更新状态的逻辑代码多/复杂，那么就使用 <code>useReducer</code>，否则使用 <code>useState</code>。</p>
-        <pre><code class="language-js">/* 语法一 */
+        <pre><code class="language-jsx">/* 语法一 */
 const [ state, dispatch ] = useReducer( reduce, initial_state );
 
 /* 语法二 */
@@ -102,8 +102,8 @@ const [ state, dispatch ] = useReducer(
 function reduce ( previous_state, action ) { return next_state }
 </code></pre>
         <p>对于第二种语法，<code>initialize</code> 函数的返回值会作为状态的初始值，而该函数在调用时会接收一个入参，这个入参就是 <code>useReducer</code> 的第二个参数。React 官方把这种语法称为“惰性初始化（lazy initialize）”，理由同 <code>useState</code> 的惰性初始化。</p>
-        <h3 id="c4c74fde-623e-4364-88a4-585381ab3621">范例</h3>
-        <pre><code class="language-react">function Counter ( {
+        <h3 id="bc3f6a65-a56b-4cbe-a052-0733bfc20de6">范例</h3>
+        <pre><code class="language-jsx">function Counter ( {
     step = 3,
     initialCount: initial_count = 0,
 } ) {
@@ -140,9 +140,9 @@ function reduce ( previous_state, action ) {
 
 }
 </code></pre>
-        <h3 id="d5d031e0-0dfd-4d98-909e-c3a47964f066">原理</h3>
+        <h3 id="20060934-381c-48bc-aab6-15de80606162">原理</h3>
         <p><code>useReducer</code> 的原理和 <code>useState</code> 的原理差不多，只不过在 <code>useReducer</code> 的任务队列中，排队的是 <code>action</code>。另外，你可以认为 <code>useReducer</code> 是这么实现的：</p>
-        <pre><code class="language-react">function useReducer ( reduce, initial_state ) {
+        <pre><code class="language-jsx">function useReducer ( reduce, initial_state ) {
 
     const [ state, setState ] = useState( initial_state );
     const dispatch = action =&gt; setState( previous_state =&gt; reduce( previous_state, action ) );
@@ -151,9 +151,9 @@ function reduce ( previous_state, action ) {
 
 }
 </code></pre>
-        <h3 id="63bf6532-1046-488c-830c-80300a88f0d8">名称起源</h3>
+        <h3 id="fb844187-f154-47e5-9ac3-07b1c772e62e">名称起源</h3>
         <p>虽然 <code>useReducer</code> 可以减少组件内的代码，但这并不是它叫 <code>reducer</code> 的原因。它之所以叫 <code>reducer</code>，是因为它的工作原理和 <code>Array.prototype.reduce</code> 一样。</p>
-        <pre><code class="language-js">[ 1, 2, 3 ].reduce( ( previous, current ) =&gt; previous + current ); // 1 + 2 + 3
+        <pre><code class="language-jsx">[ 1, 2, 3 ].reduce( ( previous, current ) =&gt; previous + current ); // 1 + 2 + 3
 </code></pre>
         <p>如上所示，<code>Array.prototype.reduce</code> 会基于前一次调用的返回值和当前元素的值，来推断出本次调用的返回值，然后继续如此向后处理，直至推断出最终的值。如果我们连续 <code>dispatch</code> 了多个 <code>action</code>，那么 <code>useReducer</code> 就会做相似的事情：</p>
         <ul>
@@ -162,9 +162,9 @@ function reduce ( previous_state, action ) {
             <li>...</li>
             <li>直至推断出最终的状态值。</li>
         </ul>
-        <h2 id="46e6f4ef-972e-4af8-bb5a-17e91680adc5">useEffect</h2>
+        <h2 id="369e2d97-bdff-4fcf-bcae-698ec7a45349">useEffect</h2>
         <p><code>useEffect</code> 用于执行带有副作用的操作，其语法如下：</p>
-        <pre><code class="language-js">useEffect(
+        <pre><code class="language-jsx">useEffect(
     function effect () { return function clean () {} },
     dependency_array
 );
@@ -173,7 +173,7 @@ function reduce ( previous_state, action ) {
             <li><code>effect</code> 函数用于装载具有副作用的操作，如果挂载或更新了组件，那么 React 就会执行 <code>effect</code> 函数，并且执行时机是在页面更新之后。</li>
             <li><code>dependency_array</code> 数组用于决定是否执行 <code>effect</code> 和 <code>clean</code> 函数。</li>
         </ul>
-        <h3 id="5e949fe5-5700-42db-9ee9-e4ac47138cbb">clean</h3>
+        <h3 id="c8af6d70-86c8-4aac-bca8-e41242a4adae">clean</h3>
         <p><code>clean</code> 是由 <code>effect</code> 函数所返回的另一个函数，它用于清除副作用，它的运行机制如下：</p>
         <ul>
             <li>如果更新了组件，那么 React 就会在页面更新之后、<code>effect</code> 函数执行之前，就执行 <code>clean</code> 函数，这么做是为了消除上一次调用 <code>effect</code> 函数时所产生的副作用，否则组件在多次更新之后，副作用就会累积。</li>
@@ -183,9 +183,9 @@ function reduce ( previous_state, action ) {
             <p><strong>Note</strong></p>
             <p>事实上，<code>effect</code> 函数除了可以返回函数之外，还可以返回 <code>undefined</code>，所以 <code>clean</code> 是可选的。不过，如果 <code>effect</code> 函数返回了其他数据类型的值，那么 React 就会报错。</p>
         </blockquote>
-        <h3 id="2ea09341-eaef-4c47-877f-946e3f87aab4">dependency_array</h3>
+        <h3 id="e75960de-4759-4130-b2d8-2979b5204325">dependency_array</h3>
         <p><code>dependency_array</code> 数组用于决定是否执行 <code>effect</code> 和 <code>clean</code> 函数，具体来说：</p>
-        <pre><code class="language-js">/**
+        <pre><code class="language-jsx">/**
  * 方式一：
  * 如果挂载或更新了组件，那么effect函数就会执行。
  * 如果卸载或更新了组件，那么clean 函数就会执行。
@@ -218,15 +218,15 @@ useEffect(
 </code></pre>
         <p>其中，React 使用 <code>Object.js</code> 来比较新旧 <code>state</code> 是否发生了变化。</p>
         <p>另外，因为 <code>useReducer</code> 所返回的 <code>dispatch</code> 是 <a href="https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer">稳定的、不会改变的</a>，所以哪怕我们在 <code>effect</code> 函数中使用了 <code>dispatch</code> 函数，我们也不需要将其添加进 <code>dependency_array</code>。</p>
-        <h2 id="04fa7bc8-5be0-40c4-ba1e-7effb08158b2">useRef</h2>
+        <h2 id="dab2d326-c385-4386-84d2-b775b21ef939">useRef</h2>
         <p><code>useRef</code> 用于提供一个数据仓库，这个数据仓库会伴随组件的整个生命周期，这意味着开发者可以在数据仓库中存储一些历史数据，另外我们也常常用这个数据仓库来存储 DOM 节点。</p>
         <p>具体来说 <code>useRef</code> 会返回一个只有 <code>current</code> 属性的普通对象，比如 <code>{ current: initial_value }</code>，其语法如下：</p>
-        <pre><code class="language-js">const reference = useRef( initial_value ); // { current: initial_value }
+        <pre><code class="language-jsx">const reference = useRef( initial_value ); // { current: initial_value }
 </code></pre>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>我们可以认为 <code>useRef</code> 是 <code>useState</code> 的语法糖，因为 React 官方说 <code>useRef</code> 大概是这么实现的：</p>
-            <pre><code class="language-react">function useRef ( initial_value ) {
+            <pre><code class="language-jsx">function useRef ( initial_value ) {
 
     const [ reference, setReference ] = useState( { current: initial_value } );
 
@@ -235,18 +235,18 @@ useEffect(
 }
 </code></pre>
         </blockquote>
-        <h2 id="02dd6c73-f7df-42ea-b0af-09add4929c93">useContext</h2>
+        <h2 id="026b32e8-6260-4e11-881c-ade543b96a8e">useContext</h2>
         <p><code>context</code> 是 <code>properties</code> 的替代品，它是另一种传递数据的方案，它可用于远距离传输数据和大范围发布数据。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p><code>properties</code> 是指组件构造器的第一个入参，从父组件中传递下来的数据，都会保存在这个参数中。</p>
         </blockquote>
-        <h3 id="3fa051a8-f7ee-44f5-857d-ca213ef8236c">使用</h3>
+        <h3 id="c760b36b-37d5-4a8a-ab30-b4c66696c0a6">使用</h3>
         <p>第一步：创建一个 <code>CountContext</code>。</p>
-        <pre><code class="language-react">const CountContext = createContext( initial_value );
+        <pre><code class="language-jsx">const CountContext = createContext( initial_value );
 </code></pre>
         <p>第二步：在组件内订阅 <code>CountContext</code>，然后该组件会沿着 UI 树，向上寻找距离最近的 <code>CountContext.Provider</code>，如果找到了，那么就使用 <code>CountContext.Provider</code> 的 <code>value</code> 值，否则就使用 <code>CountContext</code> 的初始值 <code>initial_value</code>。</p>
-        <pre><code class="language-react">function Counter () {
+        <pre><code class="language-jsx">function Counter () {
 
     const count = useContext( CountContext );
 
@@ -255,7 +255,7 @@ useEffect(
 }
 </code></pre>
         <p>第三步（可选）：在上层组件中，使用 <code>CountContext.Provider</code> 来向下层组件发布一个新值。下例中的第一个 <code>&lt;Counter/&gt;</code> 将会返回<code>&lt;p&gt;0&lt;/p&gt;</code>，第二个 <code>&lt;Counter/&gt;</code> 将会返回 <code>&lt;p&gt;1&lt;/p&gt;</code>。</p>
-        <pre><code class="language-react">function App () {
+        <pre><code class="language-jsx">function App () {
 
     return (
         &lt;&gt;
@@ -268,24 +268,24 @@ useEffect(
 
 }
 </code></pre>
-        <h3 id="1a7bf3f4-211a-45e7-b578-5fab0594aecd">优点和缺点</h3>
+        <h3 id="b701f207-911d-41b6-9a1a-46ec8fee27a5">优点和缺点</h3>
         <p>想象一下，当曾曾曾祖父组件需要向曾曾曾孙组件传递数据时，如果我们使用 <code>properties</code> 方案，那么数据就需要从曾曾曾祖父组件开始向下传递，依次流经曾曾祖父组件、曾祖父组件、祖父组件、父组件，最后才能到达曾曾曾孙组件。</p>
         <p>当我们使用 <code>properties</code> 方案时，如果数据传递的路径非常长，那么就会给维护带来不小的麻烦，因为一旦我们需要修改传递的数据，比如更名、新增、移除，我们就需要对传递路径上的每一个环节做修改。</p>
         <p>React 官方把这种数据传递路径很长的情况称为“prop drilling（钻探）”。</p>
         <p><code>context</code> 可以直接解决这个问题，因为 <code>context</code> 可以“一步到位”的向下传递数据。不过，由于 <code>context</code> 会隐藏数据的传递路径，所以你需要翻阅更多的代码才能看清数据是如何传递的，这意味着代码的可读性会下降。</p>
         <p><code>context</code> 的另一个好处是可以大范围的发布数据，但我并不打算展开细说。</p>
-        <h2 id="ff0d9c41-984d-4dfc-97c1-4341d3cfe8af">useImperativeHandle</h2>
+        <h2 id="c2d52d19-7c14-4145-a179-051f2bc98a7b">useImperativeHandle</h2>
         <p><code>useImperativeHandle</code> 需要和 <code>forwardRef</code> 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 <code>Parent</code> 组件的 <code>reference</code>。</p>
-        <h3 id="81b990ea-10c6-40a6-9bfe-d1b5a6feab33">语法</h3>
+        <h3 id="f3373510-154a-4091-b830-2ea0a961bf18">语法</h3>
         <p><code>useImperativeHandle</code> 函数接收 2 个参数：</p>
         <ol>
             <li>第一个是上游组件的 <code>reference</code>。</li>
             <li>第二个是无参函数，无参函数的返回值将作为 <code>reference</code> 的 <code>current</code> 属性的值。</li>
         </ol>
-        <pre><code class="language-react">useImperativeHandle( parent_reference, _ =&gt; parent_reference_current_value );
+        <pre><code class="language-jsx">useImperativeHandle( parent_reference, _ =&gt; parent_reference_current_value );
 </code></pre>
-        <h3 id="bea6b2ec-dea2-420b-915b-ec566a0c9576">示例</h3>
-        <pre><code class="language-react">Child = forwardRef( Child );
+        <h3 id="ff46a7de-d522-4291-a2ca-f6d2f09afd82">示例</h3>
+        <pre><code class="language-jsx">Child = forwardRef( Child );
 
 function Parent () {
 
@@ -306,7 +306,7 @@ function Child ( properties, reference ) {
         <blockquote>
             <p><strong>Note</strong></p>
             <p>从技术上来说，哪怕没有 <code>useImperativeHanlde</code>，我们也可以实现相同的效果，只要使用 ref callback 就可以了。</p>
-            <pre><code class="language-react">function Child ( properties, reference ) {
+            <pre><code class="language-jsx">function Child ( properties, reference ) {
     
     return &lt;div ref={ _ =&gt; reference.current = 1 }&gt;&lt;/div&gt;;
     
@@ -314,14 +314,14 @@ function Child ( properties, reference ) {
 </code></pre>
             <p>这种实现反而更加简洁。</p>
         </blockquote>
-        <h2 id="7e16c740-ec8c-4791-88b6-1b8003378737">Custom Hook</h2>
+        <h2 id="7aacb39d-72ac-4dc6-a105-933b1a12fc1f">Custom Hook</h2>
         <p>custom hook 是一个用于封装 hook 的函数，并且 React 要求 custom hook 的命名必须以 <code>use</code> 开头。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>React 要检查 custom hook 内的 hook 使用是否符合规范，为了方便分辨出哪些函数才是 custom hook，React 便要求 custom hook 的命名必须以 <code>use</code> 开头。</p>
         </blockquote>
-        <h3 id="f8ec0213-8450-4362-bc15-cdb275841c2c">示例</h3>
-        <pre><code class="language-react">function Name () {
+        <h3 id="841eb5f3-491c-44d4-a736-9f09c0734acd">示例</h3>
+        <pre><code class="language-jsx">function Name () {
 
     const [ name, setName ] = useLocalStorageState( &quot;name&quot;, &quot;Jynxio&quot; );
 
@@ -347,19 +347,19 @@ function useLocalStorageState ( key, initial_value ) {
 
 }
 </code></pre>
-        <h3 id="0f8b7827-0e3b-430a-8b60-5759e8449278">原理</h3>
+        <h3 id="c8aff37b-2164-480c-b1f0-da31cf4972ba">原理</h3>
         <p>为了减少代码的冗余或增强代码的可读性，我们会把代码从原处提取出来，封装到一个函数中去，custom hook 就是这么一种产物，只不过其内的代码包含了 hook 而已。</p>
         <p>所以 custom hook 和普通函数其实没有本质的区别，在组件内调用一个 custom hook 就和调用一个普通函数一样。</p>
         <p>不过需要提醒的是，在 custom hook 内，用 <code>useState</code> 所创建出来的状态不是跟随 custom hook 的，而是跟随调用 custom hook 的组件的，其他的内建 hook 也同理。之所以会有这种现象，我猜测是因为由 <code>useState</code> 所创建出来的状态会自动吸附到组件上。</p>
-        <h2 id="a29db275-d334-474f-a4a3-a7cab42aab5c">ref property</h2>
+        <h2 id="26fbb64a-45ba-4b63-8205-1b270b35ba84">ref property</h2>
         <p>React 元素具有一个 <code>ref</code> 属性，<code>ref</code> 属性用于捕获元素节点，它有 2 种调用方式：</p>
-        <pre><code class="language-react">/* 方式一 */
+        <pre><code class="language-jsx">/* 方式一 */
 &lt;div ref={ { current: undefined } }&gt;&lt;/div&gt;
 
 /* 方式二 */
 &lt;div ref={ element =&gt; {} }&gt;&lt;/div&gt;
 </code></pre>
-        <h3 id="7e8c8701-c4d2-46f5-804b-7d31cc9f6f46">方式一</h3>
+        <h3 id="884008a9-5412-4801-9082-24486dc85c80">方式一</h3>
         <p><code>ref</code> 属性可以接收一个 <code>{ current: * }</code> 格式的普通对象，此时其运行机制如下：</p>
         <ul>
             <li>React 会在创建了 <code>div</code> 元素之后，将 <code>div</code> 元素赋值给 <code>current</code> 属性。</li>
@@ -370,7 +370,7 @@ function useLocalStorageState ( key, initial_value ) {
             <p>直至调用了 <code>ReactDOM.createRoot( dom ).render</code> 方法之后，React 才会创建 DOM 元素。</p>
         </blockquote>
         <p>如果把 <code>useRef</code> 的返回值传递给 <code>ref</code> 属性，那么我们就可以持久的存储 DOM 元素了：</p>
-        <pre><code class="language-react">function Component () {
+        <pre><code class="language-jsx">function Component () {
 
     const reference = useRef();
 
@@ -378,7 +378,7 @@ function useLocalStorageState ( key, initial_value ) {
 
 }
 </code></pre>
-        <h3 id="608d1d8e-26b9-45ea-afb5-70d5a850a4ea">方式二</h3>
+        <h3 id="a9118acd-3001-43e4-9d91-54bcb5b96a5f">方式二</h3>
         <p><code>ref</code> 属性也可以接收一个函数，我们把这个函数称为 <code>refCallback</code>，此时其运行机制如下：</p>
         <ul>
             <li>React 会在创建了 <code>div</code> 元素之后，调用 <code>refCallback</code> 函数，并将 <code>div</code> 元素作为入参传递给 <code>refCallback</code>。</li>
@@ -388,9 +388,9 @@ function useLocalStorageState ( key, initial_value ) {
             <p><strong>Note</strong></p>
             <p>如果 React 更新了组件，那么 React 就会创建一个新的 <code>div</code> 元素来替代旧的 <code>div</code> 元素，这意味着 React 将会调用两次 <code>refCallback</code>，第一次调用是因为移除了旧的 <code>div</code> 元素，第二次调用时因为创建了新的 <code>div</code> 元素。</p>
         </blockquote>
-        <h2 id="25d31297-4cf2-4fb3-9440-7d8872d46605">forwardRef</h2>
+        <h2 id="89dbd5d7-4610-4b22-be3d-c5a36d5f5f04">forwardRef</h2>
         <p>React 不允许通过下述方式来在 <code>Parent</code> 组件中获取 <code>Child</code> 组件的 DOM，因为 React 认为这是一种不安全的编程范式。</p>
-        <pre><code class="language-react">function Parent () {
+        <pre><code class="language-jsx">function Parent () {
     
     const reference = useRef();
     
@@ -399,9 +399,9 @@ function useLocalStorageState ( key, initial_value ) {
 }
 </code></pre>
         <p>不过，React 提供了另一种途径来获取 <code>Child</code> 组件的 DOM，那就是通过 <code>forwardRef</code> API 来将 <code>Parent</code> 组件的 <code>reference</code> 转发给 <code>Child</code> 组件，然后再获取 <code>Child</code> 组件的 DOM。</p>
-        <h3 id="90a5edbf-abf6-4151-9b9d-a9609809bc41">语法</h3>
+        <h3 id="94029a61-a5d9-4d23-a457-e9860055ee7c">语法</h3>
         <p><code>forwardRef</code> 就像一个开关，经它改造的组件，将可以接收到第二个参数 <code>reference</code>。</p>
-        <pre><code class="language-react">Child = forwardRef( Child );
+        <pre><code class="language-jsx">Child = forwardRef( Child );
 
 function Parent () {
 
@@ -417,9 +417,9 @@ function Child ( properties, reference ) {
 
 }
 </code></pre>
-        <h3 id="55c33884-f93c-4370-8182-63fb14f9d252">原理</h3>
+        <h3 id="361f0002-18cc-4c77-b122-f26d53807010">原理</h3>
         <p>其实，在经 <code>forwardRef</code> 改造之前，组件也可以接收到第二个参数 <code>reference</code>，只不过这个参数总是一个空对象 <code>{}</code>。</p>
-        <pre><code class="language-react">function Child ( properties, reference ) {
+        <pre><code class="language-jsx">function Child ( properties, reference ) {
 
     console.log( reference );  // {}
 
@@ -431,7 +431,7 @@ function Child ( properties, reference ) {
         <blockquote>
             <p><strong>Note</strong></p>
             <p>另外，哪怕没有 <code>forwardRef</code>，我们也可以把 <code>reference</code> 数据传递给下游组件，只要把 <code>reference</code> 数据包裹在 <code>properties</code> 中就可以了：</p>
-            <pre><code class="language-react">function Parent () {
+            <pre><code class="language-jsx">function Parent () {
 
     const reference = useRef();
 
@@ -446,17 +446,17 @@ function Child ( properties ) {
 }
 </code></pre>
         </blockquote>
-        <h2 id="e5f27e78-b526-4128-a898-7fbb5b10a42c">flushSync</h2>
+        <h2 id="26b8e1b3-491c-4f5a-b12a-fa1f700537a4">flushSync</h2>
         <p><code>flushSync</code> 用于让 React 立即更新 DOM，它来自于 <code>react-dom</code>。</p>
-        <h3 id="b74d5ed7-fe96-476f-b186-42a4193d5434">语法</h3>
+        <h3 id="2dc3606a-e1c8-4b49-94f7-5e7bffaf7c59">语法</h3>
         <p><code>flushSync</code> 接收并立即执行一个回调函数，待回调函数执行结束之后，React 就会立即更新 DOM。</p>
-        <pre><code class="language-js">import { flushSync } from &quot;react-dom&quot;;
+        <pre><code class="language-jsx">import { flushSync } from &quot;react-dom&quot;;
 
 flushSync( _ =&gt; {} );
 </code></pre>
-        <h3 id="8faa2688-a5f2-4fda-880f-bdde316262a4">示例</h3>
+        <h3 id="880af918-1f86-4d2c-9f60-11d4b72e58c4">示例</h3>
         <p><code>(1)</code> 会同步的更新组件，并在更新好后立即更新 DOM，所以挂载或卸载 <code>div</code> 元素之后，<code>(2)</code> 行代码总是可以正确的输出 <code>div</code> 元素或 <code>null</code>。</p>
-        <pre><code class="language-react">function Component () {
+        <pre><code class="language-jsx">function Component () {
 
     const reference = useRef();
     const [ visible, setVisible ] = useState( false );
@@ -478,14 +478,14 @@ flushSync( _ =&gt; {} );
 
 }
 </code></pre>
-        <h2 id="56d2c6b9-8427-4d53-95d6-03eb663dd8b4">Error Boundary</h2>
+        <h2 id="8d0750f4-424f-4670-82c6-c1e5281da0b0">Error Boundary</h2>
         <p>error boundary 是指定义了 <code>getDerivedStateFromError</code> 或 <code>componentDidCatch</code> 方法的 class 组件。</p>
         <p>一旦 error boundary 组件的后代组件发生了崩溃，那么这个崩溃就会冒泡至 error boundary 组件，这时 Reacy 就会依次调用 error boundary 组件的 <code>getDerivedStateFromError</code>、<code>render</code>、<code>componentDidCatch</code> 方法。而我们就可以通过操纵 <code>getDerivedStateFromError</code> 方法来渲染降级的 UI，用 <code>componentDidCatch</code> 方法来向服务器发送崩溃日志。</p>
         <p>如果 error boundary 组件的后代组件没有发生崩溃，那么 React 就不会调用 error boundary 的 <code>getDericedStateFromError</code> 和 <code>componentDidCatch</code> 方法。</p>
-        <h3 id="89b41565-2128-4402-9780-0c155c7ee363">getDerivedStateFromError</h3>
+        <h3 id="7f322bdc-0a0a-49d6-9d79-702a27e731a1">getDerivedStateFromError</h3>
         <p><code>getDerivedStateFromError</code> 是 error boundary 组件的静态方法，该方法先于 <code>render</code> 方法被调用。该方法接收一个入参 <code>error</code>，其代表后代组件所抛出的错误，而该方法的返回值会更新 error boundary 组件的 <code>state</code>。</p>
         <p>如果后代组件没有发生崩溃，React 就不会调用该方法。</p>
-        <pre><code class="language-react">class ErrorBoundary {
+        <pre><code class="language-jsx">class ErrorBoundary {
 
     /*
      * @param { Error } - 后代组件所抛出的错误。
@@ -495,10 +495,10 @@ flushSync( _ =&gt; {} );
 
 }
 </code></pre>
-        <h3 id="42dd2491-b86b-4974-a98b-3af57a4cf53a">componentDidCatch</h3>
+        <h3 id="5fd90b03-31f5-48d3-a15c-cbadfd775c6a">componentDidCatch</h3>
         <p><code>componentDidCatch</code> 是 error boundary 组件的原型方法，该方法后于 <code>render</code> 方法被调用。该方法接收 2 个入参，分别是 <code>error</code> 和 <code>information</code>，<code>error</code> 代表后代组件所抛出的错误，<code>information</code> 是一个带有 <code>componentStack</code> 属性的普通对象，<code>componentStack</code> 属性是一个字符串，该字符串记录了抛出错误的后代组件的栈信息。</p>
         <p>如果后代组件没有发生崩溃，React 就不会调用该方法。</p>
-        <pre><code class="language-js">class ErrorBoundary {
+        <pre><code class="language-jsx">class ErrorBoundary {
 
     /*
      * @param { Error }  - 后代组件所抛出的错误。
@@ -512,8 +512,8 @@ flushSync( _ =&gt; {} );
             <p><strong>Note</strong></p>
             <p>在开发环境下，被 <code>componentDidCatch</code> 方法所捕获的错误会冒泡至浏览器根对象 <code>window</code>，而在生产环境下，则不会发生冒泡。</p>
         </blockquote>
-        <h3 id="78132e01-174d-4029-9634-1957c34c6e57">示例</h3>
-        <pre><code class="language-react">class ErrorBoundary extends Component {
+        <h3 id="e3759165-5f36-4436-a0e0-7bb49b39ed8b">示例</h3>
+        <pre><code class="language-jsx">class ErrorBoundary extends Component {
 
     constructor ( props ) {
 
@@ -560,9 +560,9 @@ function Bomb () {
 
 }
 </code></pre>
-        <h3 id="c02b5f6c-cc4c-4c47-ac42-7147e85fa45e">react-error-boundary</h3>
+        <h3 id="b90b42ff-88fe-4374-b4d8-b9e5f0367784">react-error-boundary</h3>
         <p><a href="https://github.com/bvaughn/react-error-boundary#readme">react-error-boundary</a> 是一个 <code>ErrorBoundary</code> 库，它可以让你免于手动编写 <code>ErrorBoundary</code> 类，并且它还提供了一些额外的特性。</p>
-        <pre><code class="language-react">import { ErrorBoundary } from &quot;react-error-boundary&quot;;
+        <pre><code class="language-jsx">import { ErrorBoundary } from &quot;react-error-boundary&quot;;
 
 function App () {
 
@@ -604,7 +604,7 @@ function Bomb () {
 
 }
 </code></pre>
-        <h2 id="519c1ebd-073c-47c3-8d32-5693f5ec3b2a">UI 树与状态</h2>
+        <h2 id="aac5e9c2-6018-4cc0-a8cf-2ecd2b706248">UI 树与状态</h2>
         <p>组件的状态就是一份用于描述组件状况的数据，然而这份数据却并不存在于组件的内部，而是存在于 React 之中，直至组件构造器被调用的时候，React 才会将属于组件的状态数据派发给组件。</p>
         <p>特别的是，React 并没有直接将状态数据和组件绑定在一起，而是将状态数据和 UI 树关联在一起，更具体的说，React 将状态数据和位置、种类、<code>key</code> 值绑定在了一起。</p>
         <ol>
@@ -619,7 +619,7 @@ function Bomb () {
             <p>创建组件时，如果我们为组件的 <code>key</code> 属性指定了一个值，那么组件的 <code>key</code> 属性就会使用这个指定值。否则，组件的 <code>key</code> 属性就会使用默认值，这个默认值是组件在父组件中的序号，比如 <code>first</code>、<code>second</code> 等。</p>
             <p>另外，如果移除了一个组件，那么该组件的后代组件也都会被移除，所以被移除的组件的后代组件也都会执行步骤 2。</p>
         </blockquote>
-        <h3 id="2727cf7f-9ff9-44e6-a2f0-82361b4c5b47">UI 树</h3>
+        <h3 id="a099855a-88fc-4b8e-9466-55869ed1a500">UI 树</h3>
         <p>UI 树类似于 DOM 树，DOM 树描述了每个节点的位置关系，而 UI 树则描述了每个 react element 的位置关系。React 通过 JSX 来构建 UI 树，并通过 UI 树来更新 DOM 树。</p>
         <p><img src="/static/image/markdown/javascript/react-api-manual/ui-tree.png" alt="UI树"></p>
     </article>
