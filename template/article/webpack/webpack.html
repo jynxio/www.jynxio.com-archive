@@ -14,27 +14,27 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=811a2806-5ad3-40c9-b1c3-4ab5abc1be58>概念</p>
-        <p data-target-id=0b948906-03c0-47fe-8e81-052b21e2b644>开发环境</p>
-        <p data-target-id=ee63e9de-80f6-482a-9872-074e2f32df45>生产环境</p>
-        <p data-target-id=441a82fc-7d88-45b1-8236-82c43424d6e5>动态导入</p>
-        <p data-target-id=5b52d7fe-cb27-4d54-a65e-ecc86e734dbe>预获取/预加载模块</p>
-        <p data-target-id=98c33363-d7c1-4067-98a6-158dfad02f06>缓存</p>
-        <p data-target-id=230b832e-17b6-4c1b-8d2f-b961c9338074>创建 library</p>
-        <p data-target-id=3872f473-97e5-4015-bcf4-fdf8e56019f6>优化性能</p>
-        <p data-target-id=8174cbfe-9180-43f0-acf2-6fa397c26c4c>Tree Shaking</p>
-        <p data-target-id=e4b06c7b-732a-4288-8e26-100ccb43f142>懒加载</p>
+        <p data-target-id=48d04e27-9640-42cb-9f38-7b9aea92e7ab>概念</p>
+        <p data-target-id=deca24db-361f-4476-b229-f69c62d96874>开发环境</p>
+        <p data-target-id=8af747f2-ec62-4b4b-a544-aa70b615841b>生产环境</p>
+        <p data-target-id=336f428f-4656-4889-88b2-510626dad314>动态导入</p>
+        <p data-target-id=71613d6d-af1d-469b-9d44-b0709d423504>预获取/预加载模块</p>
+        <p data-target-id=f156d80e-ef2d-492d-aae2-4065640341ce>缓存</p>
+        <p data-target-id=dd15391a-a52f-451b-9b83-d6ae15317cf1>创建 library</p>
+        <p data-target-id=78a74d69-4023-471d-b9e7-b3f46684694d>优化性能</p>
+        <p data-target-id=0f3adfea-324c-4418-b6b3-12043099407f>Tree Shaking</p>
+        <p data-target-id=365c9a34-3046-4acb-a35f-68fe5db3d171>懒加载</p>
     </aside>
     <article>
         <h1>Webpack 5</h1>
-        <h2 id="811a2806-5ad3-40c9-b1c3-4ab5abc1be58">概念</h2>
-        <h3 id="28cc8a60-1667-47cb-b2e6-2df28e465e9a">entry</h3>
+        <h2 id="48d04e27-9640-42cb-9f38-7b9aea92e7ab">概念</h2>
+        <h3 id="eb9c381c-b495-4ddd-8ede-14c776e3ff83">entry</h3>
         <p><code>entry</code> 属性用于指定入口文件，默认值是 <code>./src/index.js</code> 。</p>
         <pre><code class="language-js">module.exports = {
     entry: &quot;./src/index.js&quot;
 }
 </code></pre>
-        <h3 id="61de2c3d-2faf-4f04-9bb4-ca2e711f4a9c">output</h3>
+        <h3 id="9a99f959-40e0-4487-a776-8064c4cae6ee">output</h3>
         <p><code>output</code> 属性用于指定 bundle 的输出地址及命名，默认值是 <code>./dist/main.js</code> ，其他生成文件默认放置在 <code>./dist</code> 文件夹中。</p>
         <pre><code class="language-js">const path = require(&quot;path&quot;);
 
@@ -45,7 +45,7 @@ module.exports = {
     }
 };
 </code></pre>
-        <h3 id="ab6a1e8b-e0b2-43a2-aeba-1e674d883a88">loader</h3>
+        <h3 id="a30001bf-dd10-49c3-b114-9bd790959ea8">loader</h3>
         <p>webpack 自身只能识别 JS 和 JSON 文件，如果想让 webpack 识别其他文件，就需要使用 <code>loader</code> 。</p>
         <pre><code class="language-js">const path = require(&quot;path&quot;);
 
@@ -57,7 +57,7 @@ module.exports = {
 </code></pre>
         <p><code>loader</code> 有 2 个属性： <code>test</code> 和 <code>use</code> 。前者用于指定那些文件需要被处理，后者用于指定处理时应使用哪个 loader 。</p>
         <p>上例的意思是：当 webpack 碰到 .txt 文件时，在打包它之前，先使用 <code>raw-loader</code> 处理一下。</p>
-        <h3 id="70e066ab-d0ec-47cb-a9b4-4828bbcce711">plugin</h3>
+        <h3 id="791a3eb5-8fb9-4841-a2b3-8bc198708696">plugin</h3>
         <p><code>loader</code> 用于处理某些类型的文件， <code>plugin</code> 用于执行更宽泛的任务，比如打包优化、资源管理、注入环境变量。</p>
         <pre><code class="language-js">const html_webpack_plugin = require(&quot;html-webpack-plugin&quot;);
 
@@ -65,45 +65,45 @@ module.exports = {
     plugins: [ new html_webpack_plugin() ]
 };
 </code></pre>
-        <h3 id="502a7562-4a9e-441d-bf5f-2e86b89f482a">mode</h3>
+        <h3 id="f888a637-132f-4419-a63e-da6a296eb1bb">mode</h3>
         <p><code>mode</code> 用于指定打包的行为，有 3 种值可选： <code>&quot;development&quot;</code> 、 <code>&quot;production&quot;</code> 、 <code>&quot;none&quot;</code> ，默认值时 <code>&quot;production&quot;</code> 。</p>
         <pre><code class="language-js">module.exports = {
     mode: &quot;production&quot;
 };
 </code></pre>
-        <h3 id="2f7ba388-c5b2-4cc0-8c5a-69c301fb1e15">浏览器兼容性</h3>
+        <h3 id="ad42365d-2b66-4669-8c89-6430bf06fe18">浏览器兼容性</h3>
         <p>webpack 支持所有符合 ES5 标准的浏览器（不支持 IE8 及以下版本）。 webpack 的 <code>import()</code> 和 <code>require.ensure()</code> 需要 <code>Promise</code> ，如果目标环境不支持 <code>Promise</code> ，那么在使用 <code>import()</code> 和 <code>require.ensure()</code> 之前需要提前进行 polyfill 。</p>
-        <h3 id="a4c449d0-3db4-49f6-9249-eb9a469987c6">环境</h3>
+        <h3 id="2a324393-8dfd-406c-ada3-60ffa17c8fe1">环境</h3>
         <p>webpack5 要求 Node.js v10.13.0+ 。</p>
-        <h2 id="0b948906-03c0-47fe-8e81-052b21e2b644">开发环境</h2>
+        <h2 id="deca24db-361f-4476-b229-f69c62d96874">开发环境</h2>
         <p><code>package.json</code></p>
         <pre><code class="language-json">
 </code></pre>
         <p><code>webpack-dev.config.js</code></p>
         <pre><code class="language-js">
 </code></pre>
-        <h2 id="ee63e9de-80f6-482a-9872-074e2f32df45">生产环境</h2>
+        <h2 id="8af747f2-ec62-4b4b-a544-aa70b615841b">生产环境</h2>
         <p><code>package.json</code></p>
         <pre><code class="language-json">
 </code></pre>
         <p><code>webpack-dev.config.js</code></p>
         <pre><code class="language-js">
 </code></pre>
-        <h2 id="441a82fc-7d88-45b1-8236-82c43424d6e5">动态导入</h2>
+        <h2 id="336f428f-4656-4889-88b2-510626dad314">动态导入</h2>
         <p>学习 webpack 的 <a href="https://webpack.docschina.org/guides/code-splitting/">动态导入</a> ，《现代JavaScript教程》中的 <a href="https://zh.javascript.info/modules-dynamic-imports">动态导入</a> 对你会有额外帮助，也建议学完它的 3 节《模块》的内容。</p>
-        <h2 id="5b52d7fe-cb27-4d54-a65e-ecc86e734dbe">预获取/预加载模块</h2>
+        <h2 id="71613d6d-af1d-469b-9d44-b0709d423504">预获取/预加载模块</h2>
         <p>🔗 <a href="https://webpack.docschina.org/guides/code-splitting/">https://webpack.docschina.org/guides/code-splitting/</a></p>
-        <h2 id="98c33363-d7c1-4067-98a6-158dfad02f06">缓存</h2>
+        <h2 id="f156d80e-ef2d-492d-aae2-4065640341ce">缓存</h2>
         <p>浏览器会使用缓存技术来加快网站的加载速度，这带来的一个问题是，如果我们在部署新版本时不更改资源的名称，浏览器就可能会认为它没有被更新，然后继续使用它的缓存版本，这就会带来一些棘手的问题。</p>
         <p>webpack 似乎有一套专业的 <a href="https://webpack.docschina.org/guides/caching/">办法</a> 来解决它，不过为了省事我暂时先使用浏览器的 「停用缓存」功能。</p>
-        <h2 id="230b832e-17b6-4c1b-8d2f-b961c9338074">创建 library</h2>
+        <h2 id="dd15391a-a52f-451b-9b83-d6ae15317cf1">创建 library</h2>
         <p>从这里开始学。</p>
         <p>先看生产环境吧！</p>
-        <h2 id="3872f473-97e5-4015-bcf4-fdf8e56019f6">优化性能</h2>
-        <h3 id="491812b8-47a7-4600-bed1-5bc05e92758f">优化通用环境的性能</h3>
-        <h4 id="c000bdff-2e8f-46de-aac3-68b829657f6f">更新版本</h4>
+        <h2 id="78a74d69-4023-471d-b9e7-b3f46684694d">优化性能</h2>
+        <h3 id="ab5ea4e9-f15e-4212-9c9b-0e6e64f47b62">优化通用环境的性能</h3>
+        <h4 id="946a6fa0-f106-482e-8d23-6679244b1399">更新版本</h4>
         <p>使用最新版本的 <code>webpack</code> 、 <code>node.js</code> 、 <code>npm</code> 都有助于提高构建脚本的性能。</p>
-        <h4 id="3089f2d5-0286-4370-b742-8d80dcde1d7b">loader</h4>
+        <h4 id="b94f9cfd-d548-425f-b7ea-597af13bbfc5">loader</h4>
         <p>让 <code>loader</code> 只作用于需要的模块，比如：</p>
         <pre><code class="language-js">module.exports = {
     // ...
@@ -133,10 +133,10 @@ module.exports = {
     },
 };
 </code></pre>
-        <h3 id="01957e77-dba5-4877-b474-34f7d7c27cd6">优化开发环境的性能</h3>
-        <h4 id="8902f709-ef69-4d76-bf53-d57cd90f775a">Devtool</h4>
+        <h3 id="9860faea-3d3f-4511-acae-4d830b08bfad">优化开发环境的性能</h3>
+        <h4 id="1d8affbb-dd0b-49fb-a1d0-c021b4df4a46">Devtool</h4>
         <p> <code>&quot;eval-cheap-module-source-map&quot;</code> 是大多数情况下的最佳选择，它的构建速度快，且可以生成源码的行映射。</p>
-        <h4 id="2d8e9126-6bf6-412d-90e4-23eec0f964e7">避免使用生产环境才需要的工具</h4>
+        <h4 id="7d5edda8-987a-403e-9faf-246c161bff73">避免使用生产环境才需要的工具</h4>
         <p>在开发环境下，应该排除一下这些工具，因为它们都只用于生产环境，对开发环境没有意义：</p>
         <ul>
             <li><code>TerserPlugin</code> </li>
@@ -145,7 +145,7 @@ module.exports = {
             <li><code>AggresiveMergingPlugin</code> </li>
             <li><code>ModuleConcatenationPlugin</code></li>
         </ul>
-        <h4 id="9f82eec5-0d5a-4cca-8324-ed90ca617205">最小化 entry chunk</h4>
+        <h4 id="002d6b09-0886-4fa4-831d-fc68ea493c02">最小化 entry chunk</h4>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>我不懂它，所以没有使用。</p>
@@ -157,7 +157,7 @@ module.exports = {
     },
 };
 </code></pre>
-        <h4 id="ae7cb771-c628-4bef-9371-ecf373ba19ac">避免额外的优化步骤</h4>
+        <h4 id="709faa75-f829-4ce2-8802-a8485e5107bf">避免额外的优化步骤</h4>
         <p>webpack 通过执行额外的算法任务来优化输出结果的体积和加载性能，这些优化适用于小型代码库，但是不适用于大型代码库，因为这些优化在大型代码库中非常耗费性能。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -172,7 +172,7 @@ module.exports = {
     },
 };
 </code></pre>
-        <h4 id="5c307e43-768a-4fbd-a10a-9a16432951b8">输出结果不携带路径信息</h4>
+        <h4 id="573d027d-c5a6-4545-9c86-2102a260a5cd">输出结果不携带路径信息</h4>
         <p>webpack 会在输出的 bundle 中生成路径信息，如果打包的模块有数千个，那么禁用该特性可以减轻垃圾回收的压力，禁用它的方法是：</p>
         <pre><code class="language-js">module.exports = {
     // ...
@@ -181,14 +181,14 @@ module.exports = {
     }
 };
 </code></pre>
-        <h3 id="64bf1a98-dec0-431b-b0ad-272991bf4e87">优化生产环境的性能</h3>
-        <h4 id="ce1b9f59-a261-4b23-9c8b-0b902840a0b5">Source Maps</h4>
+        <h3 id="32aec7ea-f773-4d98-9c64-d1d5f105ca17">优化生产环境的性能</h3>
+        <h4 id="6fd88b07-3445-41a1-bb52-3493b4658cbd">Source Maps</h4>
         <p>source map 相当消耗资源，而且会暴露源码的位置，如果要保护代码的安全，就应该在生产环境中禁用它，禁用后还可以提升一些构建的性能。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>代码经 webpack 打包压缩之后，如果发生了异常，控制台是无法输出正确的代码位置的。 source map 用于解决这个问题，它是一个信息文件，它存储了代码打包前后的位置映射关系，有了它，控制台就可以正确的输出异常发生在原始代码的哪个位置了。</p>
         </blockquote>
-        <h3 id="e7a6d19c-0205-4da8-8969-500ba5b06ab3">模块热更替</h3>
+        <h3 id="f156fa89-fa4b-4ed9-83e6-77951b8a3e30">模块热更替</h3>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>我不知道怎么使用它。</p>
@@ -204,9 +204,9 @@ module.exports = {
             <p><strong>Note</strong></p>
             <p>HMR 只适用于开发环境。</p>
         </blockquote>
-        <h2 id="8174cbfe-9180-43f0-acf2-6fa397c26c4c">Tree Shaking</h2>
+        <h2 id="0f3adfea-324c-4418-b6b3-12043099407f">Tree Shaking</h2>
         <p>它用来剔除无用代码，但我目前没有使用它。</p>
-        <h2 id="e4b06c7b-732a-4288-8e26-100ccb43f142">懒加载</h2>
+        <h2 id="365c9a34-3046-4acb-a35f-68fe5db3d171">懒加载</h2>
     </article>
 </body>
 

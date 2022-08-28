@@ -14,24 +14,24 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=94e3155a-2475-4ada-b810-38eb191c227b>汇总表</p>
-        <p data-target-id=12f93941-a166-4d01-8cb9-85d2f5388c86>算术运算符</p>
-        <p data-target-id=c6269294-d619-4aa5-bcee-6b9bda188fb6>赋值运算符</p>
-        <p data-target-id=0a9f19b9-e276-4291-97a7-dd2ecf2b8598>逻辑运算符</p>
-        <p data-target-id=259cd9fc-8b9c-4d22-8c76-2c1a60750850>一元运算符</p>
-        <p data-target-id=1639391b-c0b4-4292-93ff-5a3d836f01f9>三元运算符</p>
-        <p data-target-id=d7055c40-c71a-4ece-83fa-839fe33d3328>比较运算符</p>
-        <p data-target-id=0a80a39f-4609-427f-a015-9fdfd6beab1c>逗号运算符</p>
-        <p data-target-id=e25e62ae-acad-42b8-9250-7130d5742a8f>可选链运算符</p>
-        <p data-target-id=4e56fbae-1a46-47c2-9ebe-924ffdb962f4>in 运算符</p>
-        <p data-target-id=169da6b2-4e9f-4e7d-a06e-69c51ca34f83>instanceof 运算符</p>
-        <p data-target-id=c46fc797-f2eb-45c8-921b-2e4bd1fa7d21>位运算符</p>
+        <p data-target-id=44596623-3923-4c18-a99e-8df034a07017>汇总表</p>
+        <p data-target-id=671af3d0-9074-47eb-aff9-c4d430a773fa>算术运算符</p>
+        <p data-target-id=f2478092-34c7-44be-a274-516ea0908fe8>赋值运算符</p>
+        <p data-target-id=2ddbb215-fc79-407f-a549-3efaebaa7eb0>逻辑运算符</p>
+        <p data-target-id=74121b82-a679-4dba-9385-07633d15a5ad>一元运算符</p>
+        <p data-target-id=df50dd72-7bc8-427e-aa0b-fd0c3ec296be>三元运算符</p>
+        <p data-target-id=7fac324f-836d-4ad3-916a-ad5eeb48e6b6>比较运算符</p>
+        <p data-target-id=572374f5-faea-4b37-b282-36fd6cc52081>逗号运算符</p>
+        <p data-target-id=cfb93697-d4df-4cec-b7cd-e289cc8c4bbc>可选链运算符</p>
+        <p data-target-id=00759b58-4cf2-454c-9924-757d1921a791>in 运算符</p>
+        <p data-target-id=f1a8dbe0-97f4-48a6-997a-214f0d3b9e8e>instanceof 运算符</p>
+        <p data-target-id=ab08552d-b0b6-497f-810c-f5aae830f6a6>位运算符</p>
     </aside>
     <article>
         <h1>运算符</h1>
-        <h2 id="94e3155a-2475-4ada-b810-38eb191c227b">汇总表</h2>
+        <h2 id="44596623-3923-4c18-a99e-8df034a07017">汇总表</h2>
         <p>参见 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#%E6%B1%87%E6%80%BB%E8%A1%A8">MDN-运算符优先级-汇总表</a>。</p>
-        <h2 id="12f93941-a166-4d01-8cb9-85d2f5388c86">算术运算符</h2>
+        <h2 id="671af3d0-9074-47eb-aff9-c4d430a773fa">算术运算符</h2>
         <table>
             <thead>
                 <tr>
@@ -80,13 +80,13 @@
             <li>对于二元加法运算符，若有至少一个运算元是 <code>String</code> ，则非 <code>String</code> 的运算元会被转换为 <code>String</code> </li>
             <li>对于其它算术运算符，所有非 <code>Number</code> 的运算元都会被转换为 <code>Number</code></li>
         </ul>
-        <h3 id="89d99ebe-af5d-45c5-b37f-fe8bb9209dd8">求幂</h3>
+        <h3 id="71556604-6a82-4eb1-830f-cdc48ee662ee">求幂</h3>
         <p>以左运算元为底数，以右运算元为指数，返回它们的乘方。注意，该运算符的关联性是从右到左，因此 <code>2 ** 2 ** 3</code> 等价于 <code>2 ** (2 ** 3)</code>，不等价于 <code>(2 ** 2) ** 3</code> 。</p>
-        <h3 id="e75981ad-2f39-45aa-9c02-985f9e5303ef">自增 和 自减</h3>
+        <h3 id="47983b60-c5c2-4b40-9928-ced05c643983">自增 和 自减</h3>
         <p>对于前置自增，先令运算元自增 <code>1</code> ，再返回运算元的值。对于后置自增，先返回运算元的值，再令运算元自增 <code>1</code> 。自减运算符同理。</p>
-        <h3 id="dc566165-08da-43cc-9881-898084208f90">加法</h3>
+        <h3 id="153c2d53-1d56-4ee7-9a35-a7a627688249">加法</h3>
         <p>对于二元加法运算符，若有至少一个运算元是 <code>String</code> ，则非 <code>String</code> 的运算元会被隐式转换为 <code>String</code> ，然后再进行字符串的连接，最后返回连接的结果。</p>
-        <h2 id="c6269294-d619-4aa5-bcee-6b9bda188fb6">赋值运算符</h2>
+        <h2 id="f2478092-34c7-44be-a274-516ea0908fe8">赋值运算符</h2>
         <table>
             <thead>
                 <tr>
@@ -166,7 +166,7 @@
 </code></pre>
         <p>因为 <code>a = b</code> 的返回值是变量 <code>b</code> 的值而不是变量 <code>b</code>，所以才会抛出 <code>Invalid left-hand</code>。</p>
         <p>逻辑与赋值的定义是：若左运算元为 <code>truthy</code>，则将右运算元的值赋予左运算元，否则不进行赋值操作。因为逻辑与赋值具有短路计算的特性，因此 <code>a &amp;&amp;= b</code> 才会等价于 <code>a &amp;&amp; ( a = b )</code> ，而不是 <code>a = a &amp;&amp; b</code>，因为前者才符合短路计算的特性。对于逻辑或赋值、逻辑空赋值也是同理的。</p>
-        <h2 id="0a9f19b9-e276-4291-97a7-dd2ecf2b8598">逻辑运算符</h2>
+        <h2 id="2ddbb215-fc79-407f-a549-3efaebaa7eb0">逻辑运算符</h2>
         <table>
             <thead>
                 <tr>
@@ -204,7 +204,7 @@
             </tbody>
         </table>
         <p>注意，<code>a</code> 和 <code>b</code> 是变量或表达式，变量的初始值就是变量的值，表达式的初始值就是表达式的计算结果。</p>
-        <h3 id="04048d0f-4677-452a-9554-89e2d3f01cac">逻辑或</h3>
+        <h3 id="20bda560-a036-4d85-8e6d-016a3fa49a51">逻辑或</h3>
         <p>从左向右逐个检查运算元，然后返回首个 <code>truthy</code> 运算元的初始值，并忽略剩余的运算元。若一直没有找到 <code>truthy</code> 运算元，则返回最后那个运算元的初始值。比如对于 <code>a &amp;&amp; b &amp;&amp; c</code> ，JavaScript 引擎会这么做：</p>
         <ol>
             <li>从左向右逐个检查运算元；</li>
@@ -212,9 +212,9 @@
             <li>若当前运算元的布尔值为 <code>true</code> ，则立即返回当前运算元的初始值，并忽略剩余的运算元；</li>
             <li>若所有运算元的布尔值为 <code>false</code> ，则返回最后那个运算元的初始值；</li>
         </ol>
-        <h3 id="d0d12ed7-f900-479b-818b-d5e66a95bc7a">逻辑与</h3>
+        <h3 id="cd56d37a-d4da-439e-8da3-0e7ac4ee98cf">逻辑与</h3>
         <p>从左向右逐个检查运算元，返回首个 <code>falsy</code> 运算元的初始值，并忽略剩余的运算元。若一直没有找到 <code>falsy</code> 运算元，则返回最后那个运算元的初始值。</p>
-        <h3 id="c4af4d67-0047-4ba0-9668-48b84fca8dad">逻辑空</h3>
+        <h3 id="62b795c5-a439-4259-bc49-7210a13ace06">逻辑空</h3>
         <p>逻辑空又被称为空值合并运算符，它的执行逻辑很简单，即：如果左运算元的值为 <code>null</code> 或 <code>undefined</code>，则返回右运算元的值，否则就返回左运算元的值。</p>
         <p>另外，ECMAScript 规定如果没有明确的添加圆括号，就不能混合使用 <code>??</code> 和 <code>||</code>，也不能混合使用 <code>??</code> 和 <code>&amp;&amp;</code>。</p>
         <pre><code class="language-js">1 &amp;&amp; 2 ?? 3; // Syntax error: Unexpected token &#39;??&#39;
@@ -224,13 +224,13 @@
 ( 1 || 2 ) ?? 3; // 1
 </code></pre>
         <p>为了弥补 <code>||</code> 的缺憾，所以语言规范的制定者创造了 <code>??</code>，不过制定者们认为人们在将 <code>||</code> 切换为 <code>??</code> 的时候容易引发错误，所以制定者们才额外添加了上文的限制措施。</p>
-        <h3 id="c6226289-bf75-484a-86d8-181352256a24">短路计算</h3>
+        <h3 id="c9d7e026-bd40-47f1-bfc4-bbf217a14ec6">短路计算</h3>
         <p><code>&amp;&amp;</code> 、 <code>||</code> 、 <code>??</code> 具有能够忽略运算元的特性， “运算元被忽略” 是指该运算元没有被执行，因此被忽略的运算元中的错误、副作用、函数调用等都不会被触发。这种忽略运算元的行为被称为短路计算。短路计算常用于简化判断语句，但它也会降低代码的可读性。</p>
         <pre><code class="language-js">if ( 1 &gt; 0 ) console.log( true );
 /* equal to */
 1 &gt; 0 &amp;&amp; console.log( true );
 </code></pre>
-        <h2 id="259cd9fc-8b9c-4d22-8c76-2c1a60750850">一元运算符</h2>
+        <h2 id="74121b82-a679-4dba-9385-07633d15a5ad">一元运算符</h2>
         <table>
             <thead>
                 <tr>
@@ -285,7 +285,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 id="7708b5a3-f883-4e84-94cb-8d5292ab94ec">void</h3>
+        <h3 id="70999556-9e00-411b-9dca-9869607f7d57">void</h3>
         <p>执行右运算元，然后返回 <code>undefined</code>，它的语法是：</p>
         <pre><code class="language-js">void expression;
 void ( expression );
@@ -297,7 +297,7 @@ void ( expression );
         <pre><code class="language-html">&lt;a href=&quot;javascript: void 0;&quot;&gt;&lt;/a&gt;
 &lt;a href=&quot;javascript: void(0);&quot;&gt;&lt;/a&gt;
 </code></pre>
-        <h3 id="32121e6a-2606-469a-8d03-f5287ba92aad">typeof</h3>
+        <h3 id="ed23ed0d-ab28-4222-a03c-ab5733cf8fe7">typeof</h3>
         <p>返回一个表示右运算元的数据类型的字符串，它的语法是：</p>
         <pre><code class="language-js">typeof a;
 typeof ( a );
@@ -357,7 +357,7 @@ typeof ( a );
             </tbody>
         </table>
         <p>其中，<code>typeof null</code> 的返回值是 <code>&#39;object&#39;</code> ，这是一个历史遗留错误。</p>
-        <h3 id="0470df23-f674-4ef8-86d0-e4ce3fe4eb55">delete</h3>
+        <h3 id="42b5f73d-36f7-433c-9eab-bcdaa97125c8">delete</h3>
         <p>删除对象自身的指定属性，但不会删除对象原型链上的同名属性，它的语法时是：</p>
         <pre><code class="language-js">delete obj.prop;
 delete obj[expr];
@@ -367,11 +367,11 @@ delete obj[expr];
             <li><code>false</code> ：若 <code>delete</code> 不可配置的属性，则会返回该值，且在非严格模式下，该操作将静默失败，在严格模式下，该操作将会抛出错误。</li>
             <li><code>true</code> ：其余情况都返回 <code>true</code>。</li>
         </ul>
-        <h4 id="e6238bfe-114e-4812-85f5-b6a4af9d47f5">delete 不存在的属性</h4>
+        <h4 id="ec031023-b18b-4d0c-8cdb-20f60604629a">delete 不存在的属性</h4>
         <p><code>delete</code> 不存在的属性也会返回 <code>true</code> ，且被操作的对象没有任何变化。</p>
         <pre><code class="language-js">delete {}.a; // true
 </code></pre>
-        <h4 id="f7ee682b-771e-44d4-999b-e36d0e1f8fb9">delete 由 var、let、const、function 生命的变量</h4>
+        <h4 id="577e52ce-5810-4590-8c6f-6f38bf2feb11">delete 由 var、let、const、function 生命的变量</h4>
         <p>在任何作用域内，由声明关键字声明的变量都是某个对象的不可配置的属性，而不经声明就直接赋值来创建的变量则是某个对象的可配置的属性。因此，<code>delete</code> 前者将会返回 <code>false</code>，<code>delete</code> 后者将会返回 <code>true</code>，比如：</p>
         <pre><code class="language-js">var a = 1;
 Object.getOwnPropertyDescriptor(window, &quot;a&quot;).configurable; // false
@@ -381,20 +381,20 @@ Object.getOwnPropertyDescriptor(window, &quot;a&quot;).configurable; // true
 </code></pre>
         <pre><code>
 </code></pre>
-        <h4 id="a69b11a3-4e07-4082-aadc-40fec8a3503f">delete 数组元素</h4>
+        <h4 id="0f13fe1e-01ef-4652-ac9c-48f2d68322c4">delete 数组元素</h4>
         <p><code>delete</code> 一个数组的元素，就会清空这个元素的内容，但不会释放掉这个元素所占据的内存空间，被 <code>delete</code> 后的元素的值为 <code>undefined</code> ，意义为 empty 。数组的长度不会改变，其它元素的下标也不会重排。</p>
         <pre><code class="language-js">const a = [ 1, 2 ];
 delete a[ 0 ];
 a;      // [ empty, 2 ]
 a[ 0 ]; // undefined
 </code></pre>
-        <h2 id="1639391b-c0b4-4292-93ff-5a3d836f01f9">三元运算符</h2>
+        <h2 id="df50dd72-7bc8-427e-aa0b-fd0c3ec296be">三元运算符</h2>
         <p>又被称为条件运算符，它的语法是：</p>
         <pre><code class="language-js">condition ? expr_1 : expr_2;
 </code></pre>
         <p>若 <code>condition</code> 的 truthy 为 <code>true</code>，则执行 <code>expr_1</code>，且忽略 <code>expr_2</code>，最后返回 <code>expr_1</code> 的初始值。否则忽略 <code>expr_1</code>，执行 <code>expr_2</code>，最后返回 <code>expr_2</code> 的初始值。</p>
         <p>注意，非表达式的语法结构不能作为三元运算符的运算元，比如函数内部的 <code>return</code>，循环体内的 <code>break</code> 和 <code>continue</code>。</p>
-        <h2 id="d7055c40-c71a-4ece-83fa-839fe33d3328">比较运算符</h2>
+        <h2 id="7fac324f-836d-4ad3-916a-ad5eeb48e6b6">比较运算符</h2>
         <p>所有比较运算符均会返回布尔值。</p>
         <table>
             <thead>
@@ -432,7 +432,7 @@ a[ 0 ]; // undefined
                 </tr>
             </tbody>
         </table>
-        <h3 id="b0566faa-ecb5-4b2d-9552-325411d956a5">字符串之间的比较</h3>
+        <h3 id="08626823-0811-4ffc-81a6-c0fa737ffab1">字符串之间的比较</h3>
         <p>JavaScript 会根据字符串的 Unicode 来比较字符串的大小，具体来说是：</p>
         <ol>
             <li>首先比较左右运算元的首位字符的 Unicode，该 Unicode 更大的运算元更大。</li>
@@ -447,7 +447,7 @@ a[ 0 ]; // undefined
 &quot;aa&quot; &lt; &quot;ab&quot;;  // true
 &quot;ab&quot; &lt; &quot;abb&quot;; // true
 </code></pre>
-        <h3 id="9c108fb8-0a64-45eb-92c9-9056b9859940">不同原始类型之间的比较</h3>
+        <h3 id="9ef004cf-f349-4b7a-94bb-dd957500d825">不同原始类型之间的比较</h3>
         <p>严格相等运算符（<code>===</code>）会比较左右运算元的数据类型与值，只有当它们的数据类型与值均相等时，它们才相等。严格不相等运算符（<code>!==</code>） 也会比较左右运算元的数据类型与值，只要数据类型或值不相等，那么它们就不相等。</p>
         <p>对于其他的比较运算符，如果左右运算元的数据类型不一致，那么 JavaScript 就会把左右运算元都隐式转换为数字值之后再进行比较。</p>
         <pre><code class="language-js">2 &gt; &quot;1&quot;;     // true，其中 &quot;1&quot; -&gt; 1
@@ -455,7 +455,7 @@ a[ 0 ]; // undefined
 &quot;1&quot; &gt; false; // true，其中 false -&gt; 0，&quot;1&quot; -&gt; 1
 &quot;&quot; == false; // true，其中 false -&gt; 0，&quot;&quot; -&gt; 0
 </code></pre>
-        <h3 id="c4696028-d38d-4a03-80c0-698c30eddb65">null 和 undefined</h3>
+        <h3 id="d25c126f-7e71-4a06-85bd-0229f6822678">null 和 undefined</h3>
         <p>对于 <code>==</code> 和 <code>!==</code>，<code>null</code> 和 <code>undefined</code> 不会进行类型转换，并且它们还有一套特别的针对宽松相等和宽松不相等的比较规则，即：</p>
         <ul>
             <li><code>null</code> 与 <code>undefined</code> 宽松相等，且它们不会与除了它们之外的任何值宽松相等。</li>
@@ -468,13 +468,13 @@ a[ 0 ]; // undefined
 null == 0; // false
 null &gt;  0; // false
 </code></pre>
-        <h3 id="76774572-6660-4af1-8ac9-c247fdda03a8">NaN</h3>
+        <h3 id="dfca318f-5d5c-428a-9b45-447a52be9157">NaN</h3>
         <p><code>NaN</code> 与任何值（甚至包括它自己）进行任何比较都会返回 <code>false</code>。</p>
         <pre><code class="language-js">NaN == NaN; // false
 </code></pre>
-        <h3 id="8940dabb-0801-46cd-a274-5034464bc163">引用值之间的比较</h3>
+        <h3 id="d6674953-eb03-43ca-a97a-ef47a818a335">引用值之间的比较</h3>
         <p>如果两个运算元都是引用值，且它们都指向同一个对象时，那么就认为他们是宽松相等和严格相等的，否则就认为它们是宽松不相等和严格不相等的。</p>
-        <h2 id="0a80a39f-4609-427f-a015-9fdfd6beab1c">逗号运算符</h2>
+        <h2 id="572374f5-faea-4b37-b282-36fd6cc52081">逗号运算符</h2>
         <p>从左向右逐个执行运算元，然后返回最右边的运算元的初始值，请注意，声明语句中的逗号并不是逗号运算符，只有表达式中的逗号才是逗号运算符。它的语法是：</p>
         <pre><code>expr_1, expr_2, ..., expr_n;
 </code></pre>
@@ -484,14 +484,14 @@ const exprB = _ =&gt; 2;
 
 (exprA(), exprB()); // 2
 </code></pre>
-        <h2 id="e25e62ae-acad-42b8-9250-7130d5742a8f">可选链运算符</h2>
+        <h2 id="cfb93697-d4df-4cec-b7cd-e289cc8c4bbc">可选链运算符</h2>
         <p>若左运算元为 <code>null</code> 或 <code>undefined</code> ，则返回 <code>undefined</code> ，并忽略右运算元，否则执行右运算元（通常是属性访问或函数调用）。它的语法是：</p>
         <pre><code class="language-js">obj?.property;
 obj?.[expression];
 array?.[index];
 function?.();
 </code></pre>
-        <h2 id="4e56fbae-1a46-47c2-9ebe-924ffdb962f4">in 运算符</h2>
+        <h2 id="00759b58-4cf2-454c-9924-757d1921a791">in 运算符</h2>
         <p>若该属性存在于该对象或该对象的原型链上，则返回 <code>true</code> ，否则返回 <code>false</code> ，它的语法是：</p>
         <pre><code class="language-js">prop in obj;
 </code></pre>
@@ -503,7 +503,7 @@ function?.();
         <pre><code class="language-js">&#39;toString&#39; in {}; // true
 0 in [1, 2, 3];   // true
 </code></pre>
-        <h2 id="169da6b2-4e9f-4e7d-a06e-69c51ca34f83">instanceof 运算符</h2>
+        <h2 id="f1a8dbe0-97f4-48a6-997a-214f0d3b9e8e">instanceof 运算符</h2>
         <p>若对象 A 的 <code>prototype</code> 属性位于对象 B 的原型链上，则返回 <code>true</code> ，否则返回 <code>false</code> 。它的语法是：</p>
         <pre><code class="language-js">obj_b instanceof obj_a;
 </code></pre>
@@ -514,7 +514,7 @@ const a = new A();
 a instanceof A;      // true
 a instanceof Object; // true
 </code></pre>
-        <h2 id="c46fc797-f2eb-45c8-921b-2e4bd1fa7d21">位运算符</h2>
+        <h2 id="ab08552d-b0b6-497f-810c-f5aae830f6a6">位运算符</h2>
         <p>这类运算符在实际开发中很少被用到，因此暂时忽略它们，如果你更感兴趣，可以从 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">这里</a> 开始学习</p>
         <table>
             <thead>
