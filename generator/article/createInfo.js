@@ -1,5 +1,3 @@
-const { createUuid } = require( "./createUuid" );
-
 /**
  * 根据入参来构建一个普通对象，这个普通对象描述了如何转译与打包md文件。
  * @param { Object } options - 配置参数。
