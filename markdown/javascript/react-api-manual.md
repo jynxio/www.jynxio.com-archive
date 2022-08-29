@@ -364,7 +364,7 @@ function areEqual ( previous_property, current_property ) {}
   - `MemoizedComponent` 返回 `cache_result`。
 - 更新时：
   - 如果 `MemoizedComponent` 自己接收到的 `property` 等于 `cache_property`，那么 `MemoizedComponent` 就会直接返回 `cache_result`。
-  - 否则，就重复挂载的操作。
+  - 否则，就重复挂载时的操作。
 
 另外，如果 `Component` 的实现代码中使用了 `useState`、`useReducer`、`useContext`，那么我们可以直接使用这 3 个 hook 来更新 `Component`，这可以无视 `MemoizedComponent` 对新旧 `property` 的检查。我实践发现，如果我使用这些方式来直接更新 `Component`，那么 `Component` 的新返回值会更新 `MemoirzedComponent` 的 `cache_result`。
 
@@ -380,82 +380,78 @@ function areEqual ( previous_property, current_property ) {}
 
 ## useMemo
 
-`useMemo` 会返回一个值的 memoized 版本，即 `memoized_value`。
+`useMemo` 用于创建值的 memoized 版本。
+
+### 语法
 
 ```jsx
-const memoized_value = useMemo(
-    function expensiveCalculate () {},
-    dependency_array,
-);
+const memoized_value = useMemo( function expensiveCalculate () {}, dependency_array );
 ```
 
-- `memoized_value` 是 `expensiveCalculate` 函数的返回值的 memoized 版本。
 - `expensiveCalculate` 是一个无参函数，它的返回值会作为 `memoized_value` 的值。
 - `dependency_array` 数组用于决定是否执行 `expensiveCalculate` 函数来更新 `memoized_value` 的值。
 
 > 请勿在 `expensiveCalculate` 内执行带有副作用的操作，因为 `expensiveCalculate` 会在组件构造器的调用期间被执行。
-
-### 范例
-
-```jsx
-const [ count, setCount ] = useState( 100000000 );
-const memoized_value = useMemo( expensiveCalculate, [ count ] );
-
-function expensiveCalculate () {
-
-    for ( let i = 0; i < count; i ++ ) new Date();
-
-}
-```
-
-### dependency_array
-
-```jsx
-/**
- *方式一：
- * 如果挂载或更新了组件，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
- */
-const memoized_value = useMemo( function expensiveCalculate () {} );
-
-/*
- * 方式二：
- * 如果挂载了组件，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
- * 如果更新了组件，那么useMemo就会返回expensiveCalculate函数上一次执行时的返回值。
- */
-const memoized_value = useMemo( function expensiveCalculate () {}, [] );
-
-/**
- * 方式三：
- * 如果挂载了组件，那么useMemo就会执行expensieCalculate函数，然后返回该函数的返回值。
- * 如果更新了组件，且state变量发生了改变，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
- * 如果更新了组件，但tstae变量没有改变，那么useMemo就会返回expensiveCalculate函数上一次执行时的返回值。
- */
-const memoized_value = useMemo( function expensiveCalculate () {}, [ state ] );
-```
-
-其中，React 使用 `Object.is` 来比较新旧 `state` 是否发生了变化。
-
-## useCallback
-
-`useCallback` 会返回一个函数的 memoized 版本，即 `memoized_callback`。
-
-```jsx
-const memoizedCallback = useCallback(
-    function callback () {},
-    dependency_array,
-);
-```
-
-- `memoized_callback` 函数是 `callback` 函数的 memoized 版本。
-- `callback` 函数就是一个普通的函数。
-- `dependency_array` 数组用于决定是否更新 `memoizedCallback` 的值。
 
 ### dependency_array
 
 ```jsx
 /**
  * 方式一：
- * 如果挂载或更新了组件，那么useCallback就会返回callback函数。
+ * 挂载或更新组件时，
+ *   - useMemo会执行expensiveCalculate函数。
+ *   - useMemo会缓存expensiveCalculate的返回值，来作为cache。
+ *   - useMemo会返回cache。
+ */
+const memoized_value = useMemo( function expensiveCalculate () {} );
+
+/*
+ * 方式二：
+ * 挂载组件时：
+ *   - useMemo会执行expensiveCalculate函数。
+ *   - useMemo会缓存expensiveCalculate的返回值，来作为cache。
+ *   - useMemo会返回cache。
+ * 更新组件时：
+ *   - useMemo会返回cache。
+ */
+const memoized_value = useMemo( function expensiveCalculate () {}, [] );
+
+/**
+ * 方式三：
+ * 挂载组件时：
+ *   - useMemo会执行expensiveCalculate函数。
+ *   - useMemo会缓存expensiveCalculate的返回值，来作为cache。
+ *   - useMemo会返回cache。
+ * 更新组件时：
+ *   - 如果state变量没有改变，那么useMemo就会返回cache。
+ *   - 如果state变量发生了改变，那么useMemo就会重复挂载时的步骤。
+ */
+const memoized_value = useMemo( function expensiveCalculate () {}, [ state ] );
+```
+
+通常，`state` 是指 `expensiveCalculate` 中使用到的变量。另外，React 使用 `Object.is` 来比较新旧 `state` 是否发生了变化。
+
+## useCallback
+
+`useCallback` 用于创建函数的 memoized 版本。
+
+### 语法
+
+```jsx
+const memoizedCallback = useCallback( function callback () {}, dependency_array );
+```
+
+- `memoizedCallback` 函数就是 `callback` 函数。
+- `dependency_array` 数组用于决定是否使用当前的 `callback` 来更新 `memoizedCallback`。
+
+### dependency_array
+
+```jsx
+/**
+ * 方式一：
+ * 挂载或更新组件时：
+ *   - useCallback会缓存callback函数，来作为cache。
+ *   - useCallback会返回cache。
  */
 const memoizedCallback = useCallback(
     function callback () {},
@@ -463,8 +459,11 @@ const memoizedCallback = useCallback(
 
 /*
  * 方式二：
- * 如果挂载了组件，那么useCallback就会返回callback函数。
- * 如果更新了组件，那么useCallback就会返回callback函数。
+ * 挂载组件时：
+ *   - useCallback会缓存callback函数，来作为cache。
+ *   - useCallback会返回cache。
+ * 更新组件时：
+ *   - useCallback会返回cache。
  */
 const memoizedCallback = useCallback(
     function callback () {},
@@ -473,9 +472,12 @@ const memoizedCallback = useCallback(
 
 /**
  * 方式三：
- * 如果挂载了组件，那么useMemo就会执行expensieCalculate函数，然后返回该函数的返回值。
- * 如果更新了组件，且state变量发生了改变，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
- * 如果更新了组件，但tstae变量没有改变，那么useMemo就会返回expensiveCalculate函数上一次执行时的返回值。
+ * 挂载组件时：
+ *   - useCallback会缓存callback函数，来作为cache。
+ *   - useCallback会返回cache。
+ * 更新组件时：
+ *   - 如果state变量没有改变，那么useCallback就会返回cache。
+ *   - 如果state变量发生了改变，那么useCallback就会重复挂载时的步骤。
  */
 const memoizedCallback = useCallback(
     function callback () {},
@@ -483,7 +485,9 @@ const memoizedCallback = useCallback(
 );
 ```
 
-另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
+通常，`state` 是指 `callback` 中使用到的变量。另外，React 使用 `Object.is` 来比较新旧 `state` 是否发生了变化。
+
+> 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `callback` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
 ## useImperativeHandle
 
