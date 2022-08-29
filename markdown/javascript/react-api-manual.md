@@ -274,9 +274,9 @@ const reference = useRef( initial_value ); // { current: initial_value }
 
 ## useContext
 
-`context` 是 `properties` 的替代品，它是另一种传递数据的方案，它可用于远距离传输数据和大范围发布数据。
+`context` 是 `property` 的替代品，它是另一种传递数据的方案，它可用于远距离传输数据和大范围发布数据。
 
-> `properties` 是指组件构造器的第一个入参，从父组件中传递下来的数据，都会保存在这个参数中。
+> `property` 是指组件构造器的第一个入参，从父组件中传递下来的数据，都会保存在这个参数中。
 
 ### 使用
 
@@ -317,9 +317,9 @@ function App () {
 
 ### 远距离传输数据
 
-想象一下，当曾曾曾祖父组件需要向曾曾曾孙组件传递数据时，如果我们使用 `properties` 方案，那么数据就需要从曾曾曾祖父组件开始向下传递，依次流经曾曾祖父组件、曾祖父组件、祖父组件、父组件，最后才能到达曾曾曾孙组件。
+想象一下，当曾曾曾祖父组件需要向曾曾曾孙组件传递数据时，如果我们使用 `property` 方案，那么数据就需要从曾曾曾祖父组件开始向下传递，依次流经曾曾祖父组件、曾祖父组件、祖父组件、父组件，最后才能到达曾曾曾孙组件。
 
-当我们使用 `properties` 方案时，如果数据传递的路径非常长，那么就会给维护带来不小的麻烦，因为一旦我们需要修改传递的数据，比如更名、新增、移除，我们就需要对传递路径上的每一个环节做修改。
+当我们使用 `property` 方案时，如果数据传递的路径非常长，那么就会给维护带来不小的麻烦，因为一旦我们需要修改传递的数据，比如更名、新增、移除，我们就需要对传递路径上的每一个环节做修改。
 
 React 官方把这种数据传递路径很长的情况称为“prop drilling（钻探）”。
 
@@ -331,9 +331,11 @@ React 官方把这种数据传递路径很长的情况称为“prop drilling（�
 
 ## memo
 
-`memo` 是高阶组件，它用于把一个普通的组件转换为 memoized component。
+`memo` 是高阶组件，它用于创建组件的 memoized 版本。
 
-> 高阶组件（Higher Order Component）是基于 React 的设计模式，它是一个参数和返回值均为组件的函数，它可用于转换组件。
+> 高阶组件（Higher Order Component）是一种基于 React 的设计模式，它是一个参数和返回值均为组件的函数，用于转换组件。
+
+### 语法
 
 ```jsx
 /* 语法一 */
@@ -342,32 +344,43 @@ const MemoizedComponent = memo( Component );
 /* 语法二 */
 const MemoizedComponent = memo( Component, areEqual );
 
-function areEqual ( previous_properties, current_properties ) {}
+function areEqual ( previous_property, current_property ) {}
 ```
 
-- `Component` 是自定义的组件。
-- `areEqual` 是可选的参数，用于比较两个 `properties` 是否相等。
+其中：
 
-### 作用
+- `Component` 是原始的自定义组件。
+- `MemoizedComponent` 是 `Component` 的 memoized 版本。
+- `areEqual` 是可选的函数入参，我们使用它来自定义新旧 `property` 的比较规则，缺省情况下，React 只会浅比较新旧 `property`。
 
-当 React 准备调用 `MemoizedComponent` 时：
+### MemoizedComponent
 
-- 如果 `MemoizedComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是一样的，那么 React 就不会调用 `MemoizedComponent`，而是复用 `MemoizedComponent` 上次调用的结果。
-- 哪怕 `MemoizedComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是一样的，`useState`、`useReducer`、`useContext` 也能使 React 调用 `MemoizedComponent`。
-- 如果 `MemoizedComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是不一样的，那么 React 就会调用 `MemoizedComponent`，来生成新的结果，并缓存本次调用的结果和 `properties`。
+`MemoizedComponent` 的运行原理大致如下：
 
-> 需要特别注意的是，`MemoizedComponent` 只会缓存上一次的 `properties` 和上一次的调用结果，而不会缓存所有过往的 `properties` 和所有过往的调用结果。
+- 挂载时：
+  - `MemoizedComponent` 缓存自己接收到的 `property`，来作为 `cache_property`。
+  - `MemoizedComponent` 以 `cache_property` 为参数，来调用 `Component`。
+  - `MemoizedComponent` 缓存 `Component` 的调用结果，来作为 `cache_result`。
+  - `MemoizedComponent` 返回 `cache_result`。
+- 更新时：
+  - 如果 `MemoizedComponent` 自己接收到的 `property` 等于 `cache_property`，那么 `MemoizedComponent` 就会直接返回 `cache_result`。
+  - 否则，就重复挂载的操作。
+
+另外，如果 `Component` 的实现代码中使用了 `useState`、`useReducer`、`useContext`，那么我们可以直接使用这 3 个 hook 来更新 `Component`，这可以无视 `MemoizedComponent` 对新旧 `property` 的检查。我实践发现，如果我使用这些方式来直接更新 `Component`，那么 `Component` 的新返回值会更新 `MemoirzedComponent` 的 `cache_result`。
+
+需要特别注意的是，`MemoizedComponent` 不会缓存所有过往的 `property` 和 `result`，它只会缓存上一次的 `property` 和 `result`。
 
 ### areEqual
 
-`areEqual` 是可选参数，它用于定义 React 该如何上次的 `properties` 和本次的 `properties`。当 `areEqual` 缺省时，React 只会浅比较这 2 个 `properties`。
+`areEqual` 是 `memo` 的第二个入参，它是一个函数，用于定义该如何比较新旧 `property` 是否相等，如果它返回 `true`，那么就代表新旧 `property` 相等，如果它返回 `false`，就代表新旧 `property` 不相等。
 
-- 如果 `areEqual` 返回 `true`，那么 React 就会认为这 2 个 `properties` 是一样的。
-- 否则，React 就会认为这 2 个 `properties` 是不一样的。
+`areEqual` 是可选的，当它缺省时，`memo` 会通过浅比较，来判断新旧 `property` 是否相等。
+
+> 旧 `property` 是指 `MemoizedComponent` 的 `cache_property`，新 `property` 是指 `MemoizedComponent` 在当前调用时刻所接收到的 `property`。
 
 ## useMemo
 
-`useMemo` 会返回一个 memoized value，它用于节省昂贵的计算，其具体的使用规则可见下文。
+`useMemo` 会返回一个值的 memoized 版本，即 `memoized_value`。
 
 ```jsx
 const memoized_value = useMemo(
@@ -376,6 +389,7 @@ const memoized_value = useMemo(
 );
 ```
 
+- `memoized_value` 是 `expensiveCalculate` 函数的返回值的 memoized 版本。
 - `expensiveCalculate` 是一个无参函数，它的返回值会作为 `memoized_value` 的值。
 - `dependency_array` 数组用于决定是否执行 `expensiveCalculate` 函数来更新 `memoized_value` 的值。
 
@@ -399,27 +413,75 @@ function expensiveCalculate () {
 ```jsx
 /**
  *方式一：
- * 如果挂载或更新了组件，那么expensiveCalculate函数就会执行。
+ * 如果挂载或更新了组件，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
  */
-useMemo( function expensiveCalculate () {} );
+const memoized_value = useMemo( function expensiveCalculate () {} );
 
 /*
  * 方式二：
- * 如果挂载了组件，那么expensiveCalculate函数就会执行。
+ * 如果挂载了组件，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
+ * 如果更新了组件，那么useMemo就会返回expensiveCalculate函数上一次执行时的返回值。
  */
-useMemo( function expensiveCalculate () {}, [] );
+const memoized_value = useMemo( function expensiveCalculate () {}, [] );
 
 /**
  * 方式三：
- * 如果挂载了组件，那么expensiveCalculate函数就会执行。
- * 如果更新了组件，且item变量发生了改变，那么expensiveCalculate函数就会执行
+ * 如果挂载了组件，那么useMemo就会执行expensieCalculate函数，然后返回该函数的返回值。
+ * 如果更新了组件，且state变量发生了改变，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
+ * 如果更新了组件，但tstae变量没有改变，那么useMemo就会返回expensiveCalculate函数上一次执行时的返回值。
  */
-useMemo( function expensiveCalculate () {}, [ item ] );
+const memoized_value = useMemo( function expensiveCalculate () {}, [ state ] );
 ```
 
-其中，React 使用 `Object.is` 来比较新旧 `item` 是否发生了变化。
+其中，React 使用 `Object.is` 来比较新旧 `state` 是否发生了变化。
 
 ## useCallback
+
+`useCallback` 会返回一个函数的 memoized 版本，即 `memoized_callback`。
+
+```jsx
+const memoizedCallback = useCallback(
+    function callback () {},
+    dependency_array,
+);
+```
+
+- `memoized_callback` 函数是 `callback` 函数的 memoized 版本。
+- `callback` 函数就是一个普通的函数。
+- `dependency_array` 数组用于决定是否更新 `memoizedCallback` 的值。
+
+### dependency_array
+
+```jsx
+/**
+ * 方式一：
+ * 如果挂载或更新了组件，那么useCallback就会返回callback函数。
+ */
+const memoizedCallback = useCallback(
+    function callback () {},
+);
+
+/*
+ * 方式二：
+ * 如果挂载了组件，那么useCallback就会返回callback函数。
+ * 如果更新了组件，那么useCallback就会返回callback函数。
+ */
+const memoizedCallback = useCallback(
+    function callback () {},
+    [],
+);
+
+/**
+ * 方式三：
+ * 如果挂载了组件，那么useMemo就会执行expensieCalculate函数，然后返回该函数的返回值。
+ * 如果更新了组件，且state变量发生了改变，那么useMemo就会执行expensiveCalculate函数，然后返回该函数的返回值。
+ * 如果更新了组件，但tstae变量没有改变，那么useMemo就会返回expensiveCalculate函数上一次执行时的返回值。
+ */
+const memoizedCallback = useCallback(
+    function callback () {},
+    [ state ],
+);
+```
 
 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
@@ -451,7 +513,7 @@ function Parent () {
 
 }
 
-function Child ( properties, reference ) {
+function Child ( property, reference ) {
 
     useImperativeHandle( reference, _ => 1 );
 
@@ -463,7 +525,7 @@ function Child ( properties, reference ) {
 > 从技术上来说，哪怕没有 `useImperativeHanlde`，我们也可以实现相同的效果，只要使用 ref callback 就可以了。
 >
 > ```jsx
-> function Child ( properties, reference ) {
+> function Child ( property, reference ) {
 >     
 >     return <div ref={ _ => reference.current = 1 }></div>;
 >     
@@ -589,7 +651,7 @@ function Parent () {
 
 }
 
-function Child ( properties, reference ) {
+function Child ( property, reference ) {
 
     return <div ref={ reference }></div>;
 
@@ -601,7 +663,7 @@ function Child ( properties, reference ) {
 其实，在经 `forwardRef` 改造之前，组件也可以接收到第二个参数 `reference`，只不过这个参数总是一个空对象 `{}`。
 
 ```jsx
-function Child ( properties, reference ) {
+function Child ( property, reference ) {
 
     console.log( reference );  // {}
 
@@ -612,7 +674,7 @@ function Child ( properties, reference ) {
 
 这是因为 React 故意不让组件接收到来自上游的 `reference` 数据，仅当开发者使用 `forwardRef` 改造了组件之后，组件才能接收到来自上游的 `reference` 数据，所以 `forwardRef` 就像一个开关。
 
-> 另外，哪怕没有 `forwardRef`，我们也可以把 `reference` 数据传递给下游组件，只要把 `reference` 数据包裹在 `properties` 中就可以了：
+> 另外，哪怕没有 `forwardRef`，我们也可以把 `reference` 数据传递给下游组件，只要把 `reference` 数据包裹在 `property` 中就可以了：
 >
 > ```jsx
 > function Parent () {
@@ -623,9 +685,9 @@ function Child ( properties, reference ) {
 > 
 > }
 > 
-> function Child ( properties ) {
+> function Child ( property ) {
 > 
->     return <div ref={ properties.secret }></div>
+>     return <div ref={ property.secret }></div>
 > 
 > }
 > ```
