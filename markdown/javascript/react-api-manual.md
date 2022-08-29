@@ -489,6 +489,41 @@ const memoizedCallback = useCallback(
 
 > 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `callback` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
+### 与 useEffect 一起
+
+如果 `useEffect` 的 `dependency_array` 中包含了一个函数，那么你可能就会需要使用 `useCallback` 来创建该函数的 memoized 版本，详见下例。
+
+```jsx
+function Counter ( property ) {
+
+    const [ count, setCount ] = useState( 0 );
+
+    /* 挂载时，React会执行effect函数。 */
+    /* 更新时，React会执行effect函数 */
+    const printCountFrequent =  _ => console.log( count );
+    useEffect( _ => printCountFrequent(), [ printCountFrequent ] );
+
+    /* 挂载时，React会执行effect函数。 */
+    /* 更新时，如果count变量没有改变，那么React就不会执行effect函数，否则就会执行。 */
+    const printCountInfrequent = useCallback( _ => console.log( count ), [ count ] );
+    useEffect( _ => printCountInfrequent(), [ printCountInfrequent ] );
+
+}
+```
+
+
+
+```jsx
+function Counter ( property ) {
+
+    const [ count, setCount ] = useState( 0 );
+    const printCount = useCallback( _ => console.log( count ), [ count ] );
+
+    useEffect( _ => printCount(), [ printCount ] );
+
+}
+```
+
 ## useImperativeHandle
 
 `useImperativeHandle` 需要和 `forwardRef` 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
