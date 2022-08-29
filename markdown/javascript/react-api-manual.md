@@ -113,6 +113,8 @@ function reduce ( previous_state, action ) { return next_state }
 
 对于第二种语法，`initialize` 函数的返回值会作为状态的初始值，而该函数在调用时会接收一个入参，这个入参就是 `useReducer` 的第二个参数。React 官方把这种语法称为“惰性初始化（lazy initialize）”，理由同 `useState` 的惰性初始化。
 
+> 因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)（即 `dispatch` 并不会在组件更新时发生改变），所以我们不需要将其添加进 `useEffect` 和 `useCallback` 的 `dependency_array` 中去。
+
 ### 范例
 
 ```jsx
@@ -234,9 +236,9 @@ useEffect(
 /**
  * 方式三：
  * 如果挂载了组件，那么effect函数就会执行；
- * 如果更新了组件且state变量发生了变化，那么effect函数就会执行。
+ * 如果更新了组件，且state变量发生了变化，那么effect函数就会执行。
  * 如果卸载了组件，那么clean 函数就会执行；
- * 如果更新了组件且state变量发生了变化，那么clean 函数就会执行。
+ * 如果更新了组件，且state变量发生了变化，那么clean 函数就会执行。
  */
 useEffect(
     function effect () { return function clean () {} },
@@ -329,29 +331,32 @@ React 官方把这种数据传递路径很长的情况称为“prop drilling（�
 
 ## memo
 
-`memo` 是高阶组件，它用于把一个普通的组件转换为带有缓存的组件。
+`memo` 是高阶组件，它用于把一个普通的组件转换为 memoized component。
+
+> 高阶组件（Higher Order Component）是基于 React 的设计模式，它是一个参数和返回值均为组件的函数，它可用于转换组件。
 
 ```jsx
 /* 语法一 */
-const CacheComponent = React.memo( Component );
+const MemoizedComponent = React.memo( Component );
 
 /* 语法二 */
-const CacheComponent = React.memo( Component, areEqual );
+const MemoizedComponent = React.memo( Component, areEqual );
 
 function areEqual ( previous_properties, current_properties ) {}
 ```
 
-> 高阶组件（Higher Order Component）是基于 React 的设计模式，它是一个参数和返回值均为组件的函数，它可用于转换组件。
+- `Component` 是自定义的组件。
+- `areEqual` 是可选的参数，用于比较两个 `properties` 是否相等。
 
 ### 作用
 
-当 React 准备调用 `CacheComponent` 时：
+当 React 准备调用 `MemoizedComponent` 时：
 
-- 如果 `CacheComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是一样的，那么 React 就不会调用 `CacheComponent`，而是复用 `CacheComponent` 上次调用的结果。
-- 哪怕 `CacheComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是一样的，`useState`、`useReducer`、`useContext` 也能使 React 调用 `CacheComponent`。
-- 如果 `CacheComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是不一样的，那么 React 就会调用 `CacheComponent`，来生成新的结果，并缓存本次调用的结果和 `properties`。
+- 如果 `MemoizedComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是一样的，那么 React 就不会调用 `MemoizedComponent`，而是复用 `MemoizedComponent` 上次调用的结果。
+- 哪怕 `MemoizedComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是一样的，`useState`、`useReducer`、`useContext` 也能使 React 调用 `MemoizedComponent`。
+- 如果 `MemoizedComponent` 这次接收到的 `properties`，和上次接收到的 `properties` 是不一样的，那么 React 就会调用 `MemoizedComponent`，来生成新的结果，并缓存本次调用的结果和 `properties`。
 
-> 需要特别注意的是，`CacheComponent` 只会缓存上一次的 `properties` 和上一次的调用结果，而不会缓存所有过往的 `properties` 和所有过往的调用结果。
+> 需要特别注意的是，`MemoizedComponent` 只会缓存上一次的 `properties` 和上一次的调用结果，而不会缓存所有过往的 `properties` 和所有过往的调用结果。
 
 ### areEqual
 
@@ -362,9 +367,46 @@ function areEqual ( previous_properties, current_properties ) {}
 
 ## useMemo
 
+`useMemo` 会返回一个 memoized value，它用于节省昂贵的计算，其具体的使用规则可见下文。
 
+```jsx
+const memoized_value = React.useMemo(
+    function expensiveCalculate () {},
+    dependency_array,
+);
+```
+
+- `expensiveCalculate` 函数的返回值会作为 `memoized_value` 的值。
+- `dependency_array` 数组用于决定是否执行 `expensiveCalculate` 函数来更新 `memoized_value` 的值。
+
+### dependency_array
+
+```jsx
+/**
+ *方式一：
+ * 如果挂载或更新了组件，那么expensiveCalculate函数就会执行。
+ */
+React.useMemo( function expensiveCalculate () {} );
+
+/*
+ * 方式二：
+ * 如果挂载了组件，那么expensiveCalculate函数就会执行。
+ */
+React.useMemo( function expensiveCalculate () {}, [] );
+
+/**
+ * 方式三：
+ * 如果挂载了组件，那么expensiveCalculate函数就会执行。
+ * 如果更新了组件，且item变量发生了改变，那么expensiveCalculate函数就会执行
+ */
+React.useMemo( function expensiveCalculate () {}, [ item ] );
+```
+
+其中，React 使用 `Object.is` 来比较新旧 `item` 是否发生了变化。
 
 ## useCallback
+
+另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
 ## useImperativeHandle
 
