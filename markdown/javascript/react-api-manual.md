@@ -337,10 +337,10 @@ React 官方把这种数据传递路径很长的情况称为“prop drilling（�
 
 ```jsx
 /* 语法一 */
-const MemoizedComponent = React.memo( Component );
+const MemoizedComponent = memo( Component );
 
 /* 语法二 */
-const MemoizedComponent = React.memo( Component, areEqual );
+const MemoizedComponent = memo( Component, areEqual );
 
 function areEqual ( previous_properties, current_properties ) {}
 ```
@@ -370,14 +370,29 @@ function areEqual ( previous_properties, current_properties ) {}
 `useMemo` 会返回一个 memoized value，它用于节省昂贵的计算，其具体的使用规则可见下文。
 
 ```jsx
-const memoized_value = React.useMemo(
+const memoized_value = useMemo(
     function expensiveCalculate () {},
     dependency_array,
 );
 ```
 
-- `expensiveCalculate` 函数的返回值会作为 `memoized_value` 的值。
+- `expensiveCalculate` 是一个无参函数，它的返回值会作为 `memoized_value` 的值。
 - `dependency_array` 数组用于决定是否执行 `expensiveCalculate` 函数来更新 `memoized_value` 的值。
+
+> 请勿在 `expensiveCalculate` 内执行带有副作用的操作，因为 `expensiveCalculate` 会在组件构造器的调用期间被执行。
+
+### 范例
+
+```jsx
+const [ count, setCount ] = useState( 100000000 );
+const memoized_value = useMemo( expensiveCalculate, [ count ] );
+
+function expensiveCalculate () {
+
+    for ( let i = 0; i < count; i ++ ) new Date();
+
+}
+```
 
 ### dependency_array
 
@@ -386,20 +401,20 @@ const memoized_value = React.useMemo(
  *方式一：
  * 如果挂载或更新了组件，那么expensiveCalculate函数就会执行。
  */
-React.useMemo( function expensiveCalculate () {} );
+useMemo( function expensiveCalculate () {} );
 
 /*
  * 方式二：
  * 如果挂载了组件，那么expensiveCalculate函数就会执行。
  */
-React.useMemo( function expensiveCalculate () {}, [] );
+useMemo( function expensiveCalculate () {}, [] );
 
 /**
  * 方式三：
  * 如果挂载了组件，那么expensiveCalculate函数就会执行。
  * 如果更新了组件，且item变量发生了改变，那么expensiveCalculate函数就会执行
  */
-React.useMemo( function expensiveCalculate () {}, [ item ] );
+useMemo( function expensiveCalculate () {}, [ item ] );
 ```
 
 其中，React 使用 `Object.is` 来比较新旧 `item` 是否发生了变化。
