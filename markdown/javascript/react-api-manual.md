@@ -500,26 +500,13 @@ function Counter ( property ) {
 
     /* 挂载时，React会执行effect函数。 */
     /* 更新时，React会执行effect函数 */
-    const printCountFrequent =  _ => console.log( count );
-    useEffect( _ => printCountFrequent(), [ printCountFrequent ] );
+    const printCountEverytime =  _ => console.log( count );
+    useEffect( _ => printCountEverytime(), [ printCountEverytime ] );
 
     /* 挂载时，React会执行effect函数。 */
     /* 更新时，如果count变量没有改变，那么React就不会执行effect函数，否则就会执行。 */
-    const printCountInfrequent = useCallback( _ => console.log( count ), [ count ] );
-    useEffect( _ => printCountInfrequent(), [ printCountInfrequent ] );
-
-}
-```
-
-
-
-```jsx
-function Counter ( property ) {
-
-    const [ count, setCount ] = useState( 0 );
-    const printCount = useCallback( _ => console.log( count ), [ count ] );
-
-    useEffect( _ => printCount(), [ printCount ] );
+    const printCountSometime = useCallback( _ => console.log( count ), [ count ] );
+    useEffect( _ => printCountSometime(), [ printCountSometime ] );
 
 }
 ```
