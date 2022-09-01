@@ -253,6 +253,57 @@ useEffect(
 
 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
+### React18 的糟糕更新
+
+> 这真是一个十分糟糕的更新，因为这个改动不仅没什么用，还给开发者带来了心智负担，你能想到或理解 `useEffect` 会有如此出人意料的行为吗？
+
+在 React 17 及之前的版本，`effect` 和 `clean` 总是在页面更新之后执行。但是从 React 18 开始，如果 `useEffect` 是由离散的输入事件所触发的（比如点击事件），那么 `effect` 和 `clean` 就会在页面更新之前执行。详见 [New in 18: useEffect fires synchronously when it's the result of a discrete input](https://github.com/reactwg/react-18/discussions/128) 和 [Timing of effects](https://reactjs.org/docs/hooks-reference.html#timing-of-effects)。不过无论如何，`effect` 和 `clean` 都会在 `layout effect` 和 `layout clean` 之后执行。
+
+> “如果 `useEffect` 是由离散的输入事件所触发的”是指：离散的输入事件触发了组件更新，然后组件更新触发了 `useEffect`。
+
+如下所示，`useEffect` 是由点击事件触发的，而点击事件是离散的输入事件，因此 `effect` 会在页面更新之前执行，这会导致，用户点击了 add 按钮之后，页面会在 1000ms 之后新增一个红色的 `<li>`。假如 `effect` 会在页面更新之后执行，那么用户点击了 add 按钮之后，页面就会立即新增一个黑色的 `<li>`，然后在 1000ms 之后，`<li>` 又变成红色。
+
+```jsx
+function App () {
+
+    const [ count, setCount ] = React.useState( 1 );
+    const lis = [];
+
+    for ( let i = 0; i < count; i ++ ) {
+
+        lis.push( <li key={ i } id={ i }>{ i }</li> );
+
+    }
+
+    React.useEffect( function effect () {
+
+        sleep();
+
+        document.getElementById( count - 1 ).style.color = "red";
+
+    }, [ count ] );
+
+    return (
+        <>
+            <button onClick={ _ => setCount( count + 1 ) }>add</button>
+            <button onClick={ _ => setCount( count - 1 ) }>sub</button>
+            <ul>
+                { lis }
+            </ul>
+        </>
+    );
+
+}
+
+function sleep ( time = 1000 ) {
+
+    const wakeup_time = Date.now() + time;
+
+    while ( Date.now() < wakeup_time ) {}
+
+}
+```
+
 ## useLayoutEffect
 
 `useLayoutEffect` 的用法和 `useEffect` 的完全一样，它们的区别在于：
