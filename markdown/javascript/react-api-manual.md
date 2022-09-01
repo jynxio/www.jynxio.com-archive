@@ -111,6 +111,9 @@ const [ state, dispatch ] = useReducer(
 function reduce ( previous_state, action ) { return next_state }
 ```
 
+- `state` 是状态值。
+- `dispatch` 是用于派发 `action` 的函数（即 `dispatch( action )`）。
+
 对于第二种语法，`initialize` 函数的返回值会作为状态的初始值，而该函数在调用时会接收一个入参，这个入参就是 `useReducer` 的第二个参数。React 官方把这种语法称为“惰性初始化（lazy initialize）”，理由同 `useState` 的惰性初始化。
 
 > 因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)（即 `dispatch` 并不会在组件更新时发生改变），所以我们不需要将其添加进 `useEffect` 和 `useCallback` 的 `dependency_array` 中去。
@@ -249,6 +252,15 @@ useEffect(
 其中，React 使用 `Object.js` 来比较新旧 `state` 是否发生了变化。
 
 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
+
+## useLayoutEffect
+
+`useLayoutEffect` 的用法和 `useEffect` 的完全一样，它们的区别在于：
+
+- `useEffect` 的 `effect` 和 `clean` 函数均在页面更新之后调用。
+- `useLayoutEffect` 的 `effect` 和 `clean` 函数均在 DOM 更新之后、页面更新之前被调用。
+
+注意，`useLayoutEffect` 的 `clean` 函数也同样会在 `effect` 函数之前执行。
 
 ## useRef
 
@@ -444,6 +456,8 @@ const memoizedCallback = useCallback( function callback () {}, dependency_array 
 - `memoizedCallback` 函数就是 `callback` 函数。
 - `dependency_array` 数组用于决定是否使用当前的 `callback` 来更新 `memoizedCallback`。
 
+> `useCallback( callback, dependency_Array )` 相当于 `useMemo( _ => callback, dependency_array )`。
+
 ### dependency_array
 
 ```jsx
@@ -489,7 +503,7 @@ const memoizedCallback = useCallback(
 
 > 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `callback` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
 
-### 与 useEffect 一起
+### 与 useEffect 一起使用
 
 如果 `useEffect` 的 `dependency_array` 中包含了一个函数，那么你可能就会需要使用 `useCallback` 来创建该函数的 memoized 版本，详见下例。
 
