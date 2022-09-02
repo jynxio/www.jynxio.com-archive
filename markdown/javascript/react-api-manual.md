@@ -679,6 +679,82 @@ const Child = React.forwardRef( function Child ( property, parent_reference ) {
 
 Kent C. Dodds 说：虽然这是可以运行的，但是它在极少数情况下会产生 bug，所以还是推荐使用 `React.useImperativeHandle`。
 
+## useDebugValue
+
+`React.useDebugValue` 用于给 custom hook 添加标签，当 custom hook 被多个组件多次使用时，你可以通过标签来区分出每一个 custom hook。
+
+另外，你只能通过控制台的 `⚛️Components` 项来看到 custom hook 的标签，如果浏览器没有安装 React Developer Tools 插件，那么控制台就没有 `⚛️Components` 项。
+
+### 语法
+
+```jsx
+/* 语法一 */
+function useMyHook () {
+
+    React.useDebugValue( tag );
+
+}
+
+/* 语法二 */
+function useMyHook () {
+
+    React.useDebugValue( data, function format ( data ) { return tag } );
+
+}
+```
+
+- 第一个参数：必选的，允许任意数据类型。
+  - 如果没有传递第二个参数，那么该参数就会成为 custom hook 的标签。
+  - 如果传递了第二个参数，那么该参数就会作为入参传递给第二个参数。
+- 第二个参数：可选的，只允许函数或 `undefined`。
+  - 如果该参数是 `undefined`，那么就等同于没有传递该参数。
+  - 如果该参数是一个函数，那么第一个入参就会作为该函数的入参，该函数的返回值将会作为 custom hook 的标签，且仅当控制台激活时，该函数才会被调用。
+
+### 延迟创建标签
+
+对于产品的用户而言，创建 custom hook 的标签是一种浪费性能的行为，因为产品的用户不需要查看 custom hook 的标签。当 `React.useDebugValue` 的入参 `tag` 需要耗时的计算才能获得时，这种浪费便尤为严重。
+
+为了解决这个问题，React 官方为 `React.useDebugValue` 提供了第二种语法，我个人倾向于在所有情况下都使用这种语法。
+
+### 示例
+
+下例展示了如何创建、查看 custom hook 的标签。
+
+![React.useDebugValue](/static/image/markdown/javascript/react-api-manual/usedebugvalue.png)
+
+```jsx
+function App () {
+
+    return (
+        <>
+            <Counter initial={ 10 } step={ 1 }/>
+            <Counter initial={ 20 } step={ 2 }/>
+        </>
+    );
+
+}
+
+function useCount ( initial, step ) {
+
+    React.useDebugValue( { initial, step }, parameter => parameter );
+
+    const [ count, setCount ] = React.useState( initial );
+    const increase = _ => setCount( count + step );
+
+    return [ count, increase ];
+
+}
+
+function Counter ( property ) {
+
+    const { initial, step } = property;
+    const [ count, increase ] = useCount( initial, step );
+
+    return <button onClick={ increase }>{ count }</button>;
+
+}
+```
+
 ## Custom Hook
 
 custom hook 是一个用于封装 hook 的函数，并且 React 要求 custom hook 的命名必须以 `use` 开头。
