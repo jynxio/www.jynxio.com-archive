@@ -14,22 +14,22 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=3c9a11f9-c3cf-41e0-a579-b10f0b4bc1fc>概述</p>
-        <p data-target-id=a3bb2a1c-6c37-4a57-beb5-87423f099acb>时间复杂度</p>
-        <p data-target-id=9698b72c-723b-45d2-949e-c9c0afdc428d>空间复杂度</p>
+        <p data-target-id=4eedd409-0435-47bb-99d1-ba02a6562015>概述</p>
+        <p data-target-id=56ff1826-e6bd-4c9b-bc09-cf8273516c50>时间复杂度</p>
+        <p data-target-id=5f776b37-2bc8-4abb-ad16-e92717db9854>空间复杂度</p>
     </aside>
     <article>
         <h1>时间和空间复杂度</h1>
-        <h2 id="3c9a11f9-c3cf-41e0-a579-b10f0b4bc1fc">概述</h2>
+        <h2 id="4eedd409-0435-47bb-99d1-ba02a6562015">概述</h2>
         <p>算法是通过操纵数据来解决问题的方法，计算机执行算法需要消耗时间与内存，不同算法对时间与内存的消耗程度大不相同。我们通常会从时间和空间两个维度来分析算法的效率，以便于筛选出更加合适的算法，时间维度上的衡量指标是时间复杂度，空间维度上的衡量指标是空间复杂度。</p>
-        <h2 id="a3bb2a1c-6c37-4a57-beb5-87423f099acb">时间复杂度</h2>
+        <h2 id="56ff1826-e6bd-4c9b-bc09-cf8273516c50">时间复杂度</h2>
         <p>时间复杂度用于表示算法在时间维度上的效率，具体来说它代表了算法所执行的语句的次数随着问题规模 n 的变化而变化的规律。</p>
         <p>因为一个算法在不同性能的机器上的运行时间会大不相同，所以我们不能直接使用算法的真实运行时间来作为它的时间复杂度。取而代之的是，我们会使用渐进时间复杂度来作为它算法的时间复杂度，在介绍渐进的时间复杂度之前，我们需要先理解下面几个概念。</p>
-        <h3 id="c018824f-89f8-4c32-8403-942c10f42941">时间频度</h3>
+        <h3 id="ecccbeb2-5bf1-40dd-bb88-ea65fb15c4ab">时间频度</h3>
         <p>时间频度的符号是 <code>T(n)</code>，它代表一个算法会执行多少次语句。时间频度的意义是可以更加简单的反映出算法的耗时，因为我们很难统计出每条语句的具体耗时，不过我们至少可以认为算法的耗时与语句的执行次数成正比，当算法需要执行的语句的次数越多时，算法消耗的时间也会越长。</p>
         <p><code>T(n)</code> 中的 n 代表问题的规模，比如对于一个函数而言，n 代表函数的输入值。<code>T(n)</code> 只能表示算法在某个特定规模下的效率，但我们往往需要知道算法在任意规模下的效率，这样才方便我们直观的感受到不同的算法在不同规模的场景下的效率的优劣。</p>
         <p>不过，我们根本无法穷举出算法在所有规模下的效率，因为规模的数量是无穷的，所以我们不能通过暴力的计算出 <code>T(n)</code> 在每种 n 下的值来模拟出算法在任意规模下的效率，取而代之的方法是，我们会通过计算出 <code>T(n)</code> 随着 n 的变化所呈现出的规律来模拟算法在任意规模下的效率。</p>
-        <h3 id="92db33c2-b16b-4789-93c2-db40280a1492">渐进时间复杂度</h3>
+        <h3 id="5d4fd08c-4968-4d1e-8812-326001e27012">渐进时间复杂度</h3>
         <p>渐进时间复杂度就是 <code>T(n)</code> 随着 n 的变化所呈现出的规律，而时间复杂度正是渐进时间复杂度的简称，在下文中，我会使用时间复杂度这一术语来代表渐进时间复杂度。</p>
         <p>时间复杂度的符号是 <code>O( f(n) )</code>，其中 <code>f(n)</code> 代表一个与 <code>T(n)</code> 同数量级的函数，其中 <code>O( f(n) )</code> 代表存在一个常数 C，可以使得 <code>T(n) &lt;= C * f(n)</code>。这代表着我们可以用 <code>f(n)</code> 来近似的模拟 <code>T(n)</code>，并通过观察 <code>f(n)</code> 的曲线来粗略的判断出 <code>T(n)</code> 在不同规模（n）下的变化规律，毕竟 <code>f(n)</code> 和 <code>T(n)</code> 是同一数量级的函数。另外，当 n 趋近于无穷时，<code>f(n)</code> 会越来越贴近 <code>T(n)</code>。</p>
         <p>为了更简洁的表示出算法的时间复杂度，我们还可以简化 <code>f(n)</code>，只要保证 <code>f(n)</code> 与 <code>T(n)</code> 在同一数量级即可，所以我们会把常数级别的时间复杂度写作 <code>O(1)</code>，而不是更复杂的 <code>O(2)</code>、<code>O(100)</code>或其他。另外，我们也会省略对数函数的底数，来简化对数级别的时间复杂度，比如把 <code>O(log2 n)</code> 简写为 <code>O(log n)</code>。</p>
@@ -50,7 +50,7 @@
         <pre><code class="language-js">if ( n &lt; 100 ) console.log( 1 );
 else for ( let i = 0; i &lt; n; i++ ) console.log( 1 );
 </code></pre>
-        <h3 id="b3e07b23-0391-4013-b62d-6e7ea71f5fb0">计算时间复杂度</h3>
+        <h3 id="da4172b0-e837-490b-b371-ddfb59ec6d18">计算时间复杂度</h3>
         <ul>
             <li>如果时间频度 <code>T(n)</code> 为 <code>常数</code>，那么时间复杂度为 <code>O(1)</code></li>
             <li>如果时间频度 <code>T(n)</code> 为 <code>常数*n + 常数</code>，那么时间复杂度为 <code>O(n)</code>。</li>
@@ -61,14 +61,14 @@ else for ( let i = 0; i &lt; n; i++ ) console.log( 1 );
             <p>对于第二和第三条，我们之所以可以省略掉式子中的低次幂项、常数项和系数，是因为当 n 趋于无穷时，这些项与系数的影响将会越来越小，以至于可以忽略不计，所以我们就干脆省略掉了它们，如此一来时间复杂度的式子还能更加简洁易懂。</p>
             <p>另外，如果时间复杂度是一个对数，我们还会省略掉对数的底数。</p>
         </blockquote>
-        <h3 id="e1508b49-42ad-4a24-b923-01224106b4cd">示例 - O(1)</h3>
+        <h3 id="01547909-c931-4ffd-929b-75c937308218">示例 - O(1)</h3>
         <p>观察下述程序，无论它只有 3 行语句，还是有上千万行语句，它的时间频度都是一个常数，这代表着它的时间频度不会随着问题规模的增长而增长，因此它的时间复杂度为 <code>O(1)</code>。</p>
         <pre><code class="language-js">const a = 1;
 const b = 2;
 const c = 3;
 ...
 </code></pre>
-        <h3 id="334a6384-c276-49ab-8642-9ddd39f37f7c">示例 - O(log n)</h3>
+        <h3 id="4f2e3ccc-3b93-4621-a91e-a0844a1f041d">示例 - O(log n)</h3>
         <p>观察下述程序，第一条语句的频度是 1，因为它只会执行一次。</p>
         <p>对于第二和第三条语句，我们需要详细的解释一下：变量 i 会通过不断的乘以 2 来逼近变量 n，直至变量 i 大于变量 n 之后，变量 i 就不会再自乘 2，并且结束掉整个程序。我们可以假设变量 i 最多可以乘以 x 次 2，这意味着第三条语句就执行了 x 次，第二条语句就执行了 <code>x+1</code> 次。第二条语句之所以会执行 <code>x+1</code> 次，是因为只有当第二条语句有 x 次判断为真之后，才能执行 x 次第三条语句，而第二条语句又一定会有一次判定为假，因为只有这样才能结束掉整个程序。这样，我们就可以计算出整个程序的时间频度是 <code>2x+2</code>次。因为 <code>i * 2^x &lt;= n</code>，且变量 i 的初始值为 1，因此可以得到 <code>2^x &lt;= n</code>，基于这个式子我们就可以计算出 <code>x &lt;= log2 n</code>，因此这个程序的时间频度是 <code>2log2 n + 2</code>，继而计算出这个程序的时间复杂度就是 <code>O(log n)</code>。</p>
         <pre><code class="language-js">let i = 1;        // 1：1次
@@ -76,11 +76,11 @@ while( i &lt;= n ) { // 2：x+1次
     i *= 2;       // 3：x次
 }
 </code></pre>
-        <h3 id="480d95ab-aa72-44f1-a421-468c29f40f2b">示例 - O(n)</h3>
+        <h3 id="f3990db3-7dc8-4043-989b-f797c278df6b">示例 - O(n)</h3>
         <p>观察下述代码，其中 <code>let i = 0</code> 会执行 1 次， <code>i &lt; n</code> 会执行 <code>n+1</code> 次（理由同上），<code>i++</code> 会执行 n 次，<code>console.log( i )</code> 会执行 n 次，因此这个程序的时间频度是 <code>3n + 2</code>，因此这个程序的时间复杂度就是 <code>O(n)</code>。</p>
         <pre><code class="language-js">for ( let i = 0; i &lt; n; i++ ) console.log( i )
 </code></pre>
-        <h3 id="764b4d91-5e7f-4387-a131-9f501ef53785">示例 - O(nlog n)</h3>
+        <h3 id="7ffb7fbc-3a67-48d9-8a0a-31ffcbfe3833">示例 - O(nlog n)</h3>
         <p>观察下述代码，它是 “示例 - O(log n)” 的变体，变化的地方是它在 “示例 - O(log n)” 的外围包裹上了一层 for 循环，使该 “示例 - O(log n)” 会被执行 n 次，所以显然这个程序的时间复杂度是 <code>O(nlog n)</code>。</p>
         <pre><code class="language-js">for ( let i = 0; i &lt; n; i++ ) {
     let j = 1;
@@ -89,7 +89,7 @@ while( i &lt;= n ) { // 2：x+1次
     }
 }
 </code></pre>
-        <h3 id="8d42bf82-a34c-43e0-9fa8-c4e6cc96d5eb">示例 - O(n^2)</h3>
+        <h3 id="ba5c0230-ed23-4869-a5f0-40bb4fd88aac">示例 - O(n^2)</h3>
         <p>观察下述代码，根据 “示例 - O(n)”，易得内层 for 循环的时间频度是 <code>3n + 2</code>。对于外层 for 循环，它会执行 1 次 <code>let i = 0</code>、执行 <code>n+1</code> 次 <code>i &lt; n</code>、执行 n 次 <code>i++</code>，执行 n 次内层 for 循环。因此整个程序的时间频度是 <code>(3n + 2) * n + 1 + n + 1 + n</code>，即 <code>3n^2 + 4n + 2</code>，继而推断出这个程序的时间复杂度是 <code>O(n^2)</code>。</p>
         <pre><code class="language-js">for ( let i = 0; i &lt; n; i++ ) {
     for ( let j = 0; j &lt; n; j++ ) {
@@ -98,7 +98,7 @@ while( i &lt;= n ) { // 2：x+1次
 }
 </code></pre>
         <p>观察上述代码可知，嵌套了 2 层 n 次 for 循环的程序的时间复杂度就是 <code>O(n^2)</code>，所以 <code>O(n^3)</code> 乃至 <code>O(n^k)</code> 就代表了嵌套 3 层乃至 k 层 n 次 for 循环的程序的时间复杂度。</p>
-        <h3 id="93127247-b86a-487a-83cc-f85c0dfd176f">示例 - O(nm)</h3>
+        <h3 id="f83c7011-0dc1-4d72-95ad-37e778401a10">示例 - O(nm)</h3>
         <p>我们将 “示例 - o(n^2)” 的代码改动一下，将内层 for 循环的 n 替换为 m，那么这个程序的时间频度就是 <code>(3m + 2) * n + 1 + n + 1 + n</code>，即 <code>3nm + 4n + 2</code>，继而推断出这个程序的时间复杂度就是 <code>O(nm)</code>。</p>
         <pre><code class="language-js">for ( let i = 0; i &lt; n; i++ ) {
     for ( let j = 0; j &lt; m; j++ ) {
@@ -106,11 +106,11 @@ while( i &lt;= n ) { // 2：x+1次
     }
 }
 </code></pre>
-        <h3 id="9758ed7b-9389-4845-8c3d-63f96195b726">示例 - O(2^n)</h3>
+        <h3 id="93cc421a-9cad-4afb-81d3-6994c7fee300">示例 - O(2^n)</h3>
         <p>正在编辑。</p>
-        <h3 id="96b99e3b-10a4-46eb-8caa-0b4607d170e8">示例 - O(!n)</h3>
+        <h3 id="2aeb8503-a810-4342-81f3-9b35e202de2b">示例 - O(!n)</h3>
         <p>正在编辑。</p>
-        <h3 id="46b13849-bf03-4b0f-b5ac-ff00ae14c52b">练习</h3>
+        <h3 id="7eca2f59-a22c-4b4f-b25c-966605e09781">练习</h3>
         <p>假设某算法的时间频度等于一个递推的关系式：<code>T(n) = T(n-1) + n</code>（其中 n 为正整数），并且已知 <code>T(0) = 1</code>，求该算法的时间复杂度。</p>
         <pre><code>由： T(n) = T(n-1) + n
 得： T(n-1) = T(n-2) + (n-1)
@@ -129,20 +129,20 @@ T(n) = T(n-2) + (n-1) + n
 
 故该算法的时间复杂度为 O(n^2)
 </code></pre>
-        <h2 id="9698b72c-723b-45d2-949e-c9c0afdc428d">空间复杂度</h2>
+        <h2 id="5f776b37-2bc8-4abb-ad16-e92717db9854">空间复杂度</h2>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>因为我们往往只使用时间复杂度来衡量算法的性能，而很少会讨论算法的空间复杂度，因此本文只会简述空间复杂度。</p>
         </blockquote>
         <p>空间复杂度用于表示算法在空间维度上的效率，具体来说它代表了算法需要占用的内存的大小随着问题规模 n 的变化而变化的规律。空间复杂度和时间复杂度的相同之处在于，它们的值都是估算的，而不是精确的。</p>
-        <h3 id="c12a3099-dec2-4172-b4e9-c7250bf1cc36">示例 - O(1)</h3>
+        <h3 id="30b6ce18-3dea-4e0d-a888-04f134071a55">示例 - O(1)</h3>
         <p>观察下述代码，无论它只有 3 行语句，还是有上千万行语句，它的空间复杂度都是 <code>O(1)</code>，因为这个程序需要占用的内存空间与问题规模 n 没有关系。</p>
         <pre><code class="language-js">const a = 1;
 const b = 2;
 const c = 3;
 ...
 </code></pre>
-        <h3 id="c0079cee-bdfe-431e-970d-385199615bd1">示例 - O(n)</h3>
+        <h3 id="485966ce-8679-44d4-9781-3114ce0fe950">示例 - O(n)</h3>
         <p>观察下述代码，这个程序的空间复杂度就是 <code>O(n)</code>。</p>
         <pre><code class="language-js">new Array(n); // [ empty, empty, ..., empty ]
 </code></pre>
