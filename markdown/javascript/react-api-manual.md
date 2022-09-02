@@ -357,17 +357,19 @@ function sleep ( time = 1000 ) {
 const reference = useRef( initial_value ); // { current: initial_value }
 ```
 
-> 我们可以认为 `useRef` 是 `useState` 的语法糖，因为 React 官方说 `useRef` 大概是这么实现的：
->
-> ```jsx
-> function useRef ( initial_value ) {
-> 
->     const [ reference, setReference ] = useState( { current: initial_value } );
-> 
->     return reference;
-> 
-> }
-> ```
+### 语法糖
+
+我们可以认为 `useRef` 是 `useState` 的语法糖，因为 React 官方说 `useRef` 大概是这么实现的：
+
+```jsx
+function useRef ( initial_value ) {
+
+    const [ reference, setReference ] = useState( { current: initial_value } );
+
+    return reference;
+
+}
+```
 
 ## useContext
 
@@ -612,52 +614,70 @@ function Counter ( property ) {
 
 ## useImperativeHandle
 
-`useImperativeHandle` 需要和 `forwardRef` 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
+`React.useImperativeHandle` 需要和 `React.forwardRef` 搭配在一起来使用，因为它的作用是让开发者自由的决定应该暴露什么内容给 `Parent` 组件的 `reference`。
 
 ### 语法
 
-`useImperativeHandle` 函数接收 2 个参数：
-
-1. 第一个是上游组件的 `reference`。
-2. 第二个是无参函数，无参函数的返回值将作为 `reference` 的 `current` 属性的值。
-
 ```jsx
-useImperativeHandle( parent_reference, _ => parent_reference_current_value );
+const Child = React.forwardRef( function Child ( property, reference ) {
+
+    React.useImperativeHandle(
+        reference,
+        _ => reference_current_value,
+    );
+
+} );
 ```
+
+`React.useImperativeHandle` 接收 2 个入参：
+
+- 第一个参数：组件的第二个参数 `reference`
+- 第二个参数：一个无参函数，它的返回值将会作为 `reference` 的 `current` 属性的值。
 
 ### 示例
 
-```jsx
-Child = forwardRef( Child );
+该示例演示了：`Child` 组件仅向 `Parent` 组件暴露 `input` 元素的 `focus` 方法，而不暴露 `input` 元素本身。
 
+```jsx
 function Parent () {
 
-    const reference = useRef();
+    const parent_reference = React.useRef();
 
-    return <Child ref={ reference }/>
-
-}
-
-function Child ( property, reference ) {
-
-    useImperativeHandle( reference, _ => 1 );
-
-    return <div></div>;
+    return <Child ref={ parent_reference }/>;
 
 }
+
+const Child = React.forwardRef( function Child ( property, parent_reference ) {
+
+    const child_reference = React.useRef();
+
+    React.useImperativeHandle(
+        parent_reference,
+        _ => ( { focus: _ => child_reference.current.focus() } ),
+    );
+
+    return <input ref={ child_reference }/>;
+
+} );
 ```
 
-> 从技术上来说，哪怕没有 `useImperativeHanlde`，我们也可以实现相同的效果，只要使用 ref callback 就可以了。
->
-> ```jsx
-> function Child ( property, reference ) {
->     
->     return <div ref={ _ => reference.current = 1 }></div>;
->     
-> }
-> ```
->
-> 这种实现反而更加简洁。
+### polyfill
+
+```jsx
+const Child = React.forwardRef( function Child ( property, parent_reference ) {
+
+    return <input ref={ refCallback }/>;
+
+    function refCallback ( dom ) {
+
+        parent_reference.current = { focus: _ => dom?.focus() };
+
+    }
+
+} );
+```
+
+Kent C. Dodds 说：虽然这是可以运行的，但是它在极少数情况下会产生 bug，所以还是推荐使用 `React.useImperativeHandle`。
 
 ## Custom Hook
 
@@ -754,20 +774,16 @@ function Parent () {
     
     const reference = useRef();
     
-    return <Child ref={ reference }/>;
+    return <Child ref={ reference }/>; // Error
     
 }
 ```
 
-不过，React 提供了另一种途径来获取 `Child` 组件的 DOM，那就是通过 `forwardRef` API 来将 `Parent` 组件的 `reference` 转发给 `Child` 组件，然后再获取 `Child` 组件的 DOM。
+不过，React 提供了另一种途径来获取 `Child` 组件的 DOM，那就是 `React.forwardRef`，详见下文。
 
 ### 语法
 
-`forwardRef` 就像一个开关，经它改造的组件，将可以接收到第二个参数 `reference`。
-
 ```jsx
-Child = forwardRef( Child );
-
 function Parent () {
 
     const reference = useRef();
@@ -776,46 +792,44 @@ function Parent () {
 
 }
 
-function Child ( property, reference ) {
+const Child = React.forwardRef( function Child ( property, reference ) {
 
     return <div ref={ reference }></div>;
 
-}
+} );
 ```
 
 ### 原理
 
-其实，在经 `forwardRef` 改造之前，组件也可以接收到第二个参数 `reference`，只不过这个参数总是一个空对象 `{}`。
+无论组件是否经过了 `React.forwardRef` 的改造，它们都总是可以接收到第二个参数 `reference`。只不过，如果组件没有经过 `React.forwardRef` 的改造，那么它的第二个参数 `reference` 就总是一个空对象 `{}`。
+
+`React.forwardRef` 就像一个开关，仅当组件经过了它的改造之后，组件的 `reference` 参数才能接收到上游的数据。
 
 ```jsx
 function Child ( property, reference ) {
 
     console.log( reference );  // {}
 
-    return <div></div>
-
 }
 ```
 
-这是因为 React 故意不让组件接收到来自上游的 `reference` 数据，仅当开发者使用 `forwardRef` 改造了组件之后，组件才能接收到来自上游的 `reference` 数据，所以 `forwardRef` 就像一个开关。
+### polyfill
 
-> 另外，哪怕没有 `forwardRef`，我们也可以把 `reference` 数据传递给下游组件，只要把 `reference` 数据包裹在 `property` 中就可以了：
->
-> ```jsx
-> function Parent () {
-> 
->     const reference = useRef();
-> 
->     return <Child secret={ reference }/>
-> 
-> }
-> 
-> function Child ( property ) {
-> 
->     return <div ref={ property.secret }></div>
-> 
-> }
-> ```
+```jsx
+function Parent () {
+
+    const reference = useRef();
+
+    return <Child secret={ reference }/>
+
+}
+
+function Child ( property ) {
+
+    return <div ref={ property.secret }></div>
+
+}
+```
 
 ## flushSync
 
