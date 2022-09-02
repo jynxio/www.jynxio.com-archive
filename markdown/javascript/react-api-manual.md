@@ -35,6 +35,40 @@ UI 树类似于 DOM 树，DOM 树描述了每个节点的位置关系，而 UI �
 
 ![UI树](/static/image/markdown/javascript/react-api-manual/ui-tree.png)
 
+## StrictMode
+
+`StrictMode` 译为“严格模式”，它是 React 中的一个用于探测潜在问题的特性，我们通过 `<React.StrictMode>` 标签来使用这个特性。
+
+### 启用
+
+被包含在 `<React.StrictMode>` 标签内的代码将会启用严格模式，我们可以对任意代码启用严格模式：
+
+```jsx
+function Component () {
+    
+    return (
+    	<>
+            <div>不启用严格模式</div>
+            <React.StrictMode>
+                <div>启用严格模式</div>
+            </React.StrictMode>
+        </>
+    );
+    
+}
+```
+
+### 作用
+
+`<React.StrictMode>` 仅在开发环境下生效，在生产环境下不会生效，并且该标签就像 `<React.Fragment>` 标签一样，不会渲染任何可见的 UI。其作用具体如下：
+
+1. 检测组件是否是纯函数。
+2. 检测组件是否使用了过时的方法。
+
+关于第一点：在开发环境下，当挂载组件时，React 会连续调用两次组件构造器，并最后只使用其中一次调用的结果。当更新组件时，React 会连续调用两次组件的更新器（即 `setState` 函数），并最后只使用其中一次调用的结果。React 通过这种方式来检测组件是否是纯函数。
+
+另外，从 React 18 开始，在开发环境下，每当组件挂载之后，React 都会立即卸载和重新挂载组件，并在最后使用第一次挂载时的状态。React 之所以这么做，是为了给未来的某个新特性做准备。
+
 ## useState
 
 `useState` 用于声明、存储、更新组件的内部状态，其语法如下：
