@@ -698,7 +698,7 @@ function useMyHook () {
 /* 语法二 */
 function useMyHook () {
 
-    React.useDebugValue( data, function format ( data ) { return tag } );
+    React.useDebugValue( tag, function format ( tag ) { return tag } );
 
 }
 ```
