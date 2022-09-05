@@ -29,12 +29,12 @@ vec4 warp( vec2 uv, float time ) {
     );
     float strength = length( col * pattern * row );
 
-    time /= 10.0;
+    time /= 12.0;
 
     for ( float i = 1.0; i < 7.0; i++ ) {
 
-        uv.x += 0.6 / i * cos( i * 2.0 * uv.y + time );
-        uv.y += 0.6 / i * cos( i * 5.0 * uv.x + time );
+        uv.x += 0.6 / i * cos( i * 1.0 * uv.y + time );
+        uv.y += 0.6 / i * cos( i * 3.0 * uv.x + time );
 
     }
 
@@ -42,15 +42,14 @@ vec4 warp( vec2 uv, float time ) {
 
     ratio = abs( ratio );
     ratio = clamp( 0.1 / ratio, 0.1, 1.1 ) - 0.1;
-    ratio = floor( ratio * 5.0 ) / 5.0; // 颜色分层
+    ratio = floor( ratio * 100.0 ) / 100.0;           // 颜色分层
 
-    vec3 greenColor = vec3( 0.0, 0.502, 0.502 );
-    vec3 purpleColor = vec3( 0.365, 0.447, 0.965 );
-    vec3 blackColor = vec3( 0.0, 0.0, 0.0 );
-    vec3 mixedColor = purpleColor;
+    vec3 blackColor  = vec3( 0.067, 0.078, 0.098 );
+    vec3 greenColor  = vec3( 0.000, 0.502, 0.502 );
+    vec3 purpleColor = vec3( 0.220, 0.259, 0.514 );
+    vec3 mixedColor = blackColor;
 
-    mixedColor = mix( mixedColor, greenColor, ratio );
-    mixedColor = mix( blackColor, mixedColor, ratio );
+    mixedColor = mix( mixedColor, purpleColor, ratio * 6.0 );
 
     return vec4( mixedColor * strength, 1.0 );
 
