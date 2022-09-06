@@ -99,28 +99,12 @@ body {
 
 ```css
 @media ( min-width: 100vh ) {
-    /* 该样式仅在视口宽度大于视口高度时生效 */
+    /* 该样式仅在视口宽度大于或等于视口高度时生效 */
 }
 @media ( max-width: 100vh ) {
-    /* 该样式仅在视口宽度小于视口高度时生效 */
+    /* 该样式仅在视口宽度小于或等于视口高度时生效 */
 }
 ```
-
-### 文章断点
-
-我们把查询条件变为真的点称为“断点”，断点对文章的阅读舒适性非常重要。
-
-如果网页的文本行过长了，那么就会令阅读变得不舒服，这时我们就需要对文章进行分栏，而分栏的关键就是合适的断点和 `column-count` 属性。
-
-```css
-@media ( min-width: 50em ) {
-    article {
-        column-count: 2;
-    }
-}
-```
-
-> 对于不同的网页而言，文章的断点是不一样的。在这个例子中，我们假设了 `50em` 是文本行变得令人不舒服的断点。
 
 ### 组合使用
 
@@ -182,6 +166,235 @@ label {
 另外，关于微布局，有一个“容器查询”新特性
 
 详见 [Learn Responsive Design - Micro layouts](https://web.dev/learn/design/micro-layouts/)。
+
+## 文字排版
+
+### 固定字号
+
+如果网页被显示在小屏幕上，那么我们就应该使用更小的字号，如果网页被显示在大屏幕上，那么我们就应该使用更大的字号。之所以要这么做，是因为用户的眼睛往往距离小屏幕更近，距离大屏幕更远，想象一下我们使用智能手机和投影仪时的场景。
+
+下例是一个固定字号的例子：
+
+```css
+@media ( min-width: 30em ) {
+    html { font-size: 125%; }
+}
+
+@media ( min-width: 40em ) {
+    html { font-size: 150%; }
+}
+
+@media ( min-width: 50em ) {
+    html { font-size: 175%; }
+}
+
+@media ( min-width: 60em ) {
+    html { font-size: 200%; }
+}
+```
+
+不过，固定字号方案有一个明显的缺陷，那就是字号会在断点（查询条件变为真的点）处发生突变。比如在上例中，当页面宽度为 `39em` 时，字号大小是 `1.25` 倍，当页面宽度稍微增长到 `40em` 时，字号就会猛增至 `1.5` 倍。
+
+为了解决固定字号方案的这个缺陷，于是便有了弹性字号方案。
+
+### 弹性字号
+
+弹性字号方案可以解决固定字号方案的缺陷，它的做法就是让字号与页宽挂钩，请看下面的例子：
+
+```css
+html {
+    font-size: clamp( 1rem, 0.75rem + 1vw, 2rem );
+}
+```
+
+上例中，字号会随着页宽的变化而变化，这可以让字号的过渡显得更加自然，并且我们限制了字号的极限大小，这样就不用担心字号在窄屏幕上变得太小，在宽屏幕上变得太大了。如果你不熟悉 `clamp`，那么请见 [MDN - clamp](https://developer.mozilla.org/zh-CN/docs/Web/CSS/clamp)。
+
+#### 陷阱 1
+
+请不要像下面这样编写弹性字号方案，因为这会导致无论用户如何缩放网页，网页字体的大小都不会变化。
+
+```css
+html {
+    font-size: clamp( 1rem, 1vw, 2rem );
+}
+```
+
+#### 陷阱 2
+
+请不要像下面这样编写弹性字号方案，因为这会导致字号在窄屏幕下变得太小，在宽屏幕下变得太大。
+
+```css
+html {
+    font-size: clacl( 0.75rem + 1vw );
+}
+```
+
+### 断行 & 分段
+
+如果文本行的行长太长了，那么就会破坏阅读的体验，因此我们需要在合适的位置断行。如果页面宽度有充分的余量，那么我们还可以进行分列。
+
+```css
+/* 分段 */
+@media { min-width: 110ch } {
+    article { column-count: 2; }
+}
+
+/* 断行 */
+article {
+    max-inline-size: 50ch;
+}
+```
+
+> 请使用 `ch` 和 `ic` 来作为断行的长度单位，`ch` 代表阿拉伯数字 `0` 的宽度，`ic` 代表 CJK 表意文字 `水` 的宽度。
+
+断行与分段的关键之一是合适的断点，[《The Elements of Typographic Style Applied to the Web》](http://webtypography.net/2.1.2) 中提到：
+
+```
+Anything from 45 to 75 characters is widely regarded as a satisfactory length of line for a single-column page set in a serifed text face in a text size. The 66-character line* (*counting both letters and spaces*) *is widely regarded as ideal. For multiple column work, a better average is 40 to 50 characters
+
+对于单列文章而言，45～75个字符（包括空格）都是较好的行长，尤其是66个字符。对于多列文章而言，40～50个字符则更加合适。
+```
+
+### 行高
+
+行高越大，越不利于读者的眼睛从上一行的末尾移动到下一行的开头，因此较短的文本行可以拥有较大的行高，但是较长的文本行则不应使用较大的行高。
+
+另外，你应该使用 `line-height: 1.5`，而不要使用 `line-height: 24px`，因为这样可以确保文本行的行高可以自动适应 `font-size` 的大小。
+
+### 字体族
+
+#### 加载 & 使用
+
+我们可以通过 `@font-face` 来为网页添加外部的字体族资源。
+
+```css
+@font-face {
+    font-family: "Fira Code";
+    src: url( "/font/fira-code.woff2" ) format( "woff2" );
+}
+```
+
+因为我们在 `@font-face` 中将外部的字体族资源命名为了 `Fira Code`，所以我们可以通过 `font-family: "Fira Code"` 来直接使用这个字体族。
+
+```css
+html {
+    font-family: "Fira Code";
+}
+```
+
+#### 字形 & 字重
+
+因为 `Fira Code` 字体不支持细体、粗体、斜体，所以我们需要在 `@font-face` 中补充 `font-style: normal` 和 `font-weight: normal`。
+
+这样做的用处是，仅当元素的 `font-style` 和 `font-weight` 均为 `normal` 时，`Fira Code` 字体族才会生效，否则就不会生效（回退到使用默认字体族）。
+
+```css
+@font-face {
+    font-family: "Fira Code";
+    font-style: normal;
+    font-weight: normal;
+    src: url( "/font/fira-code.woff2" ) format( "woff2" );
+}
+
+/* Fira Code生效 */
+p.italic {
+    font-familg: "Fira Code";
+    font-style: italic;
+}
+
+/* Fira Code不生效 */
+p.normal {
+    font-familg: "Fira Code";
+    font-style: normal;
+}
+```
+
+如果我们不增加这两条规则，那么浏览器就会通过强行加粗和拉斜来使 `Fira Code` 适应粗体和斜体文本。不过强行加粗和拉斜的效果并不美观，而我们使用字体的目的不就是为了美观吗？
+
+#### 可变字体
+
+另外，有些字体族可以自适应斜体和不同的字重，这是因为这些字体族文件的内部包含了多套字形，我们把这些字体族称为“可变字体”。可变字体的好处是更加易用，坏处是体积更大，因为它们包含了更多的字形数据。
+
+不过，现在越来越多的系统字体已经变成了可变字体，比如 `system-ui`。
+
+#### 加速加载 1
+
+我们可以通过 `@font-face` 中的 `src` 属性来加速字体族资源的加载，具体做法是：
+
+```css
+@font-face {
+    font-family: "Fira Code";
+    src: local( "Fira Code" ),
+         url( "/font/fira-code.woff2" ) format( "woff2" ),
+         url( "/font/fira-code.woff" ) format( "woff" ),
+         url( "/font/fira-code.ttf" ) format( "ttf" );
+}
+```
+
+其工作原理如下：
+
+1. 浏览器检查本地机器中是否存在名为 `Fira Code` 的字体族资源：
+   1. 如果不存在，则跳转到 2。
+   2. 如果存在，则直接使用该字体族资源，然后结束。
+2. 浏览器检查自身是否支持 `woff2`：
+   1. 如果不支持，则跳转到 3。
+   2. 如果支持，则尝试下载 `/font/fira-code.woff2` 的字体族资源：
+      1. 如果下载失败，则跳转到 3。
+      2. 如果下载成功，则直接使用该字体族资源，然后结束。
+3. 浏览器检查自身是否支持 `woff`：
+   1. 如果不支持，则跳转到 4。
+   2. 如果支持，则尝试下载 `/font/fira-code.woff` 的字体族资源：
+      1. 如果下载失败，则跳转到 4。
+      2. 如果下载成功，则直接使用该字体族资源，然后结束。
+4. 浏览器检查自身是否支持 `tff`：
+   1. 如果不支持，则跳转到 5。
+   2. 如果支持，则尝试下载 `/font/fira-code.ttf` 的字体族资源：
+      1. 如果下载失败，则跳转到 5。
+      2. 如果下载成功，则直接使用该字体族资源，然后结束。
+5. 浏览器使用默认字体来替代 `Fira Code`。
+
+#### 加速加载 2
+
+我们可以通过 `<link>` 标签来让浏览器优先下载我们的字体族资源，具体做法是：
+
+```html
+<head>
+    <link href="/font/fira-code.woff2" as="font" type="font/woff2" rel="preload" crossorigin>
+</head>
+```
+
+`rel="preload"` 属性用于告知浏览器优先下载该资源。`as="font"` 用于告知浏览器该资源的类型。`type="font/woff2"` 用于进一步告知浏览器该资源的类型。`crossorigin` 用于告知浏览器使用 CORS 来获取资源，并且无论你的字体族资源是否被托管在别的域，你都必须设置该属性，否则浏览器就会不加载。
+
+#### 切换字体族
+
+下载外部的字体族资源需要时间，因此网页需要等待一段时间才能使用上外部的字体族，那么我们的网页在这个等待的期间会怎样渲染字体呢？
+
+我们可以通过在 `@font-face` 中定义 `font-display` 属性来控制等待期间的字体渲染，它有 5 种取值：`auto`、`block`、`swap`、`fallback`、`optional`。
+
+我认为下例是大多数情况下的最佳选择。
+
+```css
+@font-face {
+    font-family: "Fira Code";
+    font-display: swap;
+    src: url( "/font/fira-code.woff2" ) format( "woff2" );
+}
+```
+
+- 网页会先经历一个极短的无字时间：
+  - 如果在此期间，网页还没有加载好外部的字体族资源，那么任何使用该字体族资源的元素都会渲染不可见的后备字体，这看起来就像是没有渲染字体。
+  - 如果在此期间，网页加载好了外部的字体族资源，那么就立即使用该字体族组件。
+- 网页会进入到无限长的有字时间：
+  - 如果在此期间，网页还没有加载好外部的字体资源，那么任何使用该字体族资源的元素都会渲染后备字体。
+  - 如果在此期间，网页加载好了外部的字体族资源，那么就立即使用该字体族组件。
+
+你可以通过 [MDN - font-display](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face/font-display#Browser_compatibility) 来了解其他用法。
+
+#### 切换时闪烁
+
+切换字体族时，网页通常发生闪烁，这个闪烁其实是一种布局偏移。触发该闪烁的原因是，切换前后的两种字体族的间距等属性是不一样的。你可以通过 [这篇文章](https://web.dev/css-size-adjust/) 来详细了解这个闪烁。
+
+我们可以通过 `@font-face` 中的 `size-adjust` 属性来解决这个闪烁，请通过 [这篇文章](https://web.dev/css-size-adjust/) 来学习具体的处理方法，不过我可以提前告诉你，这个处理很麻烦，因为它的思路是通过反复的手工校准切换前后的字体，来使切换前后的字体可以尽可能的拥有相似的布局。
 
 ## 参考
 
