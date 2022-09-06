@@ -167,7 +167,7 @@ label {
 
 详见 [Learn Responsive Design - Micro layouts](https://web.dev/learn/design/micro-layouts/)。
 
-## 文字排版
+## 文字
 
 ### 固定字号
 
@@ -395,6 +395,10 @@ p.normal {
 切换字体族时，网页通常发生闪烁，这个闪烁其实是一种布局偏移。触发该闪烁的原因是，切换前后的两种字体族的间距等属性是不一样的。你可以通过 [这篇文章](https://web.dev/css-size-adjust/) 来详细了解这个闪烁。
 
 我们可以通过 `@font-face` 中的 `size-adjust` 属性来解决这个闪烁，请通过 [这篇文章](https://web.dev/css-size-adjust/) 来学习具体的处理方法，不过我可以提前告诉你，这个处理很麻烦，因为它的思路是通过反复的手工校准切换前后的字体，来使切换前后的字体可以尽可能的拥有相似的布局。
+
+## 图像
+
+
 
 ## 参考
 
