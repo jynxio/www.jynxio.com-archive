@@ -14,31 +14,31 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=5e4e0158-d80f-4549-9a9b-0e7c0627ddfd>概述</p>
-        <p data-target-id=8c9a8111-18a7-4f36-82c6-2254e18e4f8c>规范</p>
-        <p data-target-id=a18a8798-7ec6-4189-8cd3-70fcd0e3a753>实现</p>
-        <p data-target-id=13f88415-66c1-466f-9fc2-e9397c682cab>测试</p>
-        <p data-target-id=24cd0cdd-9754-45f3-85e5-4656c0af61f4>使用</p>
-        <p data-target-id=e97d3f26-f46c-4ad1-83c6-464a1b2b01e6>参考</p>
+        <p data-target-id=3ad99a0c-3063-4e2e-ae69-ecca7098c04a>概述</p>
+        <p data-target-id=71b1e768-a86b-4b19-b3af-23fb810f9a39>规范</p>
+        <p data-target-id=bf555dc4-d7ab-490e-b171-680ba1ec9554>实现</p>
+        <p data-target-id=3d3dab24-bdba-413c-abb8-3b3121e0ccba>测试</p>
+        <p data-target-id=f640ad30-e5a4-4cb9-8ef1-9c19e4fc90e8>使用</p>
+        <p data-target-id=20b521d6-62b9-41fb-af6e-62a9cb61ce5f>参考</p>
     </aside>
     <article>
         <h1>Promises/A+ 规范与实现</h1>
-        <h2 id="5e4e0158-d80f-4549-9a9b-0e7c0627ddfd">概述</h2>
+        <h2 id="3ad99a0c-3063-4e2e-ae69-ecca7098c04a">概述</h2>
         <p>本文将会阐述 Promises/A+ 规范的内容，并实现一个 100% 通过 Promises/A+ 测试的 Promise polyfill。在开始编码实现之前，我们需要先阅读规范的内容，下文是 <a href="https://promisesaplus.com">Promises/A+ 规范</a> 的简中翻译版本，它比原文更加浅显易懂。</p>
-        <h2 id="8c9a8111-18a7-4f36-82c6-2254e18e4f8c">规范</h2>
+        <h2 id="71b1e768-a86b-4b19-b3af-23fb810f9a39">规范</h2>
         <p><a href="https://promisesaplus.com/">Promises/A+ 规范</a> 是一个开放的 JavaScript Promise 标准。</p>
         <p><code>promise</code> 代表异步操作的最终结果，我们主要通过 <code>promise</code> 的 <code>then</code> 方法来使用它，<code>then</code> 方法用于注册回调函数，回调函数可以接收到 <code>promise</code> 在 <code>fulfilled</code> 或 <code>rejected</code> 状态下的值。</p>
         <p>该规范详细说明了 <code>then</code> 方法的行为规范，providing an interoperable base which all Promises/A+ conformant promise implementations can be depended on to provide。所以我们可以认为这个规范是非常稳定的。虽然 Promises/A+ 组织可能会采用一些向后兼容的小修改来解决新发现的极端情况，但是组织只有在经过深思熟虑、讨论和测试之后才会采用无法向后兼容的大修改。</p>
         <p>Promises/A+ 厘清了早期的 Promises/A 提案的行为规范，extending it to cover de facto behaviors，并省略掉了一些模糊的与存疑的部分。</p>
         <p>最后，Promises/A+ 规范不涉及如何创建、兑现、拒绝 <code>promise</code> ，而是专注于定义 <code>then</code> 方法的行为规范，不过该规范在未来也可能会涉及到创建、兑现、拒绝 <code>promise</code> 的事情。</p>
-        <h3 id="0d3f145c-c19f-46ea-b7d8-f6be41eea1c4">1.术语</h3>
+        <h3 id="20effc90-6393-4ae1-8ea8-e02e5611741f">1.术语</h3>
         <p>1.1 <code>promise</code> 是 Promise 构造函数的实例，是一个具有 <code>then</code> 方法的对象或函数，且其 <code>then</code> 方法完全符合本规范的要求。</p>
         <p>1.2 <code>thenable</code> 是一个具有 <code>then</code> 方法的对象或函数。</p>
         <p>1.3 <code>value</code> 是 <code>promise</code> 的 <code>fulfilled</code> 值，代表 <code>promise</code> 被兑现时的值。</p>
         <p>1.4 <code>reason</code> 是 <code>promise</code> 的 <code>rejected</code> 值，代表 <code>promise</code> 被拒绝时的原因。</p>
         <p>1.5<code>exception</code> 是一个使用 <code>throw</code> 语句抛出的值。</p>
-        <h3 id="09ffa40f-fd4b-4c31-b9af-033d39438e2b">2.要求</h3>
-        <h4 id="fc107c9f-67ce-4d8f-82af-d70fdcc33d05">2.1 状态</h4>
+        <h3 id="2cd72db8-b162-4815-bd85-082180c80043">2.要求</h3>
+        <h4 id="d458d042-0d31-4b36-8891-b7ab7e3fede5">2.1 状态</h4>
         <p><code>promise</code> 是拥有状态的，且其状态必须是 <code>pending</code>、<code>fulfilled</code>、<code>rejected</code> 这 3 种中的其中一种。</p>
         <p>2.1.1 当处于 <code>pending</code> 状态时：
             2.1.1.1 可以转换到 <code>fulfilled</code> 或 <code>rejected</code> 状态。</p>
@@ -48,7 +48,7 @@
         <p>2.1.3 当处于 <code>rejected</code> 状态时：
             2.1.3.1 不能再转换到其他的状态。
             2.1.3.2 拥有一个 <code>reason</code>（即 <code>rejected</code> 值）。</p>
-        <h4 id="fdb092f5-83ce-457a-9de5-56b3123f170a">2.2 then</h4>
+        <h4 id="304a9ba5-28c9-4b31-95ad-2d138e371dd9">2.2 then</h4>
         <p><code>promise</code> 必须提供 <code>then</code> 方法，且当 <code>promise</code> 的状态由 <code>pending</code> 切换到 <code>fulfilled</code> 后，由 <code>then</code> 方法注册的 <code>onFulfilled</code> 回调函数可以接收到 <code>promise</code> 的 <code>value</code>，或者当 <code>promise</code> 的状态由 <code>pending</code> 切换到 <code>rejected</code> 后，由 <code>then</code> 方法注册的 <code>onRejected</code> 回调函数可以接收到 <code>promise</code> 的 <code>reason</code>。<code>then</code> 方法的语法是</p>
         <pre><code class="language-js">promise.then( onFulfilled, onRejected );
 </code></pre>
@@ -102,7 +102,7 @@
             <p>关于 2.2.4：本文的 2.2.4 是我的个人理解，因为原文的表述非常晦涩。</p>
             <p>关于 2.2.7：Promises/A+ 允许 <code>promise_2 === promise_1</code> 这种情况，并且实现者要主动在文档中说明你的实现是否允许这种情况，并且是在什么条件下才允许的。</p>
         </blockquote>
-        <h4 id="c2ef3fa2-879a-4cf9-a178-9a714d84e252">2.3 promise 处理程序</h4>
+        <h4 id="b1f14c8e-aac8-48f3-a7c2-997978e3f0d1">2.3 promise 处理程序</h4>
         <p><code>promise 处理程序</code> 是一个抽象的操作，它是 <code>promise</code> 的内部方法，它会接收一个 Promise 实例 <code>promise</code> 和一个值 <code>x</code>，我们把 <code>promise 处理程序表示为</code> <code>[[Resolve]]( promise, x )</code>。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -163,7 +163,7 @@ promise.then(
             <p>规范认为，不应该通过设定递归的深度上限来检测算法是否陷入到无限递归之中，因为真正的无限递归的深度是无限的。</p>
         </blockquote>
         <p>本文是一份比 <a href="https://www.ituring.com.cn/article/66566">Promises/A+ 的翻译</a> 更好的简中版本，因为本文更加浅显易懂。</p>
-        <h2 id="a18a8798-7ec6-4189-8cd3-70fcd0e3a753">实现</h2>
+        <h2 id="bf555dc4-d7ab-490e-b171-680ba1ec9554">实现</h2>
         <p>我实现了一个 100% 通过 <a href="https://github.com/promises-aplus/promises-tests">Promises/A+ 测试</a> 的 Promise polyfill，并为其取名为 Yeensin，因为 Yeensin 是粤语 “应承” 的谐音，“应承” 在粤语中表示答应、承诺的意思。</p>
         <p>我建立了 <a href="https://github.com/jynxio/yeensin">一个仓库</a> 来存储这个项目，你可以通过阅读其内的 <a href="https://github.com/jynxio/yeensin/blob/main/Yeensin.js">Yeensin.js</a> 来了解我的实现细节，同时，我也将这份代码板书在了下方。</p>
         <pre><code class="language-js">const PENDING_STATE = &quot;pending&quot;;
@@ -436,7 +436,7 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
 module.exports = Yeensin;
 </code></pre>
-        <h2 id="13f88415-66c1-466f-9fc2-e9397c682cab">测试</h2>
+        <h2 id="3d3dab24-bdba-413c-abb8-3b3121e0ccba">测试</h2>
         <p>当你实现了自己的 Promise 后，你应该使用 Promises/A+ 的官方测试套件来对它进行测试，你可以通过阅读这份 <a href="https://github.com/promises-aplus/promises-tests">官方文档</a> 来学习测试的流程。如果你看不懂官方文档，那么你可以参考我的 <a href="https://github.com/jynxio/yeensin">Yeensin</a> 项目。</p>
         <p>如果你想要验证我的 Yeensin 项目是否完全通过了 Promises/A+ 的测试，那么请执行下述步骤：</p>
         <ol>
@@ -444,9 +444,9 @@ module.exports = Yeensin;
             <li><code>npm install</code></li>
             <li><code>npm run test</code></li>
         </ol>
-        <h2 id="24cd0cdd-9754-45f3-85e5-4656c0af61f4">使用</h2>
+        <h2 id="f640ad30-e5a4-4cb9-8ef1-9c19e4fc90e8">使用</h2>
         <p>如果你想要使用 Promise 的 polyfill，那么你应该使用 Babel，而不是 Yeensin 或其他第三方实现。</p>
-        <h2 id="e97d3f26-f46c-4ad1-83c6-464a1b2b01e6">参考</h2>
+        <h2 id="20b521d6-62b9-41fb-af6e-62a9cb61ce5f">参考</h2>
         <ul>
             <li><a href="https://promisesaplus.com">Promises/A+</a></li>
             <li><a href="https://www.ituring.com.cn/article/66566">Promises/A+ 的翻译</a></li>
