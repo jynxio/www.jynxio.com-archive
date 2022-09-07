@@ -132,6 +132,13 @@ body {
 }
 ```
 
+### 媒体特性手册
+
+请参考这两篇文章，但它们都没有包含所有的媒体特性。
+
+- https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries
+- https://developer.mozilla.org/en-US/docs/Web/CSS/@media
+
 ## 国际化
 
 汉语、英语的阅读习惯是从左到右，而阿拉伯语、希伯来语的阅读习惯是从右到左，为了使你的站点可以在不同阅读习惯的语种国家中正常的显示，请使用逻辑属性来替代方向属性，比如：
@@ -493,7 +500,57 @@ img {
 
 如果你为同一幅图像制作了多个不同分辨率的版本，那么你就可以通过 `<img>` 标签的 `srcset` 属性来让浏览器智能的下载合适版本的图像，这可以节省流量和加速图像资源的加载速度。
 
-详请参阅 [Responsive images with `srcset`](https://web.dev/learn/design/responsive-images/#responsive-images-with-srcset)。
+详请参阅 [Responsive images with `srcset`](https://web.dev/learn/design/responsive-images/#responsive-images-with-srcset) 和 [The picture element](https://web.dev/learn/design/picture-element/)。
+
+## 主题
+
+### 嗅探系统主题
+
+许多操作系统都支持浅色模式和深色模式，比如 Windows 和 MacOS，`prefers-color-scheme` 媒体特性可以检测出操作系统正在使用哪种模式，然后我们就可以使用不同的主题色。
+
+```css
+/* 操作系统正在使用浅色模式 */
+@media ( prefers-color-scheme: light ) {
+    html { background-color: white; }
+}
+
+/* 操作系统正在使用深色模式 */
+@media ( prefers-color-scheme: dark ) {
+    html { background-color: black; }
+}
+```
+
+如果操作系统不支持主题色，或未设置主题色，或禁止获取主题色，那么就需要使用：
+
+```css
+@media ( prefers-color-scheme: no-preference ) {
+    html { background-color: white; }
+}
+```
+
+### accent-color
+
+CSS 的 `accent-color` 属性可以设置单选框、复选框、进度条的颜色。
+
+```css
+input {
+    accent-color: black;
+}
+```
+
+## 色觉缺陷
+
+FireFox 和 Chrome 的开发者工具都可以模拟色觉缺陷的视觉效果，在 FireFox 中，`开发者工具 -> 无障碍环境 -> 模拟`，在 Chrome 中，`开发者工具 -> 渲染选项卡 -> 模拟视觉缺陷`。
+
+Chrome 的色觉缺陷模拟功能比较难找，如果你找不到，那么你可以查看 [这篇文章](https://developer.chrome.com/blog/new-in-devtools-83/#vision-deficiencies)。
+
+## 虚拟键盘
+
+智能手机使用虚拟键盘来代替实体键盘，你可以通过参阅 [这篇文章](https://web.dev/learn/design/interaction/#virtual-keyboards) 来学习如何优化虚拟键盘，这些优化是指：
+
+- 如何唤醒整数数字键盘；
+- 如何唤醒浮点数数字键盘；
+- 如何让虚拟键盘自动联想出相关内容，比如电话号码、邮箱、国家。
 
 ## 参考
 
