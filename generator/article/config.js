@@ -33,33 +33,6 @@ const createJavascriptInfo = _ => {
 
 }
 
-const createBrowserInfo = _ => {
-
-    const name = "browser";
-    const alias = "Browser";
-    const md_path = BASE_MD_PATH + "/" + name;
-    const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH + "/" + name;
-    const children = [
-        { name: "network-protocol", alias: "网络协议" },
-        { name: "browser-architecture", alias: "浏览器的架构" },
-        { name: "browser-navigation", alias: "浏览器的导航" },
-        { name: "page-rendering", alias: "页面的渲染" },
-        { name: "input-event-and-page-scroll", alias: "输入事件与页面滚动" },
-    ];
-    const options = {
-        name,
-        alias,
-        children,
-        mdPath: md_path,
-        htmlPath: html_path,
-        buildPath: build_path,
-    };
-
-    return createInfo( options );
-
-};
-
 const createDataStructureInfo = _ => {
 
     const name = "data-structure";
@@ -79,6 +52,33 @@ const createDataStructureInfo = _ => {
         { name: "tree", alias: "树" },
         { name: "binary-search-tree", alias: "二叉搜索树" },
         { name: "avl-tree", alias: "AVL 树" },
+    ];
+    const options = {
+        name,
+        alias,
+        children,
+        mdPath: md_path,
+        htmlPath: html_path,
+        buildPath: build_path,
+    };
+
+    return createInfo( options );
+
+};
+
+const createBrowserInfo = _ => {
+
+    const name = "browser";
+    const alias = "Browser";
+    const md_path = BASE_MD_PATH + "/" + name;
+    const html_path = BASE_HTML_PATH + "/" + name;
+    const build_path = BASE_BUILD_PATH + "/" + name;
+    const children = [
+        { name: "network-protocol", alias: "网络协议" },
+        { name: "browser-architecture", alias: "浏览器的架构" },
+        { name: "browser-navigation", alias: "浏览器的导航" },
+        { name: "page-rendering", alias: "页面的渲染" },
+        { name: "input-event-and-page-scroll", alias: "输入事件与页面滚动" },
     ];
     const options = {
         name,
@@ -139,6 +139,29 @@ const createWebpackInfo = _ => {
 
 };
 
+const createCssInfo = _ => {
+
+    const name = "css";
+    const alias = "CSS";
+    const md_path = BASE_MD_PATH + "/" + name;
+    const html_path = BASE_HTML_PATH + "/" + name;
+    const build_path = BASE_BUILD_PATH + "/" + name;
+    const children = [
+        { name: "responsive-design", alias: "响应式设计" },
+    ];
+    const options = {
+        name,
+        alias,
+        children,
+        mdPath: md_path,
+        htmlPath: html_path,
+        buildPath: build_path,
+    };
+
+    return createInfo( options );
+
+};
+
 const createOtherInfo = _ => {
 
     const name = "other";
@@ -168,10 +191,11 @@ const createAllInfo = _ => {
 
     return ( [
         createJavascriptInfo(),
-        createBrowserInfo(),
         createDataStructureInfo(),
+        createBrowserInfo(),
         createBabelInfo(),
         createWebpackInfo(),
+        createCssInfo(),
         createOtherInfo(),
     ] );
 
