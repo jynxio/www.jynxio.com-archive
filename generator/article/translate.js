@@ -94,10 +94,11 @@ function translateCore( input_path, output_path ) {
                 headerIds: false,
                 renderer: {
                     hr: parseHr,
-                    heading: parseH123456,
+                    heading: parseHeading,
                     checkbox: parseCheckboxInput,
                     listitem: parseLi,
                     blockquote: parseBlockquote,
+                    image: parseImage,
                 },
             } );
             const article_content = marked.parse( markdown_content );
@@ -139,7 +140,7 @@ function translateCore( input_path, output_path ) {
 
     }
 
-    function parseH123456( content, level ) {
+    function parseHeading( content, level ) {
 
         /* 剔除Typora的图床地址。 */
         if ( content.search( /typora-root-url:/ ) > -1 ) return "";
@@ -191,6 +192,12 @@ function translateCore( input_path, output_path ) {
         const title = `<p><strong>Note</strong></p>`;
 
         return `<blockquote>${ title }${ content }</blockquote>`;
+
+    }
+
+    function parseImage( href, title, alt ) {
+
+        return `<img src=${ href } alt=${ alt } loading="lazy" decoding="async">`;
 
     }
 
