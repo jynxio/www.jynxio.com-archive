@@ -14,47 +14,47 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=8c699fd8-c2b9-4598-a4ed-9fafa42b2f7b>树</p>
-        <p data-target-id=569c40dd-f9cc-4189-b2dc-7ef6cd3419e5>二叉树</p>
-        <p data-target-id=1e1fbfe3-0040-4588-9f1d-8253c446a901>完全二叉树</p>
-        <p data-target-id=26c7a23d-4f60-4bd4-89b4-179e5785a8aa>满二叉树</p>
-        <p data-target-id=a24ad00b-4bf6-41a5-9873-a7d1e74024ad>平衡二叉树</p>
-        <p data-target-id=d79a84c1-df56-40d5-b419-e4b1e428067a>自平衡二叉树</p>
-        <p data-target-id=4c778911-19ef-4e1b-b754-294ef273ba59>二叉搜索树</p>
-        <p data-target-id=df1be335-df8e-44c2-b3e1-97e31e8c43a4>AVL 树</p>
-        <p data-target-id=f46152da-dad4-437e-bf10-931b22388b48>红黑树</p>
+        <p data-target-id=c03cbf64-eb1c-4733-8275-d5f80ab5d55c>树</p>
+        <p data-target-id=2ff89812-bff3-42cb-a5b6-8f010776f833>二叉树</p>
+        <p data-target-id=eb6b5914-6db7-471d-9b03-c2aacc30b4dc>完全二叉树</p>
+        <p data-target-id=530d5d7b-6e10-4793-a45c-eedd950b0ce6>满二叉树</p>
+        <p data-target-id=e5234dd1-0884-4897-8c73-e1f7800fd0d5>平衡二叉树</p>
+        <p data-target-id=c9e3806f-fd3b-4ce5-a205-47b08b73a3c1>自平衡二叉树</p>
+        <p data-target-id=80ba46c8-1bb6-4d7a-9358-c53b87fae1ea>二叉搜索树</p>
+        <p data-target-id=983701b6-358e-489a-8d82-93b4e3d0c571>AVL 树</p>
+        <p data-target-id=f6c0ecc6-9b86-4d98-9a35-6e53902c7f3c>红黑树</p>
     </aside>
     <article>
         <h1>树的基本知识</h1>
-        <h2 id="8c699fd8-c2b9-4598-a4ed-9fafa42b2f7b">树</h2>
+        <h2 id="c03cbf64-eb1c-4733-8275-d5f80ab5d55c">树</h2>
         <p>树是一种树状的数据结构，它由 n（n &gt; 0）个有限的节点组成，比如族谱、公司职级架构就是典型的树数据结构。</p>
         <p>树中的每个元素都叫做节点。其中，没有父节点的节点叫做根节点，根节点位于树的顶部。没有子节点的节点叫做叶节点，叶节点位于每条路径的底部。</p>
         <p>我们可以对树进行分层，其中根节点位于第 0 层，根节点的子节点位于第 1 层，以此类推。而树的高度就等于最大层数。</p>
         <p><img src=/static/image/markdown/data-structure/tree/tree.png alt=树 loading="lazy" decoding="async"></p>
-        <h2 id="569c40dd-f9cc-4189-b2dc-7ef6cd3419e5">二叉树</h2>
+        <h2 id="2ff89812-bff3-42cb-a5b6-8f010776f833">二叉树</h2>
         <p>二叉树是树的一种，二叉树中的每个节点最多只有 2 个子节点，其中一个是左侧子节点，另一个是右侧子节点。</p>
         <p><img src=/static/image/markdown/data-structure/tree/binary-tree.png alt=二叉树 loading="lazy" decoding="async"></p>
-        <h2 id="1e1fbfe3-0040-4588-9f1d-8253c446a901">完全二叉树</h2>
+        <h2 id="eb6b5914-6db7-471d-9b03-c2aacc30b4dc">完全二叉树</h2>
         <p>完全二叉树是二叉树的一种特殊形态，其定义为：对于一个高度为 h 的二叉树，除了第 h 层外，其余各层的节点数都达到了最大值，且第 h 层的所有节点是从左到右连续排列的。</p>
         <p><img src=/static/image/markdown/data-structure/tree/complete-binary-tree.png alt=完全二叉树 loading="lazy" decoding="async"></p>
-        <h2 id="26c7a23d-4f60-4bd4-89b4-179e5785a8aa">满二叉树</h2>
+        <h2 id="530d5d7b-6e10-4793-a45c-eedd950b0ce6">满二叉树</h2>
         <p>满二叉树是完全二叉树的一种特殊形态，其定义为：每一层的节点数都达到了最大值。</p>
         <p><img src=/static/image/markdown/data-structure/tree/full-binary-tree.png alt=满二叉树 loading="lazy" decoding="async"></p>
-        <h2 id="a24ad00b-4bf6-41a5-9873-a7d1e74024ad">平衡二叉树</h2>
+        <h2 id="e5234dd1-0884-4897-8c73-e1f7800fd0d5">平衡二叉树</h2>
         <p>如果一棵二叉树的任意节点的左侧子树和右侧子树的高度差不大于 1，那么我们就称这棵二叉树为平衡二叉树。平衡二叉树是二叉树的一种特殊形态。</p>
-        <h2 id="d79a84c1-df56-40d5-b419-e4b1e428067a">自平衡二叉树</h2>
+        <h2 id="c9e3806f-fd3b-4ce5-a205-47b08b73a3c1">自平衡二叉树</h2>
         <p>自平衡二叉搜索树是一种会自动保持平衡的二叉搜索树，具体来说，每当新增或删除节点之后，自平衡二叉搜索树都会检查自身是否仍然平衡，如果不平衡了，那么它就会通过平衡操作来使自己变回平衡状态。</p>
-        <h2 id="4c778911-19ef-4e1b-b754-294ef273ba59">二叉搜索树</h2>
+        <h2 id="80ba46c8-1bb6-4d7a-9358-c53b87fae1ea">二叉搜索树</h2>
         <p>二叉搜索树是一种特殊的二叉树，其遵循下述规则：</p>
         <ul>
             <li>左侧子节点的值必须比父节点的值小。</li>
             <li>右侧子节点的值必须比父节点的值大。</li>
             <li>树中每个节点的值都是唯一的。</li>
         </ul>
-        <h2 id="df1be335-df8e-44c2-b3e1-97e31e8c43a4">AVL 树</h2>
+        <h2 id="983701b6-358e-489a-8d82-93b4e3d0c571">AVL 树</h2>
         <p>AVL 树（Adelson-Velskii-Landi Tree）是计算机科学中最早被发明的自平衡二叉搜索树，每当新增或删除节点之后，自平衡二叉搜索树都会检查自身是否仍然处于平衡状态，如果任意节点的左侧子树和右侧子树的高度差不大于 <code>1</code>，那么就可以认为自己处于平衡状态，否则自平衡二叉树就需要通过旋转操作来使自己回归到平衡状态。</p>
         <p>相较于二叉搜索树，AVL 树的新增、删除、搜索操作在平均和最坏情况下的时间复杂度都是 <code>O(logn)</code>，这得益于 AVL 树总是会保持着一种较为接近满二叉树的形态。</p>
-        <h2 id="f46152da-dad4-437e-bf10-931b22388b48">红黑树</h2>
+        <h2 id="f6c0ecc6-9b86-4d98-9a35-6e53902c7f3c">红黑树</h2>
         <p>红黑树也是一种自平衡的二叉搜索树，红黑树的新增和删除性能比 AVL 树更好，AVL 树的搜索性能比红黑树更好。红黑树比 AVL 树要复杂的多，树中的每个节点都需要遵循以下规则：</p>
         <ul>
             <li>节点是红色或黑色的。</li>
