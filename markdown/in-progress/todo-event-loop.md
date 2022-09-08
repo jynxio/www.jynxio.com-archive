@@ -19,6 +19,10 @@ typora-root-url: ..\..
 
 ![任务的优先级](/static/image/markdown/javascript/event-loop/task-order.jpg)
 
+这张图片的出处：https://medium.com/@paul_irish/requestanimationframe-scheduling-for-nerds-9c57f7438ef4
+
+以及秦光辉的一些个人笔记：https://www.qinguanghui.com/react/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%80%E5%B8%A7%E9%87%8C%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88.html
+
 ## 参考资料
 
 - [Promise A+ 规范](https://promisesaplus.com/)
