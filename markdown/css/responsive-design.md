@@ -254,13 +254,9 @@ article {
 
 > 请使用 `ch` 和 `ic` 来作为断行的长度单位，`ch` 代表阿拉伯数字 `0` 的宽度，`ic` 代表 CJK 表意文字 `水` 的宽度。
 
-断行与分段的关键之一是合适的断点，[《The Elements of Typographic Style Applied to the Web》](http://webtypography.net/2.1.2) 中提到：
+断行与分段的关键之一是合适的断点，[《The Elements of Typographic Style Applied to the Web》](http://webtypography.net/2.1.2) 中提到 “对于单列文章而言，45～75个字符（包括空格）都是较好的行长，尤其是66个字符。对于多列文章而言，40～50个字符则更加合适”。
 
-```
-Anything from 45 to 75 characters is widely regarded as a satisfactory length of line for a single-column page set in a serifed text face in a text size. The 66-character line* (*counting both letters and spaces*) *is widely regarded as ideal. For multiple column work, a better average is 40 to 50 characters
-
-对于单列文章而言，45～75个字符（包括空格）都是较好的行长，尤其是66个字符。对于多列文章而言，40～50个字符则更加合适。
-```
+> 其原文为：Anything from 45 to 75 characters is widely regarded as a satisfactory length of line for a single-column page set in a serifed text face in a text size. The 66-character line (counting both letters and spaces) is widely regarded as ideal. For multiple column work, a better average is 40 to 50 characters.
 
 ### 行高
 
