@@ -2,12 +2,12 @@
     "private": true,
     "devDependencies": {
         "css-loader": "^6.7.1",
-        "css-minimizer-webpack-plugin": "^4.1.0",
+        "css-minimizer-webpack-plugin": "^4.2.1",
         "font-caster": "^1.0.3",
         "html-loader": "^4.2.0",
         "html-webpack-plugin": "^5.5.0",
         "js-beautify": "^1.14.6",
-        "marked": "^4.1.0",
+        "marked": "^4.1.1",
         "mini-css-extract-plugin": "^2.6.1",
         "readline-sync": "^1.4.10",
         "style-loader": "^3.3.1",
@@ -28,6 +28,6 @@
         "create-font-home": "node ./generator/font-home/index.js"
     },
     "dependencies": {
-        "three": "^0.144.0"
+        "three": "^0.145.0"
     }
 }
