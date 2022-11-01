@@ -14,30 +14,30 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=8aa8ff7e-27e4-4265-b858-f2b999cad6e8>概述</p>
-        <p data-target-id=2134c85f-8d9d-4d74-a065-9dda7dfff3b0>极值</p>
-        <p data-target-id=737a907a-d86f-4783-a5ec-6d87c1c94242>NaN</p>
-        <p data-target-id=5e769307-3986-4ad7-9d2c-dc9bdac3b06f>Infinity</p>
-        <p data-target-id=6eec7b0c-196d-4fa6-ac93-aa3ae41153d0>零</p>
-        <p data-target-id=54ad84c4-8c35-4239-ae3d-05f7b0d1a70c>进制</p>
-        <p data-target-id=4f68a2bb-3663-48b9-883e-01f7fc44d26c>科学计数法</p>
-        <p data-target-id=bd3d2be1-8e93-4ff6-ae5a-56ffa254bf5a>数字分隔符</p>
-        <p data-target-id=0548327d-39c9-4898-9531-19b82a1922f4>字面量与原型方法</p>
-        <p data-target-id=1829ed96-1bba-4914-9e43-b425886778d0>不精确的小数</p>
+        <p data-target-id=43c0f4ff-faca-4ed4-aada-5069c52a9350>概述</p>
+        <p data-target-id=a0cb9104-6d7c-4b46-a036-8b8215ce8572>极值</p>
+        <p data-target-id=5c6d8da6-8640-4c58-a5db-f74a0ebe9820>NaN</p>
+        <p data-target-id=5e412f03-e666-4649-8380-17cff19bc02b>Infinity</p>
+        <p data-target-id=24e51acd-1813-485b-bad6-5f68732dcbfe>零</p>
+        <p data-target-id=129e8426-d096-4015-98d9-76eff3a82560>进制</p>
+        <p data-target-id=43adac6d-1680-4d50-9492-4d561a54001d>科学计数法</p>
+        <p data-target-id=36a885bb-5684-4a37-9f87-fa0d59bacd7c>数字分隔符</p>
+        <p data-target-id=46e38fc8-4d4a-4893-b3e1-eb15d7c4eece>字面量与原型方法</p>
+        <p data-target-id=1780c1ec-0635-487e-b7cf-4e11882c0c7a>不精确的小数</p>
     </aside>
     <article>
         <h1>Number</h1>
-        <h2 id="8aa8ff7e-27e4-4265-b858-f2b999cad6e8">概述</h2>
+        <h2 id="43c0f4ff-faca-4ed4-aada-5069c52a9350">概述</h2>
         <p>Number 是 JavaScript 中唯一的数值类型，它是基于 IEEE-754 标准的双精度 64 位二进制格式的值，其中，52 位用于存储整数，11 位用于存储小数，1 位用于存储符号。</p>
         <p>JavaScript 中没有整数数值类型，所有整数都是用 Number 这种浮点数数值类型来表示的。</p>
         <p>除了常规的数值外，JavaScript 还定义了两个特殊的数值，分别是 <code>Infinity</code> 和 <code>NaN</code>，前者表示无穷，后者表示计算错误。</p>
-        <h2 id="2134c85f-8d9d-4d74-a065-9dda7dfff3b0">极值</h2>
+        <h2 id="a0cb9104-6d7c-4b46-a036-8b8215ce8572">极值</h2>
         <p><code>Number.MAX_VALUE</code> 属性是 JavaScript 所能存储的最大的数值，约为 <code>1.798e+308</code>，任何超过该值的数值都会被转换为 <code>Infinity</code>。<code>Number.MIN_VALUE</code> 属性是 JavaScript 所能存储的最小的正数值，约为 <code>5e-324</code>，任何小于该值的正数值都会被转换为 <code>0</code>。</p>
         <p><code>Number.MAX_SAFE_INTEGER</code> 属性是 JavaScript 所能安全存储的最小整数，值为 <code>- ( 2^53-1 )</code>，即 <code>-9007199254740991</code>。<code>Number.MAX_SAFE_INTEGER</code> 属性是 JavaScript 所能安全存储的最大整数，值为 <code>( 2^53-1 )</code>，即 <code>9007199254740991</code>。所以 JavaScript 的整数值的安全存储范围就是 <code>[ - ( 2^53 - 1 ), ( 2^53 - 1 ) ]</code>。如果两个整数值超出了安全存储的范围，那么 JavaScript 就无法准确的区分这两个整数值了，这便是“安全存储”的含义，这种缺陷来自于 IEEE-754。</p>
         <pre><code class="language-js">Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2; // true
 </code></pre>
         <p><code>Number.isSafeInteger( value )</code> 可以用来判断入参是否是一个安全的整数值，你可以通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger">这篇文章</a> 来了解更多。</p>
-        <h2 id="737a907a-d86f-4783-a5ec-6d87c1c94242">NaN</h2>
+        <h2 id="5c6d8da6-8640-4c58-a5db-f74a0ebe9820">NaN</h2>
         <p>NaN 是 JavaScript 的一个特殊值，它是 Not a Number 的缩写，它代表计算错误。具体来说，如果 JavaScript 执行了一个错误的数学运算表达式，它不会像 C++ 等语言一样抛出一个错误，而是直接返回 <code>NaN</code>，来表示发生了计算错误。</p>
         <pre><code class="language-js">1 / {}; // NaN
 </code></pre>
@@ -67,16 +67,16 @@ Number.isNaN( NaN ); // true
 }
 </code></pre>
         </blockquote>
-        <h2 id="5e769307-3986-4ad7-9d2c-dc9bdac3b06f">Infinity</h2>
+        <h2 id="5e412f03-e666-4649-8380-17cff19bc02b">Infinity</h2>
         <p><code>Infinity</code> 是 JavaScript 的一个特殊值，它代表无穷大，如果数值超过 JavaScript 的存储极限，那么这个数值就会被就近的舍入为 <code>Number.MAX_VALUE</code> 或 <code>Infinity</code>。</p>
         <pre><code class="language-js">Number.MAX_VALUE + Math.pow( 2, 969 ); // Number.MAX_VALUE
 Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
 </code></pre>
         <p>另外，<code>-Infinity</code> 代表无穷小，它不是一个值，而是一个数学运算表达式，它代表 <code>( -1 ) * Infinity</code>。</p>
-        <h2 id="6eec7b0c-196d-4fa6-ac93-aa3ae41153d0">零</h2>
+        <h2 id="24e51acd-1813-485b-bad6-5f68732dcbfe">零</h2>
         <p>在 JavaScript 中，<code>0</code>、<code>+0</code>、<code>-0</code> 三者是相等的。不过，如无必要，请勿使用 <code>+0</code>和 <code>-0</code>，一是为了某些性能优化，二是为了代码的简洁。比如，如果我们使用 <code>-0</code> 来作为 JavaScript 对象的键，那么 V8 引擎就有可能会永远降低 JavaScript 对象的性能，具体原因请查看本博客的另一篇文章《V8 Object》。</p>
         <p>小数点前的零是可以省略的，比如 <code>.1</code> 等价于 <code>0.1</code>。是否这样做取决于我们的编程风格。</p>
-        <h2 id="54ad84c4-8c35-4239-ae3d-05f7b0d1a70c">进制</h2>
+        <h2 id="129e8426-d096-4015-98d9-76eff3a82560">进制</h2>
         <p>JavaScript 默认使用十进制来表示数值，此外它还支持二进制、八进制、十六进制和其他自定义的进制。如果我们想要使用二进制、八进制、十六进制的数值，那么我们就需要为数值添加特殊的前缀标识，具体来说：</p>
         <ul>
             <li>二进制：<code>0b</code></li>
@@ -96,7 +96,7 @@ Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
             <p><strong>Note</strong></p>
             <p><code>radix</code> 参数是一个属于 <code>[ 2, 36 ]</code> 的整数。</p>
         </blockquote>
-        <h2 id="4f68a2bb-3663-48b9-883e-01f7fc44d26c">科学计数法</h2>
+        <h2 id="43adac6d-1680-4d50-9492-4d561a54001d">科学计数法</h2>
         <p>JavaScript 的科学计数法的格式是：<code>底数 + e或E + 指数</code>。比如：</p>
         <pre><code class="language-js">2.5e5;  // 250000
 2.5e+5; // 250000
@@ -104,7 +104,7 @@ Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
 2.5E+5; // 250000
 2.5E-5; // 0.000025
 </code></pre>
-        <h2 id="bd3d2be1-8e93-4ff6-ae5a-56ffa254bf5a">数字分隔符</h2>
+        <h2 id="36a885bb-5684-4a37-9f87-fa0d59bacd7c">数字分隔符</h2>
         <p>数字分隔符是 ECMAScript 2021 的语法糖特性，该特性允许我们为数值字面量添加下划线，这可以增强数值的可读性。</p>
         <pre><code class="language-js">1_000_000_000_000 === 1000000000000;          // true
 1_000_000_000_000n === 1000000000000n;        // true
@@ -112,7 +112,7 @@ Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
 0xa0_b0_c0 === 0xa0b0c0;                      // true
 </code></pre>
         <p>由于该特性在移动端的 <a href="https://caniuse.com/?search=numeric%20separator">支持度</a> 不详，因此请总是为其应用 babel。最后，你可以通过 <a href="https://github.com/tc39/proposal-numeric-separator">这篇文章</a> 来了解更多细节。</p>
-        <h2 id="0548327d-39c9-4898-9531-19b82a1922f4">字面量与原型方法</h2>
+        <h2 id="46e38fc8-4d4a-4893-b3e1-eb15d7c4eece">字面量与原型方法</h2>
         <p>如果数值字面量想要调用 <code>Number.prototype</code> 上的方法，那么它需要遵循下述规则：</p>
         <ul>
             <li>若字面量带有小数点，比如 <code>0.1</code>，则可以直接调用原型方法，比如 <code>0.1.toString()</code></li>
@@ -125,13 +125,13 @@ Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
                 </ul>
             </li>
         </ul>
-        <h2 id="1829ed96-1bba-4914-9e43-b425886778d0">不精确的小数</h2>
-        <h3 id="41fe5368-7828-4e48-b090-7d05c6b30818">概述</h3>
+        <h2 id="1780c1ec-0635-487e-b7cf-4e11882c0c7a">不精确的小数</h2>
+        <h3 id="4025017b-76fa-4d8a-9a75-24435603e1a5">概述</h3>
         <p>当我们使用 JavaScript 这门语言来操纵数值的时候，会遇到一些反常的现象，引发这些现象的根本原因是：JavaScript 无法精确的存储某些小数。</p>
         <pre><code class="language-js">/* 反常的现象 */
 0.1 + 0.2 === 0.3; // false
 </code></pre>
-        <h3 id="be86157c-c6e9-485f-96d9-ce0a239f518f">原因</h3>
+        <h3 id="cf8d61c4-7c32-4fd5-a859-a387027d9a3f">原因</h3>
         <p>前文提到，JavaScript 使用二进制来存储数值，在理论上，二进制可以精确的存储所有整数，但是却不能精确的存储所有小数。比如，<code>0.5</code> 的二进制值为 <code>0.1</code>，<code>0.1</code> 的二进制值为 <code>0.000110011001100...</code>，这是一个循环节为 1100 的无限循环小数。</p>
         <p>由于 JavaScript 只能使用有限的位数（11 位）来存储数值的小数部分，所以当它遇到类似于 <code>0.1</code> 这样的小数时，就会对其进行舍入，所以 JavaScript 中的 <code>0.1</code> 并不等于数学上的 <code>0.1</code>。这便是 JavaScript 无法精确存储某些小数的根本原因。</p>
         <p>我们可以通过 <code>String.prototype.toFixed</code> 方法来查看小数的真实值，观察下述代码，你就会明白概述中的反常现象的成因了。</p>
@@ -141,7 +141,7 @@ Number.MAX_VALUE + Math.pow( 2, 970 ); // Infinity
 
 ( 0.1 + 0.2 ).toFixed( 20 ); // 0.30000000000000004441
 </code></pre>
-        <h3 id="4e748c41-eac6-423f-b18e-4641aaf70e64">解决</h3>
+        <h3 id="324447be-a11e-4212-9188-a9a2aa23d374">解决</h3>
         <p>一个好用的解决方案是，如果两个数值的差值的小于某个阈值，那么我们就可以认为这两个数值时相等的，通常我们会取机器精度（<code>Number.EPSILON</code>）来作为这个阈值。下例就是实现：</p>
         <pre><code class="language-js">function numbersCloseEnoughToEqual( value_1, value_2 ) {
     
