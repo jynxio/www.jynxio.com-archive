@@ -124,27 +124,26 @@ function createFibonacciCalculator () {
 
 ## 深拷贝
 
-这是一个深拷贝的简单实现，它可以深拷贝普通对象和数组。
+这是一个深拷贝的简单实现，它可以深拷贝普通对象。
 
 ```js
-function deepCopy ( source ) {
+function deepClone ( source ) {
 
     /* 基线条件 */
-    if ( source === null ) return source;
     if ( typeof source !== "object" ) return source;
 
     /*  */
-    const target = source instanceof Array ? [] : {};
+    const target = {};
     const keys = Object.keys( source );
 
-    keys.forEach( key => target[ key ] = deepCopy( source[ key ] ) );
+    keys.forEach( key => target[ key ] = deepClone( source[ key ] ) );
 
     return target;
 
 }
 ```
 
-> `deepCopy` 只有练习价值，没有实用价值，因为它没有考虑到不可枚举属性、Setter/Getter、自循环引用、函数、Error 等情况。如果你想在生产环境中使用深拷贝，那么请使用 [structuredClone API](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)，这是一个由 HTML5 规范定义的深拷贝方法，浏览器和 Node 运行时都自建了该方法。或许你也可以使用其他第三方库，比如 [immutable.js](https://github.com/immutable-js/immutable-js)。
+> `deepClone` 只有练习价值，没有实用价值，因为它没有考虑到不可枚举属性、Setter/Getter、自循环引用、函数、Error 等情况。如果你想在生产环境中使用深拷贝，那么请使用 [structuredClone API](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)，这是一个由 HTML5 规范定义的深拷贝方法，浏览器和 Node 运行时都自建了该方法。或许你也可以使用其他第三方库，比如 [immutable.js](https://github.com/immutable-js/immutable-js)。
 
 ## 意义
 
