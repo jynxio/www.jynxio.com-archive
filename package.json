@@ -7,7 +7,7 @@
         "html-loader": "^4.2.0",
         "html-webpack-plugin": "^5.5.0",
         "js-beautify": "^1.14.7",
-        "marked": "^4.1.1",
+        "marked": "^4.2.0",
         "mini-css-extract-plugin": "^2.6.1",
         "readline-sync": "^1.4.10",
         "style-loader": "^3.3.1",
@@ -28,6 +28,6 @@
         "create-font-home": "node ./generator/font-home/index.js"
     },
     "dependencies": {
-        "three": "^0.145.0"
+        "three": "^0.146.0"
     }
 }
