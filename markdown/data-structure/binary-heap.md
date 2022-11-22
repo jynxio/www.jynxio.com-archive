@@ -399,6 +399,20 @@ export default function heapSort ( data ) {
 
 ![动态中位数算法的核心思想](/static/image/markdown/data-structure/binary-heap/dynamic-median-core.png)
 
+> 该过程的时间复杂度是 `O(nlogn)`，推理如下：
+>
+> 假设无序数组的长度为 `n`，且已知二叉树的插入操作的时间复杂度为 `O(logn)`，可得整个过程的时间复杂度为 `O(log1 + log2 + ... + logn)`，即 `O(logn!)`，而 `nlogn` 是 `logn!` 的同阶函数，因此整个过程的时间复杂度就是 `O(nlogn)`。
 
+如果我们需要向无序数组插入一个新的数字值，并希望求出新的无序数组的中位数的话，那么我们需要这么做：
+
+1. 将新的数字值插入到最小堆或最大堆中去。
+2. 调整最小堆和最大堆，使它们的节点数的差值不大于 `1`。
+3. 联立最小堆的最小值和最大堆的最大值即可求出新的中位数。
+
+![动态中位数算法的插入思想](/static/image/markdown/data-structure/binary-heap/dynamic-median-insert.png)
+
+> 该过程的时间复杂度是 `O(logn)`，推理如下：
+>
+> 第一步的时间复杂度是 `O(logn)`，第二步可能会引发到一至多次的插入节点和移除堆顶节点操作，因此时间复杂度也是 `O(logn)`，第三步的时间复杂度是 `O(1)`，因此整个过程的时间复杂度就是 `O(long)`。
 
 ## 源码
