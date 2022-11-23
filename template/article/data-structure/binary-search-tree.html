@@ -14,14 +14,14 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=b6d88d7d-03a2-45a5-b6c3-6206b91ce61d>概述</p>
-        <p data-target-id=ae9b42ed-f635-473b-be81-09a9bb7a45c3>效率</p>
-        <p data-target-id=1ec9fb5c-4a57-4996-a28e-2845f008622f>实现</p>
-        <p data-target-id=f5b84edb-f0c8-411b-b318-3033ca5c2f2e>源码</p>
+        <p data-target-id=1a8c93bf-ebb7-488a-8caf-b84d67dd7655>概述</p>
+        <p data-target-id=4ca73c19-2382-4bdc-b776-25634965efda>效率</p>
+        <p data-target-id=f77da162-379b-4972-9ed3-79dbcfb27954>实现</p>
+        <p data-target-id=cdaed685-1d5c-429c-a83e-19bd917c661b>源码</p>
     </aside>
     <article>
         <h1>二叉搜索树</h1>
-        <h2 id="b6d88d7d-03a2-45a5-b6c3-6206b91ce61d">概述</h2>
+        <h2 id="1a8c93bf-ebb7-488a-8caf-b84d67dd7655">概述</h2>
         <p>二叉搜索树是一种特殊的二叉树，其遵循下述规则：</p>
         <ul>
             <li>左侧子节点的值必须比父节点的值小。</li>
@@ -36,7 +36,7 @@
             <p>如果你可以定义一个规则，来比较其他类型的值与其他类型的值之间的大小，那么你也可以用其他类型的值来作为二叉搜索树的节点的值。</p>
             <p>比如使用字符串来作为节点的值，之所以可以这么做，是因为在 JavaScript 中，字符串与字符串之间会通过隐式的转换为 ASCII 码来比较大小。</p>
         </blockquote>
-        <h2 id="ae9b42ed-f635-473b-be81-09a9bb7a45c3">效率</h2>
+        <h2 id="4ca73c19-2382-4bdc-b776-25634965efda">效率</h2>
         <p>在理想情况下（即满二叉搜索树时），二叉搜索树的新增、删除、搜索节点的时间复杂度均为 <code>O(logn)</code>，具体推理可见后文。</p>
         <p>在最坏情况下（即退化成链表时），二叉搜索树的新增、删除、搜索节点的时间复杂度就会变成 <code>O(n)</code>，这是显而易见的。</p>
         <p><img src=/static/image/markdown/data-structure/binary-search-tree/binary-search-tree-time-complexity.png alt=两种情况下的时间复杂度 loading="lazy" decoding="async"></p>
@@ -57,7 +57,7 @@
 
 5.对于一棵满二叉搜索树而言，其在最坏情况下的搜索操作的时间频度就等于h+1，即log2( n + 1 )，因此其搜索操作的时间复杂度就等于O(logn)，而新增与删除操作同理。
 </code></pre>
-        <h2 id="1ec9fb5c-4a57-4996-a28e-2845f008622f">实现</h2>
+        <h2 id="f77da162-379b-4972-9ed3-79dbcfb27954">实现</h2>
         <p>我们将会实现一个名为 <code>BinarySearchTree</code> 的二叉搜索树的类，它将会拥有下述方法：</p>
         <table>
             <thead>
@@ -93,7 +93,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 id="5fbdd3a4-1aed-41ba-a18f-ea8079d9987c">创建节点类</h3>
+        <h3 id="959691fd-a680-4d79-acce-aff01a85d0f2">创建节点类</h3>
         <p>首先，让我们来创建一个节点的类 <code>BinarySearchTreeNode</code>。</p>
         <pre><code class="language-js">class BinarySearchTreeNode {
 
@@ -107,7 +107,7 @@
 
 }
 </code></pre>
-        <h3 id="4e5d8533-c803-4fb5-abbc-7799b3babca2">创建二叉搜索树类</h3>
+        <h3 id="7793b828-6cf1-4fbf-ba2d-78863e55b57e">创建二叉搜索树类</h3>
         <p>接下来，让我们来创建二叉搜索树的类 <code>BinarySearchTree</code>，它目前只有构造器方法，我们会在后续为其继续补充剩余的方法。</p>
         <pre><code class="language-js">class BinarySearchTree {
 
@@ -115,7 +115,7 @@
 
 }
 </code></pre>
-        <h3 id="0342d09e-0ec4-4515-8a93-4b3705a660ef">创建 insert 方法</h3>
+        <h3 id="2de7e5d0-1f93-40c8-b5b1-76c344b87e74">创建 insert 方法</h3>
         <p><code>insert</code> 方法的实现思路如下：</p>
         <ol>
             <li>首先易知，向二叉搜索树插入的新节点必然会成为它的叶节点。</li>
@@ -166,7 +166,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="efe2486f-3e34-4bc5-a694-f01ac4d02fd1">创建 remove 方法</h3>
+        <h3 id="4a455f49-4baf-4fea-93c2-22b4df4c411e">创建 remove 方法</h3>
         <p><code>remove</code> 方法的实现比 <code>insert</code> 方法更难，其实现思路如下：</p>
         <ol>
             <li>如果根节点为空，那么就直接结束该方法。</li>
@@ -237,7 +237,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="d2f9fe0a-cd4a-432e-a1d4-f8eb02c42595">创建 search 方法</h3>
+        <h3 id="96cce596-edba-4f92-9c65-718b23b72b6a">创建 search 方法</h3>
         <p><code>search</code> 方法是最简单的，其实现思路如下：</p>
         <ol>
             <li>如果搜索节点的值小于根节点的值，那么就把根节点的左侧子节点当作一棵新的二叉搜索树，然后在这棵新的二叉搜索树中去搜索这个搜索节点。</li>
@@ -275,7 +275,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="3c7f5811-439d-46a0-b48e-3229860f28a5">创建 inorderTraverse 方法</h3>
+        <h3 id="912fccaa-bd57-4ab7-abb5-9bf173ae31e1">创建 inorderTraverse 方法</h3>
         <p>中序遍历的遍历顺序如下图所示：</p>
         <p><img src=/static/image/markdown/data-structure/binary-search-tree/binary-search-tree-inorder-traverse.png alt=inorderTraverse方法 loading="lazy" decoding="async"></p>
         <blockquote>
@@ -308,7 +308,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="6bea08b3-2b7a-4f67-8eef-232c396a999a">创建 preorderTraverse</h3>
+        <h3 id="a07fd719-dbc4-4e98-a93b-6b1d1be8362d">创建 preorderTraverse</h3>
         <p>先序遍历的遍历顺序如下图所示：</p>
         <p><img src=/static/image/markdown/data-structure/binary-search-tree/binary-search-tree-preorder-traverse.png alt=preorderTraverse方法 loading="lazy" decoding="async"></p>
         <p>只需稍稍修改一下中序遍历，就能实现先序遍历了，其实现代码如下：</p>
@@ -337,7 +337,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="e2bf6fdd-a8a0-41f9-bad5-3fcfbffb2b75">创建 postorderTraverse</h3>
+        <h3 id="4dd9ceed-3361-4a74-8392-c60db83835a8">创建 postorderTraverse</h3>
         <p>后序遍历的遍历顺序如下图所示：</p>
         <p><img src=/static/image/markdown/data-structure/binary-search-tree/binary-search-tree-postorder-traverse.png alt=postorderTraverse方法 loading="lazy" decoding="async"></p>
         <p>同样的，只需稍稍修改一下中序遍历，就能实现后序遍历了，其实现代码如下：</p>
@@ -366,7 +366,7 @@ class BinarySearchTree {
 
 }
 </code></pre>
-        <h2 id="f5b84edb-f0c8-411b-b318-3033ca5c2f2e">源码</h2>
+        <h2 id="cdaed685-1d5c-429c-a83e-19bd917c661b">源码</h2>
         <p>你可以通过该 <a href="https://github.com/jynxio/leetcode-everyday">库</a> 的 <a href="https://github.com/jynxio/leetcode-everyday/blob/main/Tree.js">Tree.js</a> 文件，来获取 <code>BinarySearchTree</code> 的完整源码。</p>
     </article>
 </body>

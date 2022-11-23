@@ -14,19 +14,19 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=ac334906-a23e-4c1c-8dc4-2b30894816b0>概述</p>
-        <p data-target-id=b6b99d61-8597-4a0f-a1f7-55a525b5ed48>实现</p>
-        <p data-target-id=4acfa822-1926-480b-9a6c-35507814a6a1>Map 和 WeakMap</p>
+        <p data-target-id=5d195f3e-a479-4601-a7dc-94abc4868aca>概述</p>
+        <p data-target-id=b55d8512-367a-45ca-8c42-22e9447c6d21>实现</p>
+        <p data-target-id=292f4f2b-293a-4dc2-8b6a-a0c12664e36a>Map 和 WeakMap</p>
     </aside>
     <article>
         <h1>字典</h1>
-        <h2 id="ac334906-a23e-4c1c-8dc4-2b30894816b0">概述</h2>
+        <h2 id="5d195f3e-a479-4601-a7dc-94abc4868aca">概述</h2>
         <p>字典是指用键值对来存储数据的数据结构，它又称为映射、符号表、关联数组，JavaScript 的普通对象 <code>{}</code> 就是字典。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>字典有多种实现方式，比如可以使用树、二维数组、散列函数来实现，其中使用散列函数来实现的字典被称为散列表。</p>
         </blockquote>
-        <h2 id="b6b99d61-8597-4a0f-a1f7-55a525b5ed48">实现</h2>
+        <h2 id="b55d8512-367a-45ca-8c42-22e9447c6d21">实现</h2>
         <p>我们实现的字典将会拥有以下方法和属性。</p>
         <table>
             <thead>
@@ -199,7 +199,7 @@
 
 }
 </code></pre>
-        <h2 id="4acfa822-1926-480b-9a6c-35507814a6a1">Map 和 WeakMap</h2>
+        <h2 id="292f4f2b-293a-4dc2-8b6a-a0c12664e36a">Map 和 WeakMap</h2>
         <p><code>Map</code> 是 ECMAScript 2015 的 API，它是比普通对象更加强大的字典，比如它可以使用任意数据类型的值来作为键、可以按照键值对的插入顺序来迭代、拥有更高的增删性能等，你可以通过阅读 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map">这篇文章</a> 来进一步了解这个 API。</p>
         <p>另外，<code>WeakMap</code> 是一个类似于 <code>Map</code> 的 API，它同样源自于 ECMAScript 2015，它的特别之处在于只能使用复杂数据类型的值来作为键，并且它的键都是 “弱引用” 的，你可以通过阅读 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">这篇文章</a> 来进一步了解这个 API。</p>
     </article>
