@@ -285,7 +285,7 @@ class BaseHeap {
 `MinHeap` 的实现代码如下所示：
 
 ```javascript
-export class MinHeap extends BaseHeap {
+class MinHeap extends BaseHeap {
 
     /**
      * 最小堆类。
@@ -315,7 +315,7 @@ export class MinHeap extends BaseHeap {
 `MaxHeap` 的实现代码如下所示：
 
 ```javascript
-export class MaxHeap extends BaseHeap {
+class MaxHeap extends BaseHeap {
 
     /**
      * 最大堆类。
@@ -362,7 +362,7 @@ export class MaxHeap extends BaseHeap {
  * @example
  * f( [ 3, 1, 2 ] ); // return [ [ 1, 2, 3 ], [ 3, 2 ,1 ] ]
  */
-export default function heapSort ( data ) {
+function heapSort ( data ) {
 
     /*  */
     const min_heap = new MinHeap;
@@ -395,13 +395,31 @@ export default function heapSort ( data ) {
 
 该算法可用于计算动态的无序数组的中位数，该算法的冷启动效率较低，热更新效率较高。具体来说，就是当你第一次获取一个无序数组的中位数时，该操作的时间复杂度为 `O(nlogn)`，而当你向该无序数组新增一个数字值，并再次获取该无序数组的中位数时，该操作的时间复杂度为 `O(logn)`。
 
-其核心思想是将无序数组分解成如下所示的一个最小堆和一个最大堆，然后只需要联立最小堆的最小值和最大堆的最大值即可求解得到中位数。
+### 思想
 
-![动态中位数算法的核心思想](/static/image/markdown/data-structure/binary-heap/dynamic-median-core.png)
+该算法的思想是：
 
-> 该过程的时间复杂度是 `O(nlogn)`，推理如下：
->
-> 假设无序数组的长度为 `n`，且已知二叉树的插入操作的时间复杂度为 `O(logn)`，可得整个过程的时间复杂度为 `O(log1 + log2 + ... + logn)`，即 `O(logn!)`，而 `nlogn` 是 `logn!` 的同阶函数，因此整个过程的时间复杂度就是 `O(nlogn)`。
+1. 将无序数组拆分成一个最小堆和一个最大堆。
+2. 最小堆的最小值必须不小于最大堆的最大值。
+3. 联立最小堆的最小值和最大堆的最大值即可求出中位数。
+
+![动态中位数算法的思想](/static/image/markdown/data-structure/binary-heap/dynamic-median-idea.png)
+
+### 实现
+
+如何构造出满足要求的最小堆和最大堆呢？具体实现步骤如下：
+
+1. 使用无序数组的前半部分数字值来创建一个最小堆。
+2. 遍历无序数组的后半部分数字值：
+   1. 如果某个数字值大于最小堆的最小值，那么就将这个数字值插入到最小堆中去，然后弹出最小堆的堆顶节点。
+   2. 如果某个数字值小于或等于最小堆的最小值，那么就跳过这个数字值。
+3. 使用无序数组的剩余数字值（指未插入到最小堆中的数字值）来创建一个最小堆。
+
+![动态中位数算法的实现](/static/image/markdown/data-structure/binary-heap/dynamic-median-implementation.png)
+
+> 该过程的时间复杂度为 `O(nlong)`，推理如下：已知二叉树的插入操作的时间复杂度是 `O(logn)`，假设无序数组的长度为 `n`，那么第一步的时间复杂度就是 `O(log1 + log2 + ... + logn/2)`，即 `O(logn!)`，由于 `nlong` 是 `logn!` 的同阶函数，所以该步骤的时间复杂度可转换为 `O(nlogn)`。同理，第二步和第三步的时间复杂度都是 `O(nlogn)`，因此整个过程的时间复杂度就是 `O(nlogn)`。
+
+### 插入
 
 如果我们需要向无序数组插入一个新的数字值，并希望求出新的无序数组的中位数的话，那么我们需要这么做：
 
@@ -409,10 +427,165 @@ export default function heapSort ( data ) {
 2. 调整最小堆和最大堆，使它们的节点数的差值不大于 `1`。
 3. 联立最小堆的最小值和最大堆的最大值即可求出新的中位数。
 
-![动态中位数算法的插入思想](/static/image/markdown/data-structure/binary-heap/dynamic-median-insert.png)
+![动态中位数算法的插入](/static/image/markdown/data-structure/binary-heap/dynamic-median-insert.png)
 
 > 该过程的时间复杂度是 `O(logn)`，推理如下：
 >
-> 第一步的时间复杂度是 `O(logn)`，第二步可能会引发到一至多次的插入节点和移除堆顶节点操作，因此时间复杂度也是 `O(logn)`，第三步的时间复杂度是 `O(1)`，因此整个过程的时间复杂度就是 `O(long)`。
+> 第一步的时间复杂度是 `O(logn)`。第二步可能会引发到一至多次的插入节点和移除堆顶节点操作，其时间复杂度也是 `O(logn)`。第三步的时间复杂度是 `O(1)`。最后，可得整个过程的时间复杂度就是 `O(long)`。
+
+### 编码
+
+该算法的实现代码如下：
+
+```javascript
+class DynamicMedian {
+
+    #data;
+    #min_heap;
+    #max_heap;
+
+    /**
+     * 动态中位数的类，用于计算动态无序数组的中位数，该算法不会改变原始数据。
+     * @example
+     * const f = new F();
+     * f.setData( [ 3, 1, 5 ] ); // retutn f   - O(nlogn)
+     * f.getMedian();            // return 3   - O(1)
+     * f.insertNumber( 4 );      // return f   - O(logn)
+     * f.getMedian();            // return 3.5 - O(1)
+     */
+    constructor () {}
+
+    /**
+     * 设置无序数组。
+     * @param { number[] } data - 无序数组，即一组无序的数字值，比如[3, 1, 2]。
+     * @returns { Object } - 实例本身。
+     */
+    setData ( data ) {
+
+        if ( data.length === 0 ) throw new Error( "计算失败：因为入参不合法。" );
+
+        this.#data = [ ... data ];
+        this.#min_heap = new MinHeap();
+        this.#max_heap = new MaxHeap();
+
+        const data_count = this.#data.length;
+        const min_heap_count = Math.ceil( data_count / 2 );
+        const max_heap_count = data_count - min_heap_count;
+
+        /* 初始化最小堆 */
+        for ( let i = 0; i < min_heap_count; i ++ ) this.#min_heap.insert( this.#data[ i ] );
+
+        for ( let i = min_heap_count; i < data_count; i ++ ) {
+
+            const minimum = this.#min_heap.getMinimum();
+
+            if ( minimum >= this.#data[ i ] ) continue;
+
+            this.#min_heap.shift();
+            this.#min_heap.insert( this.#data[ i ] );
+
+        }
+
+        /* 初始化最大堆 */
+        for ( let i = 0; i < max_heap_count; i ++ ) this.#max_heap.insert( this.#data[ i ] );
+
+        for ( let i = max_heap_count; i < data_count; i ++ ) {
+
+            const maximum = this.#max_heap.getMaximum();
+
+            if ( maximum <= this.#data[ i ] ) continue;
+
+            this.#max_heap.shift();
+            this.#max_heap.insert( this.#data[ i ] );
+
+        }
+
+        return this;
+
+    }
+
+    /**
+     * 获取无序数组。
+     * @returns { number[] } - 无序数组。
+     */
+    getData () {
+
+        if ( ! this.#data ) throw new Error( "执行失败：因为没有设置无序数组。" );
+
+        return this.#data;
+
+    }
+
+    /**
+     * 获取无序数组的中位数。
+     * @returns { number } - 无序数组的中位数。
+     */
+    getMedian () {
+
+        if ( ! this.#data ) throw new Error( "执行失败：因为没有设置无序数组。" );
+
+        /* 如果无序数组有奇数个数字值 */
+        if ( this.#data.length % 2 === 1 ) return this.#min_heap.getMinimum();
+
+        /* 如果无序数字有偶数个数字值 */
+        return ( this.#min_heap.getMinimum() + this.#max_heap.getMaximum() ) / 2;
+
+    }
+
+    /**
+     * 插入一个数字值。
+     * @param { number } number - 一个数字值。
+     * @returns { Object } - 实例本身。
+     */
+    insertNumber ( number ) {
+
+        if ( ! this.#data ) throw new Error( "执行失败：因为没有设置无序数组。" );
+
+        this.#data.push( number );
+
+        /* 如果无序数组有奇数个数字值 */
+        if ( this.#data.length % 2 === 1 ) {
+
+            if ( number >= this.#max_heap.getMaximum() ) {
+
+                this.#min_heap.insert( number );
+
+                return this;
+
+            }
+
+            this.#max_heap.insert( number );
+            this.#min_heap.insert( this.#max_heap.getMaximum() );
+            this.#max_heap.shift();
+
+            return this;
+
+        }
+
+        /* 如果无序数字有偶数个数字值 */
+        if ( number <= this.#min_heap.getMinimum() ) {
+
+            this.#max_heap.insert( number );
+
+            return this;
+
+        }
+
+        this.#min_heap.insert( number );
+        this.#max_heap.insert( this.#min_heap.getMinimum() );
+        this.#min_heap.shift();
+
+        return this;
+
+    }
+
+}
+```
 
 ## 源码
+
+你可以从 [这里](https://github.com/jynxio/data-structure-and-algorithm/blob/main/data-structure/Heap.js) 获取得到 `MinHeap` 和 `MaxHeap` 的完整源码。
+
+你可以从 [这里](https://github.com/jynxio/data-structure-and-algorithm/blob/main/algorithm/heapSort.js) 获取得到 `heapSort` 的完整源码。
+
+你可以从 [这里](https://github.com/jynxio/data-structure-and-algorithm/blob/main/algorithm/DynamicMedian.js) 获取得到 `DynamicMedian` 的完整源码。
