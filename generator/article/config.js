@@ -52,6 +52,7 @@ const createDataStructureInfo = _ => {
         { name: "tree", alias: "树" },
         { name: "binary-search-tree", alias: "二叉搜索树" },
         { name: "avl-tree", alias: "AVL 树" },
+        { name: "binary-heap", alias: "二叉堆" },
     ];
     const options = {
         name,
