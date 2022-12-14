@@ -35,20 +35,15 @@ CSS 的术语：
 
 伪类允许我们根据元素的状态来应用 CSS 的 rule，你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) 来查看所有的伪类。
 
-`:focus`：鼠标点击一个元素，使用 table 键切换到一个元素上时，这个元素都会进入到 focused 状态，当元素进入到 focused 状态后，键盘可以直接操控这个元素，比如输入表单，或者回车键打开连接。
+### focus
 
-> 只有表单元素、按钮元素、超链接元素才可以被选中。
->
-> `click` 可以选中一个元素，`tab` 可以选中下一个元素，`shift + tab` 可以选中上一个元素。
->
-> 但是对于 MacOS：
->
-> 1.在 Safari 上，`click` 不能选中一个元素（这是一个众所周知的 bug）。
->
-> 2.在某些版本的 Firefox 上，`tab` 只能选中表单元素和按钮元素，无法选中超链接元素。
->
-> 3.对于 Safari，`tab` 只能选中表单元素，`option + tab` 和 `option + shift + tab` 可以选中下一个和上一个按钮元素。
->
-> 你可以从 [这里](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/button) 找到更多详细信息，你也可以通过设置 MacOS 的系统设置，来让 Safari 和 Firefox 的 `tab` 功能变得正常，请看 [这里](https://www.scottohara.me/blog/2014/10/03/link-tabbing-firefox-osx.html)。
+`:focus` 表示获得焦点的元素，我们可以通过光标点击、触摸屏触摸、键盘的 `tab` 键来使元素进入到 focused 状态。并且当元素进入到了 focused 状态之后，键盘可以直接操控这个元素，比如可以输入表单（对于表单元素）、打开链接（对于超链接元素）、触发按钮（对于按钮元素）。
 
-如果你想更加深入的学习可访问性，那么请看 [这里](https://a11y.coffee/)。
+另外，只有表单、按钮、超链接元素才可以进入 focused 状态。
+
+- 对于大多数操作系统的浏览器而言，光标点击或触摸屏触摸可以聚焦一个元素，`tab` 可以聚焦下一个元素，`shift+tab` 可以聚焦上一个元素。
+- 对于 MacOS 的 Safari 而言，光标点击或触摸屏触摸无法聚焦一个元素（这是一个众所周知的 bug！），`tab` 和 `shift+tab` 只能聚焦表单元素，`option+tab` 和 `option+shift+tab`只能聚焦上一个按钮元素和下一个按钮元素。
+- 对于 MacOS 的某些版本的 Firefox 而言，`tab` 和 `shift+tab` 只能聚焦按钮元素和表单元素。
+
+> 如果你想要知道更多的相关信息，那么请查看 [这里](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/button)。如果你想让 Safari 和 Firefox 变得正常，那么你就需要更改 MacOS 的系统设置，请从 [这里](https://www.scottohara.me/blog/2014/10/03/link-tabbing-firefox-osx.html) 查看教程。如果你想更加深入的学习可访问性，那么请查看 [这里](https://a11y.coffee/)。
+
