@@ -47,3 +47,17 @@ CSS 的术语：
 
 > 如果你想要知道更多的相关信息，那么请查看 [这里](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/button)。如果你想让 Safari 和 Firefox 变得正常，那么你就需要更改 MacOS 的系统设置，请从 [这里](https://www.scottohara.me/blog/2014/10/03/link-tabbing-firefox-osx.html) 查看教程。如果你想更加深入的学习可访问性，那么请查看 [这里](https://a11y.coffee/)。
 
+### checked
+
+`:checked` 仅对处于勾选状态下的 `radio` 和 `checkbox` 类型的 `input` 元素有效，如果没有处于勾选状态，那么 `:checked` 就不会生效。
+
+```html
+<input type="radio" />
+<input type="checkbox" />
+```
+
+### first-child、last-child、first-of-type、last-of-type
+
+`p:first-child`：仅当 `p` 是其父元素内的第一个子元素时，它才会生效。
+
+`p:first-of-type`：仅当 `p` 是其父元素内的第一个 `p` 型子元素时，它才会生效。
