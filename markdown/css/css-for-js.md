@@ -33,7 +33,7 @@ CSS 的术语：
 
 ## Pseudo-classes
 
-伪类允许我们根据元素的状态来应用 CSS 的 rule，你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) 来查看所有的伪类。
+伪类是添加到选择器的关键字，它是选择器的附加条件，这个附加条件用于指定目标元素的状态，你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) 查看到所有的伪类。
 
 ### focus
 
@@ -61,3 +61,6 @@ CSS 的术语：
 `p:first-child`：仅当 `p` 是其父元素内的第一个子元素时，它才会生效。
 
 `p:first-of-type`：仅当 `p` 是其父元素内的第一个 `p` 型子元素时，它才会生效。
+
+## Pseudo-elements
+
