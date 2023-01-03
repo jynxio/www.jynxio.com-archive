@@ -200,6 +200,7 @@ Chrome 官方的博客并没有说明 GPU 是如何组合这些位图来生成�
 - [Inside look at modern web browser (part 3)](https://developer.chrome.com/blog/inside-browser-part3/)
 - [Inside look at modern web browser (part 4)](https://developer.chrome.com/blog/inside-browser-part4/)
 - [Multi-process Architecture](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
+- [Populating the page: how browsers work - MDN](https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work)
 
 Chromium 的更新很快，本文无法代表最新的 Chromium，如果你想了解最新的 Chromium 的内容，可以尝试从阅读下述资料开始。
 
