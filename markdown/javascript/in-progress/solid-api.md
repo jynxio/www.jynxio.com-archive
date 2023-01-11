@@ -20,6 +20,10 @@ function Counter () {
 
 当 `signal` 发生了改变之后，solid 就会通过跟踪 `getter` 来决定应该更新哪些组件，具体来说，如果某个组件调用过了 `getter`，那么 solid 就会更新这个组件。值得强调的是，solid 不会通过跟踪 `setter` 来决定应该更新哪些组件。
 
+## createMemo
+
+
+
 ## Show
 
 ```react
