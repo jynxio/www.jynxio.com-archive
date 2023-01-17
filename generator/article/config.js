@@ -18,7 +18,7 @@ const createJavascriptInfo = _ => {
         { name: "v8-jit", alias: "V8 JIT" },
         { name: "v8-object", alias: "V8 Object" },
         { name: "promisesaplus", alias: "Promises/A+" },
-        { name: "react-api-manual", alias: "React 手册" },
+        { name: "react-api-manual", alias: "React API" },
     ];
     const options = {
         name,
@@ -94,52 +94,6 @@ const createBrowserInfo = _ => {
 
 };
 
-const createBabelInfo = _ => {
-
-    const name = "babel";
-    const alias = "Babel";
-    const md_path = BASE_MD_PATH + "/" + name;
-    const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH + "/" + name;
-    const children = [
-        { name: "babel", alias: "Babel7" },
-    ];
-    const options = {
-        name,
-        alias,
-        children,
-        mdPath: md_path,
-        htmlPath: html_path,
-        buildPath: build_path,
-    };
-
-    return createInfo( options );
-
-};
-
-const createWebpackInfo = _ => {
-
-    const name = "webpack";
-    const alias = "Webpack";
-    const md_path = BASE_MD_PATH + "/" + name;
-    const html_path = BASE_HTML_PATH + "/" + name;
-    const build_path = BASE_BUILD_PATH + "/" + name;
-    const children = [
-        { name: "webpack", alias: "Webpack5" },
-    ];
-    const options = {
-        name,
-        alias,
-        children,
-        mdPath: md_path,
-        htmlPath: html_path,
-        buildPath: build_path,
-    };
-
-    return createInfo( options );
-
-};
-
 const createCssInfo = _ => {
 
     const name = "css";
@@ -174,6 +128,8 @@ const createOtherInfo = _ => {
         { name: "semantic-versioning", alias: "语义化版本控制" },
         { name: "npm-base", alias: "npm 基础" },
         { name: "npm-command", alias: "npm 命令" },
+        { name: "babel-7", alias: "Babel 7" },
+        { name: "webpack-5", alias: "Webpack 5" },
     ];
     const options = {
         name,
@@ -194,8 +150,6 @@ const createAllInfo = _ => {
         createJavascriptInfo(),
         createDataStructureInfo(),
         createBrowserInfo(),
-        createBabelInfo(),
-        createWebpackInfo(),
         createCssInfo(),
         createOtherInfo(),
     ] );
