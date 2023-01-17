@@ -1,6 +1,6 @@
 # 运算符
 
-## 汇总表
+## 汇总
 
 参见 [MDN-运算符优先级-汇总表](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#%E6%B1%87%E6%80%BB%E8%A1%A8)。
 
