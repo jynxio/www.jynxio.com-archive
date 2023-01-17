@@ -77,6 +77,8 @@ typora-root-url: ..\..
 
 计算页面的布局是一件非常复杂的工作，你可以通过 [这个视频](https://www.youtube.com/watch?v=Y5Xa4H2wtVA) 来了解布局的细节过程。
 
+> LayoutNG 是 Chromium 的下一代布局引擎，它从 Chrome 77 版本开始引入，随后被不断的更新与完善，同时渐进式的替换旧的布局引擎，最后于 Chrome 108 版本宣告 [几乎完成](https://chromestatus.com/feature/5108105013100544)。
+
 ## 第 4 步：创建绘图指令
 
 除了 DOM、样式信息和布局信息外，渲染进程还需要知道绘图的指令才能绘制页面，绘图指令用来告诉渲染进程应该先画什么、再画什么、最后画什么，它类似于：
@@ -94,7 +96,7 @@ typora-root-url: ..\..
 
 ![创建绘制指令](/static/image/markdown/browser/page-rendering/generate-paint-record.png)
 
-## 插播：如何绘制页面
+## 插叙：页面是如何绘制的
 
 现在，渲染进程已经知道了页面的结构、样式信息、几何信息还有绘图指令，它已经能够绘制页面了，不过它到底是怎样绘制的呢？
 
