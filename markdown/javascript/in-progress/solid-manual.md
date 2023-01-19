@@ -22,7 +22,9 @@ function Counter () {
 
 ## createMemo
 
+## createEffect & createRenderEffect
 
+它们有时候 effect 函数会批处理一系列的 signal 更新，有时候则不会批处理...到底是怎么回事呢？
 
 ## Show
 
