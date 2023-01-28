@@ -14,42 +14,42 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=7780118a-2aed-4137-a3f8-6af01864c1bd>布局类型</p>
-        <p data-target-id=e1cea565-f5ce-431c-83ed-30e82b13e8d8>媒体查询</p>
-        <p data-target-id=541a26d4-4437-4a58-b9f2-e52d5fc6bd92>国际化</p>
-        <p data-target-id=4086c868-1b34-4559-a507-c93789b446c9>宏布局</p>
-        <p data-target-id=d2e0c3f5-d210-485e-87cb-81c24ca85049>微布局</p>
-        <p data-target-id=04b7b2b8-17e6-4f19-baad-cb1f9ff07fd8>文字</p>
-        <p data-target-id=84858e0e-06d7-4d0c-963e-3255a08ca04e>图像</p>
-        <p data-target-id=3226f4ef-7e0c-4e9a-9e95-6e20caa0e7fa>主题</p>
-        <p data-target-id=767fd662-b2f9-48dc-8397-f6e1b6b7af17>色觉缺陷</p>
-        <p data-target-id=36eede8a-d22e-476c-bd97-ff4b2ae55038>虚拟键盘</p>
-        <p data-target-id=f7a98e73-2eba-40b0-b46f-52be5e09d684>参考</p>
+        <p data-target-id=8f64a07d-59bb-4c1f-9c90-e6729a99bce9>布局类型</p>
+        <p data-target-id=db926524-cc7d-4038-b150-ebb70498564c>媒体查询</p>
+        <p data-target-id=82ae6a85-a6b6-4d6d-a273-1188fc265c51>国际化</p>
+        <p data-target-id=7ac81c4a-dbdb-41fa-bfe8-b43c911f6097>宏布局</p>
+        <p data-target-id=8350f1f1-84c2-4da2-a6e9-e13f51e490c4>微布局</p>
+        <p data-target-id=5167e81f-9ff8-4be8-9959-b2bab0b11a8b>文字</p>
+        <p data-target-id=a2212a20-5cdc-4cc3-be6c-7edaa3b5f700>图像</p>
+        <p data-target-id=1d8a75b3-350c-4098-8ee1-c16f7967ffe9>主题</p>
+        <p data-target-id=ac35a722-c9cc-4501-b3b8-6e50412eb5fb>色觉缺陷</p>
+        <p data-target-id=a6816e43-b55d-4764-b6e4-b0d7a6bef7a1>虚拟键盘</p>
+        <p data-target-id=8065063b-4ca4-4838-8ad4-4478f6d24b44>参考</p>
     </aside>
     <article>
         <h1>响应式设计</h1>
-        <h2 id="7780118a-2aed-4137-a3f8-6af01864c1bd">布局类型</h2>
-        <h3 id="50fb2ece-872f-457a-b0e8-73c722718661">固定宽度布局</h3>
+        <h2 id="8f64a07d-59bb-4c1f-9c90-e6729a99bce9">布局类型</h2>
+        <h3 id="3d031877-a8c4-49d6-a645-7bd9d82f52fd">固定宽度布局</h3>
         <p>固定宽度布局是指使用固定的宽度来设计网页的布局。固定宽度布局的通用性很差，因为现代设备的尺寸的多样性太丰富了。</p>
         <p>比如这就是一个固定宽度布局：</p>
         <pre><code class="language-css">body {
     width: 1980ox;
 }
 </code></pre>
-        <h3 id="440665f8-1a40-440b-ba20-7f11bf0f460a">流体布局</h3>
+        <h3 id="cd6b4194-229b-4ffa-a9dc-34b8756ff8f3">流体布局</h3>
         <p>流体布局又称为液体布局、灵活布局，它是指使用列宽的百分比来设计网页的布局。流体布局在极端尺寸下的表现并不好，比如在宽屏上会显得拉伸，在窄屏上会显得压扁。</p>
         <p>比如这就是一个流体布局：</p>
         <pre><code class="language-css">body {
     width: 50%;
 }
 </code></pre>
-        <h3 id="2579db64-330c-46ed-9891-d7963e71b179">自适应布局</h3>
+        <h3 id="93ba2583-aafd-4850-afb3-3bc16dc2c700">自适应布局</h3>
         <p>自适应布局是固定宽度布局和 CSS 媒体查询的混合体，自适应布局会拥有多套固定宽度布局方案，然后根据 CSS 媒体查询的结果，来为不同尺寸的设备应用不同的方案。自适应布局还不够完美，因为现代设备的尺寸的多样性太丰富了，而自适应布局的方案数是有限的。</p>
-        <h3 id="51c9356f-2ad8-4da7-a2f7-7b9da0784124">响应式布局</h3>
+        <h3 id="669e8021-719b-4fe8-a122-fbe9e11d7dfe">响应式布局</h3>
         <p>响应式布局是流体布局和 CSS 媒体查询的混合体。</p>
-        <h2 id="e1cea565-f5ce-431c-83ed-30e82b13e8d8">媒体查询</h2>
+        <h2 id="db926524-cc7d-4038-b150-ebb70498564c">媒体查询</h2>
         <p>媒体查询用于帮助我们将样式应用至特定的设备。</p>
-        <h3 id="53333a63-e028-4918-8050-34cdbd3ed890">查询媒体类型</h3>
+        <h3 id="6153adbb-1e55-43a6-8c93-484eb146c5cb">查询媒体类型</h3>
         <p>我们可以通过指定媒体的类型，来为特定类型的媒体应用特定的样式，我们有 2 种编写方法：</p>
         <ol>
             <li>
@@ -78,7 +78,7 @@
             <p><strong>Note</strong></p>
             <p>如果我们没有为 CSS 块和 <code>&lt;link&gt;</code> 标签指定任何媒体类型，那么它们就会使用默认的媒体类型，这个默认的媒体类型是 <code>all</code>。</p>
         </blockquote>
-        <h3 id="9644d73d-3c80-4282-a01c-11cec9b17d1e">查询条件</h3>
+        <h3 id="cf03a7c0-28dd-4213-b263-674b5475a88d">查询条件</h3>
         <p>我们可以通过指定特殊的条件，来为满足特殊条件的所有类型的媒体应用特定的样式。比如，我们可以根据浏览器窗口是处于横向模式（视口宽度大于视口高度）还是纵向模式（视口高度大于视口宽度），来为其应用不同的样式。</p>
         <p>我们有 2 种编写方法：</p>
         <ol>
@@ -99,7 +99,7 @@
 </code></pre>
             </li>
         </ol>
-        <h3 id="d99b5d85-28ed-4fc0-b72f-fb96c7b778af">响应尺寸</h3>
+        <h3 id="ce9819ec-567d-4cf7-b3c5-84e1ed098dec">响应尺寸</h3>
         <p>对于响应式布局，最有用的查询条件之一就是浏览器视口的尺寸，比如：</p>
         <pre><code class="language-css">@media ( min-width: 100vh ) {
     /* 该样式仅在视口宽度大于或等于视口高度时生效 */
@@ -108,7 +108,7 @@
     /* 该样式仅在视口宽度小于或等于视口高度时生效 */
 }
 </code></pre>
-        <h3 id="fc6c0dec-7936-48da-8ce4-27cf5a72f6d8">组合使用</h3>
+        <h3 id="eb8d56ea-bd22-40b5-92a6-5171bd34b27e">组合使用</h3>
         <p>我们可以把查询媒体类型和查询条件结合在一起来使用，比如：</p>
         <pre><code class="language-css">@media all and ( orientation: landscape ) {
    /* 横向模式的样式 */
@@ -125,13 +125,13 @@
   /* 该样式仅在视口宽度大于一倍视口高度、小于两倍视口高度时生效 */
 }
 </code></pre>
-        <h3 id="a36647e2-df51-4ba2-8762-0831011ca8b6">媒体特性手册</h3>
+        <h3 id="dd750198-d53b-4030-a8cd-1af64072642c">媒体特性手册</h3>
         <p>请参考这两篇文章，但它们都没有包含所有的媒体特性。</p>
         <ul>
             <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries">https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries</a></li>
             <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media">https://developer.mozilla.org/en-US/docs/Web/CSS/@media</a></li>
         </ul>
-        <h2 id="541a26d4-4437-4a58-b9f2-e52d5fc6bd92">国际化</h2>
+        <h2 id="82ae6a85-a6b6-4d6d-a273-1188fc265c51">国际化</h2>
         <p>汉语、英语的阅读习惯是从左到右，而阿拉伯语、希伯来语的阅读习惯是从右到左，为了使你的站点可以在不同阅读习惯的语种国家中正常的显示，请使用逻辑属性来替代方向属性，比如：</p>
         <pre><code class="language-css">/* 禁用 */
 label {
@@ -149,15 +149,15 @@ label {
             <p><strong>Note</strong></p>
             <p>请注意，目前媒体查询中的查询条件还不支持逻辑属性，即 <code>@media ( min-inline-size: 100vh ) {}</code> 是不起作用的。</p>
         </blockquote>
-        <h2 id="4086c868-1b34-4559-a507-c93789b446c9">宏布局</h2>
+        <h2 id="7ac81c4a-dbdb-41fa-bfe8-b43c911f6097">宏布局</h2>
         <p>宏布局是指可以响应多种不同尺寸的媒体的布局。</p>
         <p>详见 <a href="https://web.dev/learn/design/macro-layouts/">Learn Responsive Design - Macro layouts</a>。</p>
-        <h2 id="d2e0c3f5-d210-485e-87cb-81c24ca85049">微布局</h2>
+        <h2 id="8350f1f1-84c2-4da2-a6e9-e13f51e490c4">微布局</h2>
         <p>微布局是指组件层面的布局，即为组件设计样式，而非为页面设计样式。另外，Chrome 推出了一个 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries">容器查询</a> 特性，这是一个和媒体查询平级的有趣特性，不过目前它仅支持最新的 Chromium (PC) 和 Safari (PC &amp; iOS)。</p>
         <p>另外，关于微布局，有一个“容器查询”新特性</p>
         <p>详见 <a href="https://web.dev/learn/design/micro-layouts/">Learn Responsive Design - Micro layouts</a>。</p>
-        <h2 id="04b7b2b8-17e6-4f19-baad-cb1f9ff07fd8">文字</h2>
-        <h3 id="55ca416e-ea8e-4e92-9174-e40a3fdeec57">固定字号</h3>
+        <h2 id="5167e81f-9ff8-4be8-9959-b2bab0b11a8b">文字</h2>
+        <h3 id="e4a02863-4f1c-42d5-bafd-4c6f8940b808">固定字号</h3>
         <p>如果网页被显示在小屏幕上，那么我们就应该使用更小的字号，如果网页被显示在大屏幕上，那么我们就应该使用更大的字号。之所以要这么做，是因为用户的眼睛往往距离小屏幕更近，距离大屏幕更远，想象一下我们使用智能手机和投影仪时的场景。</p>
         <p>下例是一个固定字号的例子：</p>
         <pre><code class="language-css">@media ( min-width: 30em ) {
@@ -178,26 +178,26 @@ label {
 </code></pre>
         <p>不过，固定字号方案有一个明显的缺陷，那就是字号会在断点（查询条件变为真的点）处发生突变。比如在上例中，当页面宽度为 <code>39em</code> 时，字号大小是 <code>1.25</code> 倍，当页面宽度稍微增长到 <code>40em</code> 时，字号就会猛增至 <code>1.5</code> 倍。</p>
         <p>为了解决固定字号方案的这个缺陷，于是便有了弹性字号方案。</p>
-        <h3 id="e9e8744f-ab73-4736-a298-30b7388edd2a">弹性字号</h3>
+        <h3 id="253a23a0-05bf-4ca5-804e-ae90eab4f6e2">弹性字号</h3>
         <p>弹性字号方案可以解决固定字号方案的缺陷，它的做法就是让字号与页宽挂钩，请看下面的例子：</p>
         <pre><code class="language-css">html {
     font-size: clamp( 1rem, 0.75rem + 1vw, 2rem );
 }
 </code></pre>
         <p>上例中，字号会随着页宽的变化而变化，这可以让字号的过渡显得更加自然，并且我们限制了字号的极限大小，这样就不用担心字号在窄屏幕上变得太小，在宽屏幕上变得太大了。如果你不熟悉 <code>clamp</code>，那么请见 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/clamp">MDN - clamp</a>。</p>
-        <h4 id="1bd7d609-b642-47a7-9366-df5894c99658">陷阱 1</h4>
+        <h4 id="d8276b7b-1fd8-4a44-a5ed-735e7046c6b5">陷阱 1</h4>
         <p>请不要像下面这样编写弹性字号方案，因为这会导致无论用户如何缩放网页，网页字体的大小都不会变化。</p>
         <pre><code class="language-css">html {
     font-size: clamp( 1rem, 1vw, 2rem );
 }
 </code></pre>
-        <h4 id="0733f58c-f966-4ca1-af09-35ebf13f8417">陷阱 2</h4>
+        <h4 id="eba9984b-b6da-428b-b490-cab07cc4bac5">陷阱 2</h4>
         <p>请不要像下面这样编写弹性字号方案，因为这会导致字号在窄屏幕下变得太小，在宽屏幕下变得太大。</p>
         <pre><code class="language-css">html {
     font-size: clacl( 0.75rem + 1vw );
 }
 </code></pre>
-        <h3 id="d1726073-52c5-4d28-a924-5531150d53cb">断行 &amp; 分段</h3>
+        <h3 id="65328ce5-31a5-4445-8183-0e0e1f01a2c6">断行 &amp; 分段</h3>
         <p>如果文本行的行长太长了，那么就会破坏阅读的体验，因此我们需要在合适的位置断行。如果页面宽度有充分的余量，那么我们还可以进行分列。</p>
         <pre><code class="language-css">/* 分段 */
 @media { min-width: 110ch } {
@@ -218,11 +218,11 @@ article {
             <p><strong>Note</strong></p>
             <p>其原文为：Anything from 45 to 75 characters is widely regarded as a satisfactory length of line for a single-column page set in a serifed text face in a text size. The 66-character line (counting both letters and spaces) is widely regarded as ideal. For multiple column work, a better average is 40 to 50 characters.</p>
         </blockquote>
-        <h3 id="2da2d5d2-f108-4196-a28a-dcdb8a4a71d9">行高</h3>
+        <h3 id="3a6ebb96-4965-4582-a4f2-50dbb35899d7">行高</h3>
         <p>行高越大，越不利于读者的眼睛从上一行的末尾移动到下一行的开头，因此较短的文本行可以拥有较大的行高，但是较长的文本行则不应使用较大的行高。</p>
         <p>另外，你应该使用 <code>line-height: 1.5</code>，而不要使用 <code>line-height: 24px</code>，因为这样可以确保文本行的行高可以自动适应 <code>font-size</code> 的大小。</p>
-        <h3 id="67fc4fe3-d606-4c9a-977b-122ef847f1db">字体族</h3>
-        <h4 id="b889e88c-8200-4a4f-8563-f54d6acb5b7b">加载 &amp; 使用</h4>
+        <h3 id="29677125-1d5f-43af-b4ba-8471b578f13d">字体族</h3>
+        <h4 id="fea8d2d5-0997-4c54-95c6-47dc139f2b4b">加载 &amp; 使用</h4>
         <p>我们可以通过 <code>@font-face</code> 来为网页添加外部的字体族资源。</p>
         <pre><code class="language-css">@font-face {
     font-family: &quot;Fira Code&quot;;
@@ -234,7 +234,7 @@ article {
     font-family: &quot;Fira Code&quot;;
 }
 </code></pre>
-        <h4 id="06146faa-faa7-4ad6-9f4b-7384c8b2d0f1">字形 &amp; 字重</h4>
+        <h4 id="e29f6762-ca3f-4627-adce-101a07f88375">字形 &amp; 字重</h4>
         <p>因为 <code>Fira Code</code> 字体不支持细体、粗体、斜体，所以我们需要在 <code>@font-face</code> 中补充 <code>font-style: normal</code> 和 <code>font-weight: normal</code>。</p>
         <p>这样做的用处是，仅当元素的 <code>font-style</code> 和 <code>font-weight</code> 均为 <code>normal</code> 时，<code>Fira Code</code> 字体族才会生效，否则就不会生效（回退到使用默认字体族）。</p>
         <pre><code class="language-css">@font-face {
@@ -257,10 +257,10 @@ p.normal {
 }
 </code></pre>
         <p>如果我们不增加这两条规则，那么浏览器就会通过强行加粗和拉斜来使 <code>Fira Code</code> 适应粗体和斜体文本。不过强行加粗和拉斜的效果并不美观，而我们使用字体的目的不就是为了美观吗？</p>
-        <h4 id="09cab51d-5a54-4d68-b02a-36937231f75e">可变字体</h4>
+        <h4 id="88eaf71d-b4a2-403c-a8ae-4790f42f41a8">可变字体</h4>
         <p>另外，有些字体族可以自适应斜体和不同的字重，这是因为这些字体族文件的内部包含了多套字形，我们把这些字体族称为“可变字体”。可变字体的好处是更加易用，坏处是体积更大，因为它们包含了更多的字形数据。</p>
         <p>不过，现在越来越多的系统字体已经变成了可变字体，比如 <code>system-ui</code>。</p>
-        <h4 id="c8432908-6877-4297-92ed-2b17ad6a33b4">短路加载</h4>
+        <h4 id="61f5a349-f2d9-471f-b49d-7e05730550f9">短路加载</h4>
         <p>我们可以通过 <code>@font-face</code> 中的 <code>src</code> 属性来让浏览器短路加载字体族资源，这可以加速字体族资源的加载，具体做法是：</p>
         <pre><code class="language-css">@font-face {
     font-family: &quot;Fira Code&quot;;
@@ -306,14 +306,14 @@ p.normal {
             </li>
             <li>浏览器使用默认字体来替代 <code>Fira Code</code>。</li>
         </ol>
-        <h4 id="1fd16355-4cae-4817-9712-d4a4df1b1d9c">优先加载</h4>
+        <h4 id="402ae8d2-0b0e-416a-8781-0c979bc10858">优先加载</h4>
         <p>我们可以通过 <code>&lt;link&gt;</code> 标签来让浏览器优先下载我们的字体族资源，具体做法是：</p>
         <pre><code class="language-html">&lt;head&gt;
     &lt;link href=&quot;/font/fira-code.woff2&quot; as=&quot;font&quot; type=&quot;font/woff2&quot; rel=&quot;preload&quot; crossorigin&gt;
 &lt;/head&gt;
 </code></pre>
         <p><code>rel=&quot;preload&quot;</code> 属性用于告知浏览器优先下载该资源。<code>as=&quot;font&quot;</code> 用于告知浏览器该资源的类型。<code>type=&quot;font/woff2&quot;</code> 用于进一步告知浏览器该资源的类型。<code>crossorigin</code> 用于告知浏览器使用 CORS 来获取资源，并且无论你的字体族资源是否被托管在别的域，你都必须设置该属性，否则浏览器就会不加载。</p>
-        <h4 id="0a753121-d92b-4641-9e21-3ba94971a74a">切换字体族</h4>
+        <h4 id="d4a37041-c7f5-4b80-8d1f-975ec9b89da5">切换字体族</h4>
         <p>下载外部的字体族资源需要时间，因此网页需要等待一段时间才能使用上外部的字体族，那么我们的网页在这个等待的期间会怎样渲染字体呢？</p>
         <p>我们可以通过在 <code>@font-face</code> 中定义 <code>font-display</code> 属性来控制等待期间的字体渲染，它有 5 种取值：<code>auto</code>、<code>block</code>、<code>swap</code>、<code>fallback</code>、<code>optional</code>。</p>
         <p>我认为下例是大多数情况下的最佳选择。</p>
@@ -336,11 +336,11 @@ p.normal {
             </li>
         </ul>
         <p>你可以通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face/font-display#Browser_compatibility">MDN - font-display</a> 来了解其他用法。</p>
-        <h4 id="ba5f9115-893b-495e-81fe-c2fa7426f8fd">切换时闪烁</h4>
+        <h4 id="e82cadc8-af75-4aec-915f-c249a52bcdae">切换时闪烁</h4>
         <p>切换字体族时，网页通常发生闪烁，这个闪烁其实是一种布局偏移。触发该闪烁的原因是，切换前后的两种字体族的间距等属性是不一样的。你可以通过 <a href="https://web.dev/css-size-adjust/">这篇文章</a> 来详细了解这个闪烁。</p>
         <p>我们可以通过 <code>@font-face</code> 中的 <code>size-adjust</code> 属性来解决这个闪烁，请通过 <a href="https://web.dev/css-size-adjust/">这篇文章</a> 来学习具体的处理方法，不过我可以提前告诉你，这个处理很麻烦，因为它的思路是通过反复的手工校准切换前后的字体，来使切换前后的字体可以尽可能的拥有相似的布局。</p>
-        <h2 id="84858e0e-06d7-4d0c-963e-3255a08ca04e">图像</h2>
-        <h3 id="8b974c8e-1755-49b5-affc-8be46c20a923">尺寸</h3>
+        <h2 id="a2212a20-5cdc-4cc3-be6c-7edaa3b5f700">图像</h2>
+        <h3 id="cf8b5629-a5da-47bc-8735-02636c6b18ad">尺寸</h3>
         <p>如果我们不主动设置图像的尺寸，那么网页就会使用图像的自然尺寸，如果图像的自然尺寸超出了视口的大小，那么网页就会在水平或垂直方向上生成滚动条，这是一种糟糕的体验，因此我们需要主动设置图像的尺寸。</p>
         <p>下例方案可以让图像在铺满屏幕某一轴的同时，又保持原来的横纵比。</p>
         <pre><code class="language-css">img {
@@ -348,7 +348,7 @@ p.normal {
     block-size: auto;
 }
 </code></pre>
-        <h3 id="324a2c74-68ad-41eb-8697-aae81a3b4365">横纵比</h3>
+        <h3 id="33d327f0-59ee-46b1-b0d5-e0bb083751f9">横纵比</h3>
         <p>请使用 <code>aspect-ratio</code> 属性来一次性的设置图像的横纵比，而不要通过手写宽高属性来设置图像的横纵比，这不仅仅是因为前者更加简洁，还因为前者遵循方向逻辑。</p>
         <p>比如，当 <code>writing-mode: horizontal-tb</code> 时，<code>aspect-ratio: 2/1</code> 代表横是纵的两倍。</p>
         <pre><code class="language-css">img {
@@ -357,10 +357,10 @@ p.normal {
     aspect-ratio: 2/1;
 }
 </code></pre>
-        <h3 id="10d8dca4-cb86-44d0-acf2-8f39764a948e">框内布局</h3>
+        <h3 id="e9a2a0a3-c9a7-4dff-af88-2719b837ed05">框内布局</h3>
         <p><code>max-inline-size</code>、<code>block-size</code>、<code>aspect-ratio</code> 等属性用于设置图像元素的内容框的尺寸，而我们还可以进步一设置图像元素的内容相对于内容框的布局，这就需要用到 <code>object</code> 系列的属性。</p>
         <p>其中，图像元素的内容是指图像本身，图像元素的内容框是指盒子的内容框。</p>
-        <h4 id="f75188c9-7a0b-454c-9b74-6588e005163a">object-fit</h4>
+        <h4 id="7d0af26c-ef77-4527-964b-5ea8affcdfbf">object-fit</h4>
         <p><code>object-fit</code> 属性用于设置图像元素的内容在其内容框中的布局，它有一点点像 <code>background-size</code> 属性，它有 5 种取值，分别是：<code>contain</code>、<code>cover</code>、<code>fill</code>、<code>none</code>、<code>scale-down</code>。</p>
         <p>其中 <code>contain</code> 属性最有趣，它可以在保持图像横纵比的前提下，缩放图像以使其至少铺满内容框的某一轴，如果图像没有铺满另一轴，那么图像就会在该轴方向上居中，并在两侧留下透明的空余空间。</p>
         <pre><code class="language-css">img {
@@ -369,21 +369,21 @@ p.normal {
     object-fit: contain;
 }
 </code></pre>
-        <h4 id="2f403a18-1542-4de5-8ab6-7e8f07be2a1c">object-position</h4>
+        <h4 id="88a61d35-d963-44f4-9405-d390633001ce">object-position</h4>
         <p><code>object-position</code> 属性用于设置图像元素的内容在其内容框中的偏移，它很像 <code>background-position</code> 属性，详见 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-position">MDN - object-position</a>。</p>
-        <h3 id="fb346649-2b49-4155-863b-b2bf575c1213">尺寸提示</h3>
+        <h3 id="a75d8cba-18d4-4a19-af30-f639f3958c90">尺寸提示</h3>
         <p>如果你预先就知道图像的尺寸，那么请务必为 <code>&lt;img&gt;</code> 标签设置 <code>width</code> 和 <code>height</code> 属性，浏览器可以通过这两个属性来提前获知图像的尺寸，然后为图像预留相应的空间来“占位”。</p>
         <pre><code class="language-html">&lt;img width=&quot;100&quot; height=&quot;100&quot;&gt;
 </code></pre>
         <p>想象一下，如果浏览器没有为图像预留占位的空间，那么当图像还未加载完成时，图像元素的高度就是 <code>0</code>，此时图像元素的上文和下文会紧紧的挨在一起，而当图像加载完成后，由于图像元素拥有了高度，此时图像元素的上文和下文就会一下子被挤开，这在视觉上表现为闪烁和跳转，这会破坏用户的阅读体验，因为用户的视觉锚点一下子就消失了。</p>
         <p>如果浏览器为图像预留了占位的空间，那么无论图像是否加载完成，图像元素都会占据相同的空间，当图像还未加载完成时，占位空间表现为透明色，当图像加载完成后，占位空间就会渲染出图像，这样就可以解决上述问题了。</p>
         <p><a href="https://web.dev/learn/design/responsive-images/#sizing-hints">这个视频</a> 直观的演示了有无占位空间时的区别。</p>
-        <h3 id="0ee754d6-7d2c-4892-ad71-14f8cf1e22c5">惰性加载</h3>
+        <h3 id="eeb1b853-9b81-4cb3-a446-d6518860dfd9">惰性加载</h3>
         <p><code>&lt;img&gt;</code> 标签的 <code>loading</code> 属性可以启用惰性加载，如下所示。启用惰性下载后，浏览器会延迟加载图像，直至图像接近视口时，浏览器才会加载图像，建议总是为首屏以下的图像启用惰性加载。</p>
         <pre><code class="language-html">&lt;img loading=&quot;lazy&quot;&gt;
 </code></pre>
         <p><code>loading</code> 属性的默认值时 <code>eager</code>，此时无论图像是否出现在视口之内，浏览器都会立即加载图像。</p>
-        <h3 id="d0a6f5db-3f40-4ba2-8f41-49da825866a5">惰性解码</h3>
+        <h3 id="fee0eed7-5f36-49b5-b523-da1ebb520bf6">惰性解码</h3>
         <p><code>&lt;img&gt;</code> 标签的 <code>decoding</code> 属性可以启用惰性解码，如下所示。图像解码会阻塞其他的操作，如果我们设置了异步解码，那么浏览器就可以优先处理网页的其他内容，我通常会为博客中的图像添加惰性解码。</p>
         <pre><code class="language-html">&lt;img decoding=&quot;async&quot;&gt;
 </code></pre>
@@ -394,11 +394,11 @@ p.normal {
             <p><strong>Note</strong></p>
             <p><code>decoding</code> 的默认值是 <code>auto</code>，此时将由浏览器来决定到底使用 <code>async</code> 还是 <code>sync</code>。</p>
         </blockquote>
-        <h3 id="459a25b9-96f6-439b-a2ec-27ecfbaed299">响应尺寸</h3>
+        <h3 id="f9f521df-b448-4e42-9eef-9de3582316b9">响应尺寸</h3>
         <p>如果你为同一幅图像制作了多个不同分辨率的版本，那么你就可以通过 <code>&lt;img&gt;</code> 标签的 <code>srcset</code> 属性来让浏览器智能的下载合适版本的图像，这可以节省流量和加速图像资源的加载速度。</p>
         <p>详请参阅 <a href="https://web.dev/learn/design/responsive-images/#responsive-images-with-srcset">Responsive images with <code>srcset</code></a> 和 <a href="https://web.dev/learn/design/picture-element/">The picture element</a>。</p>
-        <h2 id="3226f4ef-7e0c-4e9a-9e95-6e20caa0e7fa">主题</h2>
-        <h3 id="9193b230-be5c-451a-bb8f-153d167f3f70">嗅探系统主题</h3>
+        <h2 id="1d8a75b3-350c-4098-8ee1-c16f7967ffe9">主题</h2>
+        <h3 id="f8676b8b-cebf-4288-94ca-7aa827ed997e">嗅探系统主题</h3>
         <p>许多操作系统都支持浅色模式和深色模式，比如 Windows 和 MacOS，<code>prefers-color-scheme</code> 媒体特性可以检测出操作系统正在使用哪种模式，然后我们就可以使用不同的主题色。</p>
         <pre><code class="language-css">/* 操作系统正在使用浅色模式 */
 @media ( prefers-color-scheme: light ) {
@@ -415,23 +415,23 @@ p.normal {
     html { background-color: white; }
 }
 </code></pre>
-        <h3 id="926e3cfa-c988-4257-9b22-962537b99566">accent-color</h3>
+        <h3 id="0e34359a-4447-479b-9d0f-d2d03ff2ef96">accent-color</h3>
         <p>CSS 的 <code>accent-color</code> 属性可以设置单选框、复选框、进度条的颜色。</p>
         <pre><code class="language-css">input {
     accent-color: black;
 }
 </code></pre>
-        <h2 id="767fd662-b2f9-48dc-8397-f6e1b6b7af17">色觉缺陷</h2>
+        <h2 id="ac35a722-c9cc-4501-b3b8-6e50412eb5fb">色觉缺陷</h2>
         <p>FireFox 和 Chrome 的开发者工具都可以模拟色觉缺陷的视觉效果，在 FireFox 中，<code>开发者工具 -&gt; 无障碍环境 -&gt; 模拟</code>，在 Chrome 中，<code>开发者工具 -&gt; 渲染选项卡 -&gt; 模拟视觉缺陷</code>。</p>
         <p>Chrome 的色觉缺陷模拟功能比较难找，如果你找不到，那么你可以查看 <a href="https://developer.chrome.com/blog/new-in-devtools-83/#vision-deficiencies">这篇文章</a>。</p>
-        <h2 id="36eede8a-d22e-476c-bd97-ff4b2ae55038">虚拟键盘</h2>
+        <h2 id="a6816e43-b55d-4764-b6e4-b0d7a6bef7a1">虚拟键盘</h2>
         <p>智能手机使用虚拟键盘来代替实体键盘，你可以通过参阅 <a href="https://web.dev/learn/design/interaction/#virtual-keyboards">这篇文章</a> 来学习如何优化虚拟键盘，这些优化是指：</p>
         <ul>
             <li>如何唤醒整数数字键盘；</li>
             <li>如何唤醒浮点数数字键盘；</li>
             <li>如何让虚拟键盘自动联想出相关内容，比如电话号码、邮箱、国家。</li>
         </ul>
-        <h2 id="f7a98e73-2eba-40b0-b46f-52be5e09d684">参考</h2>
+        <h2 id="8065063b-4ca4-4838-8ad4-4478f6d24b44">参考</h2>
         <p><a href="https://web.dev/learn/design/">Learn Responsive Design</a></p>
     </article>
 </body>
