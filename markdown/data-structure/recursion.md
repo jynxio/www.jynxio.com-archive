@@ -143,7 +143,9 @@ function deepClone ( source ) {
 }
 ```
 
-> `deepClone` 只有练习价值，没有实用价值，因为它没有考虑到不可枚举属性、Setter/Getter、自循环引用、函数、Error 等情况。如果你想在生产环境中使用深拷贝，那么请使用 [structuredClone API](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)，这是一个由 HTML5 规范定义的深拷贝方法，浏览器和 Node 运行时都自建了该方法。或许你也可以使用其他第三方库，比如 [immutable.js](https://github.com/immutable-js/immutable-js)。
+> 如果你想在生产环境中使用深拷贝，那么请使用 [structuredClone API](https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone)，这是一个由 HTML5 规范定义的深拷贝方法，它已内建于浏览器运行时与 Node.js 运行时中，它的兼容性良好。
+>
+> `structuredClone` 比 `_.cloneDeep()` 和 `JSON.parse(JSON.stringify())` 更好，你可以从 [这篇文章](https://www.builder.io/blog/structured-clone) 了解到更多。
 
 ## 意义
 
