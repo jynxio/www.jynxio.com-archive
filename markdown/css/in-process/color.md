@@ -1,47 +1,16 @@
-# 颜色格式
+# Color
 
-## 命名颜色
+## named color
 
-命名颜色（named color）是指具有特定名称的颜色，比如 `red`、`tomato`、`teal` 等。截至目前（CSS Level 4），CSS 一共定义了 140 种命名颜色（named color），你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color) 找到所有的颜色。
+named color 即命名颜色，比如 `pink`、`orange`、`tomato`、`teal` 等。截至目前（CSS Level 4，下同），CSS 一共定义了 140 种命名颜色，你可以在 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color) 找到所有的颜色。
 
-命名颜色摘录自很多来源，比如 HTML 4 规范、X11 Unix windowing 系统、[一个令人心碎的故事](https://codepen.io/trezy/post/honoring-a-great-man) 等，这导致命名颜色本身并不严谨，比如 `darkgray` 的颜色比 `gray` 的更浅。
+命名颜色的名字和颜色没有特别严谨的关联，比如 `rebeccapurple` 中的 `rebecca` 是为了纪念 [rebecca](https://codepen.io/trezy/post/honoring-a-great-man)，而与颜色无关，再比如 `dray` 的颜色比 `darkgray` 的颜色更浅。
 
-## RGB 颜色
+## hex code
 
-RGB 是一种基于物理的颜色表示法，即使用三原色来表示颜色，通过混合不同量的三原色，即可得到不同的颜色，其中 R 代表红色（Red）、G 代表绿色（Green）、B 代表蓝色（Blue）。
+hex code 是一种基于 RGB 和十六进制的颜色表示法，它是基于 sRGB 的。
 
-CSS 提供了两种使用 RGB 的方案，分别是 `rgb()` 和 `hex`。
-
-### rgb()
-
-#### 语法
-
-```css
-rgb( r g b )
-rgb( r g b / a )
-```
-
-其中，`r`、`g`、`b` 是属于 `[0, 255]` 的数字值或属于 `[0%, 100%]` 的百分比值，而 `a` 是属于 `[0, 1]` 的数字值或属于 `[0%, 100%]` 的百分比值。
-
-#### 示例
-
-```css
-rgb( 255 255 255 )
-rgb( 255 255 255 / 1 )
-```
-
-#### 兼容性
-
-该语法由 CSS Colors Module Level 4 定义，并且从该规范开始，浏览器会将 `rgba()` 视作 `rgb()` 的别名。该语法的 [兼容性高](https://caniuse.com/mdn-css_types_color_rgb_alpha_parameter)，但不兼容 IE 11，如果你需要兼容 IE 11，那么请使用：
-
-```css
-rgb( r, g, b )
-rgba( r, g, b, a )
-```
-
-### hex
-
-#### 语法
+### 语法
 
 ```css
 #rgb
@@ -50,9 +19,11 @@ rgba( r, g, b, a )
 #rrggbbaa
 ```
 
-其中，`r`、`g`、`b`、`a` 都是属于 `[0, f]` 的十六进制数字值。并且，`#rgb` 等价于 `#rrggbb`，`#rgba` 等价于 `#rrggbbaa`。另外，该语法不区分字母的大小写，比如 `#fff` 等价于 `#FFF`。
+- `r`、`g`、`b`、`a` 都是属于 `[0, f]` 的十六进制数字值。
+- `#rgb` 是 `#rrggbb` 的简写，`#rgba` 是 `#rrggbbaa` 的简写。
+- 不区分大小写，`#fff` 等价于 `#FFF`。
 
-#### 示例
+### 示例
 
 ```css
 #f00
@@ -61,49 +32,92 @@ rgba( r, g, b, a )
 #ff0000ff
 ```
 
-#### 兼容性
+### 兼容性
 
-该语法由 CSS Colors Module Level 4 定义，IE 11 只支持 `#rgb` 和 `#rrggbb`，不支持 `#rgba` 和 `#rrggbbaa`。
+IE 11 只支持 `#rgb` 和 `#rrggbb`，不支持 `#rgba` 和 `#rrggbbaa`。
 
-## HSL 颜色
+## rgb()
 
-HSL 是一种基于视觉的颜色表示法，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。HSL 比 RGB 更加符合人对颜色的认知。
+`rgb()` 也是一种基于 RGB 的颜色表示法，它也是基于 sRGB 的。
 
-CSS 只提供了一种使用 HSL 的方案，那就是 `hsl()`。
+### 语法
 
-### hsl()
+```css
+rgb( r g b )
+rgb( r g b / a )
+```
 
-#### 语法
+- `r`、`g`、`b` 是属于 `[0, 255]` 的数字值，或属于 `[0%, 100%]` 的百分比值。
+- `a` 是属于 `[0, 1]` 的数字值，或属于 `[0%, 100%]` 的百分比值。
+
+### 示例
+
+```css
+rgb( 255 255 255 )
+rgb( 255 255 255 / 1 )
+```
+
+### 兼容性
+
+IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 `rgb( r, g, b )` 和 `rgba( r, g, b, a )`。
+
+## hsl()
+
+`hsl()` 是一种基于 HSL 的颜色表示法，它基于 sRGB。
+
+> RGB 是一种基于物理的颜色格式，即使用三原色来表示颜色，通过混合不同量的三原色，即可得到不同的颜色，其中 R 代表红色（Red）、G 代表绿色（Green）、B 代表蓝色（Blue）。
+>
+> HSL 是一种基于视觉的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。相比于 RGB，HSL 要更加贴近人对颜色的认知。
+>
+> 另外，大多数的图形设计软件都提供了一种名为 HSB 的颜色格式，其中的 B 代表 Brightness。Brightness 与 Lightness 在概念上没有明显区别，不过在使用方法上有很大的不同。HSB 与 HSL 的相同之处在于，当 Brightness  为 `0%` 时，颜色也会表现为黑色，不同之处在于，当 Brightness 为 `100%` 时，如果 Saturation 为 `0%`，那么颜色就会表现为白色，如果 Saturation 为 `100%`，那么颜色就会表现为本来的颜色。需要提醒的是，CSS 没有 `hsb()`，只有 `hsl()`。
+
+### 语法
 
 ```css
 hsl( h s l )
 hsl( h s l / a )
 ```
 
-其中，`h` 是属于 `[0deg, 360deg]` 的角度值，除了 `deg` 单位外，你还可以使用的单位有 `rad`、`grad`、`turn`，如果你没有为它指定单位，那么它就会使用 `deg` 来作为默认单位。
+- `h` 是属于 `[0deg, 360deg]` 的角度值。除了 `deg` 外，你还可以使用的单位有 `rad`、`grad`、`turn`。如果你没有为它指定单位，那么它就会使用 `deg` 来作为默认单位。
+- `s` 是属于 `[0%, 100%]` 的百分比值。当 `s` 为 `0%` 时，由于颜色完全不饱和，此时颜色会呈现为灰色，如果你想渲染出鲜艳的颜色，那么请将 `s` 设置为 `100%`。
+- `l` 是属于 `[0%, 100%]` 的百分比值。当 `l` 为 `0%` 时，由于没有亮度，此时颜色会呈现为黑色，当 `l` 为 `100%` 时，由于亮度过高，此时颜色会呈现为白色，如果你想渲染出颜色本来的颜色，那么请将 `l` 设置为 `50%`。
+- `a` 是属于 `[0, 1]` 的数字值，或属于 `[0%, 100%]` 的百分比值。
 
-`s` 是属于 `[0%, 100%]` 的百分比值。当 `s` 为 `0%` 时，由于颜色完全不饱和，此时颜色会呈现为灰色，如果你想渲染出鲜艳的颜色，那么请将 `s` 设置为 `100%`。
-
-`l` 是属于 `[0%, 100%]` 的百分比值。当 `l` 为 `0%` 时，由于没有亮度，此时颜色会呈现为黑色，当 `l` 为 `100%` 时，由于亮度过高，此时颜色会呈现为白色，如果你想渲染出颜色本来的颜色，那么请将 `l` 设置为 `50%`。
-
-`a` 是属于 `[0, 1]` 的数字值或属于 `[0%, 100%]` 的百分比值。
-
-#### 示例
+### 示例
 
 ```css
 hsl( 0 100% 50% )
 hsl( 0 100% 50% / 1 )
 ```
 
-#### 兼容性
+### 兼容性
 
-该语法由 CSS Colors Module Level 4 定义，并且从该规范开始，浏览器会将 `hsla()` 视作 `hsl()` 的别名。该语法的 [兼容性高](https://caniuse.com/mdn-css_types_color_rgb_alpha_parameter)，但不兼容 IE 11，如果你需要兼容 IE 11，那么请使用：
+IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 `hsl( h, s, l )` 和 `hsla( h, s, l, a )`。
+
+## color()
+
+CSS 的默认颜色空间是 sRGB（standard RGB color space），由命名颜色、`hex code`、`rgb()`、`hsl()` 所创建出来的颜色都是基于 sRGB 的，如果我们想要创建出基于其它颜色空间的颜色，那么我们就必须使用 `color()`。
+
+> 颜色空间是指一系列颜色的集合，常用的颜色空间有 sRGB、Adobe RGB、DCI-P3。请注意，下文出现的 display-p3 不等价于 DCI-P3，你可以把 display-p3 立即为 DCI-P3 的变种，display-p3 是由 Apple 公司创造的。
+
+### 语法
 
 ```css
-hsl( h, s, l )
-hsla( h, s, l, a )
+color( colorspace-name r g b / a )
 ```
 
-## LCH
+### 示例
 
-## OKLCH
+```css
+color( display-p3 1 0.5 0 )
+```
+
+### 兼容性
+
+目前，`color()` 的兼容性不好，只有 Safari 和 Chrome 支持 `color()` 函数，你可以从 [这里](https://caniuse.com/?search=color()) 找到最新的兼容性情况。
+
+> Safari 的控制台提供了 `sRGB -> Display P3` 或 `Display P3 -> sRGB` 的能力，你可以从 [这里](https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/) 找到具体的使用方法。
+
+## Color Picker
+
+我做了一个 rgb/hsl 的调色板玩具，你可以点击 [这个链接](https://jynxio.github.io/color-picker/) 来试用它。
