@@ -28,6 +28,6 @@
         "create-font-home": "node ./generator/font-home/index.js"
     },
     "dependencies": {
-        "three": "^0.148.0"
+        "three": "^0.149.0"
     }
 }
