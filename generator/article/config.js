@@ -102,6 +102,8 @@ const createCssInfo = _ => {
     const html_path = BASE_HTML_PATH + "/" + name;
     const build_path = BASE_BUILD_PATH + "/" + name;
     const children = [
+        { name: "pseudo-classes-and-elements", alias: "伪类和伪元素" },
+        { name: "color", alias: "颜色" },
         { name: "responsive-design", alias: "响应式设计" },
     ];
     const options = {

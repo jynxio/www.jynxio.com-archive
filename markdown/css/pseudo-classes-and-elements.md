@@ -79,18 +79,18 @@ a:focus {
 
 伪元素（pseudo-elements）是一个附加到选择器末尾的关键字，它是选择器的附加条件，用于匹配目标元素内的伪造的子元素，你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements) 查看所有的伪元素。
 
-> 根据规范，伪元素应当使用双冒号（`::`）语法，以便于与伪类进行区分。不过由于早期的 W3C 规范并为对此进行规定，因此一些早期实现伪元素也支持单冒号语法。
->
-> 我们可以通过非 HTML tag 的方式来伪造一个元素，而伪元素的作用正是匹配这些伪造出来的元素，这就是伪元素得名的原因。比如下例中的提示文本是通过 `palceholder` 属性来伪造出的一个元素，你可以把它当成 `<placeholder>`，而 `::placeholder` 可以匹配到 `<placeholder>`。
->
-> ```html
-> <style>
->     input::placeholder {
->         color: gold;
->     }
-> </style>
-> <input placeholder="please entry here..." />
-> ```
+根据规范，伪元素应当使用双冒号（`::`）语法，以便于与伪类进行区分。不过由于早期的 W3C 规范并为对此进行规定，因此一些早期实现伪元素也支持单冒号语法。
+
+我们可以通过非 HTML tag 的方式来伪造一个元素，而伪元素的作用正是匹配这些伪造出来的元素，这就是伪元素得名的原因。比如下例中的提示文本是通过 `palceholder` 属性来伪造出的一个元素，你可以把它当成 `<placeholder>`，而 `::placeholder` 可以匹配到 `<placeholder>`。
+
+```html
+<style>
+ input::placeholder {
+     color: gold;
+ }
+</style>
+<input placeholder="please entry here..." />
+```
 
 ### before & after
 
