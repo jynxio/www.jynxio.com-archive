@@ -71,7 +71,7 @@ IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 `rgb( r
 
 > RGB 是一种基于物理的颜色格式，即使用三原色来表示颜色，通过混合不同量的三原色，即可得到不同的颜色，其中 R 代表红色（Red）、G 代表绿色（Green）、B 代表蓝色（Blue）。
 >
-> HSL 是一种基于人类视觉的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。相比于 RGB，HSL 要更加贴近人对颜色的认知。
+> HSL 是一种人类可读的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。
 >
 > 另外，大多数的图形设计软件都提供了一种名为 HSB 的颜色格式，其中的 B 代表 Brightness。Brightness 与 Lightness 在概念上没有明显区别，不过在使用方法上有很大的不同。HSB 与 HSL 的相同之处在于，当 Brightness  为 `0%` 时，颜色也会表现为黑色，不同之处在于，当 Brightness 为 `100%` 时，如果 Saturation 为 `0%`，那么颜色就会表现为白色，如果 Saturation 为 `100%`，那么颜色就会表现为本来的颜色。需要提醒的是，CSS 没有 `hsb()`，只有 `hsl()`。
 
@@ -118,7 +118,7 @@ color( display-p3 1 0.5 0 )
 
 ### 兼容性
 
-目前，`color()` 的兼容性不好，只有 Safari 和 Chrome 支持 `color()` 函数，你可以从 [这里](https://caniuse.com/?search=color()) 找到最新的兼容性情况。
+目前只有 Safari 和 Chrome 支持 `color()`，你可以从 [这里](https://caniuse.com/?search=color()) 找到最新的兼容性情况。
 
 > Safari 的控制台提供了 `sRGB -> Display P3` 或 `Display P3 -> sRGB` 的能力，你可以从 [这里](https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/) 找到具体的使用方法。
 
@@ -151,7 +151,7 @@ lch( 50% 150 0 / 1 )
 
 ### 特点
 
-LCH 和 HSL 很相似，LCH 是另一种贴近人类视觉的颜色格式，其中 L 代表亮度（Lightness）、C 代表浓度（Chroma）、H 代表色调（Hue）。
+LCH 和 HSL 很相似，LCH 是另一种人类可读的颜色格式，其中 L 代表亮度（Lightness）、C 代表浓度（Chroma）、H 代表色调（Hue）。
 
 相比于 HSL，LCH 有 2 个显著的特点：
 
@@ -169,8 +169,25 @@ LCH 和 HSL 很相似，LCH 是另一种贴近人类视觉的颜色格式，其�
 
 ### 兼容性
 
-目前，`lch()` 的兼容性不好，只有 Safari 和 Chrome 支持 `lch()` 函数，你可以从 [这里](https://caniuse.com/?search=lch()) 找到最新的兼容性情况。
+目前只有 Safari 和 Chrome 支持 `lch()`，你可以从 [这里](https://caniuse.com/?search=lch()) 找到最新的兼容性情况。
+
+## oklch()
+
+OKLCH 和 LCH 很相似，并且 OKLCH 要比 LCH 更好，因为 OKLCH 修复了 LCH 中关于蓝色色调的一些 bug。
+
+如果你想了解更多，请阅读 [这篇文章](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl#oklch-vs-oklab--lch-vs-lab)。
+
+### 兼容性
+
+目前，仅仅只有 Safari 支持 `oklch()`。
 
 ## Color Picker
 
-我做了一个 rgb/hsl 的调色板玩具，你可以点击 [这个链接](https://jynxio.github.io/color-picker/) 来试用它。
+- RGB/HSL 调色板：https://jynxio.github.io/color-picker/
+- LCH 调色板：https://css.land/lch/
+- OKLCH 调色板：https://oklch.com/
+
+## 扩展阅读
+
+- [LCH colors in CSS: what, why, and how? - Lea Verou](https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/)
+- [OKLCH in CSS: why we moved from RGB and HSL](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
