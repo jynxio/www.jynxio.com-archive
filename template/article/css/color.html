@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color</title>
+</head>
+
+<body>
+    <header>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+    </header>
+    <aside>
+        <p>In this article</p>
+        <p data-target-id=6bfd6b17-de08-4db0-ab41-e3d2b3e786cd>named color</p>
+        <p data-target-id=e2d88185-d3a8-4f29-b682-65bbe01f9a9e>hex code</p>
+        <p data-target-id=704df56e-bec2-4156-adab-9fcf00e13587>rgb()</p>
+        <p data-target-id=567241af-c456-4e4a-9ebe-65b8d066c51b>hsl()</p>
+        <p data-target-id=9b3ce0a2-4d19-4381-a1ff-825bfa604d11>color()</p>
+        <p data-target-id=d836b732-1366-4ffc-8442-0922f67a3951>lch()</p>
+        <p data-target-id=2527d8b7-ef1c-4cef-a668-438b6b957b21>oklch()</p>
+        <p data-target-id=6b469bb2-7f1a-4b91-bc2d-36b35442418b>Color Picker</p>
+        <p data-target-id=8af7a89c-54f4-4154-ae97-435032d69cad>扩展阅读</p>
+    </aside>
+    <article>
+        <h1>Color</h1>
+        <h2 id="6bfd6b17-de08-4db0-ab41-e3d2b3e786cd">named color</h2>
+        <p>named color 即命名颜色，比如 <code>pink</code>、<code>orange</code>、<code>tomato</code>、<code>teal</code> 等。截至目前（CSS Level 4，下同），CSS 一共定义了 140 种命名颜色，你可以在 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/named-color">这里</a> 找到所有的颜色。</p>
+        <p>命名颜色的名字和颜色没有特别严谨的关联，比如 <code>rebeccapurple</code> 中的 <code>rebecca</code> 是为了纪念 <a href="https://codepen.io/trezy/post/honoring-a-great-man">rebecca</a>，而与颜色无关，再比如 <code>dray</code> 的颜色比 <code>darkgray</code> 的颜色更浅。</p>
+        <h2 id="e2d88185-d3a8-4f29-b682-65bbe01f9a9e">hex code</h2>
+        <p>hex code 是一种基于 RGB 和十六进制的颜色表示法，它是基于 sRGB 的。</p>
+        <h3 id="41ad6245-78cd-4cc6-9154-21c687756e06">语法</h3>
+        <pre><code class="language-css">#rgb
+#rgba
+#rrggbb
+#rrggbbaa
+</code></pre>
+        <ul>
+            <li><code>r</code>、<code>g</code>、<code>b</code>、<code>a</code> 都是属于 <code>[0, f]</code> 的十六进制数字值。</li>
+            <li><code>#rgb</code> 是 <code>#rrggbb</code> 的简写，<code>#rgba</code> 是 <code>#rrggbbaa</code> 的简写。</li>
+            <li>不区分大小写，<code>#fff</code> 等价于 <code>#FFF</code>。</li>
+        </ul>
+        <h3 id="14f5e7dd-46fa-41da-8585-78b0247141d7">示例</h3>
+        <pre><code class="language-css">#f00
+#f00f
+#ff0000
+#ff0000ff
+</code></pre>
+        <h3 id="c5815913-ca37-4dfa-aa9b-53ef71d9fe1f">兼容性</h3>
+        <p>IE 11 只支持 <code>#rgb</code> 和 <code>#rrggbb</code>，不支持 <code>#rgba</code> 和 <code>#rrggbbaa</code>。</p>
+        <h2 id="704df56e-bec2-4156-adab-9fcf00e13587">rgb()</h2>
+        <p><code>rgb()</code> 也是一种基于 RGB 的颜色表示法，它也是基于 sRGB 的。</p>
+        <h3 id="9d78fb26-95ca-4ed6-af8e-e83fa38ee5ea">语法</h3>
+        <pre><code class="language-css">rgb( r g b )
+rgb( r g b / a )
+</code></pre>
+        <ul>
+            <li><code>r</code>、<code>g</code>、<code>b</code> 是属于 <code>[0, 255]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
+            <li><code>a</code> 是属于 <code>[0, 1]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
+        </ul>
+        <h3 id="db16501a-3411-4b37-ba1a-9122b6c5b80c">示例</h3>
+        <pre><code class="language-css">rgb( 255 255 255 )
+rgb( 255 255 255 / 1 )
+</code></pre>
+        <h3 id="ad43678b-8c57-4da3-b4d9-b020bd90d1f1">兼容性</h3>
+        <p>IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 <code>rgb( r, g, b )</code> 和 <code>rgba( r, g, b, a )</code>。</p>
+        <h2 id="567241af-c456-4e4a-9ebe-65b8d066c51b">hsl()</h2>
+        <p><code>hsl()</code> 是一种基于 HSL 的颜色表示法，它基于 sRGB。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>RGB 是一种基于物理的颜色格式，即使用三原色来表示颜色，通过混合不同量的三原色，即可得到不同的颜色，其中 R 代表红色（Red）、G 代表绿色（Green）、B 代表蓝色（Blue）。</p>
+            <p>HSL 是一种人类可读的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。</p>
+            <p>另外，大多数的图形设计软件都提供了一种名为 HSB 的颜色格式，其中的 B 代表 Brightness。Brightness 与 Lightness 在概念上没有明显区别，不过在使用方法上有很大的不同。HSB 与 HSL 的相同之处在于，当 Brightness 为 <code>0%</code> 时，颜色也会表现为黑色，不同之处在于，当 Brightness 为 <code>100%</code> 时，如果 Saturation 为 <code>0%</code>，那么颜色就会表现为白色，如果 Saturation 为 <code>100%</code>，那么颜色就会表现为本来的颜色。需要提醒的是，CSS 没有 <code>hsb()</code>，只有 <code>hsl()</code>。</p>
+        </blockquote>
+        <h3 id="a7369eda-e61d-47b5-a7cf-49462e421824">语法</h3>
+        <pre><code class="language-css">hsl( h s l )
+hsl( h s l / a )
+</code></pre>
+        <ul>
+            <li><code>h</code> 是属于 <code>[0deg, 360deg]</code> 的角度值。除了 <code>deg</code> 外，你还可以使用的单位有 <code>rad</code>、<code>grad</code>、<code>turn</code>。如果你没有为它指定单位，那么它就会使用 <code>deg</code> 来作为默认单位。</li>
+            <li><code>s</code> 是属于 <code>[0%, 100%]</code> 的百分比值。当 <code>s</code> 为 <code>0%</code> 时，由于颜色完全不饱和，此时颜色会呈现为灰色，如果你想渲染出鲜艳的颜色，那么请将 <code>s</code> 设置为 <code>100%</code>。</li>
+            <li><code>l</code> 是属于 <code>[0%, 100%]</code> 的百分比值。当 <code>l</code> 为 <code>0%</code> 时，由于没有亮度，此时颜色会呈现为黑色，当 <code>l</code> 为 <code>100%</code> 时，由于亮度过高，此时颜色会呈现为白色，如果你想渲染出颜色本来的颜色，那么请将 <code>l</code> 设置为 <code>50%</code>。</li>
+            <li><code>a</code> 是属于 <code>[0, 1]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
+        </ul>
+        <h3 id="0f7f6282-c60a-477a-8a64-690a04b625ed">示例</h3>
+        <pre><code class="language-css">hsl( 0 100% 50% )
+hsl( 0 100% 50% / 1 )
+</code></pre>
+        <h3 id="028862e4-1da8-4eb4-a7e4-34973e200ad0">兼容性</h3>
+        <p>IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 <code>hsl( h, s, l )</code> 和 <code>hsla( h, s, l, a )</code>。</p>
+        <h2 id="9b3ce0a2-4d19-4381-a1ff-825bfa604d11">color()</h2>
+        <p>CSS 的默认颜色空间是 sRGB（standard RGB color space），由命名颜色、<code>hex code</code>、<code>rgb()</code>、<code>hsl()</code> 所创建出来的颜色都是基于 sRGB 的，如果我们想要创建出基于其它颜色空间的颜色，那么我们就必须使用 <code>color()</code>。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>颜色空间是指一系列颜色的集合，常用的颜色空间有 sRGB、Adobe RGB、DCI-P3。请注意，下文出现的 display-p3 不等价于 DCI-P3，你可以把 display-p3 立即为 DCI-P3 的变种，display-p3 是由 Apple 公司创造的。</p>
+        </blockquote>
+        <h3 id="cf68f60d-988e-4feb-88b2-6134ac4df694">语法</h3>
+        <pre><code class="language-css">color( colorspace-name r g b / a )
+</code></pre>
+        <h3 id="a20ac26d-a533-464a-8cc3-975af6ab3612">示例</h3>
+        <pre><code class="language-css">color( display-p3 1 0.5 0 )
+</code></pre>
+        <h3 id="73e417f5-c6e9-453c-8793-e13b371f2e59">兼容性</h3>
+        <p>目前只有 Safari 和 Chrome 支持 <code>color()</code>，你可以从 <a href="https://caniuse.com/?search=color()">这里</a> 找到最新的兼容性情况。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>Safari 的控制台提供了 <code>sRGB -&gt; Display P3</code> 或 <code>Display P3 -&gt; sRGB</code> 的能力，你可以从 <a href="https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/">这里</a> 找到具体的使用方法。</p>
+        </blockquote>
+        <h3 id="27b2a5f1-f6b9-4ae3-8888-d47fccd20dc1">图像使用 P3 色域</h3>
+        <p>在 Photoshop 中，我们可以将图像的颜色空间设置为 P3，如此一来，哪怕浏览器不支持 <code>color()</code>，图像也可以呈现出更加艳丽的色彩。</p>
+        <h2 id="d836b732-1366-4ffc-8442-0922f67a3951">lch()</h2>
+        <p><code>lch()</code> 是一种基于 LCH 的颜色表示法，它不受限于任何颜色空间。</p>
+        <h3 id="e5122cfd-ab49-40a1-bfbc-b95f247698e3">语法</h3>
+        <pre><code class="language-css">lch( l c h )
+lch( l c h / a )
+</code></pre>
+        <ul>
+            <li><code>l</code> 是属于 <code>[0%, 100%]</code> 的百分比值。当 <code>l</code> 为 <code>0%</code> 时，由于没有亮度，此时颜色会呈现为黑色，当 <code>l</code> 为 <code>100%</code> 时，由于亮度过高，此时颜色会呈现为白色，如果你想渲染出颜色本来的颜色，那么请将 <code>l</code> 设置为 <code>50%</code>。</li>
+            <li><code>c</code> 是属于 <code>[0, 正无穷]</code> 的数字值</li>
+            <li><code>h</code> 是属于 <code>[0deg, 360deg]</code> 的角度值。除了 <code>deg</code> 外，你还可以使用的单位有 <code>rad</code>、<code>grad</code>、<code>turn</code>。如果你没有为它指定单位，那么它就会使用 <code>deg</code> 来作为默认单位。</li>
+            <li><code>a</code> 是属于 <code>[0, 1]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
+        </ul>
+        <h3 id="f5c79053-63ba-4a66-807d-9093f0046f05">示例</h3>
+        <pre><code class="language-css">lch( 50% 150 0 )
+lch( 50% 150 0 / 1 )
+</code></pre>
+        <h3 id="ece39446-39fd-4074-a309-49cda04d6de3">特点</h3>
+        <p>LCH 和 HSL 很相似，LCH 是另一种人类可读的颜色格式，其中 L 代表亮度（Lightness）、C 代表浓度（Chroma）、H 代表色调（Hue）。</p>
+        <p>相比于 HSL，LCH 有 2 个显著的特点：</p>
+        <ul>
+            <li>如果 2 个颜色的 Lightness 是相同的，那么它们在视觉上的明亮程度就是相同的（详见下图）；</li>
+            <li>不受限于任何色彩空间，只受限于显示器的性能，因为它的色彩浓度（Chroma）没有上限（详见下例代码）；</li>
+        </ul>
+        <p>当显示器使用 sRGB 色彩空间时，<code>.red</code> 和 <code>.redder</code> 会呈现出一样的红色，当显示器使用更宽的色域时，<code>.redder</code> 会更红。</p>
+        <pre><code class="language-css">.red { background: lch( 50% 100 0 ) }
+.redder { background: lch( 50% 230 0 ) }
+</code></pre>
+        <p><img src=/static/image/markdown/css/color/hsl-vs-lch.png alt=hsl vs lch loading="lazy" decoding="async"></p>
+        <h3 id="e06e9dd2-5fb8-4c48-8ddb-50c1b805de2e">兼容性</h3>
+        <p>目前只有 Safari 和 Chrome 支持 <code>lch()</code>，你可以从 <a href="https://caniuse.com/?search=lch()">这里</a> 找到最新的兼容性情况。</p>
+        <h2 id="2527d8b7-ef1c-4cef-a668-438b6b957b21">oklch()</h2>
+        <p>OKLCH 和 LCH 很相似，并且 OKLCH 要比 LCH 更好，因为 OKLCH 修复了 LCH 中关于蓝色色调的一些 bug。</p>
+        <p>如果你想了解更多，请阅读 <a href="https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl#oklch-vs-oklab--lch-vs-lab">这篇文章</a>。</p>
+        <h3 id="778b428c-0d4f-4c24-853e-09f4b8e8b6c7">兼容性</h3>
+        <p>目前，仅仅只有 Safari 支持 <code>oklch()</code>。</p>
+        <h2 id="6b469bb2-7f1a-4b91-bc2d-36b35442418b">Color Picker</h2>
+        <ul>
+            <li>RGB/HSL 调色板：<a href="https://jynxio.github.io/color-picker/">https://jynxio.github.io/color-picker/</a></li>
+            <li>LCH 调色板：<a href="https://css.land/lch/">https://css.land/lch/</a></li>
+            <li>OKLCH 调色板：<a href="https://oklch.com/">https://oklch.com/</a></li>
+        </ul>
+        <h2 id="8af7a89c-54f4-4154-ae97-435032d69cad">扩展阅读</h2>
+        <ul>
+            <li><a href="https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/">LCH colors in CSS: what, why, and how? - Lea Verou</a></li>
+            <li><a href="https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl">OKLCH in CSS: why we moved from RGB and HSL</a></li>
+        </ul>
+    </article>
+</body>
+
+</html>

@@ -14,16 +14,16 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=4134c625-3cd5-42b5-ab30-aa962f59d943>概述</p>
-        <p data-target-id=4a21ac0b-9563-4f74-bfab-40da3e5891d8>基线条件</p>
-        <p data-target-id=e5dbd8a0-0b8c-417d-8d5d-14cbb15379f6>阶乘</p>
-        <p data-target-id=717a5261-2242-4b52-95b5-db2754b58887>斐波那契</p>
-        <p data-target-id=3ed54c5f-2bf2-453d-b41b-e011de10ff2a>深拷贝</p>
-        <p data-target-id=fe481cbd-24eb-42b9-bd66-a82abc790927>意义</p>
+        <p data-target-id=d1f7dbc0-d66f-48be-8d52-195b7c02077e>概述</p>
+        <p data-target-id=697db81e-7fd7-4bcb-8eb5-40a48181b92b>基线条件</p>
+        <p data-target-id=b9ae04f6-27c5-4d6a-a89d-f868e8b8ba41>阶乘</p>
+        <p data-target-id=1f6f9580-0c9c-499f-99b7-3abac2752e1c>斐波那契</p>
+        <p data-target-id=16464170-0c6a-4af7-982b-03410a5fbd42>深拷贝</p>
+        <p data-target-id=61030e97-b478-4e15-bef1-3d40a1037bd6>意义</p>
     </aside>
     <article>
         <h1>递归</h1>
-        <h2 id="4134c625-3cd5-42b5-ab30-aa962f59d943">概述</h2>
+        <h2 id="d1f7dbc0-d66f-48be-8d52-195b7c02077e">概述</h2>
         <p>递归函数是一种会调用自身的函数，比如这个 <code>loop</code> 函数就是一个递归函数。</p>
         <pre><code class="language-js">function loop () {
 
@@ -33,7 +33,7 @@
 
 }
 </code></pre>
-        <h2 id="4a21ac0b-9563-4f74-bfab-40da3e5891d8">基线条件</h2>
+        <h2 id="697db81e-7fd7-4bcb-8eb5-40a48181b92b">基线条件</h2>
         <p>基线条件是指递归函数停止递归的条件，如果递归函数没有基线条件，那么递归函数就会无限的执行下去。一个无限递归的递归函数容易造成“爆栈”，最终导致程序被杀死，比如上文中的 <code>loop</code> 函数就会造成“爆栈”。</p>
         <pre><code class="language-js">loop(); // RangeError: Maximum call stack size exceeded
 </code></pre>
@@ -54,12 +54,12 @@
 </code></pre>
             <p>另外，或许你还听说过“尾调用优化”，这是另一种防止爆栈并提升递归性能的手段，不过请忘了它吧，因为除了 Apple 之外的浏览器厂商都拒绝实现该特性。</p>
         </blockquote>
-        <h2 id="e5dbd8a0-0b8c-417d-8d5d-14cbb15379f6">阶乘</h2>
-        <h3 id="d662d1e1-0fb8-4a1c-887e-5eeabe5e1207">概念</h3>
+        <h2 id="b9ae04f6-27c5-4d6a-a89d-f868e8b8ba41">阶乘</h2>
+        <h3 id="891e6724-dd84-4710-8dd7-df3941d4364f">概念</h3>
         <p>在数学中，正整数的阶乘是所有小于及等于该数的正整数的积，我们把它表示为 <code>n!</code>，另外 <code>1</code> 和 <code>0</code> 的阶乘都等于 <code>1</code>。让我们来举个例子，<code>5</code> 的阶乘表示为 <code>5!</code>，其值为 <code>120</code>，因为：</p>
         <pre><code>5! = 1 * 2 * 3 * 4 * 5 = 120
 </code></pre>
-        <h3 id="b92d20b6-8c69-41f7-a7aa-c1727aee38c8">实现</h3>
+        <h3 id="a52267c8-3acd-4186-8e84-3d9f7e0cf7e7">实现</h3>
         <p>灵感乍现，我一下子找到了 <code>calculateFactorial</code> 函数的基线条件，然后顺势编写好了整个函数。</p>
         <pre><code class="language-js">function calculateFactorial( n ) {
 
@@ -69,12 +69,12 @@
 
 }
 </code></pre>
-        <h2 id="717a5261-2242-4b52-95b5-db2754b58887">斐波那契</h2>
+        <h2 id="1f6f9580-0c9c-499f-99b7-3abac2752e1c">斐波那契</h2>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>真怀念啊！我记得我的第一个 DOM 程序就是一个汉诺塔动画的网页，她还很兴奋的鼓励了我呢！</p>
         </blockquote>
-        <h4 id="b9e59e77-e168-419c-ac0b-9ef3623ea24e">概念</h4>
+        <h4 id="1367f79d-9afd-48c5-b919-e9d6bd9d716c">概念</h4>
         <p>斐波那契数列是一个特殊的数列，它的规律是：</p>
         <ul>
             <li><code>0号元素 = 0</code></li>
@@ -82,7 +82,7 @@
             <li><code>2号元素 = 1</code></li>
             <li><code>n号元素 = n-1号元素 + n-2号元素</code></li>
         </ul>
-        <h4 id="d796b90b-eeca-4b2d-9045-0f5a78573c88">实现</h4>
+        <h4 id="a071aeef-3881-4707-be67-1bfead203de1">实现</h4>
         <p>这是第二次灵感乍现。</p>
         <pre><code class="language-js">function calculateFibonacci ( n ) {
 
@@ -95,7 +95,7 @@
 
 }
 </code></pre>
-        <h4 id="b2b3bc59-a6d1-49fa-af33-dc905f4c7ad0">优化</h4>
+        <h4 id="a1cba62e-86ad-4b4b-a19d-deaee68b7fed">优化</h4>
         <p>这是 <code>calculateFibonacci</code> 函数的优化版本，你分别使用旧版与新版的 <code>calculateFibonacci</code> 函数来计算 <code>20</code> 的斐波那契数，便会发现新版本的计算速度要快的多。</p>
         <pre><code class="language-js">const calculateFibonacci = createFibonacciCalculator();
 
@@ -114,7 +114,7 @@ function createFibonacciCalculator () {
 }
 </code></pre>
         <p>新版的 <code>calculateFibonacci</code> 函数之所以会更快，是因为它缓存了曾经计算过的斐波那契数，从而减少了很多重复的计算。</p>
-        <h2 id="3ed54c5f-2bf2-453d-b41b-e011de10ff2a">深拷贝</h2>
+        <h2 id="16464170-0c6a-4af7-982b-03410a5fbd42">深拷贝</h2>
         <p>这是一个深拷贝的简单实现，它可以深拷贝普通对象。</p>
         <pre><code class="language-js">function deepClone ( source ) {
 
@@ -136,7 +136,7 @@ function createFibonacciCalculator () {
             <p>如果你想在生产环境中使用深拷贝，那么请使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/structuredClone">structuredClone API</a>，这是一个由 HTML5 规范定义的深拷贝方法，它已内建于浏览器运行时与 Node.js 运行时中，它的兼容性良好。</p>
             <p><code>structuredClone</code> 比 <code>_.cloneDeep()</code> 和 <code>JSON.parse(JSON.stringify())</code> 更好，你可以从 <a href="https://www.builder.io/blog/structured-clone">这篇文章</a> 了解到更多。</p>
         </blockquote>
-        <h2 id="fe481cbd-24eb-42b9-bd66-a82abc790927">意义</h2>
+        <h2 id="61030e97-b478-4e15-bef1-3d40a1037bd6">意义</h2>
         <p>递归函数的意义在于提高函数的可读性，如果你仔细阅读了上述两个例子的代码，你就会发现它们都是自解释的。</p>
         <p>不过，如果你期望得到的是高性能的函数，那么你可以尝试把递归函数改造成普通的迭代函数，迭代函数往往会比递归函数更快，这是因为创建额外的函数执行上下文会带来额外的性能负荷。</p>
     </article>

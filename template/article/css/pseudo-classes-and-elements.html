@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伪类和伪元素</title>
+</head>
+
+<body>
+    <header>
+        <button><a href="/catalogue.html"><strong>CATALOGUE</strong></a></button>
+    </header>
+    <aside>
+        <p>In this article</p>
+        <p data-target-id=2819a67d-e7c4-45ef-8ca1-8d7b2ccf9acb>伪类</p>
+        <p data-target-id=b961f46e-5169-443e-8602-13f4e01005d5>伪元素</p>
+        <p data-target-id=8845e206-010d-4be9-a8f1-7ecdc056b1e2>区别</p>
+    </aside>
+    <article>
+        <h1>伪类和伪元素</h1>
+        <h2 id="2819a67d-e7c4-45ef-8ca1-8d7b2ccf9acb">伪类</h2>
+        <p>伪类（pseudo-classes）是一个附加到选择器末尾的关键字，它是选择器的附加条件，用于匹配处于特定状态下的元素，你可以从 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">这里</a> 查看所有的伪类。</p>
+        <h3 id="1a183f92-7315-4bd4-a27a-dfe171cafc78">focus</h3>
+        <p><code>:focus</code> 用于匹配获得焦点的元素，用户可以通过点击、触击、tab 键来聚焦一个元素（<code>tab</code> 代表聚焦下一个元素，<code>shift+tab</code>代表聚焦上一个元素）。</p>
+        <pre><code class="language-css">a:focus {
+    color: red;
+}
+</code></pre>
+        <p>只有锚、按钮、表单元素才能获得焦点。并且用户可以使用键盘来控制已经获得焦点的元素，比如对于锚元素而言，可以回车打开链接；对于按钮元素而言，可以回车出发按钮；对于表单元素而言，可以直接输入内容。</p>
+        <p>另外，如果操作系统不同、浏览器不同，那么聚焦的触发方式也不同，具体来说：</p>
+        <ul>
+            <li>用户可以通过点击或触击来聚焦元素，用户可以使用 <code>tab</code> 来聚焦下一个元素，使用 <code>shift+tab</code> 来聚焦上一个元素。</li>
+            <li>对于 MacOS 的 Safari：<ul>
+                    <li>用户无法通过点击或触击来聚焦元素（这是一个众所周知的 bug）。</li>
+                    <li><code>tab</code> 和 <code>shift+tab</code> 只能聚焦表单元素，不能聚焦锚元素和按钮元素。</li>
+                    <li><code>option+tab</code> 和 <code>option+shift+tab</code> 可以聚焦锚、按钮、表单元素。</li>
+                </ul>
+            </li>
+            <li>对于 MacOS 的某些版本的 Firefox，<code>tab</code> 和 <code>shift+tab</code> 只能聚焦按钮、表单元素。</li>
+        </ul>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>如果你想让 Safari 和 Firefox 的行为变得“正常”，那么你就需要更改 MacOS 的系统设置，请从 <a href="https://www.scottohara.me/blog/2014/10/03/link-tabbing-firefox-osx.html">这里</a> 查看修改的教程。</p>
+            <p>如果你想更加深入的学习可访问性，那么你可以看 <a href="https://a11y.coffee/">这里</a>。</p>
+        </blockquote>
+        <h3 id="8ce6371b-d523-4ba8-81e9-31d405fe96a9">checked</h3>
+        <p><code>:checked</code> 用于匹配处于勾选状态下的元素，另外只有 <code>&lt;input type=&quot;radio&quot; /&gt;</code> 和 <code>&lt;input type=&quot;checkbox&quot; /&gt;</code> 才能被勾选。</p>
+        <h3 id="d4eff39a-6d1b-4c51-8a92-094473f122b4">first &amp; last child</h3>
+        <p><code>:first-child</code> 的作用是仅当锚元素是其父元素的第一个字元素时，才匹配该锚元素，<code>:last-child</code> 的作用则恰好相反。</p>
+        <blockquote>
+            <p><strong>Note</strong></p>
+            <p>此处的“锚元素”是指被伪类吸附的元素，而不是 <code>&lt;a&gt;</code>。</p>
+        </blockquote>
+        <pre><code class="language-html">&lt;style&gt;
+    span:first-child {
+        color: red;
+    }
+    span:last-child {
+        color: blue;
+    }
+&lt;/style&gt;
+&lt;body&gt;
+    &lt;span&gt;该文本的字体颜色是：红色&lt;/span&gt;
+    &lt;span&gt;该文本的字体颜色是：蓝色&lt;/span&gt;
+&lt;/body&gt;
+</code></pre>
+        <h3 id="ee04379e-fc00-4423-81db-e2a0fe4be305">first &amp; last of type</h3>
+        <p><code>:first-of-type</code> 的作用是仅当锚元素是所有兄弟元素中的长兄元素时，才匹配该锚元素，<code>:last-of-type</code> 的作用则恰好相反。</p>
+        <pre><code class="language-html">&lt;style&gt;
+    span:first-of-type {
+        color: red;
+    }
+    span:last-of-type {
+        color: blue;
+    }
+&lt;/style&gt;
+&lt;body&gt;
+    &lt;div&gt;&lt;/div&gt;
+    &lt;span&gt;该文本的字体颜色是：红色&lt;/span&gt;
+    &lt;span&gt;该文本的字体颜色是：蓝色&lt;/span&gt;
+    &lt;div&gt;&lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+        <h2 id="b961f46e-5169-443e-8602-13f4e01005d5">伪元素</h2>
+        <p>伪元素（pseudo-elements）是一个附加到选择器末尾的关键字，它是选择器的附加条件，用于匹配目标元素内的伪造的子元素，你可以从 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements">这里</a> 查看所有的伪元素。</p>
+        <p>根据规范，伪元素应当使用双冒号（<code>::</code>）语法，以便于与伪类进行区分。不过由于早期的 W3C 规范并为对此进行规定，因此一些早期实现伪元素也支持单冒号语法。</p>
+        <p>我们可以通过非 HTML tag 的方式来伪造一个元素，而伪元素的作用正是匹配这些伪造出来的元素，这就是伪元素得名的原因。比如下例中的提示文本是通过 <code>palceholder</code> 属性来伪造出的一个元素，你可以把它当成 <code>&lt;placeholder&gt;</code>，而 <code>::placeholder</code> 可以匹配到 <code>&lt;placeholder&gt;</code>。</p>
+        <pre><code class="language-html">&lt;style&gt;
+ input::placeholder {
+     color: gold;
+ }
+&lt;/style&gt;
+&lt;input placeholder=&quot;please entry here...&quot; /&gt;
+</code></pre>
+        <h3 id="d7a4b1e1-f778-4d45-b8f8-3067399aacc8">before &amp; after</h3>
+        <p><code>::before</code> 的原理是在元素内部的头部创建出一个 <code>&lt;span&gt;</code>，然后将 <code>content</code> 属性的值作为 <code>&lt;span&gt;</code> 的内容，<code>::after</code> 也是同理。所以你可以认为 <code>::before</code> 和 <code>::after</code> 是一种用于创建 <code>&lt;span&gt;</code> 的语法糖。</p>
+        <p>比如，下面两个例子的效果是一致的，性能也没有显著的差异。</p>
+        <pre><code class="language-html">&lt;p&gt;&lt;span&gt;-&gt;&lt;/span&gt;www.jynxio.com&lt;/p&gt;
+</code></pre>
+        <pre><code class="language-html">&lt;style&gt;
+    p::before {
+        content: &quot;-&gt;&quot;
+    }
+&lt;/style&gt;
+&lt;p&gt;www.jynxio.com&lt;/p&gt;
+</code></pre>
+        <p>Josh 建议只用 <code>::before</code> 和 <code>::after</code> 来进行装饰（即让 <code>content</code> 属性的值为 <code>&quot;&quot;</code>），比如用来创建无序列表的圆点，而不要用它们来渲染 HTML 文本，原因有二：</p>
+        <ul>
+            <li>有些屏幕阅读器会阅读它们的内容，有些屏幕阅读器则不会，如果使用它们来渲染 HTML 文本，那么就会降低可访问性。</li>
+            <li>使用 CSS 来渲染 HTML 的内容是一种不好的耦合行为，这会降低程序的可维护性。</li>
+        </ul>
+        <h2 id="8845e206-010d-4be9-a8f1-7ecdc056b1e2">区别</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>伪类</th>
+                    <th>伪元素</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>单冒号语法</td>
+                    <td>双冒号语法（部分支持单冒号语法）</td>
+                </tr>
+                <tr>
+                    <td>匹配处于特定状态下的元素</td>
+                    <td>匹配目标元素内的伪造的子元素</td>
+                </tr>
+                <tr>
+                    <td>一个元素可以使用多个伪类</td>
+                    <td>一个元素只能使用一个伪元素</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</body>
+
+</html>

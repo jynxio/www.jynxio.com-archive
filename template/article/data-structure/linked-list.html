@@ -14,24 +14,24 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=d81f3775-9675-4dad-b9d2-78545d2f5c15>数组</p>
-        <p data-target-id=51d1c319-ee20-4f43-acb7-3ca01958c7a9>链表</p>
-        <p data-target-id=d35275d3-0f36-4f2c-b4ae-0d73a184aab8>单向链表</p>
-        <p data-target-id=abcbf9e4-d8af-49fa-a352-5b504d10ee84>双向链表</p>
-        <p data-target-id=52e49b65-3b6b-492d-8fa5-48567b6ac065>循环链表</p>
-        <p data-target-id=fba1685f-0395-4e73-942b-102cb6f21df4>有序链表</p>
-        <p data-target-id=2e95e51b-f2eb-4233-a0f3-787908b1967c>实现单向链表</p>
-        <p data-target-id=a36f4b14-6091-4bee-aeba-a5472ea9a13f>实现双向链表</p>
-        <p data-target-id=b3420d88-3107-413a-a0f6-d48fd246276a>实现循环链表</p>
-        <p data-target-id=7ea220c8-a8cf-4df3-bdd6-449d9468c626>实现有序链表</p>
-        <p data-target-id=7ee495d8-f6a6-45e0-8354-587cedbabe47>基于链表的栈</p>
-        <p data-target-id=8932e3bb-0083-4c26-b628-f3c12cbbf4fb>基于链表的普通队列</p>
-        <p data-target-id=e6c11b27-1e5b-4f12-b3d5-110d9089b094>基于链表的双端队列</p>
-        <p data-target-id=fb67a516-c563-461f-836e-3f711a3fb466>源码</p>
+        <p data-target-id=e5d3d382-bd81-4f49-b8c3-334d6657b082>数组</p>
+        <p data-target-id=cb039400-3cd7-4481-b08a-43c7b8f4157f>链表</p>
+        <p data-target-id=cbcecbda-c46a-4c85-9f8d-6f1e571f2e43>单向链表</p>
+        <p data-target-id=326c75af-f84f-488b-8461-94ca3cb5f8d8>双向链表</p>
+        <p data-target-id=88185a07-447a-4f71-a0a7-1de12a894e69>循环链表</p>
+        <p data-target-id=6fcdee22-ff99-41c0-941c-3af5c803381e>有序链表</p>
+        <p data-target-id=5df669c6-3a7b-4282-a9cd-b5d828fd8f15>实现单向链表</p>
+        <p data-target-id=78c04d0a-2100-4765-9ab6-eefeeced4b6d>实现双向链表</p>
+        <p data-target-id=701fb3c1-1685-48a1-9c88-5794ee3879a3>实现循环链表</p>
+        <p data-target-id=01dea289-fd40-4347-ac57-d4891b7ae85d>实现有序链表</p>
+        <p data-target-id=5c222eca-99a7-4e64-a335-34980bf5fcbc>基于链表的栈</p>
+        <p data-target-id=245c7a62-663d-4109-a66e-59b7f885fb20>基于链表的普通队列</p>
+        <p data-target-id=81ba7f8e-b62f-4532-8207-071425ad5fd2>基于链表的双端队列</p>
+        <p data-target-id=a7ba36bf-4426-4240-9a11-f9b1c9699b0b>源码</p>
     </aside>
     <article>
         <h1>链表</h1>
-        <h2 id="d81f3775-9675-4dad-b9d2-78545d2f5c15">数组</h2>
+        <h2 id="e5d3d382-bd81-4f49-b8c3-334d6657b082">数组</h2>
         <p>在介绍链表之前，我们需要先了解一下数组。数组是一种非常方便的数据结构，我们可以通过 <code>[]</code> 语法来快速的访问数组中的元素，不过数组有 2 个明显的缺点：</p>
         <ul>
             <li>数组的长度是固定的，如果我们需要变长的数组，那么问题就会变得棘手。</li>
@@ -39,14 +39,14 @@
         </ul>
         <p>幸运的是，在 JavaScript 中似乎不存在这 2 个问题，因为 JavaScript 中的数组是变长的，我们可以在不声明数组长度的情况下就创建数组，并任意的增加数组的长度，另外 JavaScript 也提供了 <code>Array.prototype.splice</code> 来帮助我们轻松的增删元素，而无需关注增删元素的实现细节。</p>
         <p>不过，JavaScript 中的类型数组还是定长的，并且从 JavaScript 引擎的角度来看，所有的数组也都是定长的。另外 <code>Array.prototype.splice</code> 只是简化了增删操作，而没有优化增删操作，从 JavaScript 引擎的角度来看，增加或移除数组的元素仍然需要重排后续所有元素的位置。</p>
-        <h2 id="51d1c319-ee20-4f43-acb7-3ca01958c7a9">链表</h2>
+        <h2 id="cb039400-3cd7-4481-b08a-43c7b8f4157f">链表</h2>
         <p>链表是节点的集合，节点是值与指针的集合，其中指针用于指向其它的节点，比如前一个节点或后一个节点。链表有许多种形式，本文将会介绍单向链表、双向链表、循环链表、有序链表。</p>
         <p>相比于数组，链表的好处是其在增删元素时不需要重排后续元素的位置，并且链表可以任意的扩展自身的长度，链表的坏处是其不能直接访问目标位置的节点，如果链表想要访问某个节点，就必须从起点开始向后遍历，直至找到目标节点。</p>
-        <h2 id="d35275d3-0f36-4f2c-b4ae-0d73a184aab8">单向链表</h2>
+        <h2 id="cbcecbda-c46a-4c85-9f8d-6f1e571f2e43">单向链表</h2>
         <p>单向链表的特点是它只能沿着一个方向来遍历节点，具体来说，单向链表只能沿着从头到尾的方向来遍历节点。</p>
         <p>单向链表就像一列火车，火车由一个车头和零至多节车厢组成，车头可以通过其尾部的钩子来连接第一节车厢，车厢可以装载货物并用其尾部的钩子来连接下一节车厢。这列火车就代表单向链表，其中车头代表链表的 <code>head</code>，车厢代表链表的节点，车厢上的货物代表节点的数据，车厢尾部的钩子代表节点的指针，这个指针用来指向下一个节点。</p>
         <p><img src=/static/image/markdown/data-structure/linked-list/singly-linked-list-structure.png alt=链表的结构 loading="lazy" decoding="async"></p>
-        <h2 id="abcbf9e4-d8af-49fa-a352-5b504d10ee84">双向链表</h2>
+        <h2 id="326c75af-f84f-488b-8461-94ca3cb5f8d8">双向链表</h2>
         <p>双向链表的特点是它既能沿着从头到尾的方向来遍历节点，也能沿着从尾到头的方向来遍历节点，这是因为双向链表的节点同时具有指针 <code>next</code> 和指针 <code>prev</code>，其中前者用于指向后一个节点，后者用于指向前一个节点。</p>
         <p>另外，我们还为这个双向链表添加了一个 <code>tail</code> 指针，它用来指向链表中的最后一个节点，当我们需要查找链表上的某个节点时，如果目标节点的序号大于 <code>size / 2</code>，那么我们就应该从尾部开始朝着头部方向去查找，否则我们就应该从头部开始朝着尾部方向去查找，这样可以减少遍历的次数。</p>
         <blockquote>
@@ -54,18 +54,18 @@
             <p>你可以自由的决定是否为你的双向链表添加 <code>tail</code> 指针，因为 <code>tail</code> 指针不是双向链表的必需品。另外，其实你也可以给你的单向链表添加 <code>tail</code> 指针。</p>
         </blockquote>
         <p><img src=/static/image/markdown/data-structure/linked-list/doubly-linked-list-structure.png alt=双向链表的结构 loading="lazy" decoding="async"></p>
-        <h2 id="52e49b65-3b6b-492d-8fa5-48567b6ac065">循环链表</h2>
+        <h2 id="88185a07-447a-4f71-a0a7-1de12a894e69">循环链表</h2>
         <p>循环链表的特点是其尾节点的指针会指向头节点。循环链表既可以基于单向链表来实现，也可以基于双向链表来实现。</p>
         <p><img src=/static/image/markdown/data-structure/linked-list/circular-linked-list-structure.png alt=循环链表的结构 loading="lazy" decoding="async"></p>
-        <h2 id="fba1685f-0395-4e73-942b-102cb6f21df4">有序链表</h2>
+        <h2 id="6fcdee22-ff99-41c0-941c-3af5c803381e">有序链表</h2>
         <p>有序链表的特点是其节点是按照顺序来排列的，具体来说，有序链表的节点们会根据自身的值与某种排序规律来进行排列，比如下图就是一个有序链表，这个链表中的节点是按照 <code>data</code> 值从小到大的顺序来排列的。</p>
         <p><img src=/static/image/markdown/data-structure/linked-list/ordered-linked-list-structure.png alt=有序链表的结构 loading="lazy" decoding="async"></p>
         <p>因为有序链表的节点的排列顺序是有要求的，所以我们还需要在插入新节点之前就计算出新节点的插入位置，为此我们可以通过遍历并比较链表上节点来找到合适的位置，再把新节点插入到这个位置上，此时有序链表的插入操作的时间复杂度是 <code>O(n)</code>。不过，我们还可以使用其它的方法来计算新节点的插入位置，比如二分查找，这样就可以将插入操作的时间复杂度降低到 <code>O(logn)</code>。</p>
         <p><img src=/static/image/markdown/data-structure/linked-list/ordered-linked-list-insert-node.png alt=有序链表插入新节点 loading="lazy" decoding="async"></p>
         <p>有序链表的优点是可以快速的移除极值节点，因为只需要移除头节点或尾节点即可，因此有序链表适用于那些需要频繁存取极值且不怎么需要存取中间值的场景。</p>
         <p>有序链表可以基于单向链表、双向链表、循环链表或其它类型的链表来实现。</p>
-        <h2 id="2e95e51b-f2eb-4233-a0f3-787908b1967c">实现单向链表</h2>
-        <h3 id="11f43276-3e00-4556-9bbe-2cbb64716e75">方法和属性</h3>
+        <h2 id="5df669c6-3a7b-4282-a9cd-b5d828fd8f15">实现单向链表</h2>
+        <h3 id="4d97fa68-6e22-4d95-b5e5-9ea03d7de05e">方法和属性</h3>
         <p>我们实现的单向链表将会有以下方法和属性：</p>
         <table>
             <thead>
@@ -140,7 +140,7 @@
             <li>节点的序号是从零起算的，链表的 <code>head</code> 所指向的节点就是零号节点。</li>
             <li>上述所有方法的返回值都是一个 <code>{success, data}</code> 格式的对象，其中 <code>success</code> 的值为 <code>true</code> 或 <code>false</code>，它代表方法是否执行成功，仅当方法执行成功时才会返回有效的 <code>data</code> 字段，<code>data</code> 则代表该方法执行成功后的真正返回值，比如节点的序号、被移除的节点、更新后的链表等。</li>
         </ol>
-        <h3 id="bda32373-a1a2-4caf-9335-c3e2924b814e">遍历、插入、移除节点</h3>
+        <h3 id="c452e2f8-c588-46a3-88f8-4bd532e2c02c">遍历、插入、移除节点</h3>
         <p>遍历、插入、移除节点是实现单向链表的主要难点。关于遍历节点，其具体实现如下。</p>
         <pre><code class="language-js">let current_node = head;
 
@@ -156,7 +156,7 @@ while ( current_node ) {
         <p><img src=/static/image/markdown/data-structure/linked-list/singly-linked-list-insert.png alt=单向链表插入节点 loading="lazy" decoding="async"></p>
         <p>关于移除节点，其对应的方法是 <code>remove</code>、<code>pop</code>、<code>shift</code>，其中后两者都是基于 <code>remove</code> 来实现的，移除节点的核心逻辑如下。</p>
         <p><img src=/static/image/markdown/data-structure/linked-list/singly-linked-list-remove.png alt=单向链表移除节点 loading="lazy" decoding="async"></p>
-        <h3 id="b4515b62-30e9-4813-9106-17bd93a5cc54">实现 SinglyNode</h3>
+        <h3 id="004a680a-debb-4a46-a73c-f6abd7dadd90">实现 SinglyNode</h3>
         <p>在正式开始实现 <code>SinglyLinkedList</code> 之前，我们需要先实现一个关于单向节点的类 <code>SinglyNode</code>，它用于构造具有 <code>data</code> 和 <code>next</code> 属性的对象，这可以让我们在实现链表的过程中更轻松、更清晰的创建节点。</p>
         <pre><code class="language-js">class SinglyNode {
 
@@ -169,7 +169,7 @@ while ( current_node ) {
 
 }
 </code></pre>
-        <h3 id="9c2e37d1-c494-4aa9-90dd-4d64cdf0f61f">实现 SinglyLinkedList</h3>
+        <h3 id="74cbba4f-69c2-496a-afcb-7a9856c304ff">实现 SinglyLinkedList</h3>
         <p>现在，我们可以开始实现单向链表了，简明的代码比啰嗦的语言更加易懂，所以请通过阅读下述代码来了解如何实现一个单向链表吧。</p>
         <pre><code class="language-js">class SinglyLinkedList {
 
@@ -408,7 +408,7 @@ while ( current_node ) {
 
 }
 </code></pre>
-        <h2 id="a36f4b14-6091-4bee-aeba-a5472ea9a13f">实现双向链表</h2>
+        <h2 id="78c04d0a-2100-4765-9ab6-eefeeced4b6d">实现双向链表</h2>
         <p>接下来，我们会实现一个名为 <code>DoublyLinkedList</code> 的类，它代表双向链表的构造器。双向链表应当继承单向链表的属性和方法，为此我们会令 <code>DoublyLinkedList</code> 继承 <code>SinglyLinkedList</code>。</p>
         <p>相比于单向链表的节点，双向链表的节点拥有额外的 <code>prev</code> 指针，所以我们需要实现一个 <code>DoublyNode</code> 来替代 <code>SinglyNode</code>。我们既可以从头实现 <code>DoublyNode</code>，也可以在 <code>SinglyNode</code> 的基础上实现 <code>DoublyNode</code>，本文选择后者。</p>
         <pre><code class="language-js">class DoublyNode extends SinglyNode {
@@ -581,7 +581,7 @@ while ( current_node ) {
 
 }
 </code></pre>
-        <h2 id="b3420d88-3107-413a-a0f6-d48fd246276a">实现循环链表</h2>
+        <h2 id="701fb3c1-1685-48a1-9c88-5794ee3879a3">实现循环链表</h2>
         <p>循环链表既可以基于单向链表来实现，也可以基于双向链表来实现。基于单向链表来实现的循环链表与单向链表的区别在于前者的尾节点的 <code>next</code> 指针会指向头节点，而不是 <code>undefined</code>。基于双向链表来实现的循环链表与双向链表的区别在于前者的尾节点的 <code>next</code> 指针会指向头节点，而不是 <code>undefined</code>，并且前者的头节点的 <code>prev</code> 指针会指向尾节点，而不是 <code>undefined</code>。</p>
         <p>接下来我们会基于双向链表来实现循环链表，我们把它称为 <code>CircularLinkedList</code>，显然 <code>CircularLinkedList</code> 会继承 <code>DoublyLinkedList</code>，并且我们需要重写 <code>CircularLinkedList</code> 的 <code>insert</code> 和 <code>remove</code> 方法。最后的实现代码如下。</p>
         <pre><code class="language-js">class CircularLinkedList extends DoublyLinkedList {
@@ -695,7 +695,7 @@ while ( current_node ) {
 
 }
 </code></pre>
-        <h2 id="7ea220c8-a8cf-4df3-bdd6-449d9468c626">实现有序链表</h2>
+        <h2 id="01dea289-fd40-4347-ac57-d4891b7ae85d">实现有序链表</h2>
         <p>有序链表是一种节点会按照某种规律来排列的链表，比如按照数值大小来排列、按照 Unicode 大小来排列或者按照其它规则来排列。在这里，我们将基于双向链表来实现一个有序链表，这个有序链表的节点将会按照数值从小到大的顺序来排列。我们之所以选用了双向链表，是因为我们实现的有序链表会用到 <code>prev</code> 和 <code>next</code> 指针，且又不会用到循环链表的“首位相连”的特性。</p>
         <p>因为有序列表会自动的根据预定义的排列规则与新节点的值来决定新节点的插入位置，所以我们就不再需要在插入节点时指定插入的位置了，为此我们需要重写 <code>insert</code> 方法，令其只接受一个唯一的参数，这个参数用于设置新节点的 <code>data</code>。实现代码如下。</p>
         <pre><code class="language-js">class SortedLinkedList extends DoublyLinkedList {
@@ -792,7 +792,7 @@ while ( current_node ) {
         <pre><code class="language-js">SortedLinkedList.prototype.push = undefined;
 SortedLinkedList.prototype.unshift = undefined;
 </code></pre>
-        <h2 id="7ee495d8-f6a6-45e0-8354-587cedbabe47">基于链表的栈</h2>
+        <h2 id="5c222eca-99a7-4e64-a335-34980bf5fcbc">基于链表的栈</h2>
         <p>在这里，我们将会用双向链表来重新实现栈。如果可以基于已经实现了的双向链表来实现栈，那么就可以大大的简化栈的实现步骤。这里实现的栈将会拥有如下的方法和属性。</p>
         <table>
             <thead>
@@ -887,7 +887,7 @@ SortedLinkedList.prototype.unshift = undefined;
 
 }
 </code></pre>
-        <h2 id="8932e3bb-0083-4c26-b628-f3c12cbbf4fb">基于链表的普通队列</h2>
+        <h2 id="245c7a62-663d-4109-a66e-59b7f885fb20">基于链表的普通队列</h2>
         <p>在这里，我们将会用双向链表 <code>DoublyLinkedList</code> 来重新实现普通队列，选用 <code>DoublyLinkedList</code> 的原因与上文一致。这里实现的普通队列将会拥有如下的方法和属性。</p>
         <table>
             <thead>
@@ -976,7 +976,7 @@ SortedLinkedList.prototype.unshift = undefined;
 
 }
 </code></pre>
-        <h2 id="e6c11b27-1e5b-4f12-b3d5-110d9089b094">基于链表的双端队列</h2>
+        <h2 id="81ba7f8e-b62f-4532-8207-071425ad5fd2">基于链表的双端队列</h2>
         <p>在这里，我们将会用双向链表 <code>DoublyLinkedList</code> 来重新实现双端队列，选用 <code>DoublyLinkedList</code> 的原因与上文一致。这里实现的双端队列将会拥有如下的方法和属性。</p>
         <table>
             <thead>
@@ -1103,7 +1103,7 @@ SortedLinkedList.prototype.unshift = undefined;
 
 }
 </code></pre>
-        <h2 id="fb67a516-c563-461f-836e-3f711a3fb466">源码</h2>
+        <h2 id="a7ba36bf-4426-4240-9a11-f9b1c9699b0b">源码</h2>
         <p>本文已将实现链表的源码上传至该 <a href="https://github.com/jynxio/leetcode-everyday">库</a> 的 <a href="https://github.com/jynxio/leetcode-everyday/blob/main/LinkedList.js">LinkedList.js</a> 文件中。</p>
     </article>
 </body>
