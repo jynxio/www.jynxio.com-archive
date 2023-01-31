@@ -1,3 +1,7 @@
+---
+typora-root-url: ../../..
+---
+
 # Color
 
 ## named color
@@ -67,7 +71,7 @@ IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 `rgb( r
 
 > RGB 是一种基于物理的颜色格式，即使用三原色来表示颜色，通过混合不同量的三原色，即可得到不同的颜色，其中 R 代表红色（Red）、G 代表绿色（Green）、B 代表蓝色（Blue）。
 >
-> HSL 是一种基于视觉的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。相比于 RGB，HSL 要更加贴近人对颜色的认知。
+> HSL 是一种基于人类视觉的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。相比于 RGB，HSL 要更加贴近人对颜色的认知。
 >
 > 另外，大多数的图形设计软件都提供了一种名为 HSB 的颜色格式，其中的 B 代表 Brightness。Brightness 与 Lightness 在概念上没有明显区别，不过在使用方法上有很大的不同。HSB 与 HSL 的相同之处在于，当 Brightness  为 `0%` 时，颜色也会表现为黑色，不同之处在于，当 Brightness 为 `100%` 时，如果 Saturation 为 `0%`，那么颜色就会表现为白色，如果 Saturation 为 `100%`，那么颜色就会表现为本来的颜色。需要提醒的是，CSS 没有 `hsb()`，只有 `hsl()`。
 
@@ -117,6 +121,55 @@ color( display-p3 1 0.5 0 )
 目前，`color()` 的兼容性不好，只有 Safari 和 Chrome 支持 `color()` 函数，你可以从 [这里](https://caniuse.com/?search=color()) 找到最新的兼容性情况。
 
 > Safari 的控制台提供了 `sRGB -> Display P3` 或 `Display P3 -> sRGB` 的能力，你可以从 [这里](https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/) 找到具体的使用方法。
+
+### 图像使用 P3 色域
+
+在 Photoshop 中，我们可以将图像的颜色空间设置为 P3，如此一来，哪怕浏览器不支持 `color()`，图像也可以呈现出更加艳丽的色彩。
+
+## lch()
+
+`lch()` 是一种基于 LCH 的颜色表示法，它不受限于任何颜色空间。
+
+### 语法
+
+```css
+lch( l c h )
+lch( l c h / a )
+```
+
+- `l` 是属于 `[0%, 100%]` 的百分比值。当 `l` 为 `0%` 时，由于没有亮度，此时颜色会呈现为黑色，当 `l` 为 `100%` 时，由于亮度过高，此时颜色会呈现为白色，如果你想渲染出颜色本来的颜色，那么请将 `l` 设置为 `50%`。
+- `c` 是属于 `[0, 正无穷]` 的数字值
+- `h` 是属于 `[0deg, 360deg]` 的角度值。除了 `deg` 外，你还可以使用的单位有 `rad`、`grad`、`turn`。如果你没有为它指定单位，那么它就会使用 `deg` 来作为默认单位。
+- `a` 是属于 `[0, 1]` 的数字值，或属于 `[0%, 100%]` 的百分比值。
+
+### 示例
+
+```css
+lch( 50% 150 0 )
+lch( 50% 150 0 / 1 )
+```
+
+### 特点
+
+LCH 和 HSL 很相似，LCH 是另一种贴近人类视觉的颜色格式，其中 L 代表亮度（Lightness）、C 代表浓度（Chroma）、H 代表色调（Hue）。
+
+相比于 HSL，LCH 有 2 个显著的特点：
+
+- 如果 2 个颜色的 Lightness 是相同的，那么它们在视觉上的明亮程度就是相同的（详见下图）；
+- 不受限于任何色彩空间，只受限于显示器的性能，因为它的色彩浓度（Chroma）没有上限（详见下例代码）；
+
+当显示器使用 sRGB 色彩空间时，`.red` 和 `.redder` 会呈现出一样的红色，当显示器使用更宽的色域时，`.redder` 会更红。
+
+```css
+.red { background: lch( 50% 100 0 ) }
+.redder { background: lch( 50% 230 0 ) }
+```
+
+![hsl vs lch](/static/image/markdown/css/color/hsl-vs-lch.png)
+
+### 兼容性
+
+目前，`lch()` 的兼容性不好，只有 Safari 和 Chrome 支持 `lch()` 函数，你可以从 [这里](https://caniuse.com/?search=lch()) 找到最新的兼容性情况。
 
 ## Color Picker
 
