@@ -14,27 +14,27 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=3ba39933-df4f-4889-9b94-e1893d87a5bd>简介</p>
-        <p data-target-id=57208cbc-9394-4e97-ae63-abb1c55c6255>版本</p>
-        <p data-target-id=1d2f8865-d736-4e27-bedc-77ad9d19e4c2>最佳实践</p>
-        <p data-target-id=be1972c5-cca9-4608-8913-34ae4441b121>如何转译语法</p>
-        <p data-target-id=5efaa308-9822-4343-8d41-ff6508e87743>如何填补接口</p>
-        <p data-target-id=4cbcfad4-d525-43fa-b216-722a6ee9be85>如何转译接口</p>
-        <p data-target-id=7c12868a-0814-4ea7-999c-946dfb15c26b>预设和插件</p>
-        <p data-target-id=4c5ca35a-9df5-4681-bc9f-5cab9a3099e1>@babel/preset-env</p>
-        <p data-target-id=64ae7996-0ce6-4857-b85d-6b1f921673c8>@babel/plugin-transform-runtime</p>
-        <p data-target-id=2fa6fcbc-88d6-4c09-951f-03ae707f6bff>@babel/runtime</p>
-        <p data-target-id=1bbbb034-a439-4cf3-9634-9999a87fc33f>@babel/runtime-corejs2</p>
-        <p data-target-id=cc2ce0c6-6b8e-4e3e-8aa1-3460472731e6>@babel/runtime-corejs3</p>
-        <p data-target-id=1ec1859f-6b43-4fcf-b3ea-2ddbab8fa805>regenerator-runtime</p>
-        <p data-target-id=fa522de1-8208-4567-aa0d-cc1893a50645>@babel/core</p>
-        <p data-target-id=e4e6e9d0-675a-4803-b799-36635526d4ab>@babel/cli</p>
-        <p data-target-id=08a4bcf7-b250-482f-b50f-eb849eb63c63>babel.config.json</p>
-        <p data-target-id=8e0eb444-86dd-4c45-97ab-0d29a5bf6cf6>FF27</p>
+        <p data-target-id=035fe392-6d24-4770-b5f0-d39dbead1fe4>简介</p>
+        <p data-target-id=55784835-a491-4809-acdd-cdc21e18eb9b>版本</p>
+        <p data-target-id=41a946da-b8ba-4b19-b36e-6cd83b72e9fe>最佳实践</p>
+        <p data-target-id=4d8d16df-6146-48e4-84b4-e67451f4b86e>如何转译语法</p>
+        <p data-target-id=1c8b30f6-b0a9-4db9-b06e-0ba67a2269be>如何填补接口</p>
+        <p data-target-id=67885e7c-199a-4236-a1bd-66cd965b2bab>如何转译接口</p>
+        <p data-target-id=05798dcb-bfa3-47be-8ece-94b3cb95418a>预设和插件</p>
+        <p data-target-id=b6807cad-fc3d-4f0c-b62a-a8f105d8431c>@babel/preset-env</p>
+        <p data-target-id=074aa59c-f25e-4418-8085-25224a33d4f4>@babel/plugin-transform-runtime</p>
+        <p data-target-id=d371a2c0-fa12-4732-b546-c3fc3c08a4e6>@babel/runtime</p>
+        <p data-target-id=4e31fbae-272e-472f-9217-cbb087ff0a41>@babel/runtime-corejs2</p>
+        <p data-target-id=02b95f15-529c-4333-804e-e26a511a2468>@babel/runtime-corejs3</p>
+        <p data-target-id=d8397ca1-62d5-458b-b2bb-b344e816992d>regenerator-runtime</p>
+        <p data-target-id=14639014-e840-446f-9985-8874f56d098b>@babel/core</p>
+        <p data-target-id=80e90845-9662-4086-a2e5-cf8304e8efe6>@babel/cli</p>
+        <p data-target-id=f2122656-c28b-4254-88f0-ce1e4fc3ff35>babel.config.json</p>
+        <p data-target-id=e409f06d-efe9-4a8c-95b9-1d1541062475>FF27</p>
     </aside>
     <article>
         <h1>Babel 7</h1>
-        <h2 id="3ba39933-df4f-4889-9b94-e1893d87a5bd">简介</h2>
+        <h2 id="035fe392-6d24-4770-b5f0-d39dbead1fe4">简介</h2>
         <p>Babel 是一个 JS 编译器，它可以将使用了 ES6+ 特性的代码转译为可以在 ES5 环境中运行的代码。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -89,12 +89,12 @@
             </ol>
             <p>摘自《圣经·旧约·创世纪》的第 11 章的第 1 ~ 9 段。</p>
         </blockquote>
-        <h2 id="57208cbc-9394-4e97-ae63-abb1c55c6255">版本</h2>
+        <h2 id="55784835-a491-4809-acdd-cdc21e18eb9b">版本</h2>
         <p>Babel 是一个以 @babel/core 为核心的工具集，每当 @babel/core 发布新版本时，整个工具集的所有包都会跟随升级至相同的版本号，即使它们的代码可能一行都没有改变。因此 Babel 的版本号即是 @babel/core 的版本号。</p>
         <p>从 Babel 7 开始，所有的包都被放置在一个名为 <code>babel</code> 的域下，比如 @babel/cli 、 @babel/core 。而之前的每个包都在 npm 全局注册表中占用一个名称，比如 babel-cli 、 babel-core 。</p>
         <p>本节在于厘清，因为许多文章将 Babel 6 和 7 混为一谈了。</p>
-        <h2 id="1d2f8865-d736-4e27-bedc-77ad9d19e4c2">最佳实践</h2>
-        <h3 id="990d1764-ed8f-4cc6-a620-0c373ef54c60">适用于项目</h3>
+        <h2 id="41a946da-b8ba-4b19-b36e-6cd83b72e9fe">最佳实践</h2>
+        <h3 id="d21d4452-9d4d-4a81-92d4-701d26c0972c">适用于项目</h3>
         <p>该方案的特点：</p>
         <ul>
             <li>默认的目标运行时是 ES5 ，如果你确定目标运行时的版本，请修改 <code>targets</code> 为你的目标运行时，这有助于减小包的体积。</li>
@@ -142,7 +142,7 @@
     }
 }
 </code></pre>
-        <h3 id="d5d870f6-3834-4a6b-acfb-43cb3862003e">适用于项目与库</h3>
+        <h3 id="56cc63c6-446a-43b3-b3d5-96bb139f0883">适用于项目与库</h3>
         <p>该方案的特点：</p>
         <ul>
             <li>默认的目标运行时是 ES5 ，如果你确定目标运行时的版本，请修改 <code>targets</code> 为你的目标运行时，这有助于减小包的体积。</li>
@@ -188,13 +188,13 @@
     }
 }
 </code></pre>
-        <h2 id="be1972c5-cca9-4608-8913-34ae4441b121">如何转译语法</h2>
+        <h2 id="4d8d16df-6146-48e4-84b4-e67451f4b86e">如何转译语法</h2>
         <p>是指将脚本中的所有语法都转译成目标运行时所支持的语法，分为 2 种情况：</p>
         <ul>
             <li>完全转译：将脚本中出现的所有 ES6+ 语法都转译为 ES5 语法。</li>
             <li>按需转译：根据目标运行时的情况，将脚本中不受支持的语法转译为受支持的语法，目标运行时不一定是 ES5 环境。</li>
         </ul>
-        <h3 id="980e8b0c-dc7a-482f-be48-1308440d4502">完全转译</h3>
+        <h3 id="9ff17b32-0825-4742-8ca9-06b37ea0eaac">完全转译</h3>
         <p>将脚本中出现的所有 ES6+ 语法都转译为 ES5 语法。</p>
         <p><code>@babel/preset-env</code> 存储了将所有的 ES6+ 语法转译为 ES5 语法的转换规则，我们将借助它来实现完全转译，示例代码是《完全转译》。步骤如下：</p>
         <ol>
@@ -236,7 +236,7 @@ var f = function f(_) {
 </code></pre>
             </li>
         </ol>
-        <h3 id="7002a006-9ea3-42e3-8777-a82f795b0b7d">按需转译</h3>
+        <h3 id="9b2e2f10-3ebc-4454-bb45-7dab6bce5c84">按需转译</h3>
         <p>根据目标运行时的情况，将脚本中不受支持的语法转译为受支持的语法，目标运行时不一定是 ES5 环境。</p>
         <p><code>@babel/preset-env</code> 的 <code>targets</code> 参数用于描述目标运行时的情况，Babel 就会自动识别出脚本中的哪些语法是不受目标运行时支持的，然后将这些语法转译为目标运行时所支持的语法。</p>
         <p>比如，如果脚本使用了箭头函数和数值分隔符这 2 种语法，且目标环境是 chrome 60 的话， Babel 就只会转译数值分隔符语法，而不会转译箭头函数语法，因为 chrome 从 45 版本开始就支持了箭头函数语法，从 75 版本开始才支持数值分隔符语法。示例代码是《按需转译》，步骤如下：</p>
@@ -283,7 +283,7 @@ const f = _ =&gt; console.log(1000000);
                 <p>果然，数值分隔符语法被转译了，而箭头函数语法被保留了。</p>
             </li>
         </ol>
-        <h3 id="5f7ed044-90a1-46dc-b274-b88c3b0ae598">语法辅助函数</h3>
+        <h3 id="afa0ede0-5b4f-4998-aaca-553a38ca519e">语法辅助函数</h3>
         <p>某些语法的转译结果是很简洁的，比如箭头函数：</p>
         <pre><code class="language-js">// 转译前
 const p = _ =&gt; {};
@@ -392,7 +392,7 @@ var A = /*#__PURE__*/(0, _createClass2[&quot;default&quot;])(function A() {
 </code></pre>
             </li>
         </ol>
-        <h2 id="5efaa308-9822-4343-8d41-ff6508e87743">如何填补接口</h2>
+        <h2 id="1c8b30f6-b0a9-4db9-b06e-0ba67a2269be">如何填补接口</h2>
         <p>如果目标运行时不支持某些 API ，就向目标运行时补充这些 API ，这将会改变目标运行时的全局环境和原型链，这分为 2 种情况：</p>
         <ul>
             <li>完全填补：帮目标运行时补齐所有的 ES6+ API ，哪怕目标运行时已经支持了部分的 ES6+ API 。</li>
@@ -404,7 +404,7 @@ var A = /*#__PURE__*/(0, _createClass2[&quot;default&quot;])(function A() {
             <p>如果目标运行时缺失了 ES5 的 API ， Babel 能填补吗？换言之 Babel 到底能填补多低级的 API 呢？</p>
         </blockquote>
         <p>另外，如果我们希望可以在不污染全局环境的前提下，就让使用了 ES6+ API 的脚本可以在不支持 ES6+ API 的运行时中正常运行，就需要使用 Babel 提供的「接口转译」特性，详见《如何转换接口》。</p>
-        <h3 id="28a2f917-00da-473e-9c04-ab47a18ecd1b">完全填补</h3>
+        <h3 id="0dd566c1-e559-410c-8497-10d7b9e126e8">完全填补</h3>
         <p>帮目标运行时补齐所有的 ES6+ API ，哪怕目标运行时已经支持了部分的 ES6+ API 。</p>
         <p>如果想帮目标运行时补齐所有 ES6+ API ，只需要将 ES6+ API 的 polyfill 文件和你的脚本打包在一起就可以了。</p>
         <p>ES6+ 的 polyfill 文件共有 3 种：</p>
@@ -474,7 +474,7 @@ Promise.resolve( 1 ).then( v =&gt; console.log( v ) );
             <p><code>regenerator-runtime</code> 用于填补 <code>Generator Function API</code> 和 <code>Async Function API</code> ， <code>core-js</code> 用于填补除了它们之外的其他 ES6+ API ，所以它们要组合在一起使用才能构建出完整的 ES6+ API 环境。</p>
             <p>如果在安装了 <code>core-js</code> 和 <code>regenerator-runtime</code> 之后再安装 <code>@babel/polyfill</code> ，那么 <code>@babel/polyfill</code> 内部的 <code>core-js</code> 和 <code>regenerator-runtime</code> 就会覆盖前者。而且主版本号为 3 的 <code>core-js</code> 文件有 <code>stable</code> 文件夹，主版本号为 2 的 <code>core-js</code> 则没有，如果不小心发生了覆盖安装，就会引发「引用错误」，因为你会在「完全填补」的示例代码中看到，我们需要通过 <code>import &quot;core-js/stable&quot;</code> 来使用主版本号为 3 的 <code>core-js</code> 。</p>
         </blockquote>
-        <h3 id="5d80fcb4-46f9-43d2-b0ff-ff0aa09ed0b9">按需填补</h3>
+        <h3 id="22a1a57a-aaff-473f-a5af-995d5529dbbb">按需填补</h3>
         <p>如果激活了 <code>@babel/preset-env</code> 的 <code>useBuiltIns</code> 属性， Babel 就会按需填补目标运行时所需的接口，具体来说就是 Babel 会自动解析 <code>core-js</code> 和 <code>regenerator-runtime</code> 。</p>
         <p>Babel 会自动的从 <code>core-js</code> 中筛选出真正需要的接口模块，然后将它们导入到脚本中去。另外，如果目标运行时需要填补 Generator Function API 或 Async Function API ，Babel 就会将 <code>regenerator-runtime</code> 导入到脚本中去，否则就不会将 <code>regenerator-runtime</code> 导入到脚本中去。</p>
         <p>Babel 通过 <code>@babel/preset-env</code> 的 <code>targets</code> 字段来了解目标运行时的状态，这样才知道目标运行时缺少什么 ES6+ API 。</p>
@@ -489,7 +489,7 @@ Promise.resolve( 1 ).then( v =&gt; console.log( v ) );
             <p><strong>Note</strong></p>
             <p>Babel 不仅仅可以解析 <code>core-js</code> 和 <code>regenerator-runtime</code> ，也可以解析 <code>@babel/polyfill</code>， 因为 <code>@babel/polyfill</code> 已经被废弃了，所以不展开介绍。</p>
         </blockquote>
-        <h4 id="bbc4b5a6-d383-4bc1-8c1f-0ec0e356762a">entry填补</h4>
+        <h4 id="043b0374-1173-43f7-9d51-769600ce2d86">entry填补</h4>
         <p>Babel 会从 <code>core-js</code> 中筛选出目标运行时所缺少的 ES6+ API 的接口模块，然后导入到脚本中去。如果目标运行时还缺少 Generator Function API 或 Async Function API ， Babel 还会将 <code>regenerator-runtime</code> 导入脚本。示例代码是《entry》，步骤如下：</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -574,7 +574,7 @@ require(&quot;core-js/modules/web.structured-clone.js&quot;);
 </code></pre>
             </li>
         </ol>
-        <h4 id="319c2ef3-2d21-460f-bac1-8135bd693dba">usage填补</h4>
+        <h4 id="5ab117bd-2323-43f6-8620-2a7c83ecb519">usage填补</h4>
         <p>Babel 会从 <code>core-js</code> 中筛选出目标运行时所缺少的且被脚本使用到了的 ES6+ API 的接口模块，然后导入到脚本中去。如果目标运行时还缺少 Generator Function API 或 Async Function API ，且脚本也刚好使用到了 Generator Function API 或 Async Function API 的话 ， Babel 还会将 <code>regenerator-runtime</code> 导入脚本。示例代码是《usage》，步骤如下：</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -655,7 +655,7 @@ function _f() {
                 <p>显然，脚本中只引入了目标运行时缺失的且被脚本使用到了的 3 个 ES6+ API ，其中引入 <code>Promise</code> 的原因是 Async Function 的返回值是 <code>Promise</code> 实例。而且由于目标运行时不支持 <code>async</code> 语法，因此 Babel 也对 Async Function 进行了语法转译。</p>
             </li>
         </ol>
-        <h3 id="51ab9486-7b26-48ee-ab7a-fe554bf11117">Generator Function 和 Async Function</h3>
+        <h3 id="e77a5b9f-6cc0-4a80-90f7-69822fc3068e">Generator Function 和 Async Function</h3>
         <p>相比其他的 ES6+ API ， <code>Generator Function</code> 和 <code>Async Function</code> 使用了新的语法，比如 <code>function*</code> 、 <code>async</code> 等等，这些语法是无法在不支持 <code>Generator Function</code> 和 <code>Async Function</code> 的旧运行时中运行的，因此哪怕你的脚本引入了 <code>regenerator-runtime</code> ，最后也会因为旧运行时不支持这些语法而导致脚本抛出异常。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -722,7 +722,7 @@ npx webpack ./bb.js -o ./bb --mode production
             <p>本节明明是在填补 <code>Async Function</code> ，可为什么需要引入 <code>core-js</code> 呢？这是因为 <code>Async Function</code> 的返回值是一个 <code>Promise</code> ，如果不引入 <code>core-js</code> ，执行时会抛出 <code>ReferenceError: Promise is not defined</code> 异常。</p>
             <p>建议如果使用了 <code>regenerator-runtime</code> ，也要使用 <code>core-js</code> 。</p>
         </blockquote>
-        <h2 id="4cbcfad4-d525-43fa-b216-722a6ee9be85">如何转译接口</h2>
+        <h2 id="67885e7c-199a-4236-a1bd-66cd965b2bab">如何转译接口</h2>
         <p>《如何填补接口》中的方法是通过修改全局环境来实现“让原本不支持 ES6+ API 的运行时支持 ES6+ API ”，大致原理是： <code>core-js</code> 模块和 <code>regenerator-runtime</code> 模块使用 ES5 的语法和 API 来在全局环境中重新生成 ES6+ API ，然后 Babel 会向你的脚本按需引入 <code>core-js</code> 和 <code>regenerator-runtime</code> 。</p>
         <p>对于普通的项目而言，虽然填补接口会污染全局环境，但这是完全可以接受的。但是对于库而言，则是不可接受的。比如，你开发的库修改了全局环境，依赖你的库的项目也修改了全局环境，如果 2 次修改是不同的，就会导致库或项目无法正常运行。因此，库不能使用填补的方式来 polyfill 接口。</p>
         <p>「转译接口」是另一种 polyfill 接口的方法，它会将脚本中与 ES6+ API 相关的代码转译成由 ES5 的语法和 API 组成的代码，这相当于将你的代码“降级”成了 ES5 运行时可以正常运行的代码，并且这种方法不会修改全局环境。如果库需要 polyfill 接口，就应当采用该方法。</p>
@@ -820,20 +820,20 @@ function _f() {
                 <p><code>a.js</code> 的代码被“降级”至了 ES5 ，导入了接口辅助函数模块（ <code>regenerator</code> 和 <code>promise</code> 模块 ），插入了内联的语法辅助函数。</p>
             </li>
         </ol>
-        <h2 id="7c12868a-0814-4ea7-999c-946dfb15c26b">预设和插件</h2>
+        <h2 id="05798dcb-bfa3-47be-8ece-94b3cb95418a">预设和插件</h2>
         <p>预设是一套预先设定好的插件组合，最常用的 4 个官方预设是： <code>@babel/preset-env</code> 、 <code>@babel/preset-flow</code> 、 <code>@babel/preset-react</code> 、 <code>@babel/preset-typescript</code> 。</p>
         <p>插件是控制 Babel 行为的 JS 程序，比如插件 <code>@babel/plugin-transform-arrow-functions</code> 可以将箭头函数转换为普通函数。使用插件可以在更细的粒度上控制 Babel 的行为，最常用的官方插件是 <code>@babel/plugin-transform-runtime</code> 。</p>
         <p>如果 Babel 使用了多个预设，预设的执行顺序是：沿着预设数组从后向前。</p>
         <p>如果 Babel 使用了多个插件，插件的执行顺序是：沿着插件数组从前向后。</p>
         <p>如果 Babel 同时使用了插件和预设， Babel 会先执行插件，后执行预设。</p>
-        <h2 id="4c5ca35a-9df5-4681-bc9f-5cab9a3099e1">@babel/preset-env</h2>
+        <h2 id="b6807cad-fc3d-4f0c-b62a-a8f105d8431c">@babel/preset-env</h2>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>在 Babel6 时代，常见的预设有： <code>babel-preset-es2015</code> 、 <code>babel-preset-es2016</code> 、 <code>babel-preset-es2017</code> 、 <code>babel-preset-state-0</code> 、 <code>babel-preset-state-1</code>、 <code>babel-preset-state-2</code> 、 <code>babel-preset-state-3</code> 、 <code>babel-preset-latest</code> 。其中 <code>babel-preset-state-x</code> 是指草案阶段的 ES 语法的转译预设，目前不再更新； <code>babel-preset-es201x</code> 是指 <code>201x</code> 年新发布的 ES 语法的转译预设，目前不再更新； <code>babel-preset-latest</code> 是指 <code>2015-至今</code> 的所有 ES 语法的转译预设，目前持续更新；</p>
             <p><code>@babel/-preset-env</code> 正是 <code>babel-preset-latest</code> 的延续与增强，它不仅仅包含所有语法的转译规则，甚至还可以按需转译语法和按需填补 API 。它在 Babel 6 时代的旧名是 <code>babel-preset-env</code> 。</p>
         </blockquote>
         <p>本文只介绍常用的 4 个参数：</p>
-        <h3 id="a56952ea-01e4-475b-b9e5-b9547a8e52fc">targets</h3>
+        <h3 id="fa5c9635-1e2a-40e1-b19e-7009d67bdf1d">targets</h3>
         <p>描述：告知 Babel 目标运行时的状态，该参数用于「按需转译语法」和「按需填补接口」。</p>
         <p>默认值： <code>{}</code> ，目标运行时是 ES5 。</p>
         <p>数据类型：<code>string |Array&lt;string&gt; |{[string]: string}</code></p>
@@ -859,7 +859,7 @@ function _f() {
   &quot;browserslist&quot;: [ &quot;chrome 58&quot; ]
 }
 </code></pre>
-        <h3 id="cee3d7c6-8aab-41d2-8b4f-0f1fac7265c1">useBuiltIns</h3>
+        <h3 id="15ab3f86-60b7-45eb-8547-ced8a01d98e7">useBuiltIns</h3>
         <p>描述：是否激活「按需填补接口」。</p>
         <p>默认值： <code>false</code></p>
         <p>取值：</p>
@@ -868,7 +868,7 @@ function _f() {
             <li><code>entry</code> ：启用，引入目标环境缺失的 ES6+ API ，且必须在待处理的脚本中显式书写 <code>import &quot;core-js/stable&quot;</code> 和 <code>import &quot;regenerator-runtime&quot;</code> 。</li>
             <li><code>usage</code> ：启用，引入目标环境缺失且被脚本使用到了的 ES6+ API ，且不能在待处理的脚本中书写 <code>import &quot;core-js/stable&quot;</code> 和 <code>import &quot;regenerator-runtime&quot;</code> 。</li>
         </ul>
-        <h3 id="c3985c45-6aea-4faa-8c36-813275abdd18">corejs</h3>
+        <h3 id="87fce678-1e2a-4278-8178-eb9b157414a0">corejs</h3>
         <p>描述：告知 Babel 项目所依赖的 <code>core-js</code> 模块的版本号是多少，仅当 <code>useBuiltIns</code> 值为 <code>&quot;entry&quot;</code> 或 <code>&quot;usage&quot;</code> 时，该参数才生效。</p>
         <p>最佳实践：将项目所依赖的 <code>core-js</code> 模块的版本号的字符串值作为 <code>corejs</code> 参数的值。比如如果 <code>package.json</code> 中显示 <code>&quot;core-js&quot;: &quot;^3.20.1&quot;</code> ，那么就将 <code>corejs</code> 参数的值设为 <code>&quot;3.19.3&quot;</code> 。</p>
         <p>默认值： <code>&quot;2.0&quot;</code></p>
@@ -877,7 +877,7 @@ function _f() {
             <p><strong>Note</strong></p>
             <p>注： Babel 需要先知道 <code>core-js</code> 的版本号才知道该如何按需填补接口，因为不同版本的 <code>core-js</code> 的内容不尽相同。如果不需要做按需填补接口，自然就不需要知道 <code>core-js</code> 的版本号了。这就是 <code>corejs</code> 参数的意义。</p>
         </blockquote>
-        <h3 id="327f337d-2df7-407f-9b10-ff1032068146">modules</h3>
+        <h3 id="727a9f1b-ada2-418e-a5e5-8a114b65940e">modules</h3>
         <p>描述：设置 Babel 应当使用什么模块语法来导入模块。</p>
         <p>默认值： <code>auto</code> （此时会采用 commonjs 模块语法，即 <code>require</code> 和 <code>module.exports</code> ）</p>
         <p>取值：选用下述其一</p>
@@ -890,7 +890,7 @@ function _f() {
             <li><code>&quot;auto&quot;</code></li>
             <li><code>&quot;false&quot;</code> （此时会采用 ES 模块语法，即 <code>import</code> 和 <code>export</code> ）</li>
         </ul>
-        <h2 id="64ae7996-0ce6-4857-b85d-6b1f921673c8">@babel/plugin-transform-runtime</h2>
+        <h2 id="074aa59c-f25e-4418-8085-25224a33d4f4">@babel/plugin-transform-runtime</h2>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>注：如果没有使用 <code>@babel/preset-env</code> ，该插件将不会生效。</p>
@@ -902,7 +902,7 @@ function _f() {
             <li>对 Generator Function API 和 Async Function API 执行接口转译，该功能默认激活。</li>
         </ol>
         <p>功能 1 的示例见《语法辅助函数》，功能 2 和 3 的示例见《如何转译接口》。</p>
-        <h3 id="ad11c8df-ba36-4ae4-9b0f-cd669ba4dc32">helpers</h3>
+        <h3 id="d4777344-575d-4df1-a30e-03e4ff40d768">helpers</h3>
         <p>描述：是否使用「语法辅助函数模块」来替换「内联语法辅助函数」。</p>
         <p>默认值： <code>true</code></p>
         <p>取值：</p>
@@ -910,7 +910,7 @@ function _f() {
             <li><code>true</code> ：激活。</li>
             <li><code>false</code> ：禁用。</li>
         </ol>
-        <h3 id="ff0c323b-8dc6-431b-a39e-faabcf22115f">corejs</h3>
+        <h3 id="feba64db-cf38-4701-8028-1495adcac105">corejs</h3>
         <p>描述：是否做接口转译，注意它只转译除了 Generator Function API 和 Async Function API 之外的 ES6+ API 。</p>
         <p>默认值： <code>false</code></p>
         <p>取值：可取以下其一</p>
@@ -919,7 +919,7 @@ function _f() {
             <li><code>2</code> ：激活，使用来自 <code>@babel/runtime-corejs2</code> 的接口辅助函数模块。</li>
             <li><code>3</code> ：激活，使用来自 <code>@babel/runtime-corejs3</code> 的接口辅助函数模块。</li>
         </ol>
-        <h3 id="2bee8220-8d81-4cca-946a-44d578f7f608">regenerator</h3>
+        <h3 id="61d31ae8-6d67-4ef9-aa43-576be29704df">regenerator</h3>
         <p>描述：是否做接口转译，注意它只转译 Generator Function API 和 Async Function API 。</p>
         <p>默认值： <code>true</code></p>
         <p>取值：</p>
@@ -931,7 +931,7 @@ function _f() {
             <p><strong>Note</strong></p>
             <p>该功能所需的接口辅助函数模块来自 <code>@babel/runtime/regenerator</code> 或 <code>@babel/runtime-corejs2/regenerator</code> 或 <code>@babel/runtime-corejs3/regenerator</code> ，具体使用哪个则取决于 <code>corejs</code> 的取值。</p>
         </blockquote>
-        <h3 id="b6edb3c4-676e-4778-b228-721995b8a4d3">version</h3>
+        <h3 id="25e55f63-d39c-4dff-b2b6-83cd86eb4372">version</h3>
         <p>描述： runtime 模块版本号。因为该插件需要根据 runtime 模块的版本号来决定可以在内部使用哪些技巧。</p>
         <p>最佳实践：照抄 runtime 模块的值，这样打包后的体积会更小。比如如果 <code>package.json</code> 中 <code>&quot;@babel/runtime-corejs3&quot;: &quot;^7.16.5&quot;</code> ，那么就将 <code>version</code> 的值设为 <code>&quot;^7.16.5&quot;</code> 。</p>
         <p>默认值： <code>&quot;7.0.0&quot;</code> </p>
@@ -940,7 +940,7 @@ function _f() {
             <p><strong>Note</strong></p>
             <p>此处的「runtime模块」是指 <code>@babel/runtime</code> 或 <code>@babel/runtime-corejs2</code> 或 <code>@babel/runtime-corejs3</code> ，「runtime模块」不是官方术语，这是本节为了简化描述而自拟的术语。</p>
         </blockquote>
-        <h3 id="7724fd28-99c5-44b1-a982-1052e9ebb726">absoluteRuntime</h3>
+        <h3 id="7f5e4d90-6a0c-44f2-809f-584ba62ff081">absoluteRuntime</h3>
         <p>描述：是否自定义 <code>@babel/plugin-transform-runtime</code> 引入 runtime 模块的路径规则。几乎用不到该参数，取默认值就行，因为只要正常的将包安装至 <code>node_modules</code> 文件夹中，就不需要自定义包的路径。</p>
         <p>默认值： <code>false</code></p>
         <p>取值：</p>
@@ -948,24 +948,24 @@ function _f() {
             <li><code>false</code> ：不需要自定义包的路径。</li>
             <li>表示路径的字符串。</li>
         </ol>
-        <h2 id="2fa6fcbc-88d6-4c09-951f-03ae707f6bff">@babel/runtime</h2>
+        <h2 id="d371a2c0-fa12-4732-b546-c3fc3c08a4e6">@babel/runtime</h2>
         <p>该包存储了所有的语法辅助函数模块和 <code>regenerator-runtime</code> 模块，前者位于 <code>helpers</code> 文件夹内，后者位于 <code>regenerator</code> 文件夹内。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>其实如果安装了 <code>@babel/preset-env</code> ， <code>@babel/runtime</code> 也会被自动安装上。但如果你要用 <code>@babel/runtime</code> 的话，最好还是再手动安装一遍。</p>
         </blockquote>
-        <h2 id="1bbbb034-a439-4cf3-9634-9999a87fc33f">@babel/runtime-corejs2</h2>
+        <h2 id="4e31fbae-272e-472f-9217-cbb087ff0a41">@babel/runtime-corejs2</h2>
         <p>它是 <code>@babel/runtime</code> 的升级版，它不仅仅包含 <code>@babel/runtime</code> 的所有内容，还包含 2 号主版本的 <code>core-js</code> 。</p>
         <p>2 号主版本的 <code>core-js</code> 只支持全局变量（如 <code>Promise</code> ）和静态属性（如 <code>Array.from</code> ），不支持实例属性（如 <code>Array.prototype.includes</code> ）。</p>
-        <h2 id="cc2ce0c6-6b8e-4e3e-8aa1-3460472731e6">@babel/runtime-corejs3</h2>
+        <h2 id="02b95f15-529c-4333-804e-e26a511a2468">@babel/runtime-corejs3</h2>
         <p>它是 <code>@babel/runtime</code> 的升级版，它不仅仅包含 <code>@babel/runtime</code> 的所有内容，还包含 3 号主版本的 <code>core-js</code> 。</p>
         <p>3 号主版本的 <code>core-js</code> 不仅支持全局变量（如 <code>Promise</code> ）和静态属性（如 <code>Array.from</code> ），还支持实例属性（如 <code>Array.prototype.includes</code> ）。</p>
-        <h2 id="1ec1859f-6b43-4fcf-b3ea-2ddbab8fa805">regenerator-runtime</h2>
+        <h2 id="d8397ca1-62d5-458b-b2bb-b344e816992d">regenerator-runtime</h2>
         <p>它不是官方包，它用于填补 Generator Function API 和 Async Function API 。该包只有 2 个 JS 文件，第一个 <code>path.js</code> 用于获取 <code>runtime.js</code> 的绝对路径，第二个 <code>runtime.js</code> 用于填补 API 。</p>
         <p>由于它只用 1 个 JS 文件来填补 2 个 API ，所以只要需要填补 Generator Function API 或 Async Function API 中的任意一个， Babel 都会导入整个 <code>regenerator-runtime</code> 。</p>
-        <h2 id="fa522de1-8208-4567-aa0d-cc1893a50645">@babel/core</h2>
+        <h2 id="14639014-e840-446f-9985-8874f56d098b">@babel/core</h2>
         <p>Babel 的核心包，只要使用 Babel 的功能，就需要用到该包。</p>
-        <h2 id="e4e6e9d0-675a-4803-b799-36635526d4ab">@babel/cli</h2>
+        <h2 id="80e90845-9662-4086-a2e5-cf8304e8efe6">@babel/cli</h2>
         <p>如果想用通过命令行来使用 Babel ，就需要安装该包，以下是一些示例：</p>
         <pre><code>1.将转译后的代码输出到terminal：
 npx babel a.js
@@ -978,14 +978,14 @@ npx babel a.js --out-file b.js
 npx babel input_file_name -d output_file_name
 npx babel input_file_name --out-dir output_file_name
 </code></pre>
-        <h2 id="08a4bcf7-b250-482f-b50f-eb849eb63c63">babel.config.json</h2>
+        <h2 id="f2122656-c28b-4254-88f0-ce1e4fc3ff35">babel.config.json</h2>
         <p>用于控制 Babel 的行为的文件，下述文件都可以控制 Babel 的行为，只要选用其一即可：</p>
         <ul>
             <li><code>babel.config.json</code> ，还支持其他文件扩展名，比如 <code>.js</code> 、 <code>.cjs</code> 、 <code>.mjs</code> 。</li>
             <li><code>xxx.babelrc.json</code> ，还支持其他文件扩展名，比如 <code>.babelrc</code> 、 <code>.js</code> 、 <code>.cjs</code> 、 <code>.mjs</code> 。</li>
             <li><code>package.json</code> 的 <code>&quot;babel&quot;</code> 字段。</li>
         </ul>
-        <h2 id="8e0eb444-86dd-4c45-97ab-0d29a5bf6cf6">FF27</h2>
+        <h2 id="e409f06d-efe9-4a8c-95b9-1d1541062475">FF27</h2>
         <p><a href="https://ftp.mozilla.org/pub/firefox/releases/27.0.1/">Firefox 27 下载地址</a></p>
         <p>安装完成后，最好禁用浏览器的自动更新： <code>选项（左上角） =&gt; 高级 =&gt; 更新</code> 。</p>
     </article>

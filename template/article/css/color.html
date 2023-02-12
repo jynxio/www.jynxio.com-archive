@@ -14,24 +14,24 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=ee675ef1-2ed5-46fd-b3f2-ca8ead8bbafd>named color</p>
-        <p data-target-id=83677471-187b-4442-a177-9c5dd8104ed5>hex code</p>
-        <p data-target-id=087c05a1-d82d-46e6-9a72-99a921fbdfa5>rgb()</p>
-        <p data-target-id=cbd8e91b-0564-4859-98e6-6cd2ac161ce9>hsl()</p>
-        <p data-target-id=65f9e833-2cf2-4c96-94bc-593add7edbe6>color()</p>
-        <p data-target-id=f69d57e3-c2aa-4fba-866a-67211b5d4ef5>lch()</p>
-        <p data-target-id=e7cd1dbf-0a71-42e1-bbce-c235bbb06110>oklch()</p>
-        <p data-target-id=6e9f9f8b-b23d-4a8a-8863-564d77e275fa>Color Picker</p>
-        <p data-target-id=b4758c32-abf2-4240-bb04-e6e5b4a9b46f>扩展阅读</p>
+        <p data-target-id=f23ebe5a-7e94-4681-9cdb-f42c75157a53>named color</p>
+        <p data-target-id=43425d26-cb67-4bce-9354-5bdee8f1d422>hex code</p>
+        <p data-target-id=f7c37855-6067-4ff7-9b7a-c492b1a67a03>rgb()</p>
+        <p data-target-id=e816ff18-13eb-453a-8bca-0b2e2ebd2e51>hsl()</p>
+        <p data-target-id=a964592f-4c32-42fe-b988-667038b72602>color()</p>
+        <p data-target-id=65a51708-319b-41ca-b52a-ccc189a98dab>lch()</p>
+        <p data-target-id=177210c4-d887-4c39-8c64-d56aec65c860>oklch()</p>
+        <p data-target-id=48c16c86-7e3c-4b1b-a568-796578890bee>Color Picker</p>
+        <p data-target-id=acca6acf-1e4a-4b07-bd65-2a00b520c5be>扩展阅读</p>
     </aside>
     <article>
         <h1>Color</h1>
-        <h2 id="ee675ef1-2ed5-46fd-b3f2-ca8ead8bbafd">named color</h2>
+        <h2 id="f23ebe5a-7e94-4681-9cdb-f42c75157a53">named color</h2>
         <p>named color 即命名颜色，比如 <code>pink</code>、<code>orange</code>、<code>tomato</code>、<code>teal</code> 等。截至目前（CSS Level 4，下同），CSS 一共定义了 140 种命名颜色，你可以在 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/named-color">这里</a> 找到所有的颜色。</p>
         <p>命名颜色的名字和颜色没有特别严谨的关联，比如 <code>rebeccapurple</code> 中的 <code>rebecca</code> 是为了纪念 <a href="https://codepen.io/trezy/post/honoring-a-great-man">rebecca</a>，而与颜色无关，再比如 <code>dray</code> 的颜色比 <code>darkgray</code> 的颜色更浅。</p>
-        <h2 id="83677471-187b-4442-a177-9c5dd8104ed5">hex code</h2>
+        <h2 id="43425d26-cb67-4bce-9354-5bdee8f1d422">hex code</h2>
         <p>hex code 是一种基于 RGB 和十六进制的颜色表示法，它是基于 sRGB 的。</p>
-        <h3 id="7558282f-3f58-4b52-b2cc-57a45d316abd">语法</h3>
+        <h3 id="2cb9f30c-e80c-490f-bc95-759ecbbcd01a">语法</h3>
         <pre><code class="language-css">#rgb
 #rgba
 #rrggbb
@@ -42,17 +42,17 @@
             <li><code>#rgb</code> 是 <code>#rrggbb</code> 的简写，<code>#rgba</code> 是 <code>#rrggbbaa</code> 的简写。</li>
             <li>不区分大小写，<code>#fff</code> 等价于 <code>#FFF</code>。</li>
         </ul>
-        <h3 id="61138b79-b3b2-4999-9713-a1554b64c828">示例</h3>
+        <h3 id="e332638a-2158-4024-8117-29f83cedf84d">示例</h3>
         <pre><code class="language-css">#f00
 #f00f
 #ff0000
 #ff0000ff
 </code></pre>
-        <h3 id="654e29bd-4e61-4536-b719-f44fe8a112bb">兼容性</h3>
+        <h3 id="4bc36267-a891-4748-9114-e2701b2af041">兼容性</h3>
         <p>IE 11 只支持 <code>#rgb</code> 和 <code>#rrggbb</code>，不支持 <code>#rgba</code> 和 <code>#rrggbbaa</code>。</p>
-        <h2 id="087c05a1-d82d-46e6-9a72-99a921fbdfa5">rgb()</h2>
+        <h2 id="f7c37855-6067-4ff7-9b7a-c492b1a67a03">rgb()</h2>
         <p><code>rgb()</code> 也是一种基于 RGB 的颜色表示法，它也是基于 sRGB 的。</p>
-        <h3 id="f94ec592-e8e6-4e5f-9f4a-8fb54ab0ed1b">语法</h3>
+        <h3 id="39dfab52-180b-48f8-94ee-d9c63108b87d">语法</h3>
         <pre><code class="language-css">rgb( r g b )
 rgb( r g b / a )
 </code></pre>
@@ -60,13 +60,13 @@ rgb( r g b / a )
             <li><code>r</code>、<code>g</code>、<code>b</code> 是属于 <code>[0, 255]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
             <li><code>a</code> 是属于 <code>[0, 1]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
         </ul>
-        <h3 id="8adaae2a-4586-47f4-ade1-4bf4d900b61c">示例</h3>
+        <h3 id="fed5c78d-c0bf-4513-817b-3d1e11a2450a">示例</h3>
         <pre><code class="language-css">rgb( 255 255 255 )
 rgb( 255 255 255 / 1 )
 </code></pre>
-        <h3 id="affe6e58-948b-4d34-bca1-7d15814dfc0a">兼容性</h3>
+        <h3 id="76e70367-b9d7-4785-8d0b-7bc31fb9ce51">兼容性</h3>
         <p>IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 <code>rgb( r, g, b )</code> 和 <code>rgba( r, g, b, a )</code>。</p>
-        <h2 id="cbd8e91b-0564-4859-98e6-6cd2ac161ce9">hsl()</h2>
+        <h2 id="e816ff18-13eb-453a-8bca-0b2e2ebd2e51">hsl()</h2>
         <p><code>hsl()</code> 是一种基于 HSL 的颜色表示法，它基于 sRGB。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -74,7 +74,7 @@ rgb( 255 255 255 / 1 )
             <p>HSL 是一种人类可读的颜色格式，其中 H 代表色调（Hue）、S 代表饱和度（Saturation）、L 代表亮度（Lightness）。</p>
             <p>另外，大多数的图形设计软件都提供了一种名为 HSB 的颜色格式，其中的 B 代表 Brightness。Brightness 与 Lightness 在概念上没有明显区别，不过在使用方法上有很大的不同。HSB 与 HSL 的相同之处在于，当 Brightness 为 <code>0%</code> 时，颜色也会表现为黑色，不同之处在于，当 Brightness 为 <code>100%</code> 时，如果 Saturation 为 <code>0%</code>，那么颜色就会表现为白色，如果 Saturation 为 <code>100%</code>，那么颜色就会表现为本来的颜色。需要提醒的是，CSS 没有 <code>hsb()</code>，只有 <code>hsl()</code>。</p>
         </blockquote>
-        <h3 id="3df111e7-f356-48ec-b5fa-a28f30c326ab">语法</h3>
+        <h3 id="d11c3584-c848-439b-a723-7a0c4ff294ff">语法</h3>
         <pre><code class="language-css">hsl( h s l )
 hsl( h s l / a )
 </code></pre>
@@ -84,35 +84,35 @@ hsl( h s l / a )
             <li><code>l</code> 是属于 <code>[0%, 100%]</code> 的百分比值。当 <code>l</code> 为 <code>0%</code> 时，由于没有亮度，此时颜色会呈现为黑色，当 <code>l</code> 为 <code>100%</code> 时，由于亮度过高，此时颜色会呈现为白色，如果你想渲染出颜色本来的颜色，那么请将 <code>l</code> 设置为 <code>50%</code>。</li>
             <li><code>a</code> 是属于 <code>[0, 1]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
         </ul>
-        <h3 id="f3f9aee6-6cfa-492c-bf05-adad69fb82c4">示例</h3>
+        <h3 id="2ed58343-f693-4d32-acf3-42585e1adb03">示例</h3>
         <pre><code class="language-css">hsl( 0 100% 50% )
 hsl( 0 100% 50% / 1 )
 </code></pre>
-        <h3 id="374c7dc8-9c13-45fe-a491-0fc00305618a">兼容性</h3>
+        <h3 id="9f5bed41-4b64-4c5f-b05d-167a1ce52df1">兼容性</h3>
         <p>IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 <code>hsl( h, s, l )</code> 和 <code>hsla( h, s, l, a )</code>。</p>
-        <h2 id="65f9e833-2cf2-4c96-94bc-593add7edbe6">color()</h2>
+        <h2 id="a964592f-4c32-42fe-b988-667038b72602">color()</h2>
         <p>CSS 的默认颜色空间是 sRGB（standard RGB color space），由命名颜色、<code>hex code</code>、<code>rgb()</code>、<code>hsl()</code> 所创建出来的颜色都是基于 sRGB 的，如果我们想要创建出基于其它颜色空间的颜色，那么我们就必须使用 <code>color()</code>。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>颜色空间是指一系列颜色的集合，常用的颜色空间有 sRGB、Adobe RGB、DCI-P3。请注意，下文出现的 display-p3 不等价于 DCI-P3，你可以把 display-p3 立即为 DCI-P3 的变种，display-p3 是由 Apple 公司创造的。</p>
         </blockquote>
-        <h3 id="c8018c46-ed0c-41c6-8eab-d71774a9ada7">语法</h3>
+        <h3 id="b4ccf97b-fefd-4eb8-bd79-43143365bb2a">语法</h3>
         <pre><code class="language-css">color( colorspace-name r g b / a )
 </code></pre>
-        <h3 id="eb51b551-ace1-442c-9187-e198706600f6">示例</h3>
+        <h3 id="1c6c5d6a-e5ff-4a7e-84e4-3ba5aeb093e0">示例</h3>
         <pre><code class="language-css">color( display-p3 1 0.5 0 )
 </code></pre>
-        <h3 id="69d2f70d-2d17-45ae-9df3-5f41c6fe00b4">兼容性</h3>
+        <h3 id="ff68cbc3-a157-4ff4-87bc-1bcdf784377d">兼容性</h3>
         <p>目前只有 Safari 和 Chrome 支持 <code>color()</code>，你可以从 <a href="https://caniuse.com/?search=color()">这里</a> 找到最新的兼容性情况。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>Safari 的控制台提供了 <code>sRGB -&gt; Display P3</code> 或 <code>Display P3 -&gt; sRGB</code> 的能力，你可以从 <a href="https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/">这里</a> 找到具体的使用方法。</p>
         </blockquote>
-        <h3 id="989442f3-3fdf-4419-a41f-1053a6a25c9c">图像使用 P3 色域</h3>
+        <h3 id="721239d1-e7da-45a2-b888-5e3e042c9e6d">图像使用 P3 色域</h3>
         <p>在 Photoshop 中，我们可以将图像的颜色空间设置为 P3，如此一来，哪怕浏览器不支持 <code>color()</code>，图像也可以呈现出更加艳丽的色彩。</p>
-        <h2 id="f69d57e3-c2aa-4fba-866a-67211b5d4ef5">lch()</h2>
+        <h2 id="65a51708-319b-41ca-b52a-ccc189a98dab">lch()</h2>
         <p><code>lch()</code> 是一种基于 LCH 的颜色表示法，它不受限于任何颜色空间。</p>
-        <h3 id="2ceb7d6f-69fd-4577-abd8-25c4475a31f8">语法</h3>
+        <h3 id="9f28e407-3cfe-40e0-925b-a059ba2f85ff">语法</h3>
         <pre><code class="language-css">lch( l c h )
 lch( l c h / a )
 </code></pre>
@@ -122,11 +122,11 @@ lch( l c h / a )
             <li><code>h</code> 是属于 <code>[0deg, 360deg]</code> 的角度值。除了 <code>deg</code> 外，你还可以使用的单位有 <code>rad</code>、<code>grad</code>、<code>turn</code>。如果你没有为它指定单位，那么它就会使用 <code>deg</code> 来作为默认单位。</li>
             <li><code>a</code> 是属于 <code>[0, 1]</code> 的数字值，或属于 <code>[0%, 100%]</code> 的百分比值。</li>
         </ul>
-        <h3 id="6716a880-dd1b-40e1-b4d6-32ce9209d29b">示例</h3>
+        <h3 id="2ff0c83f-2207-4848-a1db-62976e9fae81">示例</h3>
         <pre><code class="language-css">lch( 50% 150 0 )
 lch( 50% 150 0 / 1 )
 </code></pre>
-        <h3 id="b411dde0-6f3b-44b7-a40e-90566006ab20">特点</h3>
+        <h3 id="95f24dcd-73ea-42ef-ad7e-fa1a17e040bc">特点</h3>
         <p>LCH 和 HSL 很相似，LCH 是另一种人类可读的颜色格式，其中 L 代表亮度（Lightness）、C 代表浓度（Chroma）、H 代表色调（Hue）。</p>
         <p>相比于 HSL，LCH 有 2 个显著的特点：</p>
         <ul>
@@ -138,20 +138,20 @@ lch( 50% 150 0 / 1 )
 .redder { background: lch( 50% 230 0 ) }
 </code></pre>
         <p><img src=/static/image/markdown/css/color/hsl-vs-lch.png alt=hsl vs lch loading="lazy" decoding="async"></p>
-        <h3 id="0d64c364-3c5a-49a2-8150-2e4da23a5fa0">兼容性</h3>
+        <h3 id="5a1e4a29-fcac-4faf-b78e-bd015f5d48a3">兼容性</h3>
         <p>目前只有 Safari 和 Chrome 支持 <code>lch()</code>，你可以从 <a href="https://caniuse.com/?search=lch()">这里</a> 找到最新的兼容性情况。</p>
-        <h2 id="e7cd1dbf-0a71-42e1-bbce-c235bbb06110">oklch()</h2>
+        <h2 id="177210c4-d887-4c39-8c64-d56aec65c860">oklch()</h2>
         <p>OKLCH 和 LCH 很相似，并且 OKLCH 要比 LCH 更好，因为 OKLCH 修复了 LCH 中关于蓝色色调的一些 bug。</p>
         <p>如果你想了解更多，请阅读 <a href="https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl#oklch-vs-oklab--lch-vs-lab">这篇文章</a>。</p>
-        <h3 id="38f7c777-8aa1-46a6-b82a-cec316847f6b">兼容性</h3>
+        <h3 id="deb45c9b-e296-4157-a684-82db3662d59b">兼容性</h3>
         <p>目前，仅仅只有 Safari 支持 <code>oklch()</code>。</p>
-        <h2 id="6e9f9f8b-b23d-4a8a-8863-564d77e275fa">Color Picker</h2>
+        <h2 id="48c16c86-7e3c-4b1b-a568-796578890bee">Color Picker</h2>
         <ul>
             <li>RGB/HSL 调色板：<a href="https://jynxio.github.io/color-picker/">https://jynxio.github.io/color-picker/</a></li>
             <li>LCH 调色板：<a href="https://css.land/lch/">https://css.land/lch/</a></li>
             <li>OKLCH 调色板：<a href="https://oklch.com/">https://oklch.com/</a></li>
         </ul>
-        <h2 id="b4758c32-abf2-4240-bb04-e6e5b4a9b46f">扩展阅读</h2>
+        <h2 id="acca6acf-1e4a-4b07-bd65-2a00b520c5be">扩展阅读</h2>
         <ul>
             <li><a href="https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/">LCH colors in CSS: what, why, and how? - Lea Verou</a></li>
             <li><a href="https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl">OKLCH in CSS: why we moved from RGB and HSL</a></li>

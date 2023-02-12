@@ -104,7 +104,7 @@ const createCssInfo = _ => {
     const children = [
         { name: "color", alias: "颜色" },
         { name: "selector", alias: "选择器" },
-        { name: "cascade", alias: "层叠原理" },
+        { name: "cascade", alias: "层叠" },
         { name: "responsive-design", alias: "响应式设计" },
     ];
     const options = {

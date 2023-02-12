@@ -14,24 +14,24 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=66b898bd-00d0-4da9-b94a-5bbd379680cf>概述</p>
-        <p data-target-id=e3a3000e-d4d4-4815-a185-c2bc4bbfe2d7>原理</p>
-        <p data-target-id=0342284e-9658-4727-bdb1-a77a4e9b42df>重要性</p>
-        <p data-target-id=f972dae1-cf20-4f0d-bd39-cc1f3da7922a>优先级</p>
-        <p data-target-id=988df92f-455d-4350-97c8-8a9bfdb98e02>继承</p>
-        <p data-target-id=5a14df65-3c30-4306-9392-8d59b7b50815>参考资料</p>
+        <p data-target-id=176f130e-4179-4986-ae3c-353c42ed17df>概述</p>
+        <p data-target-id=42d6e902-ae80-40d8-a618-02c9d3285f8b>原理</p>
+        <p data-target-id=005527cf-9c27-4d7e-a8da-e966e784875f>重要性</p>
+        <p data-target-id=5a1528fe-9d82-4015-aa78-ba62c97ff340>优先级</p>
+        <p data-target-id=bfdb6a8a-76ac-4e01-867b-df5f05627c17>继承</p>
+        <p data-target-id=8a30ffee-bd28-43ee-b399-18ee004eaa18>参考资料</p>
     </aside>
     <article>
         <h1>层叠</h1>
-        <h2 id="66b898bd-00d0-4da9-b94a-5bbd379680cf">概述</h2>
+        <h2 id="176f130e-4179-4986-ae3c-353c42ed17df">概述</h2>
         <p>如果样式规则之间发生了重叠，那么 CSS 就会通过层叠算法（cascade algorithm）和优先级算法（specificity algorithm）来决定应该保留哪些样式规则。</p>
-        <h2 id="e3a3000e-d4d4-4815-a185-c2bc4bbfe2d7">原理</h2>
+        <h2 id="42d6e902-ae80-40d8-a618-02c9d3285f8b">原理</h2>
         <ol>
             <li>重要性更高的样式规则优先；</li>
             <li>如果重要性相同，那么优先级更高的样式规则优先；</li>
             <li>如果重要性和优先级都相同，那么后定义的样式规则优先；</li>
         </ol>
-        <h2 id="0342284e-9658-4727-bdb1-a77a4e9b42df">重要性</h2>
+        <h2 id="005527cf-9c27-4d7e-a8da-e966e784875f">重要性</h2>
         <p>样式规则的重要性（precedence）取决于：origin、layer、important。下表是样式规则重要性的速查表，其重要性由上到下逐渐递增。</p>
         <pre><code>user-agent &amp; first declared layer
 user-agent &amp; second declared layer
@@ -67,7 +67,7 @@ any &amp; transitions
             <p><strong>Note</strong></p>
             <p>因为 CSS 会把一个样式表内的所有的 <code>unlayered styles</code> 都丢进一个 <code>last declared anonymous layer</code> 中去，所以我们可以把 <code>unlayered styles</code> 当成 <code>last declared anonymous layer</code>。</p>
         </blockquote>
-        <h3 id="57e01e8e-74cf-4474-8b7d-524d53e3781d">Origin</h3>
+        <h3 id="18c21d0e-7472-437e-9aec-6dd950b30ee0">Origin</h3>
         <p>Origin 是指样式规则的来源，样式规则只有 3 种来源，分别是：</p>
         <ul>
             <li>用户样式表（user stylesheets）</li>
@@ -77,13 +77,13 @@ any &amp; transitions
         <p>其中，用户代理样式表是指浏览器的默认样式表，一些浏览器通过使用内置的 <code>.css</code> 文件来实现默认样式，比如 <a href="https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/html/resources/html.css">Chromium 源码中的默认样式表</a>，一些浏览器通过代码来模拟默认样式。</p>
         <p>开发者样式表是指由开发者编写的样式规则的集合，由于开发者就是网页的作者，所以开发者样式表叫做“author stylesheets”。开发者编写样式的途径有：<code>.css</code> 文件、<code>&lt;style&gt;</code> 标签、<code>style</code> 属性。</p>
         <p>用户样式表是指用户向浏览器注入的样式规则的集合，用户是指网页的读者。Firefox 浏览器允许用户通过在指定文件夹下放置 <code>.css</code> 文件的方式来向浏览器注入样式规则，而 Chrome 浏览器则必须借助插件才能完成类似的过程。如果你还不理解用户样式表，那么请阅读 <a href="https://www.thoughtco.com/user-style-sheet-3469931">这篇文章</a>。</p>
-        <h3 id="ef59e99a-a32d-4b0e-9fde-1f6160ec131e">Layer</h3>
+        <h3 id="20fcc4e6-8a71-4f72-b89d-b6f4dacf436d">Layer</h3>
         <p>一个样式表内的所有 <code>unlayered style</code> 都会按照它们声明的顺序来组合在一起，形成一个 <code>last anonymous layer</code>。更多细节请见 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@layer">@layer</a> 和 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@import">@import</a>。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p><code>@import</code> 和 <code>&lt;link&gt;</code> 的作用是一样的，但 <code>@import</code> 会创建更多的网络请求，所以如果你追求极致性能，那么请使用 <code>&lt;link&gt;</code>。</p>
         </blockquote>
-        <h3 id="0668260b-7354-421a-af17-470054ace129">Animation</h3>
+        <h3 id="c60aaaa1-a8c2-4906-b06d-ee3ed2216f8f">Animation</h3>
         <p>animation 使用 <code>@keyframes</code> 来定义动画，需要注意的是：</p>
         <ul>
             <li><code>@keyframes</code> 块内的样式规则不能使用 <code>!important</code></li>
@@ -111,7 +111,7 @@ any &amp; transitions
     }
 }
 </code></pre>
-        <h2 id="f972dae1-cf20-4f0d-bd39-cc1f3da7922a">优先级</h2>
+        <h2 id="5a1528fe-9d82-4015-aa78-ba62c97ff340">优先级</h2>
         <p>样式规则的优先级（specificity）等于组合选择器的优先级，组合选择器的优先级的计算公式如下（含义越具体，优先级越高）：</p>
         <table>
             <thead>
@@ -137,10 +137,10 @@ any &amp; transitions
         </table>
         <p>另外：</p>
         <ul>
-            <li>通配符选择器（<code>*</code>）、组合器（<code>+</code>、<code>&gt;</code>、<code>~</code>、、<code>||</code>）、优先级调整伪类（<code>:where()</code>）不参与优先级计算；</li>
+            <li>通配符选择器（<code>*</code>）、组合器（<code>+</code>、<code>&gt;</code>、<code>~</code>、<code> </code>、<code>||</code>）、优先级调整伪类（<code>:where()</code>）不参与优先级计算；</li>
             <li>否定伪类（<code>:not()</code>）、任意匹配（<code>:is()</code>）的优先级取决于参数的优先级；</li>
         </ul>
-        <h3 id="f57bd08d-db99-4d77-9e22-45294e075b96">:not() &amp; :is() &amp; where()</h3>
+        <h3 id="66a9bf5e-f4de-48ca-b9ea-d5866b12cd46">:not() &amp; :is() &amp; where()</h3>
         <p><code>:not( selector-list )</code> 和 <code>:is( selector-list )</code> 的优先级取决于 <code>selector-list</code> 中的优先级最高项的优先级。</p>
         <pre><code class="language-css">:not( #id, .classname ) {} /* 优先级为 1,0,0 */
 :is(  #id, .classname ) {} /* 优先级为 1,0,0 */
@@ -152,7 +152,7 @@ any &amp; transitions
         <p><code>:where()</code> 的作用和 <code>:is()</code> 一模一样，唯一区别是前者不参与优先级计算。</p>
         <pre><code class="language-css">article:where( .section-1, .section-2 ) {} /* 优先级为 0,0,1 */
 </code></pre>
-        <h2 id="988df92f-455d-4350-97c8-8a9bfdb98e02">继承</h2>
+        <h2 id="bfdb6a8a-76ac-4e01-867b-df5f05627c17">继承</h2>
         <p>CSS 提供了 5 个特殊的属性值，以便于控制继承，每个 CSS 属性都可以使用这 5 个特殊的属性值。它们分别是：<code>inherit</code>、<code>initial</code>、<code>unset</code>、<code>revert</code>、<code>revert-layer</code>。</p>
         <p>其中，<code>inherit</code> 意味着使用继承值，<code>initial</code> 意味着使用初始值，<code>unset</code> 意味着使用自然值（继承属性的自然值是 <code>inherit</code>，非继承属性的自然值是 <code>intial</code>）。</p>
         <p><code>revert</code> 和 <code>revert-layer</code> 复杂且少用，我不打算继续解释它们，你可以 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/revert">revert - MDN</a> 和 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/revert-layer">revert-layer - MDN</a> 来学习它们。</p>
@@ -161,7 +161,7 @@ any &amp; transitions
             <p>大多数于字体相关的属性都是继承属性。</p>
         </blockquote>
         <p>另外，CSS 还提供了一个 <code>all</code> 属性，我们可以利用 <code>all</code> 来一键重置（几乎）所有的属性。</p>
-        <h2 id="5a14df65-3c30-4306-9392-8d59b7b50815">参考资料</h2>
+        <h2 id="8a30ffee-bd28-43ee-b399-18ee004eaa18">参考资料</h2>
         <ul>
             <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Cascade#which_css_entities_participate_in_the_cascade">Introducing the CSS Cascade</a></li>
         </ul>

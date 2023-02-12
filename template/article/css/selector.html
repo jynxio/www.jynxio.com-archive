@@ -14,14 +14,14 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=405db744-df9a-4189-91d9-babc863775bc>基础选择器</p>
-        <p data-target-id=07c7fc58-34da-49c6-8afa-df9d95b51621>组合选择器</p>
-        <p data-target-id=540285e5-f2b1-4e75-8146-0863c0ba3f1a>伪类选择器</p>
-        <p data-target-id=6074ba48-3de6-42b0-b3a5-bf6c73456d45>伪元素选择器</p>
+        <p data-target-id=db122fdc-a89b-4236-93d7-958c767bc591>基础选择器</p>
+        <p data-target-id=3c77374a-3922-414a-94ff-c91a762120e0>组合选择器</p>
+        <p data-target-id=eb5e9847-3379-47c8-80f4-2dc51b43df21>伪类选择器</p>
+        <p data-target-id=1a688622-2991-4378-8dd7-fd4843c8ab85>伪元素选择器</p>
     </aside>
     <article>
         <h1>选择器</h1>
-        <h2 id="405db744-df9a-4189-91d9-babc863775bc">基础选择器</h2>
+        <h2 id="db122fdc-a89b-4236-93d7-958c767bc591">基础选择器</h2>
         <table>
             <thead>
                 <tr>
@@ -53,7 +53,7 @@
             </tbody>
         </table>
         <p>请从 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Attribute_selectors">这里</a> 查看所有属性选择器。</p>
-        <h2 id="07c7fc58-34da-49c6-8afa-df9d95b51621">组合选择器</h2>
+        <h2 id="3c77374a-3922-414a-94ff-c91a762120e0">组合选择器</h2>
         <table>
             <thead>
                 <tr>
@@ -85,9 +85,9 @@
             </tbody>
         </table>
         <p>请从 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Selectors#%E7%BB%84%E5%90%88%E5%99%A8%EF%BC%88combinators%EF%BC%89">这里</a> 查看它们的具体用法。</p>
-        <h2 id="540285e5-f2b1-4e75-8146-0863c0ba3f1a">伪类选择器</h2>
+        <h2 id="eb5e9847-3379-47c8-80f4-2dc51b43df21">伪类选择器</h2>
         <p>伪类（pseudo-classes）选择器用于匹配处于特定状态下的元素，请从 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">这里</a> 查看所有的伪类选择器。此文仅描述几个常用、重要、隐晦的伪类选择器。</p>
-        <h3 id="cecb8126-0a5a-46b4-81da-fa1d283583df">:focus</h3>
+        <h3 id="ce543851-b3e0-44db-afcf-8b564b05dfa1">:focus</h3>
         <p><code>:focus</code> 用于匹配获得焦点的元素，用户可以通过点击、触击、tab 键来聚焦一个元素，其中 <code>tab</code> 可以聚焦下一个元素，<code>shift+tab</code> 可以聚焦上一个元素。</p>
         <p>另外，只有锚、按钮、表单元素才能获得焦点。</p>
         <p>另外，聚焦的触发条件取决于 2 个因素：操作系统、浏览器，具体来说：</p>
@@ -105,16 +105,16 @@
             <p><strong>Note</strong></p>
             <p>如果你想要 Safari 和 Firefox 的行为变正常，那么你就需要更改 MacOS 的系统设置，这是 <a href="https://www.scottohara.me/blog/2014/10/03/link-tabbing-firefox-osx.html">操作指南</a>。</p>
         </blockquote>
-        <h3 id="567174a8-7ea3-42fe-9ba4-b9d1ef7e41a9">:checked</h3>
+        <h3 id="f5b5bac2-728d-4c81-b7b3-08dbb5d4db7e">:checked</h3>
         <p><code>:checked</code> 用于匹配处于勾选状态下的元素，需要注意的是，只有 <code>&lt;input type=&quot;radio&quot;/&gt;</code> 和 <code>&lt;input type=&quot;checkbox&quot;/&gt;</code> 才能被勾选。</p>
-        <h2 id="6074ba48-3de6-42b0-b3a5-bf6c73456d45">伪元素选择器</h2>
+        <h2 id="1a688622-2991-4378-8dd7-fd4843c8ab85">伪元素选择器</h2>
         <p>伪元素（pseudo-elements）选择器用于匹配无法被 HTML 语义所表达的元素实体，请从 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements">这里</a> 查看所有的伪元素选择器。</p>
         <p>不同于伪类选择器，一个选择器只能使用一个伪元素，且伪元素必须紧跟在基础选择器之后（比如 <code>p::first-line</code>）。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>根据规范，伪元素选择器使用双冒号语法，伪类选择器使用单冒号语法，这是为了区分两者。不过，由于早期的 W3C 没有出台这项规定，所以一些早期的伪元素选择器也支持单冒号语法。</p>
         </blockquote>
-        <h3 id="a7584511-ecfb-4ee0-bacd-0b30f651bb3a">::before &amp; ::after</h3>
+        <h3 id="c578d46e-c452-4250-b7ae-ae1dd4d6c860">::before &amp; ::after</h3>
         <p><code>::before</code> 和 <code>::after</code> 是一种创建 <code>&lt;span&gt;</code> 的语法糖，因为其工作原理是：在元素内部的首尾创建一个 <code>&lt;span&gt;</code>，然后将 <code>content</code> 属性的值作为 <code>&lt;span&gt;</code> 的内容。</p>
         <p>一种良好的实践是，只用 <code>::before</code> 和 <code>::after</code> 来渲染装饰性内容（即令 <code>content: &quot;&quot;</code>）。主要原因是：有些屏幕阅读器会阅读它们的 <code>content</code>，而有些则不会，<code>content: &quot;&quot;</code> 有利于网页的可访问性。</p>
     </article>

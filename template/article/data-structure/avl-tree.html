@@ -14,31 +14,31 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=b765c1e0-b81f-4c44-9fc7-5394a4e99d9f>概述</p>
-        <p data-target-id=2fa41349-83a3-4896-8ef7-f06e9d599dec>平衡因子</p>
-        <p data-target-id=cbf871f1-46c2-4899-bcc9-18cb139287f5>平衡操作</p>
-        <p data-target-id=40435c83-dffe-4637-a116-fdbe0bcb76b1>实现</p>
-        <p data-target-id=a9f811d1-a349-440f-ba98-cb691cdcaf0a>源码</p>
+        <p data-target-id=e54b384d-a36e-4727-a09b-bc0fdbbae15f>概述</p>
+        <p data-target-id=7aa98a78-74aa-4f38-80d9-27d3191193c4>平衡因子</p>
+        <p data-target-id=1860ea7e-702c-46c3-a15b-742c51172a2f>平衡操作</p>
+        <p data-target-id=7e9f1d6a-96f8-4a98-af59-5a69f872e1fe>实现</p>
+        <p data-target-id=9c4f5569-e80b-4841-b091-749e373031b2>源码</p>
     </aside>
     <article>
         <h1>AVL 树</h1>
-        <h2 id="b765c1e0-b81f-4c44-9fc7-5394a4e99d9f">概述</h2>
+        <h2 id="e54b384d-a36e-4727-a09b-bc0fdbbae15f">概述</h2>
         <p>AVL 树（Adelson-Velskii-Landi Tree）是计算机科学中最早被发明的自平衡二叉搜索树，而自平衡树是一种会自动保持平衡的二叉树。具体来说，每当新增或删除节点之后，自平衡二叉搜索树都会检查自身是否仍然处于平衡状态，如果任意节点的左侧子树和右侧子树的高度差不大于 <code>1</code>，那么就可以认为自己处于平衡状态，否则自平衡二叉树就需要通过旋转操作来使自己回归到平衡状态。</p>
         <p>相较于二叉搜索树，AVL 树的新增、删除、搜索操作在平均和最坏情况下的时间复杂度都是 <code>O(logn)</code>，这得益于 AVL 树总是会保持着一种较为接近满二叉树的形态。</p>
         <blockquote>
             <p><strong>Note</strong></p>
             <p>二叉搜索树是 AVL 树的基础，如果你不了解二叉搜索树，那么你可以通过本博客的另一篇文章《二叉搜索树》来了解它。</p>
         </blockquote>
-        <h2 id="2fa41349-83a3-4896-8ef7-f06e9d599dec">平衡因子</h2>
+        <h2 id="7aa98a78-74aa-4f38-80d9-27d3191193c4">平衡因子</h2>
         <p>AVL 树在每次新增和移除节点之后，都要检查每个节点是否处于平衡状态，而平衡因子（Balance Factor）就是一个量化平衡状态的指标，它的定义是：左子树的高度减去右子树的高度（反之亦可）。</p>
         <p>如果 AVL 树中某个节点的平衡因子的大于 <code>1</code> 了，那么就意味着该节点的左子树和右子树的高度差超过了 <code>1</code>，这时就要对 AVL 树进行旋转操作，来使其回归到平衡状态。</p>
         <p>下图展示了一棵二叉树的各个节点的高度（<code>h</code>）和平衡因子（<code>bc</code>）。</p>
         <p><img src=/static/image/markdown/data-structure/avl-tree/avl-tree-balance-factor.png alt=AVL树的平衡因子 loading="lazy" decoding="async"></p>
-        <h2 id="cbf871f1-46c2-4899-bcc9-18cb139287f5">平衡操作</h2>
+        <h2 id="1860ea7e-702c-46c3-a15b-742c51172a2f">平衡操作</h2>
         <p>当 AVL 树新增或移除一个节点之后，如果有某些节点变得不平衡了，那么我们就需要从深度最深的不平衡节点开始，自下而上的处理每一个不平衡的节点，直至处理完 AVL 树的根节点。</p>
         <p>在 AVL 树中，我们使用旋转来处理不平衡的节点，旋转是指：通过挪移节点的位置，来使树回归到平衡状态。由于新树看起来就像是旧树进行顺/逆时针旋转后的产物，所以我们把这个挪移操作比喻为旋转。</p>
         <p>在 AVL 树中，如果某个节点变得不平衡了，那么这个节点一定会呈现出 4 种形态中的一种，这 4 种形态分别是：左-左、右-右、左-右、右-左。而这 4 种形态分别对应 4 种旋转操作，分别是：右旋、左旋、左旋再右旋、右旋再左旋。我们将在后文详细解释这 4 种形态与旋转。</p>
-        <h3 id="9869c891-632f-49c9-a8a2-fba982325bf0">原理</h3>
+        <h3 id="ff2a9e9c-8955-4e0d-bba1-1203e110b39c">原理</h3>
         <p>让我们举个例子来看看 AVL 树是如何旋转的吧。</p>
         <p>下图展示了一棵原本平衡的 AVL 树，当我们插入了 <code>70</code> 节点后，树中的 <code>40</code> 和 <code>80</code> 节点就变得不平衡了，因为它们的平衡因子分别是 <code>-2</code> 和 <code>2</code>。这时我们就需要旋转该树，具体的操作步骤如下：</p>
         <ol>
@@ -55,7 +55,7 @@
         <p>这时我们就需要再检查 <code>30</code> 节点的平衡因子，如果 <code>30</code> 节点不平衡了，那么我们就需要对其进行旋转，否则就不需要进行旋转。而无论 <code>30</code> 节点旋转与否，以 <code>30</code> 节点作为根节点的树的形态都已经发生了改变，这就导致了以 <code>80</code> 节点作为根节点的树的形态也会发生改变。</p>
         <p>这时我们需要继续向上检查 <code>80</code> 节点，并在需要时对其进行旋转。因为 <code>80</code> 节点是整棵树的根节点，所以我们处理到 <code>80</code> 节点就为止了。然而，如果 <code>80</code> 节点还有父节点话，那么我们就需要继续向上检查和处理。</p>
         <p>很显然，整个处理过程是自下而上的，就像冒泡一样。总结来说，无论 AVL 树中出现了多少个不平衡的节点，AVL 树的平衡处理都是从深度最深的不平衡节点开始进行旋转，然后沿着路径，不断向上检查和旋转，直到处理完根节点为止。</p>
-        <h3 id="ce0215d4-48d2-456c-8254-e2d8e0402ed6">左旋 vs 右-右</h3>
+        <h3 id="907844b2-b939-4dd6-90fe-5851b006c436">左旋 vs 右-右</h3>
         <p>右-右形态是指：树的平衡因子为 <code>-2</code>，且右侧子节点的平衡因子为 <code>0</code> 或 <code>-1</code>。</p>
         <p>当树呈现右-右形态时，我们就需要对其进行左旋，具体操作是：</p>
         <ol>
@@ -64,7 +64,7 @@
             <li>旧根节点成为新根节点的左侧子节点。</li>
         </ol>
         <p><img src=/static/image/markdown/data-structure/avl-tree/avl-tree-rotate-left.png alt=左旋 loading="lazy" decoding="async"></p>
-        <h3 id="976e6f3a-8bed-4b8e-ad6b-73bbd9b06bbc">右旋 vs 左-左</h3>
+        <h3 id="75399381-e8f4-4313-abd8-eff2b0a33208">右旋 vs 左-左</h3>
         <p>左-左形态是指：树的平衡因子为 <code>2</code>，且左侧子节点的平衡因子为 <code>0</code> 或 <code>1</code>。</p>
         <p>当树呈现左-左形态时，我们就需要对其进行右旋，具体操作时：</p>
         <ol>
@@ -73,7 +73,7 @@
             <li>旧根节点成为新根节点的右侧子节点。</li>
         </ol>
         <p><img src=/static/image/markdown/data-structure/avl-tree/avl-tree-rotate-right.png alt=右旋 loading="lazy" decoding="async"></p>
-        <h3 id="a24aaab5-9466-47f6-b23a-1453d5f82321">左旋再右旋</h3>
+        <h3 id="7434bc74-861c-4b7f-911a-e2742858821e">左旋再右旋</h3>
         <p>左-右形态是指：树的平衡因子为 <code>2</code>，且左侧子节点的平衡因子为 <code>-1</code>。</p>
         <p>左旋再右旋用于处理左-右形态的不平衡节点，其具体操作是：</p>
         <ol>
@@ -81,7 +81,7 @@
             <li>对树进行右旋。</li>
         </ol>
         <p><img src=/static/image/markdown/data-structure/avl-tree/avl-tree-rotate-left-right.png alt=左旋再右旋 loading="lazy" decoding="async"></p>
-        <h3 id="c0172cb1-55ab-45eb-a377-e98966732f6c">右旋再左旋</h3>
+        <h3 id="9fbee713-8d83-475f-9615-fdd5d1941718">右旋再左旋</h3>
         <p>左-右形态是指：树的平衡因子为 <code>-2</code>，且左侧子节点的平衡因子为 <code>1</code>。</p>
         <p>右旋再左旋用于处理右-左形态的不平衡节点，其具体操作是：</p>
         <ol>
@@ -89,7 +89,7 @@
             <li>对树进行左旋。</li>
         </ol>
         <p><img src=/static/image/markdown/data-structure/avl-tree/avl-tree-rotate-right-left.png alt=右旋再左旋 loading="lazy" decoding="async"></p>
-        <h2 id="40435c83-dffe-4637-a116-fdbe0bcb76b1">实现</h2>
+        <h2 id="7e9f1d6a-96f8-4a98-af59-5a69f872e1fe">实现</h2>
         <p>本文将会实现一个名为 <code>AdelsonVelskiiLandiTree</code> 的 AVL 树类，这个类将会拥有和 <code>BinarySearchTree</code> 一样的方法。</p>
         <blockquote>
             <p><strong>Note</strong></p>
@@ -131,7 +131,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 id="3aca96df-3b57-4d29-b27d-d569fb87517d">创建类</h3>
+        <h3 id="d989f144-8dc0-49e4-990d-cbde57afc7e6">创建类</h3>
         <p>首先，让我们来创建 <code>AdelsonVelskiiLandiTree</code> 的类。</p>
         <pre><code class="language-js">class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
@@ -139,7 +139,7 @@
 
 }
 </code></pre>
-        <h3 id="cf0a0c56-cf6d-4ff6-9ae5-9da7e1d86a0e">创建 _balance 方法</h3>
+        <h3 id="40bdcd41-4750-4028-be87-a13e994b35ad">创建 _balance 方法</h3>
         <p>在插入和移除一个节点之后，我们都需要对树进行平衡化处理，那么我们就需要编写一个平衡化处理的方法，<code>_balance</code> 就是这个平衡化处理的方法。由于平衡化处理是不需要暴露给外界的，所以 <code>_balance</code> 是一个内部方法。</p>
         <p><code>_balance</code> 方法的内部包含了许多子函数，这些子函数用于：计算节点高度、计算节点平衡因子、左旋、右旋、左旋再右旋、右旋再左旋。这些子函数是实现平衡化处理的必要套件。</p>
         <p>下文便是 <code>_balance</code> 方法的实现代码：</p>
@@ -284,7 +284,7 @@ class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="1e3b815e-7911-4b5e-8b20-fd827c3fffd0">重写 insert 方法</h3>
+        <h3 id="6aad23f1-f1fc-4b50-8435-abae6f65d999">重写 insert 方法</h3>
         <p><code>AdelsonVelskiiLandiTree</code> 的 <code>insert</code> 方法和 <code>BinarySearchTree</code> 的 <code>insert</code> 方法几乎是一模一样的，关键的区别在于，前者增加了一行平衡化处理的代码（<code>const balance_root = balance( root )</code>）。随着 <code>core</code> 递归调用自身，这行代码会自下而上的对树进行平衡化处理。</p>
         <pre><code class="language-js">// Note：该实现省略了构造器方法与其他方法。
 class AdelsonVelskiiLandiTree extends BinarySearchTree {
@@ -324,7 +324,7 @@ class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
 }
 </code></pre>
-        <h3 id="87e63212-ab8f-4ad4-b00a-2603a44c185c">重写 remove 方法</h3>
+        <h3 id="d630f008-2259-4fff-a67d-741a48a6ddd9">重写 remove 方法</h3>
         <p><code>AdelsonVelskiiLandiTree</code> 的 <code>remove</code> 方法和 <code>BinarySearchTree</code> 的 <code>remove</code> 方法几乎是一模一样的，关键的区别在于，前者增加了两行平衡化处理的代码，同理，随着 <code>core</code> 递归调用自身，这两行代码会自下而上的对树进行平衡化处理。</p>
         <pre><code class="language-js">// Note：该实现省略了构造器方法与其他方法。
 class AdelsonVelskiiLandiTree extends BinarySearchTree {
@@ -387,7 +387,7 @@ class AdelsonVelskiiLandiTree extends BinarySearchTree {
 
 }
 </code></pre>
-        <h2 id="a9f811d1-a349-440f-ba98-cb691cdcaf0a">源码</h2>
+        <h2 id="9c4f5569-e80b-4841-b091-749e373031b2">源码</h2>
         <p>你可以通过该 <a href="https://github.com/jynxio/leetcode-everyday">库</a> 的 <a href="https://github.com/jynxio/leetcode-everyday/blob/main/Tree.js">Tree.js</a> 文件，来获取 <code>AdelsonVelskiiLandiTree</code> 的完整源码。</p>
     </article>
 </body>

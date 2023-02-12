@@ -14,20 +14,20 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=88d8f2f1-404b-4dd7-bda5-2107ee7e3e4a>概述</p>
-        <p data-target-id=fa7ead49-4f1a-457d-82a0-bda59bddff6b>重排和重绘</p>
-        <p data-target-id=81444d95-ef20-42ba-9844-068b35ccb53f>合成</p>
-        <p data-target-id=ecead3be-fe90-49e3-921c-fbb1c763962b>合成阻塞</p>
-        <p data-target-id=88f6e25d-e284-445c-b767-6c99f4056c43>Passive event listeners</p>
-        <p data-target-id=cdf5d444-c780-48e1-a9a3-4f35c7f9bdc4>处理输入事件</p>
-        <p data-target-id=7d5e19bd-6464-4e11-a102-09a18f4cdc27>Non-Fast Scrollable Region</p>
-        <p data-target-id=19a2d57b-d7f6-4743-8608-1078bcb5fd75>参考资料</p>
+        <p data-target-id=a70091ca-7416-4e6c-b0d0-cfea3d960592>概述</p>
+        <p data-target-id=483632d7-b464-491d-836e-08c7a4749f6e>重排和重绘</p>
+        <p data-target-id=dadbac88-f519-44b8-8e92-672a5f43d717>合成</p>
+        <p data-target-id=d71a7287-c089-4916-920e-2826e68ebfa4>合成阻塞</p>
+        <p data-target-id=6ed969d7-439e-42ff-80d7-4a2b7f4af34e>Passive event listeners</p>
+        <p data-target-id=1a7ba571-4829-4783-a335-8a911b061d23>处理输入事件</p>
+        <p data-target-id=c5e2ee26-3651-4378-b410-e263df4663bc>Non-Fast Scrollable Region</p>
+        <p data-target-id=b543b381-6fc6-4111-bb40-1877b10c2a0c>参考资料</p>
     </aside>
     <article>
         <h1>输入事件与页面滚动</h1>
-        <h2 id="88d8f2f1-404b-4dd7-bda5-2107ee7e3e4a">概述</h2>
+        <h2 id="a70091ca-7416-4e6c-b0d0-cfea3d960592">概述</h2>
         <p>本文将会介绍的是浏览器处理输入事件与更新页面的过程。</p>
-        <h2 id="fa7ead49-4f1a-457d-82a0-bda59bddff6b">重排和重绘</h2>
+        <h2 id="483632d7-b464-491d-836e-08c7a4749f6e">重排和重绘</h2>
         <p>在正式开始之前，我们需要先介绍重排、重绘这 2 个概念。</p>
         <p>回顾《页面的渲染》一文，Chrome 渲染页面的流程有 8 个步骤，分别是：1.构建 DOM、2.计算样式、3.计算布局、4.创建绘图指令、5.分层、6.分块、7.光栅化、8.合成。</p>
         <p>如果页面重新排版了自己的布局，那么我们就认为页面发生了重排（reflow）。当页面发生了重排之后，浏览器就会按需的执行渲染流程中的某些步骤来更新页面，而浏览器到底需要执行哪些步骤则取决于引发重排的具体行为，比如：</p>
@@ -48,11 +48,11 @@
 </code></pre>
         <p>如果页面没有立即响应用户的操作，用户就会感觉到卡顿。因为所有的重排和重绘都会受到主线程的阻塞，所以如果主线程上的任务非常耗时，那么在主线程努力处理任务的期间，页面上所有依赖重排和重绘的交互设计都将变得无响应，整个页面看起来就像陷入了假死状态。</p>
         <p>不过，哪怕整个页面都陷入了假死状态，页面仍然可以流畅的滚动，这是因为页面滚动是使用合成来实现的。</p>
-        <h2 id="81444d95-ef20-42ba-9844-068b35ccb53f">合成</h2>
+        <h2 id="dadbac88-f519-44b8-8e92-672a5f43d717">合成</h2>
         <p>合成是指浏览器只通过合成（第 8 步）来生成新的页面位图的行为，具体来说，合成器线程可以通过改变图块位图的状态（比如位置、旋转等）来让 GPU 直接合成出新的页面位图，由于这种渲染策略可以跳过大部分的渲染流程，并且合成器线程还可以和主线程并行工作，因此这种渲染策略可以很快的渲染出新的页面位图。</p>
         <p>许多 CSS3 动画和页面滚动都是使用合成来实现的，由于合成可以不受主线程的阻塞，所以在页面假死期间，页面仍然可以流畅的滚动。</p>
         <p>不过在最开始的时候，使用合成来实现的页面滚动也还是会被主线程阻塞，直至 Chrome 51 开始，Chrome 才利用 <a href="https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md">Passive event listeners</a> 特性解决了这个问题。</p>
-        <h2 id="ecead3be-fe90-49e3-921c-fbb1c763962b">合成阻塞</h2>
+        <h2 id="d71a7287-c089-4916-920e-2826e68ebfa4">合成阻塞</h2>
         <p>许多输入事件都具有默认动作，比如</p>
         <ol>
             <li>复选框的点击事件的默认动作是勾选和取消勾选。</li>
@@ -89,7 +89,7 @@ globalThis.addEventListener( &quot;click&quot;, _ =&gt; {
 } );
 </code></pre>
         <p>如果你对 JS 代码中的 <code>{ passive: false }</code> 感到困惑，请不用担心，因为文章的下一节（Passive event listeners）会阐述它的作用。不过可以提前告诉你，正是它引发了这个页面的假死。</p>
-        <h2 id="88f6e25d-e284-445c-b767-6c99f4056c43">Passive event listeners</h2>
+        <h2 id="6ed969d7-439e-42ff-80d7-4a2b7f4af34e">Passive event listeners</h2>
         <p><a href="https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md">Passive event listeners</a> 是一项用于消除滚动阻塞的特性，它可以保障页面和元素滚动的流畅性，你可以从这篇 <a href="https://dom.spec.whatwg.org/#dom-addeventlisteneroptions-passive">DOM 规范</a> 中找到它的详细定义，该特性从 Chrome 51 和 Firefix 49 开始生效。</p>
         <p>该特性允许开发者在使用 <code>addEventListener</code> API 来绑定事件监听器的同时，为事件监听器指定一个名为 <code>passive</code> 的可选参数。如果 <code>passive</code> 的值为 <code>true</code>，那么浏览器就会假定事件监听器不会调用 <code>event.preventDefault()</code>，然后主线程会继续执行事件监听器（和其他任务），但是合成器线程不会停下来等待主线程，而是直接合成新的页面位图。如果 <code>passive</code> 的值为 <code>false</code>，那么合成器线程就会停下来等待主线程，直至主线程清空掉所有任务后，合成器线程才会开始工作。</p>
         <blockquote>
@@ -122,7 +122,7 @@ globalThis.addEventListener( &quot;click&quot;, _ =&gt; {
 </code></pre>
         <p>对于触摸事件和 <code>wheel</code> 事件而言，通常我们只有在想要禁用滚动时才会调用 <code>event.preventListener()</code>，如果你根本就不打算禁用页面或元素的滚动，那么就请记得总是为这些事件监听器应用 <code>{ passive: true }</code> 来提升滚动的流畅性。否则，随着你的页面越来越复杂，主线程很可能会在不知不觉之间要处理越来越多的任务，那么你的页面的滚动体验也会在不知不觉之间变得越来越差。你可以直接观看 <a href="https://www.youtube.com/watch?v=NPM6172J22g">这个视频</a> 来感受一下 passive event listeners 特性对一个新闻网站的影响，没有使用 <code>{ passive: true }</code> 时的滚动体验实在是太糟糕了。</p>
         <p>另外，Chrome 和 Firefox 默认将 <code>window</code>、<code>document</code>、<code>document.body</code> 等文档级节点的触摸事件和 <code>wheel</code> 事件的 <code>passive</code> 设置为了 <code>true</code>，对于其他的元素而言，则仍然是 <code>false</code>。</p>
-        <h2 id="cdf5d444-c780-48e1-a9a3-4f35c7f9bdc4">处理输入事件</h2>
+        <h2 id="1a7ba571-4829-4783-a335-8a911b061d23">处理输入事件</h2>
         <p>现在，我们已经把最难理解的内容都讲完了，接下来我们就来了解一下渲染进程是如何处理输入事件的。</p>
         <ol>
             <li>当用户与浏览器发生了交互之后，浏览器会捕捉到这个交互的输入事件，然后将该事件的类型（如 <code>click</code>）和坐标（如 <code>(x,y)</code>）发送给渲染进程。</li>
@@ -133,13 +133,13 @@ globalThis.addEventListener( &quot;click&quot;, _ =&gt; {
         <p><img src=/static/image/markdown/browser/input-event-and-page-scroll/input-event-information.png alt=输入事件的信息 loading="lazy" decoding="async"></p>
         <p>另外，主线程是如何找到相应的事件监听器的呢？当主线程接收到来自合成线程的信息后，主线程会使用输入事件的坐标来和绘图指令（渲染流程第 4 步的输出结果）来进行对比，然后找到相应的 <code>event.target</code>，最后在 <code>event.target</code> 上找到需要被调用的事件监听器。</p>
         <p><img src=/static/image/markdown/browser/input-event-and-page-scroll/finding-event-target.png alt=寻找事件监听器 loading="lazy" decoding="async"></p>
-        <h2 id="7d5e19bd-6464-4e11-a102-09a18f4cdc27">Non-Fast Scrollable Region</h2>
+        <h2 id="c5e2ee26-3651-4378-b410-e263df4663bc">Non-Fast Scrollable Region</h2>
         <p>为什么合成器线程可以根据输入事件的发生地来判断输入事件是否会触发事件监听器呢？因为合成器线程会将绑定了事件监听器的区域标记为 non-fast scrollable region，如果输入事件发生在标记区域的范围内，合成器线程就会将输入事件的信息发送给主线程，否则就不会。</p>
         <p><img src=/static/image/markdown/browser/input-event-and-page-scroll/non-fast-scrollable-region.png alt=non-fast-scrollable-region loading="lazy" decoding="async"></p>
         <p>我们经常会使用事件代理来为元素绑定事件监听器，它的具体原理是：将事件监听器绑定在祖先节点的身上，然后通过判断输入事件究竟发生在哪个子孙节点的身上来决定应该执行哪些任务。</p>
         <p>不过，事件代理会扩大 non-fast scrollable region 的范围，比如，如果将事件监听器绑定在了 <code>globalThis</code> 节点上，那么整个页面都将会被标记为 non-fast scrollable region。这样一来，无论输入事件发生在页面的哪个位置，合成器线程都必须与主线程通信，哪怕输入事件根本没有触发任何事件监听器。而且，如果主线程还会阻塞合成器线程的话，那么一旦事件监听器的执行时间较长，原本流畅的页面就会变得卡顿，使用 <code>{ passive: true }</code> 可以减轻这种负面影响。</p>
         <p><img src=/static/image/markdown/browser/input-event-and-page-scroll/event-delegation.png alt=使用事件代理将可能扩大non-fast scrollable region的区域 loading="lazy" decoding="async"></p>
-        <h2 id="19a2d57b-d7f6-4743-8608-1078bcb5fd75">参考资料</h2>
+        <h2 id="b543b381-6fc6-4111-bb40-1877b10c2a0c">参考资料</h2>
         <ul>
             <li><a href="https://developer.chrome.com/blog/inside-browser-part1/">Inside look at modern web browser (part 1)</a></li>
             <li><a href="https://developer.chrome.com/blog/inside-browser-part2/">Inside look at modern web browser (part 2)</a></li>
