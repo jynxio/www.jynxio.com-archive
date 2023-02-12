@@ -1,4 +1,4 @@
-# 层叠与继承
+# 层叠
 
 ## 概述
 
@@ -66,6 +66,8 @@ Origin 是指样式规则的来源，样式规则只有 3 种来源，分别是�
 
 一个样式表内的所有 `unlayered style` 都会按照它们声明的顺序来组合在一起，形成一个 `last anonymous layer`。更多细节请见 [@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) 和 [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import)。
 
+> `@import` 和 `<link>` 的作用是一样的，但 `@import` 会创建更多的网络请求，所以如果你追求极致性能，那么请使用 `<link>`。
+
 ### Animation
 
 animation 使用 `@keyframes` 来定义动画，需要注意的是：
@@ -103,57 +105,35 @@ animation 使用 `@keyframes` 来定义动画，需要注意的是：
 
 ## 优先级
 
-优先级公式：
+样式规则的优先级（specificity）等于组合选择器的优先级，组合选择器的优先级的计算公式如下（含义越具体，优先级越高）：
 
-- id : 1,0,0,
-- 类/伪类/属性选择器：0,1,0
-- 元素/伪元素：0,0,1
+| 选择器               | 优先级  |
+| -------------------- | ------- |
+| ID 选择器            | `1,0,0` |
+| 类、伪类、属性选择器 | `0,1,0` |
+| 元素、伪元素选择器   | `0,0,1` |
 
-**通配选择符**（universal selector）（[`*`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Universal_selectors)）**关系选择符**（combinators）（[`+`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Adjacent_sibling_combinator), [`>`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Child_combinator), [`~`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/General_sibling_combinator), [" "](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Descendant_combinator), [`||`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Column_combinator)）和 **否定伪类**（negation pseudo-class）（[`:not()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not)）对优先级没有影响。（但是，在 `:not()` 内部声明的选择器会影响优先级）。
+另外：
 
-通用选择器（`*`）、组合符（`+`、`>`、`~`、`space`）和调整优先级的选择器（`:where()`）不会影响优先级。否定（[`:not()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not)）和任意匹配（[`:is()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:is)）伪类本身对优先级没有影响，但它们的参数则会带来影响。参数中，对优先级算法有贡献的参数的优先级的最大值将作为该伪类选择器的优先级。The matches-any pseudo-class [`:is()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:is) 实验性 and the negation pseudo-class [`:not()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not) are *not* considered a pseudo-class in the specificity calculation. But selectors placed into the pseudo-class count as normal selectors when determining the count of [selector types](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Specificity#Selector_Types).
+- 通配符选择器（`*`）、组合器（`+`、`>`、`~`、、`||`）、优先级调整伪类（`:where()`）不参与优先级计算；
+- 否定伪类（`:not()`）、任意匹配（`:is()`）的优先级取决于参数的优先级；
 
-`:not` 否定伪类在优先级计算中不会被看作是伪类。事实上，在计算选择器数量时还是会把其中的选择器当做普通选择器进行计数。
+### :not() & :is() & where()
 
-```html
-<style>
-    div.outer p {
-  color: orange;
-}
+`:not( selector-list )` 和 `:is( selector-list )` 的优先级取决于 `selector-list` 中的优先级最高项的优先级。
 
-div:not(.outer) p {
-  color: blueviolet;
-}
-</style>
-<div class="outer">
-  <p>orange</p>
-  <div class="inner">
-    <p>blueviolet</p>
-  </div>
-</div>
+```css
+:not( #id, .classname ) {} /* 优先级为 1,0,0 */
+:is(  #id, .classname ) {} /* 优先级为 1,0,0 */
 ```
 
-诀窍：选择器越具体，那么选择器的优先级就会更高；
+> `selector-list` 指 [选择器列表](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Selector_list)，比如 `h1, h2, h3, h4 {}`。
 
-The specificity-adjustment pseudo-class [`:where()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:where) 实验性 always has its specificity replaced with zero.
+`:where()` 的作用和 `:is()` 一模一样，唯一区别是前者不参与优先级计算。
 
-`:where()` 和 [`:is()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:is) 的不同之处在于，`:where()` 的[优先级](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Specificity)总是为 0，但是 `:is()` 的优先级是由它的选择器列表中优先级最高的[选择器](https://developer.mozilla.org/zh-CN/docs/Glossary/CSS_Selector)决定的。
-
-两者的区别在于 `:is()` 计入整体选择器的优先级（它接受优先级最高参数的优先级），而 [`:where()`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:where) 的优先级为 0。
-
-选择器列表就是 `a, p, h1` 这样的东西。
-
-规范将 `:is()` 和 `:where()` 定义为接受一个[可容错选择器列表](https://drafts.csswg.org/selectors-4/#typedef-forgiving-selector-list)。
-
-伪元素在 `:is()` 的选择器列表中无效，比如这样写是无效的。
-
+```css
+article:where( .section-1, .section-2 ) {} /* 优先级为 0,0,1 */
 ```
-some-element:is(::before, ::after) {
-  display: block;
-}
-```
-
-
 
 ## 继承
 
@@ -165,11 +145,7 @@ CSS 提供了 5 个特殊的属性值，以便于控制继承，每个 CSS 属�
 
 > 大多数于字体相关的属性都是继承属性。
 
-
-
-
-
-`all` 
+另外，CSS 还提供了一个 `all` 属性，我们可以利用 `all` 来一键重置（几乎）所有的属性。
 
 ## 参考资料
 
