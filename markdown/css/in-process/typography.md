@@ -80,3 +80,10 @@ Josh：虽然 `text-align` 可以控制所有 `inline` 元素的水平对齐方�
 
 我们可以通过编写不同的样式，来告诉用户哪些东西是链接、哪些是重点内容、哪些是注释，然而视力障碍人士无法看见我们编写的样式，他们需要通过屏幕阅读器来浏览网页，而屏幕阅读器会根据 HTML 标签的语义来选择朗读的方式（比如屏幕阅读器会重读 `<em>` 的内容）。所以语义化 HTML 很重要。
 
+## 书写方向
+
+如果你想了解更多有关于书写方向的知识，那么请看 [这篇文章](https://24ways.org/2016/css-writing-modes/)。
+
+书写方向会影响逻辑属性，请使用逻辑属性（logical property），比如 `inline-size`、`padding-inline-start`，从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties) 找到所有逻辑属性。
+
+逻辑属性旨在完全替代非逻辑属性，比如 `margin-inline-start` 会完全替代 `margin-left`。
