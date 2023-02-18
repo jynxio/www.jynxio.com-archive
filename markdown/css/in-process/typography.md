@@ -46,6 +46,19 @@ font-family: sans-serif;
 
 当我们指定渲染粗体时（比如 `font-weight: bold`），哪怕字体文件中不包含粗体的字符集，浏览器也会通过人工加粗来模拟出粗体效果，只不过这种效果并不漂亮。
 
+## Color
+
+该属性用于设置字体的颜色，`currentColor` 是一个非常有用的属性，它是当前元素的字体颜色（哪怕当前元素使用了 `color: inherit`），这个属性值非常方便！
+
+```css
+article {
+    color: #333;
+    border: 1px solid currentColor;
+}
+```
+
+> 一个冷知识：如果你没有指定 `border-color`，那么 `border-color` 默认就会使用当前元素的字体颜色。
+
 ## 字形
 
 `font-style` 可以设置字形。
