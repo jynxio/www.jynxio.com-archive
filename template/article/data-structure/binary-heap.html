@@ -14,18 +14,18 @@
     </header>
     <aside>
         <p>In this article</p>
-        <p data-target-id=b8b0458f-b035-4df1-b729-a02682c4610f>概述</p>
-        <p data-target-id=08ac742a-77f9-4c9f-a1ed-61e6ee921138>实现</p>
-        <p data-target-id=76d9b8ad-a42d-4a36-bc94-c50e4cb9cbbe>堆排序算法</p>
-        <p data-target-id=714bbb26-b872-4960-b082-79a48ace8feb>动态中位数算法</p>
-        <p data-target-id=04db3ecb-0aab-4520-b7af-ba9af7cab829>源码</p>
+        <p data-target-id=6d75cd2e-b4b5-45e8-b0ca-a7a05fb9dce9>概述</p>
+        <p data-target-id=3a80edc8-e245-4563-9a9f-cb757f582f24>实现</p>
+        <p data-target-id=2d6bba66-d76c-4a7d-97f0-fa33321624b9>堆排序算法</p>
+        <p data-target-id=58c66eaa-2589-48ff-bfb1-839003b66ccf>动态中位数算法</p>
+        <p data-target-id=f4b61b29-b0e7-4c29-aab7-4587d66d3db2>源码</p>
     </aside>
     <article>
         <h1>二叉堆</h1>
-        <h2 id="b8b0458f-b035-4df1-b729-a02682c4610f">概述</h2>
+        <h2 id="6d75cd2e-b4b5-45e8-b0ca-a7a05fb9dce9">概述</h2>
         <p>二叉堆是一种特殊的完全二叉树，其分为最小堆和最大堆。其中，最小堆的定义是：父节点的值必须不大于子节点的值，而最大堆的定义是：父节点的值必须不小于子节点的值。</p>
         <p><img src=/static/image/markdown/data-structure/binary-heap/minheap-and-maxheap.png alt=最小堆和最大堆 loading="lazy" decoding="async"></p>
-        <h2 id="08ac742a-77f9-4c9f-a1ed-61e6ee921138">实现</h2>
+        <h2 id="3a80edc8-e245-4563-9a9f-cb757f582f24">实现</h2>
         <p>我们将会实现 3 个类，分别是 <code>BaseHeap</code>、<code>MinHeap</code>、<code>MaxHeap</code>，其中 <code>BaseHeap</code> 是 <code>MinHeap</code> 和 <code>MaxHeap</code> 的父类。</p>
         <p>之所以要这么做，是因为 <code>MinHeap</code> 的实现过程几乎和 <code>MaxHeap</code> 的实现过程一模一样，唯一的区别只在于，两者在数值比较上的做法完全相反。你只要浏览一下后文的实现代码，就会立即明白我的意思。</p>
         <p>我们实现的 <code>MinHeap</code> 和 <code>MaxHeap</code> 将会拥有下述方法，并且我们会把这些公共方法提取到 <code>BaseHeap</code> 中去。</p>
@@ -85,7 +85,7 @@
                 </tr>
             </tbody>
         </table>
-        <h3 id="eb26b246-b01f-4c6e-82f5-41da73081bc1">存储容器</h3>
+        <h3 id="4d712111-0161-46c6-be1d-76fd8e02394c">存储容器</h3>
         <p>在真正开始实现二叉堆之前，我们需要选择一种数据结构来存储二叉堆的数据。</p>
         <p>在 <a href="https://www.jynxio.com/article/data-structure/binary-search-tree.html">二叉搜索树</a> 一文中，我们使用了 JavaScript 中的普通对象 <code>{}</code> 来作为存储数据的容器。虽然二叉堆也是二叉树的一种，但是我们会选用数组来作为存储数据的容器，这是因为数组非常适合用来实现完全二叉树。</p>
         <p>如果我们使用数组来存储二叉堆的数据，那么我们就可以获得如下规律：</p>
@@ -94,7 +94,7 @@
             <li>如果一个节点的序号是 <code>index</code>，那么其左子节点的序号就是 <code>2 * index + 1</code>。</li>
             <li>如果一个节点的序号是 <code>index</code>，那么其右子节点的序号就是 <code>2 * index + 2</code>。</li>
         </ul>
-        <h3 id="05320b02-68c1-4347-984d-43c7ecef85bb">实现 BaseHeap</h3>
+        <h3 id="5460883f-604b-4a48-b6b5-4d4e6265a9f0">实现 BaseHeap</h3>
         <p><code>BaseHeap</code> 的实现代码如下所示：</p>
         <pre><code class="language-javascript">class BaseHeap {
 
@@ -321,7 +321,7 @@
 
 }
 </code></pre>
-        <h3 id="c4526789-d0d8-459a-956b-c82ee2b5e767">实现 MinHeap</h3>
+        <h3 id="c23271eb-51e9-4546-80d1-959951738e2d">实现 MinHeap</h3>
         <p><code>MinHeap</code> 的实现代码如下所示：</p>
         <pre><code class="language-javascript">class MinHeap extends BaseHeap {
 
@@ -347,7 +347,7 @@
 
 }
 </code></pre>
-        <h3 id="c38b7490-cccc-473a-b9c0-b284de710866">实现 MaxHeap</h3>
+        <h3 id="f7c465b0-8ce2-4ecd-bb8e-30c916a17640">实现 MaxHeap</h3>
         <p><code>MaxHeap</code> 的实现代码如下所示：</p>
         <pre><code class="language-javascript">class MaxHeap extends BaseHeap {
 
@@ -373,7 +373,7 @@
 
 }
 </code></pre>
-        <h2 id="76d9b8ad-a42d-4a36-bc94-c50e4cb9cbbe">堆排序算法</h2>
+        <h2 id="2d6bba66-d76c-4a7d-97f0-fa33321624b9">堆排序算法</h2>
         <p>堆排序算法是指基于二叉堆数据结构来实现的排序算法，它可以对无序数组进行排序，以生成升序数组或降序数组。堆排序算法的时间复杂度是 <code>O(nlogn)</code>。</p>
         <p>如果你已经明白了最小堆和最大堆的实现原理，那么你就可以很轻易的想到堆排序算法的实现思路：</p>
         <ol>
@@ -416,10 +416,10 @@ function heapSort ( data ) {
 
 }
 </code></pre>
-        <h2 id="714bbb26-b872-4960-b082-79a48ace8feb">动态中位数算法</h2>
+        <h2 id="58c66eaa-2589-48ff-bfb1-839003b66ccf">动态中位数算法</h2>
         <p>基于二叉堆，我们可以实现一个有趣且实用的动态中位数算法。</p>
         <p>该算法可用于计算动态的无序数组的中位数，该算法的冷启动效率较低，热更新效率较高。具体来说，就是当你第一次获取一个无序数组的中位数时，该操作的时间复杂度为 <code>O(nlogn)</code>，而当你向该无序数组新增一个数字值，并再次获取该无序数组的中位数时，该操作的时间复杂度为 <code>O(logn)</code>。</p>
-        <h3 id="d0f6c8e9-7ccd-49b2-9f41-c1ff77dc7783">思想</h3>
+        <h3 id="0624e191-b7d0-4a65-b8c2-113c20993ce0">思想</h3>
         <p>该算法的思想是：</p>
         <ol>
             <li>将无序数组拆分成一个最小堆和一个最大堆。</li>
@@ -427,7 +427,7 @@ function heapSort ( data ) {
             <li>联立最小堆的最小值和最大堆的最大值即可求出中位数。</li>
         </ol>
         <p><img src=/static/image/markdown/data-structure/binary-heap/dynamic-median-idea.png alt=动态中位数算法的思想 loading="lazy" decoding="async"></p>
-        <h3 id="fdd793ae-cf3a-4711-9e3e-e126befa580a">实现</h3>
+        <h3 id="121dc97b-2e24-47f3-8180-67665d40cbc1">实现</h3>
         <p>如何构造出满足要求的最小堆和最大堆呢？具体实现步骤如下：</p>
         <ol>
             <li>使用无序数组的前半部分数字值来创建一个最小堆。</li>
@@ -443,7 +443,7 @@ function heapSort ( data ) {
             <p><strong>Note</strong></p>
             <p>该过程的时间复杂度为 <code>O(nlong)</code>，推理如下：已知二叉树的插入操作的时间复杂度是 <code>O(logn)</code>，假设无序数组的长度为 <code>n</code>，那么第一步的时间复杂度就是 <code>O(log1 + log2 + ... + logn/2)</code>，即 <code>O(logn!)</code>，由于 <code>nlong</code> 是 <code>logn!</code> 的同阶函数，所以该步骤的时间复杂度可转换为 <code>O(nlogn)</code>。同理，第二步和第三步的时间复杂度都是 <code>O(nlogn)</code>，因此整个过程的时间复杂度就是 <code>O(nlogn)</code>。</p>
         </blockquote>
-        <h3 id="b0d2654b-3583-4a51-835a-8ad5baf5b887">插入</h3>
+        <h3 id="7bd96519-b2d2-4263-bb25-f58d270f6392">插入</h3>
         <p>如果我们需要向无序数组插入一个新的数字值，并希望求出新的无序数组的中位数的话，那么我们需要这么做：</p>
         <ol>
             <li>将新的数字值插入到最小堆或最大堆中去。</li>
@@ -456,7 +456,7 @@ function heapSort ( data ) {
             <p>该过程的时间复杂度是 <code>O(logn)</code>，推理如下：</p>
             <p>第一步的时间复杂度是 <code>O(logn)</code>。第二步可能会引发到一至多次的插入节点和移除堆顶节点操作，其时间复杂度也是 <code>O(logn)</code>。第三步的时间复杂度是 <code>O(1)</code>。最后，可得整个过程的时间复杂度就是 <code>O(long)</code>。</p>
         </blockquote>
-        <h3 id="de03cfe4-cd7e-47e1-9dbe-0691736aeebd">编码</h3>
+        <h3 id="1785415c-ce90-483b-aa46-f5e98e082048">编码</h3>
         <p>该算法的实现代码如下：</p>
         <pre><code class="language-javascript">class DynamicMedian {
 
@@ -601,7 +601,7 @@ function heapSort ( data ) {
 
 }
 </code></pre>
-        <h2 id="04db3ecb-0aab-4520-b7af-ba9af7cab829">源码</h2>
+        <h2 id="f4b61b29-b0e7-4c29-aab7-4587d66d3db2">源码</h2>
         <p>你可以从 <a href="https://github.com/jynxio/data-structure-and-algorithm/blob/main/data-structure/Heap.js">这里</a> 获取得到 <code>MinHeap</code> 和 <code>MaxHeap</code> 的完整源码。</p>
         <p>你可以从 <a href="https://github.com/jynxio/data-structure-and-algorithm/blob/main/algorithm/heapSort.js">这里</a> 获取得到 <code>heapSort</code> 的完整源码。</p>
         <p>你可以从 <a href="https://github.com/jynxio/data-structure-and-algorithm/blob/main/algorithm/DynamicMedian.js">这里</a> 获取得到 <code>DynamicMedian</code> 的完整源码。</p>
