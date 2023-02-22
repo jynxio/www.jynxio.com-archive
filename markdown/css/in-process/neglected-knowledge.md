@@ -13,3 +13,23 @@
 ## Color
 
 `currentColor` 关键字代表了当前元素的字体颜色，哪怕当前元素是 `color: inherit`。
+
+## accent-color
+
+`accent-color` 是强调色，用于设置 `input` 的默认颜色，比如：
+
+```html
+<style>
+    input {
+        accent-color: auto;
+    }
+    input.custom {
+        accent-color: rebeccapurple;
+    }
+</style>
+<body>
+    <input type="checkbox"/>                <!-- 复选框的背景色是蓝色 -->
+    <input class="custom" type="checkbox"/> <!-- 复选框的背景色是紫色 -->
+</body>
+```
+
