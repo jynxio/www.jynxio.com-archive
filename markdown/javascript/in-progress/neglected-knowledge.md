@@ -10,3 +10,7 @@
 
 - 如果你需要绘制 2d 文字，那么你可以将文字写在 `<canvas>` 上，然后在 WebGL 中使用 `<canvas>` 贴图；
 - 如果你需要绘制 3d 文字，那么你可以将文字写在 `<canvas>` 上，然后通过 [potrace](https://potrace.sourceforge.net/) 来矢量化画布位图，然后再根据矢量化的结果来绘制 3d 文字。
+
+## Fugu API Tracker
+
+Chromium 在持续发布有趣的 API，你可以通过 [Fugu API Tracker](https://fugu-tracker.web.app/) 来跟踪这些信息。
