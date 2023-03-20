@@ -1,0 +1,37 @@
+{
+    "env": {
+        "browser": true,
+        "node": true,
+        "worker": true,
+        "es2022": true
+    },
+    "extends": "eslint:recommended",
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "array-callback-return": [
+            "error"
+        ]
+    },
+    "noInlineConfig": true // 禁用内嵌型注释
+}
