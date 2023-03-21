@@ -12,6 +12,7 @@
         "sourceType": "module"
     },
     "rules": {
+        // 风格类
         "indent": [
             "error",
             "tab"
@@ -28,6 +29,18 @@
             "error",
             "always"
         ],
+        "camelcase": [
+            "error"
+        ],
+        "capitalized-comments": [
+            "error",
+            "always",
+            {
+                "ignoreInlineComments": true,
+                "ignoreConsecutiveComments": true
+            }
+        ],
+        // 功能类
         "array-callback-return": [
             "error"
         ],
@@ -48,7 +61,33 @@
         ],
         "no-new-native-nonconstructor": [
             "error"
+        ],
+        "no-promise-executor-return": [
+            "error"
+        ],
+        "no-self-compare": [
+            "error"
+        ],
+        "no-template-curly-in-string": [
+            "error"
+        ],
+        "no-unmodified-loop-condition": [
+            "error"
+        ],
+        "no-unused-private-class-members": [
+            "error"
+        ],
+        "accessor-pairs": [
+            "error",
+            {
+                "getWithoutSet": true,
+                "setWithoutGet": true,
+                "enforceForClassMembers": true
+            }
+        ],
+        "block-scoped-var": [
+            "error"
         ]
     },
-    "noInlineConfig": true // 禁用内嵌型注释
+    "noInlineConfig": true
 }
