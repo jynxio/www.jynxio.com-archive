@@ -42,7 +42,8 @@
         ],
         "curly": [
             "error",
-            "multi"
+            "multi",
+            "consistent"
         ],
         "consistent-this": [
             "error",
@@ -226,8 +227,130 @@
                 "allowSeparatedGroups": true
             }
         ],
-        "spaced-comment": [ "error" ],
-        "symbol-description": [ "error" ],
+        "spaced-comment": [
+            "error"
+        ],
+        "symbol-description": [
+            "error"
+        ],
+        "array-bracket-newline": [
+            "error",
+            "consistent"
+        ],
+        "array-bracket-spacing": [
+            "error",
+            "always"
+        ],
+        "arrow-parens": [
+            "error",
+            "as-needed"
+        ],
+        "no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "all",
+                "caughtErrors": "all",
+                "argsIgnorePattern": "_$",
+                "caughtErrorsIgnorePattern": "^_$"
+            }
+        ],
+        "arrow-spacing": [
+            "error"
+        ],
+        "block-spacing": [
+            "error"
+        ],
+        "brace-style": [
+            "error"
+        ],
+        "comma-dangle": [
+            "error",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "always-multiline"
+            }
+        ],
+        "comma-spacing": [
+            "error"
+        ],
+        "comma-style": [
+            "error"
+        ],
+        "computed-property-spacing": [
+            "error",
+            "always",
+            {
+                "enforceForClassMembers": true
+            }
+        ],
+        "dot-location": [
+            "error",
+            "property"
+        ],
+        "eol-last": [
+            "error",
+            "always"
+        ],
+        "func-call-spacing": [
+            "error"
+        ],
+        "function-call-argument-newline": [
+            "error",
+            "consistent"
+        ],
+        "function-paren-newline": [
+            "error",
+            "multiline"
+        ],
+        "generator-star-spacing": [
+            "error",
+            {
+                "before": false,
+                "after": true
+            }
+        ],
+        "implicit-arrow-linebreak": [
+            "error"
+        ],
+        "jsx-quotes": [
+            "error"
+        ],
+        "key-spacing": [
+            "error"
+        ],
+        "keyword-spacing": [
+            "error"
+        ],
+        "lines-around-comment": [
+            "error",
+            {
+                "beforeBlockComment": true,
+                "beforeLineComment": true,
+                "allowBlockStart": false,
+                "allowBlockEnd": false,
+                "allowClassStart": false,
+                "allowClassEnd": false,
+                "allowObjectStart": true,
+                "allowObjectEnd": true,
+                "allowArrayStart": true,
+                "allowArrayEnd": true
+            }
+        ],
+        "lines-between-class-members": [
+            "error"
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": // TODO
+                // GO ON https://eslint.org/docs/latest/rules/max-len#code
+                // GO ON https://eslint.org/docs/latest/rules/#layout--formatting
+            }
+        ],
         // 功能类
         "array-callback-return": [
             "error"
