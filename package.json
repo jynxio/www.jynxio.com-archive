@@ -3,6 +3,8 @@
     "devDependencies": {
         "css-loader": "^6.7.3",
         "css-minimizer-webpack-plugin": "^4.2.2",
+        "eslint": "^8.36.0",
+        "eslint-plugin-spellcheck": "^0.0.20",
         "font-caster": "^1.0.3",
         "html-loader": "^4.2.0",
         "html-webpack-plugin": "^5.5.0",
