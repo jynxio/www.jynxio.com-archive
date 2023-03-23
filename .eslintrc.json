@@ -29,7 +29,11 @@
 					"aff",
 					"hunspellchecker",
 					"hunspell",
-					"utils"
+					"utils",
+					"highp",
+					"glsl",
+					"iife",
+					"cors"
 				],
 				"skipIfMatch": [
 					"http://[^s]*",
@@ -280,7 +284,7 @@
 			"error",
 			{
 				"vars": "all",
-				"args": "all",
+				"args": "none",
 				"caughtErrors": "all",
 				"argsIgnorePattern": "_$",
 				"caughtErrorsIgnorePattern": "^_$"

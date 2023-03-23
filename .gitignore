@@ -1,5 +1,15 @@
+# Vercel
+.vercel
+
+# Development
 node_modules
 package-lock.json
-.DS_Store
+
+# Production
+build
 dist
-.vercel
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
