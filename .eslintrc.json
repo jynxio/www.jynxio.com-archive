@@ -346,10 +346,431 @@
         "max-len": [
             "error",
             {
-                "code": // TODO
-                // GO ON https://eslint.org/docs/latest/rules/max-len#code
-                // GO ON https://eslint.org/docs/latest/rules/#layout--formatting
+                "code": 100,
+                "tabWidth": 4,
+                "comments": 100,
+                "ignoreTrailingComments": false,
+                "ignoreUrls": true,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreRegExpLiterals": true
             }
+        ],
+        "operator-linebreak": [
+            "error",
+            "before"
+        ],
+        "new-parens": [
+            "error",
+            "always"
+        ],
+        "no-multi-spaces": [
+            "error",
+            {
+                "ignoreEOLComments": true
+            }
+        ],
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1,
+                "maxEOF": 0,
+                "maxBOF": 0
+            }
+        ],
+        "no-tabs": [
+            "error",
+            {
+                "allowIndentationTabs": true
+            }
+        ],
+        "no-trailing-spaces": [
+            "error"
+        ],
+        "no-whitespace-before-property": [
+            "error"
+        ],
+        "nonblock-statement-body-position": [
+            "error"
+        ],
+        "object-curly-newline": [
+            "error",
+            {
+                "minProperties": 4,
+                "consistent": true
+            }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always",
+            {
+                "arraysInObjects": true,
+                "objectsInObjects": true
+            }
+        ],
+        "padded-blocks": [
+            "error"
+        ],
+        "padding-line-between-statements": [
+            "error",
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "block"
+            },
+            {
+                "blankLine": "always",
+                "prev": "block",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "block-like"
+            },
+            {
+                "blankLine": "always",
+                "prev": "block-like",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "break"
+            },
+            {
+                "blankLine": "always",
+                "prev": "break",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "case"
+            },
+            {
+                "blankLine": "always",
+                "prev": "case",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "cjs-export"
+            },
+            {
+                "blankLine": "always",
+                "prev": "cjs-export",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "cjs-export",
+                "next": "cjs-export"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "cjs-import"
+            },
+            {
+                "blankLine": "always",
+                "prev": "cjs-import",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "cjs-import",
+                "next": "cjs-import"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "class"
+            },
+            {
+                "blankLine": "always",
+                "prev": "class",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "const"
+            },
+            {
+                "blankLine": "always",
+                "prev": "const",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "const",
+                "next": "const"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "continue"
+            },
+            {
+                "blankLine": "always",
+                "prev": "continue",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "debugger"
+            },
+            {
+                "blankLine": "always",
+                "prev": "debugger",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "default"
+            },
+            {
+                "blankLine": "always",
+                "prev": "default",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "directive"
+            },
+            {
+                "blankLine": "always",
+                "prev": "directive",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "do"
+            },
+            {
+                "blankLine": "always",
+                "prev": "do",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "export"
+            },
+            {
+                "blankLine": "always",
+                "prev": "export",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "export",
+                "next": "export"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "expression"
+            },
+            {
+                "blankLine": "always",
+                "prev": "expression",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "expression",
+                "next": "expression"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "for"
+            },
+            {
+                "blankLine": "always",
+                "prev": "for",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "if"
+            },
+            {
+                "blankLine": "always",
+                "prev": "if",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "iife"
+            },
+            {
+                "blankLine": "always",
+                "prev": "iife",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "import"
+            },
+            {
+                "blankLine": "always",
+                "prev": "import",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "import",
+                "next": "import"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "let"
+            },
+            {
+                "blankLine": "always",
+                "prev": "let",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "let",
+                "next": "let"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "return"
+            },
+            {
+                "blankLine": "always",
+                "prev": "return",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "switch"
+            },
+            {
+                "blankLine": "always",
+                "prev": "switch",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "throw"
+            },
+            {
+                "blankLine": "always",
+                "prev": "throw",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "try"
+            },
+            {
+                "blankLine": "always",
+                "prev": "try",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "var"
+            },
+            {
+                "blankLine": "always",
+                "prev": "var",
+                "next": "*"
+            },
+            {
+                "blankLine": "never",
+                "prev": "var",
+                "next": "var"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "while"
+            },
+            {
+                "blankLine": "always",
+                "prev": "while",
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "with"
+            },
+            {
+                "blankLine": "always",
+                "prev": "with",
+                "next": "*"
+            }
+        ],
+        "semi-spacing": [
+            "error"
+        ],
+        "semi-style": [
+            "error"
+        ],
+        "space-before-blocks": [
+            "error"
+        ],
+        "space-before-function-paren": [
+            "error"
+        ],
+        "space-in-parens": [
+            "error",
+            "always"
+        ],
+        "space-infix-ops": [
+            "error"
+        ],
+        "space-unary-ops": [
+            "error",
+            {
+                "words": true,
+                "nonwords": true
+            }
+        ],
+        "switch-colon-spacing": [
+            "error"
+        ],
+        "template-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "template-tag-spacing": [
+            "error",
+            "always"
+        ],
+        "wrap-iife": [
+            "error",
+            "inside"
+        ],
+        "wrap-regex": [
+            "error"
+        ],
+        "yield-star-spacing": [
+            "error",
+            "after"
         ],
         // 功能类
         "array-callback-return": [
@@ -412,7 +833,7 @@
             "error",
             "always"
         ],
-        "guard-for-in": [ // 如果使用for-in循环，那么就必须检查迭代项，以排除对象原型链上的继承属性
+        "guard-for-in": [
             "error"
         ],
         "no-array-constructor": [
