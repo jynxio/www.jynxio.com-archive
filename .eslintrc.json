@@ -1,50 +1,26 @@
 {
+	"root": true,
 	"env": {
 		"browser": true,
 		"node": true,
 		"worker": true,
 		"es2022": true
 	},
-	"extends": "eslint:recommended",
 	"overrides": [],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
+	"parser": "@typescript-eslint/parser",
 	"plugins": [
-		"spellcheck"
+		"@typescript-eslint"
 	],
 	"rules": {
-		// 插件: sepllcheck
-		"spellcheck/spell-checker": [
-			2,
-			{
-				"comments": true,
-				"strings": true,
-				"identifiers": true,
-				"templates": true,
-				"lang": "en_US",
-				"skipWords": [
-					"dict",
-					"aff",
-					"hunspellchecker",
-					"hunspell",
-					"utils",
-					"highp",
-					"glsl",
-					"iife",
-					"cors"
-				],
-				"skipIfMatch": [
-					"http://[^s]*",
-					"^[-\\w]+\/[-\\w\\.]+$"
-				],
-				"skipWordIfMatch": [
-					"^foobar.*$"
-				],
-				"minLength": 3
-			}
-		],
 		// 风格类
 		"indent": [
 			"error",
