@@ -1,17 +1,16 @@
 {
     "name": "www.jynxio.com",
     "description": "Jynxio's blog",
-    "author": "jynxio",
+    "author": "Jynxio",
     "private": true,
-    "license": "BY-NC-ND",
+    "license": "BY-NC-ND (4.0)",
     "scripts": {
         "start": "vite",
         "build": "vite build"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^5.56.0",
-        "@typescript-eslint/parser": "^5.56.0",
         "eslint": "^8.36.0",
+        "typescript": "^5.0.2",
         "vite": "^4.0.3",
         "vite-plugin-solid": "^2.5.0"
     },
