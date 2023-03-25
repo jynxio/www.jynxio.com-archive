@@ -9,6 +9,8 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.56.0",
+        "@typescript-eslint/parser": "^5.56.0",
         "eslint": "^8.36.0",
         "typescript": "^5.0.2",
         "vite": "^4.0.3",
