@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-
+import path from "path";
 import solid from "vite-plugin-solid";
+import { defineConfig } from "vite";
 
 export default defineConfig( ( { command, mode } ) => {
 
@@ -24,15 +24,21 @@ export default defineConfig( ( { command, mode } ) => {
 
 		return {
 			plugins: [ solid() ],
+			root: "./",
 			base: "/",
 			publicDir: "public",
+			resolve: {
+				alias: {
+					"@": path.resolve( __dirname, "./source" ),
+				},
+			},
 			server: {
 				host: true,
 				port: 8080,
 				open: true,
-				https: false,     // 使用@vitejs/plugin-basic-ssl来创建一个自签名的证书，详见https://cn.vitejs.dev/config/server-options.html#server-https
-				strictPort: true, // 若端口已被占用，则会直接退出
-				cors: true,       // 允许访问跨域资源
+				https: false,
+				strictPort: true,
+				cors: true,
 			},
 		};
 
@@ -42,13 +48,14 @@ export default defineConfig( ( { command, mode } ) => {
 
 		return {
 			plugins: [ solid() ],
-			base: "./",
+			root: "./",
+			base: "/",
 			publicDir: "public",
 			build: {
 				outDir: "build",
 				target: "esnext",
-				assetsInlineLimit: 4096,     // 体积小于该值的资源将被转译为base64数据
-				chunkSizeWarningLimit: 1000, // Chunk体积报警的触发阈值
+				assetsInlineLimit: 4096,
+				chunkSizeWarningLimit: 1000,
 			},
 		};
 

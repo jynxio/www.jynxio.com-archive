@@ -1,5 +1,6 @@
 # Development
 node_modules
+vite.config.js
 
 # Production
 build
