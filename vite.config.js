@@ -4,6 +4,9 @@ import solid from "vite-plugin-solid";
 
 export default defineConfig( ( { command, mode } ) => {
 
+	console.log( "mode ->", mode );
+	console.log( "command ->", command );
+
 	switch ( command ) {
 
 	case "serve":
@@ -43,6 +46,7 @@ export default defineConfig( ( { command, mode } ) => {
 			publicDir: "public",
 			build: {
 				outDir: "build",
+				target: "esnext",
 				assetsInlineLimit: 4096,     // 体积小于该值的资源将被转译为base64数据
 				chunkSizeWarningLimit: 1000, // Chunk体积报警的触发阈值
 			},
