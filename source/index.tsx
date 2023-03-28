@@ -1,8 +1,14 @@
-import "/source/styles/reset.css";
+import "/source/style/global/reset.css";
 
 import App from "./App";
+import { Router } from "@solidjs/router";
 import { render } from "solid-js/web";
 
-const root = document.getElementById( "root" );
+const root = document.getElementById( "root" ) as HTMLElement;
+const code = () => (
+	<Router>
+		<App/>
+	</Router>
+);
 
-render( () => <App/>, root as HTMLElement );
+render( code, root );
