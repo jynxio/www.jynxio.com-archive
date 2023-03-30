@@ -14,7 +14,8 @@
 	],
 	"parser": "@typescript-eslint/parser",
 	"plugins": [
-		"@typescript-eslint"
+		"@typescript-eslint",
+		"import"
 	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
@@ -887,6 +888,18 @@
 		],
 		"no-loop-func": [
 			"error"
-		]
-	}
+		],
+		"import/no-unresolved": "error"
+	},
+	"settings": {
+		"import/parsers": {
+		  "@typescript-eslint/parser": [".ts", ".tsx"]
+		},
+		"import/resolver": {
+		  "typescript": {
+			"alwaysTryTypes": true,
+			"directory": "./"
+		  }
+		}
+	  }
 }

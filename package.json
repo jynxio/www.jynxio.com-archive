@@ -12,6 +12,7 @@
         "@typescript-eslint/eslint-plugin": "^5.56.0",
         "@typescript-eslint/parser": "^5.56.0",
         "eslint": "^8.36.0",
+        "eslint-import-resolver-typescript": "^3.5.4",
         "typescript": "^5.0.2",
         "vite": "^4.2.1",
         "vite-plugin-solid": "^2.6.1"
