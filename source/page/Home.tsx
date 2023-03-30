@@ -2,8 +2,7 @@ function Home () {
 
 	return (
 		<div>
-			<h1>JYNXIO</h1>
-			<p>/* building */</p>
+			<h1>HOME</h1>
 		</div>
 	);
 
