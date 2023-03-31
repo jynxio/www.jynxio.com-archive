@@ -30,6 +30,7 @@ export default defineConfig( ( { command, mode } ) => {
 			resolve: {
 				alias: {
 					"@": path.resolve( __dirname, "./source" ),
+					"$": path.resolve( __dirname, "./" ),
 				},
 			},
 			server: {

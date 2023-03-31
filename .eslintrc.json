@@ -9,12 +9,11 @@
 	"overrides": [],
 	"extends": [
 		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
-		"plugin:@typescript-eslint/recommended-requiring-type-checking"
+		"plugin:solid/typescript"
 	],
 	"parser": "@typescript-eslint/parser",
 	"plugins": [
-		"@typescript-eslint",
+		"solid",
 		"import"
 	],
 	"parserOptions": {
@@ -231,13 +230,16 @@
 		"sort-imports": [
 			"error",
 			{
+				"ignoreCase": false,
+				"ignoreDeclarationSort": true,
+				"ignoreMemberSort": false,
+				"allowSeparatedGroups": false,
 				"memberSyntaxSortOrder": [
 					"none",
 					"single",
 					"all",
 					"multiple"
-				],
-				"allowSeparatedGroups": true
+				]
 			}
 		],
 		"spaced-comment": [
@@ -893,13 +895,16 @@
 	},
 	"settings": {
 		"import/parsers": {
-		  "@typescript-eslint/parser": [".ts", ".tsx"]
+			"@typescript-eslint/parser": [
+				".ts",
+				".tsx"
+			]
 		},
 		"import/resolver": {
-		  "typescript": {
-			"alwaysTryTypes": true,
-			"directory": "./"
-		  }
+			"typescript": {
+				"alwaysTryTypes": true,
+				"directory": "./"
+			}
 		}
-	  }
+	}
 }

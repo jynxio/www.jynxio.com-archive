@@ -21,7 +21,8 @@
 		"baseUrl": "./",
 		"rootDir": "./source",
 		"paths": {
-			"@/*": [ "./source/*" ]
+			"@/*": [ "./source/*" ],
+			"$/*": [ "./*" ]
 		}
 	},
 	"include": [ "./source", "./vite.config.js" ],
