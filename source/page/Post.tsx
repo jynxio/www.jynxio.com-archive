@@ -1,6 +1,6 @@
 import postUrl from "$/post/test.md?url";
 import Markdown from "@/hook/Markdown";
-import { createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 
 function Post () {
 
@@ -13,7 +13,9 @@ function Post () {
 
 	return (
 		<div>
-			<Markdown data={ getMarkdown() } />
+			<Show when={ getMarkdown() !== "" } fallback={ <div>Loading...</div> }>
+				<Markdown data={ getMarkdown() } />
+			</Show>
 		</div>
 	);
 

@@ -1,0 +1,6 @@
+- Markdown
+- 函数式组件
+- 支持<Markdown/>，不支持<Markdown>{children}</Markdown>
+- 支持marked中所罗列的所有元素
+- 支持异步
+- 支持fallback
