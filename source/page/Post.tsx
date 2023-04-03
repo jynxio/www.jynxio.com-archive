@@ -1,6 +1,6 @@
 import postUrl from "$/post/test.md?url";
 import Markdown from "@/hook/Markdown";
-import { createSignal, Show } from "solid-js";
+import { Show, createSignal } from "solid-js";
 
 function Post () {
 

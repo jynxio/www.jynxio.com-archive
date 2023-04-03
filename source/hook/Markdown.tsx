@@ -1,25 +1,11 @@
-import { MarkdownProps } from "./type";
+import Props from "./type";
 import { marked } from "marked";
 
-function Markdown ( props: MarkdownProps ) {
+function Markdown ( props: Props ) {
 
 	/* Async headerIds headerPrefix highlight renderer tokenizer walkTokens xhtml */
 
-	const renderer = {
-		html ( html: string ) {
-
-			console.log( html );
-			console.log( "--------------" );
-
-			return "";
-
-		},
-	};
-
-	marked.use( { renderer } );
-	console.log( marked.parse( props.data ) );
-
-	return <></>;
+	return <div innerHTML={ marked.parse( props.data ) } />;
 
 }
 
