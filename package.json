@@ -21,7 +21,9 @@
     },
     "dependencies": {
         "@solidjs/router": "^0.8.2",
+        "@types/markdown-it": "^12.2.3",
         "@types/marked": "^4.0.8",
+        "markdown-it": "^13.0.1",
         "marked": "^4.3.0",
         "solid-js": "^1.7.1"
     }
