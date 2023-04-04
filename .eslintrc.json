@@ -796,9 +796,6 @@
 			"error",
 			"inside"
 		],
-		"wrap-regex": [
-			"error"
-		],
 		"yield-star-spacing": [
 			"error",
 			"after"
@@ -891,7 +888,8 @@
 		"no-loop-func": [
 			"error"
 		],
-		"import/no-unresolved": "error"
+		"import/no-unresolved": "error",
+		"solid/components-return-once": "off"
 	},
 	"settings": {
 		"import/parsers": {
