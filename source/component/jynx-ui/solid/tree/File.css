@@ -1,0 +1,17 @@
+.file {
+	display: flex;
+	align-items: center;
+	padding-block: 5px;
+	user-select: none;
+	cursor: pointer;
+}
+
+.icon {
+	inline-size: 24px;
+	block-size: 24px;
+}
+
+.name {
+	font-family: monospace;
+	margin-inline-start: 5px;
+}
