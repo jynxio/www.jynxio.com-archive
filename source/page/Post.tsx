@@ -1,5 +1,6 @@
 import JAVASCRIPT_OPERATORS_URL from "$/post/javascript/operators.md?url";
 
+import style from "./Post.module.css";
 import Article from "@/component/post/Article";
 import Directory from "@/component/post/Directory";
 import { createEffect, createSignal } from "solid-js";
@@ -32,9 +33,13 @@ function Post () {
 	} );
 
 	return (
-		<div>
-			<Directory who={ getWho() } data={ directory } />
-			<Article url={ getUrl() } />
+		<div class={ style.post }>
+			<section class={ style.directory }>
+				<Directory who={ getWho() } data={ directory } />
+			</section>
+			<div class={ style.article }>
+				<Article url={ getUrl() } />
+			</div>
 		</div>
 	);
 

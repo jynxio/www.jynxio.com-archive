@@ -1,0 +1,13 @@
+.post {
+	display: flex;
+	color: var( --green );
+	background-color: var( --black );
+}
+
+.directory {
+	min-inline-size: 16rem;
+}
+
+.article {
+	flex-grow: 1;
+}

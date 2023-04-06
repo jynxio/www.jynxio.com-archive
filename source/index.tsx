@@ -1,4 +1,5 @@
-import "/source/style/global/reset.css";
+import "@/style/global/reset.css";
+import "@/style/global/variable.css";
 
 import Home from "@/page/Home";
 import Post from "@/page/Post";
