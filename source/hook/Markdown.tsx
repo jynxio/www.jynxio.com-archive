@@ -1,60 +1,78 @@
 import "@/component/jynx-ui/solid/tree";
-import Props from "./type";
+import { HeadingNode, Props, IntFrom2To6 } from "./type";
 import { marked } from "marked";
+import { onMount } from "solid-js";
+
+/* TODO: Async, highlight */
+marked.setOptions( {
+	renderer: new marked.Renderer(),
+	gfm: true,
+	xhtml: true,
+	async: false,
+	headerIds: true,
+	headerPrefix: "heading",
+} );
+
+const headingNodes: HeadingNode[] = [];
+
+const renderer = {
+	heading ( text: string, level: number ) {
+
+		const node: HeadingNode = { level, text, children: [] };
+		const findParentNode = ( level: IntFrom2To6, headingNodes: HeadingNode[]  ): HeadingNode => {
+
+			if ( headingNodes.length < 1 ) throw new Error( "无法插入新标题" );
+			if ( level === 2 ) return headingNodes.at( - 1 ) as HeadingNode;
+
+			const nextLevel = level - 1 as IntFrom2To6;
+			const nextTree = headingNodes.at( - 1 )!.children;
+
+			return findParentNode( nextLevel, nextTree );
+
+		};
+
+		switch ( level ) {
+
+		case 1:
+			headingNodes.push( node );
+
+			break;
+
+		case 2:
+			findParentNode( level, headingNodes ).children.push( node ); // TODO
+			tree.at( - 1 )!.children.push( node );
+			findParent( level, tree )
+
+			break;
+
+		case 3:
+			tree.
+
+		default:
+			throw new Error( "发现了无法处理的标题" );
+
+		}
+
+		console.log( level, text );
+
+		return `<h${ level }>${ text }</h${ level }>`;
+
+	},
+};
+
+marked.use( { renderer } );
 
 function Markdown ( props: Props ) {
 
-	/* TODO: innerHTML={ createHtml() } */
-	/* TODO: Async headerIds headerPrefix highlight renderer tokenizer walkTokens xhtml */
+	let ref: HTMLElement;
 
-	marked.setOptions( {
-		renderer: new marked.Renderer(),
-		gfm: true,
-		xhtml: true,
-		async: false, // TODO
-		headerIds: true,
-		headerPrefix: "heading",
+	onMount( () => {
+
+		ref.innerHTML = marked.parse( props.children );
+
 	} );
 
-	const treeData = [
-		{
-			name: "folder-1",
-			children: [
-				{
-					name: "folder-1-1",
-					children: [
-						{
-							name: "file-1-1-1",
-						},
-						{
-							name: "file-1-1-2",
-						},
-					],
-				},
-				{
-					name: "file-1-2",
-				},
-			],
-		},
-		{
-			name: "folder-2",
-			children: [],
-		},
-	];
-
-	return (
-		<article>
-			<jynx-tree data={ treeData }/>
-		</article>
-	);
-
-	function createHtml () {
-
-		const result = marked.parse( props.data );
-
-		return result;
-
-	}
+	return <article ref={ ref } />;
 
 }
 

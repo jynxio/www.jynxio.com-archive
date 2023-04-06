@@ -14,7 +14,7 @@ function Post () {
 	return (
 		<div>
 			<Show when={ getMarkdown() !== "" } fallback={ <div>Loading...</div> }>
-				<Markdown data={ getMarkdown() } />
+				<Markdown>{ getMarkdown() }</Markdown>
 			</Show>
 		</div>
 	);
