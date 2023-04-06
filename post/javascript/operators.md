@@ -182,15 +182,11 @@ delete obj[expr];
 - `false` ：若 `delete` 不可配置的属性，则会返回该值，且在非严格模式下，该操作将静默失败，在严格模式下，该操作将会抛出错误。
 - `true` ：其余情况都返回 `true`。
 
-#### delete 不存在的属性
-
 `delete` 不存在的属性也会返回 `true` ，且被操作的对象没有任何变化。
 
 ```js
 delete {}.a; // true
 ```
-
-#### delete 由 var、let、const、function 生命的变量
 
 在任何作用域内，由声明关键字声明的变量都是某个对象的不可配置的属性，而不经声明就直接赋值来创建的变量则是某个对象的可配置的属性。因此，`delete` 前者将会返回 `false`，`delete` 后者将会返回 `true`，比如：
 
@@ -207,8 +203,6 @@ Object.getOwnPropertyDescriptor(window, "a").configurable; // true
 ```
 
 ```
-
-#### delete 数组元素
 
 `delete` 一个数组的元素，就会清空这个元素的内容，但不会释放掉这个元素所占据的内存空间，被 `delete` 后的元素的值为 `undefined` ，意义为 empty 。数组的长度不会改变，其它元素的下标也不会重排。
 
