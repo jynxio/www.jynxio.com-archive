@@ -1,4 +1,4 @@
-import "@/component/jynx-ui/solid/tree";
+import "@/component/jynx-ui/tree";
 import createMarked from "./helper/createMarked";
 import { onMount } from "solid-js";
 
