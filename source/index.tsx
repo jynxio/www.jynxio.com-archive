@@ -1,6 +1,6 @@
 import "/source/style/global/reset.css";
 
-import Home from "./page/Home";
+import Home from "@/page/Home";
 import Post from "@/page/Post";
 import { render } from "solid-js/web";
 import { Route, Router, Routes } from "@solidjs/router";
