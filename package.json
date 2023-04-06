@@ -23,6 +23,7 @@
         "@solidjs/router": "^0.8.2",
         "@types/marked": "^4.0.8",
         "marked": "^4.3.0",
+        "nanoid": "^4.0.2",
         "solid-element": "^1.7.0",
         "solid-js": "^1.7.1"
     }
