@@ -1,6 +1,6 @@
 .post {
 	display: flex;
-	color: var( --green );
+	color: var( --white );
 	background-color: var( --black );
 }
 

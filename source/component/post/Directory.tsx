@@ -1,41 +1,54 @@
 import "@/component/jynx-ui/tree/index";
+import directoryData from "@/store/directory";
+import { For } from "solid-js";
 
-type PostArray = [ chineseName: string, englishName: string ];
-type TypeArray = [ name: string, children: PostArray[] ];
+type Who = [ postTypeIndex: number, postInfoIndex: number ];
 
-function Directory ( props: { data: TypeArray[], who: [ typeIndex: number, postIndex: number ] } ) {
+function Directory ( props: { who: Who } ) {
 
-	const data = [
-		{
-			name: "JavaScript",
-			children: [
-				{
-					name: "运算符",
-				},
-				{
-					name: "Object在V8引擎中的实现",
-				},
-			],
-		},
-		{
-			name: "CSS",
-			children: [
-				{
-					name: "奇怪的margin",
-				},
-			],
-		},
-		{
-			name: "HTML",
-			children: [
-				{
-					name: "凑数的html文",
-				},
-			],
-		},
-	];
+	return (
+		<For each={ directoryData }>
+			{
+				firstLevelNode => (
+					<>
+						<FirstLevel name={ firstLevelNode[ 0 ] } />
+						<For each={ firstLevelNode[ 1 ] }>
+							{
+								secondLevelNode => (
+									<>
+										<SecondLevel name={ secondLevelNode[ 0 ] } />
+									</>
+								)
+							}
+						</For>
+					</>
+				)
+			}
+		</For>
+	);
 
-	return <jynx-tree data={ data } />;
+	function FirstLevel ( props: { name: string } ) {
+
+		return (
+			<div class="first-level">
+				<span class="name">{ props.name }</span>
+				<span class="icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
+				</span>
+			</div>
+		);
+
+	}
+
+	function SecondLevel ( props: { name: string } ) {
+
+		return (
+			<div class="second-level">
+				<span class="name">{ props.name }</span>
+			</div>
+		);
+
+	}
 
 }
 

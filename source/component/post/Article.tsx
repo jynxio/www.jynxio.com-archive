@@ -1,23 +1,25 @@
+import postDirectoryData from "@/store/directory";
 import { marked } from "marked";
 import { nanoid } from "nanoid";
 import { Show, createEffect, createSignal } from "solid-js";
 
-type SecondLevelNode = [ text: string, uuid: string ];
-type FirstLevelNode = [ text: string, uuid: string, children: SecondLevelNode[] ];
+type Who = [ postTypeIndex: number, postInfoIndex: number ];
+type H3Node = [ name: string, uuid: string ];
+type H2Node = [ name: string, uuid: string, children: H3Node[] ];
 
-function Article ( props: { url: string } ) {
+function Article ( props: { who: Who } ) {
 
 	const [ getHtml, setHtml ] = createSignal( "" );
-	const [ getDir, setDir ] = createSignal( [] as FirstLevelNode[] );
+	const [ getDir, setDir ] = createSignal( [] as H2Node[] );
 
 	createEffect( () => {
 
-		if ( ! props.url ) return;
+		const url = postDirectoryData[ props.who[ 0 ] ][ 1 ][ props.who[ 1 ] ][ 1 ];
 
-		createHtml( props.url ).then( ( [ html, dir ] ) => {
+		createHtml( url ).then( ( [ html, headingDirectoryData ] ) => {
 
 			setHtml( html as string );
-			setDir( dir as FirstLevelNode[] );
+			setDir( headingDirectoryData as H2Node[] );
 
 		} );
 
@@ -27,7 +29,6 @@ function Article ( props: { url: string } ) {
 		<>
 			<Show when={ getHtml() } fallback={ <Loading /> }>
 				<article innerHTML={ getHtml() } />
-				<Directory data={ getDir() } />
 			</Show>
 		</>
 	);
@@ -40,15 +41,9 @@ function Loading () {
 
 }
 
-function Directory ( props: { data: FirstLevelNode[] } ) {
-
-	return <div>directory</div>;
-
-}
-
 async function createHtml ( url: string ) {
 
-	const dir = [] as FirstLevelNode[];
+	const headingDirectoryData = [] as H2Node[];
 
 	marked.use( {
 		async: true,
@@ -62,7 +57,7 @@ async function createHtml ( url: string ) {
 	const markdown = await res.text();
 	const html = await marked.parse( markdown );
 
-	return [ html, dir ];
+	return [ html, headingDirectoryData ];
 
 	function handleHanding ( text: string, level: number ) {
 
@@ -73,18 +68,18 @@ async function createHtml ( url: string ) {
 		if ( level === 2 ) {
 
 			const uuid = nanoid( 10 );
-			const node: FirstLevelNode = [ text, uuid, [] ];
+			const node: H2Node = [ text, uuid, [] ];
 
-			dir.push( node );
+			headingDirectoryData.push( node );
 
 			return `<h2 id="${ nanoid( 10 ) }">${ text }</h2>`;
 
 		}
 
 		const uuid = nanoid( 10 );
-		const node: SecondLevelNode = [ text, uuid ];
+		const node: H3Node = [ text, uuid ];
 
-		dir.at( - 1 )![ 2 ].push( node );
+		headingDirectoryData.at( - 1 )![ 2 ].push( node );
 
 		return `<h3 id="${ nanoid( 10 ) }">${ text }</h3>`;
 
