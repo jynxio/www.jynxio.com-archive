@@ -1,13 +1,12 @@
 .post {
 	display: flex;
-	color: var( --white );
-	background-color: var( --black );
+	block-size: 100%;
 }
 
-.directory {
-	min-inline-size: 16rem;
+.nav {
+	inline-size: 20rem;
 }
 
 .article {
-	flex-grow: 1;
+	inline-size: calc( 100% - 20rem );
 }

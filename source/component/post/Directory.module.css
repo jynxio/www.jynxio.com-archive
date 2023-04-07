@@ -1,0 +1,25 @@
+.directory {
+	block-size: 100%;
+	inline-size: 100%;
+	padding: 1rem 1.5rem;
+	color: var(--white);
+	user-select: none;
+	outline: 1px solid red;
+}
+
+.type-node-group {
+	block-size: 100%;
+	inline-size: 100%;
+}
+
+.type-node {
+	display: flex;
+}
+
+.type-node>.icon {
+	margin-inline-start: auto;
+}
+
+.type-node.collapsed {
+	color: red;
+}

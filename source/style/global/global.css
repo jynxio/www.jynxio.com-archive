@@ -1,3 +1,7 @@
 html, body {
 	background-color: black;
 }
+
+#root {
+	block-size: 100%;
+}

@@ -9,6 +9,8 @@ type H2Node = [ name: string, uuid: string, children: H3Node[] ];
 
 function Article ( props: { who: Who } ) {
 
+	// TODO 使用createResource
+
 	const [ getHtml, setHtml ] = createSignal( "" );
 	const [ getDir, setDir ] = createSignal( [] as H2Node[] );
 
@@ -28,7 +30,7 @@ function Article ( props: { who: Who } ) {
 	return (
 		<>
 			<Show when={ getHtml() } fallback={ <Loading /> }>
-				<article innerHTML={ getHtml() } />
+				<article ref={ el => el.innerHTML = getHtml() } />
 			</Show>
 		</>
 	);
