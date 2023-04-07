@@ -2,7 +2,7 @@
     "files.eol": "\n",
     "editor.tabSize": 4,
     "editor.insertSpaces": false,
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "eslint.format.enable": true,
     "[javascript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -17,6 +17,6 @@
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": false
+        "source.fixAll.eslint": true
     }
 }
