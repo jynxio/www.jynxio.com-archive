@@ -1,4 +1,21 @@
 .nav {
+	display: flex;
+	flex-direction: column;
 	inline-size: 100%;
 	block-size: 100%;
+	border-inline-end: 1px dashed var(--green);
+}
+
+.nav>hr {
+	border: none;
+	border-block-start: 1px dashed var(--green);
+}
+
+.nav>.directory {
+	flex-grow: 1;
+}
+
+.nav>.search,
+.nav>.control {
+	block-size: 4rem;
 }

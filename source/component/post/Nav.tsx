@@ -7,13 +7,15 @@ function Nav () {
 
 	return (
 		<nav class={ style.nav }>
-			<section class="search">
+			<section class={ style.search }>
 				<Search />
 			</section>
-			<section class="directory">
+			<hr />
+			<section class={ style.directory }>
 				<Directory />
 			</section>
-			<section class="control">
+			<hr />
+			<section class={ style.control }>
 				<Control />
 			</section>
 		</nav>

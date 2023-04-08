@@ -1,25 +1,51 @@
 .directory {
 	block-size: 100%;
 	inline-size: 100%;
-	padding: 1rem 1.5rem;
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
 	color: var(--white);
 	user-select: none;
-	outline: 1px solid red;
 }
 
-.type-node-group {
-	block-size: 100%;
-	inline-size: 100%;
-}
-
-.type-node {
+.node {
 	display: flex;
+	align-items: center;
+	padding-inline: 0.5rem;
+	padding-block: 0.5rem;
+	margin-block: 0.5rem;
+	border: 1px solid transparent;
+	border-radius: var(--radius);
+	cursor: pointer;
 }
 
-.type-node>.icon {
+.icon {
+	inline-size: 1rem;
+	block-size: 1rem;
 	margin-inline-start: auto;
 }
 
-.type-node.collapsed {
-	color: red;
+.icon>svg {
+	inline-size: 100%;
+	block-size: 100%;
+}
+
+.node:hover {
+	border-style: dashed;
+	border-color: var(--green);
+}
+
+.type.node.selected>.icon {
+	color: var(--green);
+	transform: rotate(90deg);
+}
+
+.post.group:not(.selected) {
+	overflow: hidden;
+	block-size: 0;
+}
+
+.post.node.selected {
+	color: var(--green);
+	border-color: var(--green);
+	border-style: solid;
 }
