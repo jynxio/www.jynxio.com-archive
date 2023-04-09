@@ -4,6 +4,8 @@ import { getData, getWho, setWho } from "@/store/directory";
 
 function Directory () {
 
+	/* TODO: Try createSelector */
+
 	return (
 		<div class={ style.directory }>
 			<For each={ getData() }>{
@@ -12,6 +14,7 @@ function Directory () {
 						<div
 							class={ `${ style.type } ${ style.node }` }
 							classList={ { [ style.selected ]: getTypeIndex() === getWho()[ 0 ] } }
+							onClick={ [ handleClick, [ getTypeIndex(), 0 ] ] }
 						>
 							<span class={ style.name }>{ typeNode.name }</span>
 							<span class={ style.icon }>
@@ -27,6 +30,7 @@ function Directory () {
 									<div
 										class={ `${ style.post } ${ style.node }` }
 										classList={ { [ style.selected ]: getPostIndex() === getWho()[ 1 ] } }
+										onClick={ [ handleClick, [ getTypeIndex(), getPostIndex() ] ] }
 									>
 										<span class={ style.name }>{ postNode.name }</span>
 									</div>
@@ -38,6 +42,12 @@ function Directory () {
 			}</For>
 		</div>
 	);
+
+	function handleClick ( who: [ typeIndex: number, postIndex: number ], event: Event ) {
+
+		setWho( who );
+
+	}
 
 }
 
