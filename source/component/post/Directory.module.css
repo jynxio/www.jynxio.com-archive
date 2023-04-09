@@ -1,8 +1,4 @@
 .directory {
-	--gap: 1rem;
-}
-
-.directory {
 	display: flex;
 	flex-direction: column;
 	block-size: 100%;
@@ -39,7 +35,8 @@
 }
 
 .type.node.selected {
-	color: var(--green);
+	color: var(--black);
+	background-color: var(--green);
 }
 
 .type.node.selected>.icon {
@@ -49,6 +46,7 @@
 .post.node.selected {
 	border-color: var(--green);
 	border-style: solid;
+	color: var(--green);
 }
 
 .icon {

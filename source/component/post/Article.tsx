@@ -1,7 +1,7 @@
 import style from "./Article.module.css";
 import { getUrl } from "@/store/directory";
 import { marked } from "marked";
-import { Show, createEffect, createResource, createSignal, createUniqueId } from "solid-js";
+import { Show, createResource, createUniqueId } from "solid-js";
 
 type H3Node = { name: string, type: "h3-node", uuid: string };
 type H2Node = { name: string, type: "h2-node", uuid: string, children: H3Node[] };
@@ -10,14 +10,14 @@ function Article () {
 
 	const [ getHtml ] = createResource( getUrl, createHtml );
 
-	createEffect( () => console.log( getHtml() ) );
-
 	return (
-		<>
+		<main class={ style.main }>
+			<header class={ style.header } />
 			<Show when={ getHtml() }>
-				<article class={ style.article }>{ getHtml() }</article>
+				<article class={ style.article } innerHTML={ getHtml() } />
 			</Show>
-		</>
+			<footer class={ style.footer }/>
+		</main>
 	);
 
 }
@@ -42,7 +42,7 @@ async function createHtml ( url: string ) {
 
 	function handleHanding ( text: string, level: number ) {
 
-		if ( level === 1 ) return `<h1>${ text }</h1>`;
+		if ( level === 1 ) return "";
 
 		if ( level > 3 ) throw new Error( "Do not process h4, h5, h6" );
 

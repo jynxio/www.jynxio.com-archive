@@ -1,4 +1,4 @@
-import TYPE_1_1_URL from "$/post/type-1-1.md?url";
+import TYPE_1_1_URL from "$/post/operators.md?url";
 import TYPE_1_2_URL from "$/post/type-1-2.md?url";
 import TYPE_1_3_URL from "$/post/type-1-3.md?url";
 import TYPE_2_1_URL from "$/post/type-2-1.md?url";

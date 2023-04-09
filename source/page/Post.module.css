@@ -1,12 +1,14 @@
 .post {
 	display: flex;
-	block-size: 100%;
+	block-size: 100vh;
 }
 
 .nav {
 	inline-size: 20rem;
+	block-size: 100%;
 }
 
 .article {
 	inline-size: calc(100% - 20rem);
+	block-size: 100%;
 }

@@ -1,8 +1,4 @@
 .nav {
-	--gap: 1rem;
-}
-
-.nav {
 	display: flex;
 	flex-direction: column;
 	inline-size: 100%;
