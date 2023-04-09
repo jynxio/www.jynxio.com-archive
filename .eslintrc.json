@@ -889,7 +889,8 @@
 			"error"
 		],
 		"import/no-unresolved": "error",
-		"solid/components-return-once": "off"
+		"solid/components-return-once": "off",
+		"solid/no-innerhtml": "off"
 	},
 	"settings": {
 		"import/parsers": {
