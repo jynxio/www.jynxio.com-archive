@@ -1,4 +1,12 @@
-import JAVASCRIPT_OPERATORS_URL from "$/post/javascript/operators.md?url";
+import TYPE_1_1_URL from "$/post/type-1-1.md?url";
+import TYPE_1_2_URL from "$/post/type-1-2.md?url";
+import TYPE_1_3_URL from "$/post/type-1-3.md?url";
+import TYPE_2_1_URL from "$/post/type-2-1.md?url";
+import TYPE_2_2_URL from "$/post/type-2-2.md?url";
+import TYPE_2_3_URL from "$/post/type-2-3.md?url";
+import TYPE_3_1_URL from "$/post/type-3-1.md?url";
+import TYPE_3_2_URL from "$/post/type-3-2.md?url";
+import TYPE_3_3_URL from "$/post/type-3-3.md?url";
 
 import { createSignal } from "solid-js";
 
@@ -13,17 +21,17 @@ const data: TypeNode[] = [
 			{
 				name: "Post-1-1",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_1_1_URL,
 			},
 			{
 				name: "Post-1-2",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_1_2_URL,
 			},
 			{
 				name: "Post-1-3",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_1_3_URL,
 			},
 		],
 	},
@@ -34,17 +42,17 @@ const data: TypeNode[] = [
 			{
 				name: "Post-2-1",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_2_1_URL,
 			},
 			{
 				name: "Post-2-2",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_2_2_URL,
 			},
 			{
 				name: "Post-2-3",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_2_3_URL,
 			},
 		],
 	},
@@ -55,17 +63,17 @@ const data: TypeNode[] = [
 			{
 				name: "Post-3-1",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_3_1_URL,
 			},
 			{
 				name: "Post-3-2",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_3_2_URL,
 			},
 			{
 				name: "Post-3-3",
 				type: "post",
-				url: JAVASCRIPT_OPERATORS_URL,
+				url: TYPE_3_3_URL,
 			},
 		],
 	},

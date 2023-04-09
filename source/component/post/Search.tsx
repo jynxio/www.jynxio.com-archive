@@ -1,6 +1,8 @@
+import style from "./Search.module.css";
+
 function Search () {
 
-	return <div>search</div>;
+	return <div class={ style.search } />;
 
 }
 

@@ -1,14 +1,23 @@
 .nav {
+	--gap: 1rem;
+}
+
+.nav {
 	display: flex;
 	flex-direction: column;
 	inline-size: 100%;
 	block-size: 100%;
-	border-inline-end: 1px dashed var(--green);
+	padding: var(--gap);
 }
 
-.nav>hr {
-	border: none;
-	border-block-start: 1px dashed var(--green);
+.nav>* {
+	inline-size: 100%;
+	border: 1px solid var(--green);
+	border-radius: var(--radius);
+}
+
+.nav>*:nth-child(2) {
+	margin-block: var(--gap);
 }
 
 .nav>.directory {
@@ -17,5 +26,5 @@
 
 .nav>.search,
 .nav>.control {
-	block-size: 4rem;
+	block-size: 3rem;
 }

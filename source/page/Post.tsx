@@ -10,7 +10,7 @@ function Post () {
 				<Nav />
 			</section>
 			<section class={ style.article }>
-				{/* <Article /> */}
+				<Article />
 			</section>
 		</div>
 	);
