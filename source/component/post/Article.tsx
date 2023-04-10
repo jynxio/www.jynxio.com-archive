@@ -1,5 +1,5 @@
 import style from "./Article.module.css";
-import { getUrl } from "@/store/directory";
+import { getUrl } from "@/static/directory";
 import { marked } from "marked";
 import { Show, createResource, createUniqueId } from "solid-js";
 

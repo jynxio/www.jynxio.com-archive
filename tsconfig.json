@@ -29,7 +29,8 @@
 			"$/*": [
 				"./*"
 			]
-		}
+		},
+		"resolveJsonModule": true
 	},
 	"include": [
 		"./source",

@@ -9,9 +9,8 @@
 	--article-heading-color: hsl(0, 0%, 100%);
 	--article-paragraph-color: hsl(200, 7%, 91%);
 
-	--catalog-heading-color: hsl(240, 5%, 91%);
-	--catalog-paragraph-color: hsl(0, 0%, 60%);
-	--catalog-comment-color: hsl(0, 0%, 55%);
+	--catalog-topic-color: hsl(240, 5%, 91%);
+	--catalog-post-color: hsl(0, 0%, 60%);
 }
 
 #root {

@@ -1,0 +1,24 @@
+.catalog {
+	display: flex;
+	flex-direction: column;
+}
+
+.node {
+	color: var(--catalog-paragraph-color);
+}
+
+.data {
+	font-size: 65%;
+	color: var(--catalog-comment-color)
+}
+
+.catalog>hr:last-child {
+	display: none;
+}
+
+.catalog>hr {
+	inline-size: 80%;
+	border: none;
+	border-block-start: 1px solid var(--line-color);
+	margin-inline: auto;
+}

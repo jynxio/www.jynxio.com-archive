@@ -1,6 +1,6 @@
 import style from "./Directory.module.css";
 import { For, Show, createSelector } from "solid-js";
-import { getData, getWho, setWho } from "@/store/directory";
+import { getData, getWho, setWho } from "@/static/directory";
 
 function Directory () {
 
