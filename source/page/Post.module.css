@@ -1,14 +1,22 @@
 .post {
 	display: flex;
-	block-size: 100vh;
-}
-
-.nav {
-	inline-size: 20rem;
+	inline-size: 100%;
 	block-size: 100%;
 }
 
-.article {
-	inline-size: calc(100% - 20rem);
-	block-size: 100%;
+.post-catalogue,
+.chapter-catalogue {
+	inline-size: 18rem;
+}
+
+.post-catalogue {
+	border-inline-end: 1px solid var(--line-color);
+}
+
+.chapter-catalogue {
+	border-inline-start: 1px solid var(--line-color);
+}
+
+.content {
+	flex-grow: 1;
 }

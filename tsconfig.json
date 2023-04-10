@@ -8,7 +8,9 @@
 		"esModuleInterop": true,
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
-		"types": [ "vite/client" ],
+		"types": [
+			"vite/client"
+		],
 		"outDir": "dist",
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
@@ -21,10 +23,19 @@
 		"baseUrl": "./",
 		"rootDir": "./source",
 		"paths": {
-			"@/*": [ "./source/*" ],
-			"$/*": [ "./*" ]
+			"@/*": [
+				"./source/*"
+			],
+			"$/*": [
+				"./*"
+			]
 		}
 	},
-	"include": [ "./source", "./vite.config.js" ],
-	"exclude": [ "./node_modules" ]
+	"include": [
+		"./source",
+		"./vite.config.js"
+	],
+	"exclude": [
+		"./node_modules"
+	]
 }

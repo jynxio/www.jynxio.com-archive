@@ -1,7 +1,19 @@
 #root {
-	--black: #000;
-	--white: #fff;
-	--green: #0f0;
-	--radius: 4px;
-	--gap: 1rem;
+	--line-color: hsl(0, 0%, 7%);
+	--block-color: hsl(0, 0%, 27%);
+	--ground-color: hsl(213, 12%, 15%);
+
+	--icon-color: hsl(0, 0%, 100%);
+	--link-color: hsl(210, 78%, 60%);
+
+	--article-heading-color: hsl(0, 0%, 100%);
+	--article-paragraph-color: hsl(200, 7%, 91%);
+
+	--catalog-heading-color: hsl(240, 5%, 91%);
+	--catalog-paragraph-color: hsl(0, 0%, 60%);
+	--catalog-comment-color: hsl(0, 0%, 55%);
+}
+
+#root {
+	--border-radius: 4px;
 }

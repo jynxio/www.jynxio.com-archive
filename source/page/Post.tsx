@@ -1,16 +1,19 @@
 import style from "./Post.module.css";
-import Article from "@/component/post/Article";
-import Nav from "@/component/post/Nav";
+import Catalogue from "@/component/post/Catalogue";
+import Content from "@/component/post/Content";
 
 function Post () {
 
 	return (
 		<div class={ style.post }>
-			<section class={ style.nav }>
-				<Nav />
+			<section class={ style[ "post-catalogue" ] }>
+				<Catalogue />
 			</section>
-			<section class={ style.article }>
-				<Article />
+			<section class={ style.content }>
+				<Content />
+			</section>
+			<section class={ style[ "chapter-catalogue" ] }>
+				<Catalogue />
 			</section>
 		</div>
 	);
