@@ -1,19 +1,20 @@
 .post {
 	display: flex;
 	inline-size: 100%;
-	block-size: 100%;
+	block-size: 100vh;
+	block-size: 100dvh;
 }
 
-.post-catalogue,
-.chapter-catalogue {
+.nav,
+.chapter {
 	inline-size: 18rem;
 }
 
-.post-catalogue {
+.nav {
 	border-inline-end: 1px solid var(--line-color);
 }
 
-.chapter-catalogue {
+.chapter {
 	border-inline-start: 1px solid var(--line-color);
 }
 

@@ -9,9 +9,9 @@ body {
 	font-weight: normal;
 	font-display: swap;
 	src: local("霞鹜文楷"),
-		url("/public/font/LXGWWenKaiLite-Regular.woff2") format("woff2"),
-		url("/public/font/LXGWWenKaiLite-Regular.woff") format("woff"),
-		url("/public/font/LXGWWenKaiLite-Regular.ttf") format("truetype");
+		url("/asset/font/LXGWWenKaiLite-Regular.woff2") format("woff2"),
+		url("/asset/font/LXGWWenKaiLite-Regular.woff") format("woff"),
+		url("/asset/font/LXGWWenKaiLite-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -20,9 +20,9 @@ body {
 	font-weight: bold;
 	font-display: swap;
 	src: local("霞鹜文楷"),
-		url("/public/font/LXGWWenKaiLite-Bold.ttf") format("woff2"),
-		url("/public/font/LXGWWenKaiLite-Bold.ttf") format("woff"),
-		url("/public/font/LXGWWenKaiLite-Bold.ttf") format("truetype");
+		url("/asset/font/LXGWWenKaiLite-Bold.ttf") format("woff2"),
+		url("/asset/font/LXGWWenKaiLite-Bold.ttf") format("woff"),
+		url("/asset/font/LXGWWenKaiLite-Bold.ttf") format("truetype");
 }
 
 #root {
