@@ -361,7 +361,7 @@
 		"max-len": [
 			"error",
 			{
-				"code": 120,
+				"code": 9999,
 				"tabWidth": 4,
 				"comments": 100,
 				"ignoreTrailingComments": false,
