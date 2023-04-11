@@ -1,9 +1,11 @@
 import style from "./Post.module.css";
 import Catalogue from "@/component/post/Catalogue";
 import Content from "@/component/post/Content";
-import postCatalogData from "@/static/catalog.json";
+import postCatalogData from "@/static/postCatalog.json";
 
 function Post () {
+
+	console.log( postCatalogData );
 
 	return (
 		<div class={ style.post }>
