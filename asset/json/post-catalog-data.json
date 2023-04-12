@@ -1,40 +1,51 @@
 [
 	{
 		"name": "浏览器基础知识",
+		"path": "a",
 		"children": [
 			{
-				"name": "浏览器的架构"
+				"name": "浏览器的架构",
+				"path": "a"
 			},
 			{
-				"name": "浏览器的渲染进程"
+				"name": "浏览器的渲染进程",
+				"path": "b"
 			},
 			{
-				"name": "浏览器的页面合成"
+				"name": "浏览器的页面合成",
+				"path": "c"
 			}
 		]
 	},
 	{
 		"name": "JavaScript",
+		"path": "a",
 		"children": [
 			{
-				"name": "对象在V8引擎中的实现"
+				"name": "对象在V8引擎中的实现",
+				"path": "a"
 			},
 			{
-				"name": "危险的Number"
+				"name": "危险的Number",
+				"path": "b"
 			},
 			{
-				"name": "Promises/A+"
+				"name": "Promises_A_plus",
+				"path": "c"
 			}
 		]
 	},
 	{
 		"name": "数据结构与算法",
+		"path": "a",
 		"children": [
 			{
-				"name": "时间与空间复杂度"
+				"name": "时间与空间复杂度",
+				"path": "a"
 			},
 			{
-				"name": "二叉搜索树"
+				"name": "二叉搜索树",
+				"path": "b"
 			}
 		]
 	}

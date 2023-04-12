@@ -1,5 +1,5 @@
 import style from "./Nav.module.css";
-import postCatalogData from "$/asset/json/post-catalog-data.json";
+import * as store from "@/store/postCatalog";
 import Theme from "@/component/common/Theme";
 import { For, Show, createSelector, createSignal } from "solid-js";
 
@@ -31,6 +31,67 @@ function Search () {
 
 }
 
+function Catalogue () {
+
+	const isTargetTopic = createSelector( store.getTopic );
+	const isTargetPost = createSelector( store.getPost );
+
+	return (
+		<section class={ style.catalog }>
+			<For each={ store.getData() }>{
+				topicNode => (
+					<>
+						<div class={ style.parent } classList={ { [ style.selected ]: isTargetTopic( topicNode.uuid ) } } onClick={ [ handleTopicClick, topicNode.uuid ] }>
+							<span class={ style.name }>{ topicNode.name }</span>
+							<span class={ style.icon }>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg>
+							</span>
+						</div>
+						<Show when={ isTargetTopic( topicNode.uuid ) }>
+							<For each={ topicNode.children }>{
+								postNode => (
+									<div class={ style.child } classList={ { [ style.selected ]: isTargetPost( postNode.uuid ) } } onClick={ [ handlePostClick, postNode.uuid ] }>
+										<span class={style.name}>{ postNode.name }</span>
+										<data class={ style.data }>{ "2023/03/30 20:54" }</data>
+									</div>
+								)
+							}</For>
+						</Show>
+					</>
+				)
+			}</For>
+		</section>
+	);
+
+	function handleTopicClick ( topicUuid: string ) {
+
+		/* If open a new topic */
+		if ( store.getTopic() !== topicUuid ) {
+
+			const topicData = store.getData().find( topicNode => topicNode.uuid === topicUuid );
+			const postData = topicData!.children[ 0 ];
+
+			store.setTopic( topicUuid );
+			store.setPost( postData.uuid );
+
+			return;
+
+		}
+
+		/* If close the topic */
+		store.setTopic( "" );
+		store.setPost( "" );
+
+	}
+
+	function handlePostClick ( postUuid: string ) {
+
+		store.setPost( postUuid );
+
+	}
+
+}
+
 function Control () {
 
 	const [ getTheme, setTheme ] = createSignal( "dark" as "light" | "dark" );
@@ -57,65 +118,6 @@ function Control () {
 			</span>
 		</section>
 	);
-
-}
-
-function Catalogue () {
-
-	const [ getTargetParent, setTargetParent ] = createSignal( - 1 ); // The index of the target parentNode (-1 represents no target parentNode)
-	const [ getTargetChild, setTargetChild ] = createSignal( - 1 );   // The index of the target childNode (-1 represents no target childNode)
-
-	const isTargetParent = createSelector( getTargetParent );
-	const isTargetChild = createSelector( getTargetChild );
-
-	return (
-		<section class={ style.catalog }>
-			<For each={ postCatalogData }>{
-				( parentNode, getIndex ) => (
-					<>
-						<div class={ style.parent } classList={ { [ style.selected ]: isTargetParent( getIndex() ) } } onClick={ [ handleParentClick, getIndex() ] }>
-							<span class={style.name}>{ parentNode.name }</span>
-							<span class={ style.icon }>
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg>
-							</span>
-						</div>
-						<Show when={ isTargetParent( getIndex() ) }>
-							<For each={ parentNode.children }>{
-								( childNode, getIndex ) => (
-									<div class={ style.child } classList={ { [ style.selected ]: isTargetChild( getIndex() ) } } onClick={ [ handleChildClick, getIndex() ] }>
-										<span class={style.name}>{ childNode.name }</span>
-										<data class={ style.data }>{ "2023/03/30 20:54" }</data>
-									</div>
-								)
-							}</For>
-						</Show>
-					</>
-				)
-			}</For>
-		</section>
-	);
-
-	function handleParentClick ( index: number, event: Event ) {
-
-		if ( getTargetParent() !== index ) {
-
-			setTargetParent( index );
-			setTargetChild( 0 );
-
-			return;
-
-		}
-
-		setTargetParent( - 1 );
-		setTargetChild( - 1 );
-
-	}
-
-	function handleChildClick ( index: number, event: Event ) {
-
-		setTargetChild( index );
-
-	}
 
 }
 
