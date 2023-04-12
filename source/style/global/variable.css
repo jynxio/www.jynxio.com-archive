@@ -1,16 +1,14 @@
 #root {
-	--line-color: hsl(0, 0%, 7%);
-	--block-color: hsl(0, 0%, 27%);
-	--ground-color: hsl(213, 12%, 15%);
+	--line-color: #121112;
+	--block-color: #2e3136;
+	--ground-color: #22262b;
 
-	--icon-color: hsl(0, 0%, 100%);
-	--link-color: hsl(210, 78%, 60%);
+	--icon-color: #ffffff;
+	--link-color: #5e97e3;
 
-	--article-heading-color: hsl(0, 0%, 100%);
-	--article-paragraph-color: hsl(200, 7%, 91%);
-
-	--catalog-topic-color: hsl(240, 5%, 91%);
-	--catalog-post-color: hsl(0, 0%, 60%);
+	--heading-color: #ffffff;
+	--paragraph-color: #e7e9ea;
+	--comment-color: #999999;
 }
 
 #root {

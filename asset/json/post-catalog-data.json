@@ -19,7 +19,7 @@
 	},
 	{
 		"name": "JavaScript",
-		"path": "a",
+		"path": "b",
 		"children": [
 			{
 				"name": "对象在V8引擎中的实现",
@@ -37,7 +37,7 @@
 	},
 	{
 		"name": "数据结构与算法",
-		"path": "a",
+		"path": "c",
 		"children": [
 			{
 				"name": "时间与空间复杂度",

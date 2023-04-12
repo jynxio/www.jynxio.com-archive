@@ -43,7 +43,7 @@
 
 .search>.text {
 	margin-inline-start: 0.5rem;
-	color: var(--catalog-post-color);
+	color: var(--comment-color);
 }
 
 .search>.shortcut {
@@ -63,15 +63,15 @@
 }
 
 .catalog .name {
-	color: var(--catalog-topic-color)
+	color: var(--paragraph-color)
 }
 
 .catalog .data {
 	font-size: 65%;
-	color: var(--catalog-post-color)
+	color: var(--comment-color)
 }
 
-.catalog .parent {
+.catalog .topic {
 	display: flex;
 	align-items: center;
 	padding-block-end: 0.25rem;
@@ -80,19 +80,19 @@
 	cursor: pointer;
 }
 
-.catalog .parent:first-child {
+.catalog .topic:first-child {
 	margin-block-start: 0
 }
 
-.catalog .parent.selected>.icon {
+.catalog .topic.selected>.icon {
 	transform: rotate(90deg);
 }
 
-.catalog .parent>.icon {
+.catalog .topic>.icon {
 	margin-left: auto;
 }
 
-.catalog .child {
+.catalog .post {
 	display: flex;
 	flex-direction: column;
 	border-radius: var(--border-radius);
@@ -102,7 +102,7 @@
 	cursor: pointer;
 }
 
-.catalog .child.selected {
+.catalog .post.selected {
 	background-color: var(--block-color);
 }
 
