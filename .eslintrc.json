@@ -854,9 +854,7 @@
 		"class-methods-use-this": [
 			"error"
 		],
-		"consistent-return": [
-			"error"
-		],
+		"consistent-return": "off",
 		"default-case": [
 			"error"
 		],
