@@ -8,9 +8,9 @@
 }
 
 .nav>hr {
-	border: none;
 	block-size: 2rem;
 	inline-size: 100%;
+	border: none;
 }
 
 .icon {
@@ -39,6 +39,7 @@
 	border-radius: var(--border-radius);
 	background-color: var(--block-color);
 	cursor: text;
+	user-select: none;
 }
 
 .search>.text {

@@ -1,7 +1,7 @@
 import style from "./Nav.module.css";
 import * as store from "@/store/postCatalog";
 import Theme from "@/component/common/Theme";
-import { For, Show, createSelector, createSignal } from "solid-js";
+import { For, Show, batch, createSelector, createSignal } from "solid-js";
 
 function Nav () {
 
@@ -33,8 +33,8 @@ function Search () {
 
 function Catalogue () {
 
-	const isTargetTopic = createSelector( store.getTopic );
-	const isTargetPost = createSelector( store.getPost );
+	const isTargetTopic = createSelector( store.getSelectedTopic );
+	const isTargetPost = createSelector( store.getSelectedPost );
 
 	return (
 		<section class={ style.catalog }>
@@ -66,27 +66,35 @@ function Catalogue () {
 	function handleTopicClick ( topicUuid: string ) {
 
 		/* If open a new topic */
-		if ( store.getTopic() !== topicUuid ) {
+		if ( store.getSelectedTopic() !== topicUuid ) {
 
 			const topicData = store.getData().find( topicNode => topicNode.uuid === topicUuid );
 			const postData = topicData!.children[ 0 ];
 
-			store.setTopic( topicUuid );
-			store.setPost( postData.uuid );
+			batch( () => {
+
+				store.setSelectedTopic( topicUuid );
+				store.setSelectedPost( postData.uuid );
+
+			} );
 
 			return;
 
 		}
 
 		/* If close the topic */
-		store.setTopic();
-		store.setPost();
+		batch( () => {
+
+			store.setSelectedTopic( void 0 );
+			store.setSelectedPost( void 0 );
+
+		} );
 
 	}
 
 	function handlePostClick ( postUuid: string ) {
 
-		store.setPost( postUuid );
+		store.setSelectedPost( postUuid );
 
 	}
 

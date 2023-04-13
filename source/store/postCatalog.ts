@@ -1,34 +1,69 @@
 import rawData from "$/asset/json/post-catalog-data.json";
-import { createSignal, createUniqueId } from "solid-js";
+import { createUniqueId } from "solid-js";
+import { createStore } from "solid-js/store";
 
-const processedData = processData();
-const [ getTopic, setTopic ] = createSignal<string | undefined>(); // Full name: getTargetTopicUuid, setTargetTopicUuid
-const [ getPost, setPost ] = createSignal<string | undefined>();   // Full name: getTargetPostUuid, setTargetPostUuid
+type Uuid = string | undefined;
+type RawPostNode = { name: string, path: string };
+type RawTopicNode = { name: string, path: string, children: RawPostNode[] };
+type PostNode = { name: string, path: string, uuid: string };
+type TopicNode = { name: string, path: string, uuid: string, children: PostNode[] };
+
+const processedData = process( rawData );
+const [ store, setStore ] = createStore( {
+	data: processedData,
+	selectedTopicUuid: void 0 as Uuid,
+	selectedPostUuid: void 0 as Uuid,
+} );
 
 function getData () {
 
-	return processedData;
+	return store.data;
 
 }
 
-function getUrl () {
+function getPostUrl () {
 
-	const topicNode = getData().find( topicNode => topicNode.uuid === getTopic() );
+	const data = store.data;
+	const selectedTopicUuid = store.selectedTopicUuid;
+	const selectedPostUuid = store.selectedPostUuid;
 
-	if ( ! topicNode ) return;
+	const selectedTopic = data.find( topicNode => topicNode.uuid === selectedTopicUuid );
 
-	const postNode = topicNode?.children.find( postNode => postNode.uuid === getPost() );
+	if ( ! selectedTopic ) return;
 
-	if ( ! postNode ) return;
+	const selectedPost = selectedTopic.children.find( postNode => postNode.uuid === selectedPostUuid );
 
-	return `./post/${ topicNode.path }/${ postNode.path }.md`;
+	if ( ! selectedPost ) return;
+
+	return `./post/${ selectedTopic.path }/${ selectedPost.path }.md`;
 
 }
 
-function processData () {
+function getSelectedTopic () {
 
-	type PostNode = { name: string, path: string, uuid: string };
-	type TopicNode = { name: string, path: string, uuid: string, children: PostNode[] };
+	return store.selectedTopicUuid;
+
+}
+
+function setSelectedTopic ( uuid: Uuid ) {
+
+	setStore( "selectedTopicUuid", uuid );
+
+}
+
+function getSelectedPost () {
+
+	return store.selectedPostUuid;
+
+}
+
+function setSelectedPost ( uuid: Uuid ) {
+
+	setStore( "selectedPostUuid", uuid );
+
+}
+
+function process ( rawData: RawTopicNode[] ) {
 
 	const processedData = rawData.map( topicNode => {
 
@@ -49,4 +84,4 @@ function processData () {
 
 }
 
-export { getData, getUrl, getTopic, setTopic, getPost, setPost };
+export { getData, getPostUrl, getSelectedTopic, setSelectedTopic, getSelectedPost, setSelectedPost };

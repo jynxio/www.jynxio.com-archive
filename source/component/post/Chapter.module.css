@@ -1,3 +1,54 @@
+.chapter {
+	display: flex;
+	overflow: auto;
+	flex-direction: column;
+	inline-size: 18rem;
+	block-size: 100%;
+	padding: 1rem;
+	user-select: none;
+}
+
+.h1,
+.h2 {
+	display: flex;
+	align-items: center;
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	margin-block-end: 0.5rem;
+	cursor: pointer;
+}
+
+.h1.selected,
+.h2.selected {
+	border-radius: var(--border-radius);
+	background-color: var(--block-color);
+}
+
+.h1:last-child,
+.h2:last-child {
+	margin-block-end: 0;
+}
+
 .name {
-	color: var(--paragraph-color)
+	overflow: hidden;
+	color: var(--paragraph-color);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.icon {
+	inline-size: 0.8lh;
+	block-size: 0.8lh;
+	margin-inline-end: 0.5rem;
+	color: var(--icon-color);
+}
+
+.icon>svg {
+	inline-size: 100%;
+	block-size: 100%;
+	color: inherit;
+}
+
+.h1 svg path:last-child {
+	color: #c52922;
 }

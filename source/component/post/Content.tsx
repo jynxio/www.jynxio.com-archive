@@ -7,7 +7,7 @@ function Content () {
 
 	createEffect( () => {
 
-		const url = postCatalogStore.getUrl();
+		const url = postCatalogStore.getPostUrl();
 
 		if ( url === void 0 ) return;
 
@@ -53,7 +53,7 @@ function parseMarkdown ( markdown: string ) {
 
 		if ( level === 2 ) {
 
-			const h1Node = { name: "#" + text, uuid, children: [] };
+			const h1Node = { name: text, uuid, children: [] };
 
 			chapterCatalogData.push( h1Node );
 
@@ -61,7 +61,7 @@ function parseMarkdown ( markdown: string ) {
 
 		if ( level === 3 ) {
 
-			const h2Node = { name: "##" + text, uuid };
+			const h2Node = { name: text, uuid };
 
 			chapterCatalogData.at( - 1 )!.children.push( h2Node );
 

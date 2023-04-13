@@ -5,17 +5,12 @@
 	block-size: 100dvh;
 }
 
-.nav,
-.chapter {
+.nav {
 	inline-size: 18rem;
 }
 
 .nav {
 	border-inline-end: 1px solid var(--line-color);
-}
-
-.chapter {
-	border-inline-start: 1px solid var(--line-color);
 }
 
 .content {
