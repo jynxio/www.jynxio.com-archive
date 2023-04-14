@@ -1,18 +1,18 @@
 .post {
 	display: flex;
 	inline-size: 100%;
-	block-size: 100vh;
-	block-size: 100dvh;
 }
 
 .nav {
-	inline-size: 18rem;
+	flex: 0 0 var(--nav-width);
 }
 
-.nav {
-	border-inline-end: 1px solid var(--line-color);
+.chapter {
+	flex: 0 0 var(--chapter-width);
 }
 
 .content {
 	flex-grow: 1;
+	display: flex;
+	justify-content: center;
 }

@@ -1,10 +1,15 @@
 #root {
+	--nav-width: 18rem;
+	--chapter-width: 18rem;
+}
+
+#root {
 	--line-color: #121112;
 	--block-color: #2e3136;
 	--ground-color: #22262b;
 
 	--icon-color: #ffffff;
-	--link-color: #4a99e9;
+	--link-color: #c52922;
 
 	--heading-color: #ffffff;
 	--paragraph-color: #e7e9ea;

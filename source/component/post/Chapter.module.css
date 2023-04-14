@@ -1,9 +1,13 @@
 .chapter {
+	position: fixed;
+	top: 0;
+	right: 0;
 	display: flex;
 	overflow: auto;
 	flex-direction: column;
-	inline-size: 18rem;
-	block-size: 100%;
+	inline-size: var(--chapter-width);
+	block-size: 100vh;
+	block-size: 100dvh;
 	padding: 1rem;
 	user-select: none;
 }
@@ -50,5 +54,5 @@
 }
 
 .h1 svg path:last-child {
-	color: #c52922;
+	color: var(--link-color);
 }

@@ -1,0 +1,65 @@
+.content {
+	max-inline-size: 52rem;
+	inline-size: 100%;
+	padding: 1rem;
+	color: var(--paragraph-color);
+}
+
+/* Heading */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content h1,
+.content h2,
+.content h3 {
+	font-weight: bold;
+	line-height: 1;
+}
+
+.content h1 {
+	margin-block-end: 2rem;
+	font-size: 1.5rem;
+}
+
+.content h2 {
+	margin-block-start: 3rem;
+	margin-block-end: 2rem;
+	font-size: 2rem;
+}
+
+.content h3 {
+	margin-block-start: 2rem;
+	margin-block-end: 1.3rem;
+	font-size: 1.2rem;
+}
+
+/* Paragraph */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content p {
+	margin-block: 1rem;
+}
+
+/* Code */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content code {
+	padding-inline: 0.4rem;
+	padding-block: 0.25rem;
+	border-radius: var(--border-radius);
+	background-color: var(--block-color);
+	font-family: monospace;
+}
+
+/* Link */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content a {
+	border-block-end: 1px solid currentColor;
+	color: var(--link-color);
+	text-decoration-line: none;
+}
+
+.content a>svg {
+	display: inline;
+	inline-size: 1em;
+	block-size: 1em;
+	margin-inline-start: 0.125em;
+	vertical-align: super;
+	vertical-align: calc(-1 * (0.875lh - 1em) / 2);
+}
