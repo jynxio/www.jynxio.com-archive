@@ -1,9 +1,16 @@
+import "highlight.js/styles/github-dark.css";
 import style from "./Content.module.css";
+import hljs from "highlight.js";
 import * as postCatalogStore from "@/store/postCatalog";
 import * as chapterCatalogStore from "@/store/chapterCatalog";
 import { createEffect, createSignal, createUniqueId } from "solid-js";
 import { marked } from "marked";
 
+hljs.configure( {
+	languages: [ "html", "css", "javascript", "typescript", "json" ],
+} );
+
+const VALID_LANGUAGES = [ "html", "css", "javascript", "typescript", "react", "json" ]; // 可高亮处理的语种
 const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
 
 function Content () {
@@ -14,14 +21,11 @@ function Content () {
 
 		const url = postCatalogStore.getPostUrl();
 
-		if ( url === void 0 ) {
+		setHtml( "" );
+		chapterCatalogStore.setData( void 0 );
+		document.documentElement.scrollTo( 0, 0 );
 
-			setHtml( "" );
-			chapterCatalogStore.setData( void 0 );
-
-			return;
-
-		}
+		if ( url === void 0 ) return;
 
 		fetch( url )
 			.then( res => res.text() )
@@ -45,8 +49,9 @@ function parseMarkdown ( markdown: string ) {
 		xhtml: true,
 		async: false,
 		renderer: {
-			heading: parseHeading,
 			hr: parseHr,
+			heading: parseHeading,
+			code: parseCode,
 			link: parseLink,
 		},
 	} );
@@ -62,6 +67,12 @@ function parseMarkdown ( markdown: string ) {
 	chapterCatalogStore.setData( chapterCatalogData );
 
 	return html;
+
+	function parseHr () {
+
+		return "";
+
+	}
 
 	function parseHeading ( text: string, level: number ) {
 
@@ -97,15 +108,30 @@ function parseMarkdown ( markdown: string ) {
 
 	}
 
-	function parseHr () {
+	function parseCode ( code: string, language: string, escaped: boolean ) {
 
-		return "";
+		/* No language specified -> plain code */
+		if ( language === "" ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
+
+		/* Invalid language specified */
+		const isValid = VALID_LANGUAGES.includes( language );
+
+		if ( ! isValid ) {
+
+			console.log( `%cMarkdown format: You have used a language (${ language }) that does not support highlighting, it has now been processed as plain code. The languages that support highlighting are: ${ VALID_LANGUAGES.join( ", " ) }`, "color: #c52922" );
+
+			return marked.Renderer.prototype.code.apply( this, [ code, "", escaped ] );
+
+		}
+
+		/* Valid language specified */
+		const processedCode = hljs.highlight( code, { language } ).value;
+
+		return `<pre><code>${ processedCode }</code></pre>`;
 
 	}
 
 	function parseLink ( href: string, title: string, text: string ) {
-
-		console.log( href, title, text );
 
 		return `<a href="${ href }" target="_blank">${ text + LINK_SVG }</a>`;
 

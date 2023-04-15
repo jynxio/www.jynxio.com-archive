@@ -1,18 +1,32 @@
 .post {
-	display: flex;
+	--sidebar-width: 18rem;
+	--content-width: calc(100% - var(--sidebar-width) * 2);
+}
+
+.post {
 	inline-size: 100%;
+	min-block-size: 100%;
+}
+
+.nav,
+.chapter {
+	position: fixed;
+	top: 0;
+	inline-size: var(--sidebar-width);
+	block-size: 100vh;
+	block-size: 100dvh;
 }
 
 .nav {
-	flex: 0 0 var(--nav-width);
+	left: 0;
 }
 
 .chapter {
-	flex: 0 0 var(--chapter-width);
+	right: 0;
 }
 
 .content {
-	flex-grow: 1;
-	display: flex;
-	justify-content: center;
+	inline-size: var(--content-width);
+	margin-inline: auto;
+	min-block-size: 100%;
 }

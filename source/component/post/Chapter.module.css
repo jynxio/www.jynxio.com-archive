@@ -1,13 +1,9 @@
 .chapter {
-	position: fixed;
-	top: 0;
-	right: 0;
 	display: flex;
 	overflow: auto;
 	flex-direction: column;
-	inline-size: var(--chapter-width);
-	block-size: 100vh;
-	block-size: 100dvh;
+	inline-size: 100%;
+	block-size: 100%;
 	padding: 1rem;
 	user-select: none;
 }

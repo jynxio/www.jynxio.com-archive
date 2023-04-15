@@ -1,14 +1,10 @@
 /* Nav */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .nav {
-	position: fixed;
-	left: 0;
-	top: 0;
 	display: flex;
 	flex-direction: column;
-	inline-size: var(--nav-width);
-	block-size: 100vh;
-	block-size: 100dvh;
+	inline-size: 100%;
+	block-size: 100%;
 	padding: 1rem;
 	border-inline-end: 1px solid var(--line-color);
 	user-select: none;

@@ -1,7 +1,9 @@
 .content {
-	max-inline-size: 52rem;
 	inline-size: 100%;
+	max-inline-size: 48rem;
+	min-block-size: 100%;
 	padding: 1rem;
+	margin-inline: auto;
 	color: var(--paragraph-color);
 }
 
@@ -45,6 +47,22 @@
 	border-radius: var(--border-radius);
 	background-color: var(--block-color);
 	font-family: monospace;
+	word-break: break-all;
+}
+
+.content pre {
+	overflow: auto;
+	inline-size: 100%;
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	border-radius: var(--border-radius);
+	background-color: var(--block-color);
+}
+
+.content pre+code {
+	word-break: initial;
+	border-radius: initial;
+	background-color: initial;
 }
 
 /* Link */
