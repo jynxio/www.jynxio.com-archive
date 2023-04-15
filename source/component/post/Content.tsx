@@ -108,10 +108,10 @@ function parseMarkdown ( markdown: string ) {
 
 	}
 
-	function parseCode ( code: string, language: string, escaped: boolean ) {
+	function parseCode ( code: string, language: string | undefined, escaped: boolean ) {
 
 		/* No language specified -> plain code */
-		if ( language === "" ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
+		if ( ! language ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
 
 		/* Invalid language specified */
 		const isValid = VALID_LANGUAGES.includes( language );

@@ -1,4 +1,8 @@
 .content {
+	--block-gap: 1rem;
+}
+
+.content {
 	inline-size: 100%;
 	max-inline-size: 48rem;
 	min-block-size: 100%;
@@ -36,7 +40,7 @@
 /* Paragraph */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content p {
-	margin-block: 1rem;
+	margin-block: var(--block-gap);
 }
 
 /* Code */
@@ -55,11 +59,13 @@
 	inline-size: 100%;
 	padding-inline: 1rem;
 	padding-block: 0.5rem;
+	margin-block: var(--block-gap);
 	border-radius: var(--border-radius);
 	background-color: var(--block-color);
 }
 
-.content pre+code {
+.content pre>code {
+	padding: 0;
 	word-break: initial;
 	border-radius: initial;
 	background-color: initial;
