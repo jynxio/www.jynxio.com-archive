@@ -1,4 +1,5 @@
 import "highlight.js/styles/github-dark.css";
+import "@/component/jynx-ui/pre";
 import style from "./Content.module.css";
 import hljs from "highlight.js";
 import * as postCatalogStore from "@/store/postCatalog";
@@ -121,7 +122,7 @@ function parseMarkdown ( markdown: string ) {
 		}
 
 		/* Valid language specified */
-		return `<pre><code>${ hljs.highlight( code, { language } ).value }</code></pre>`;
+		return `<jynx-pre><code slot="code">${ hljs.highlight( code, { language } ).value }</code><button slot="expand">显示更多</button><button slot="collapse">显示更少</button></jynx-pre>`;
 
 	}
 
