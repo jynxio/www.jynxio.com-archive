@@ -4,28 +4,52 @@ body {
 }
 
 @font-face {
-	font-family: "LXGW WenKai Lite";
+	font-family: "霞鹜文楷";
 	font-style: normal;
-	font-weight: normal;
+	font-weight: 400;
 	font-display: swap;
 	src: local("霞鹜文楷"),
-		url("/asset/font/LXGWWenKaiLite-Regular.woff2") format("woff2"),
-		url("/asset/font/LXGWWenKaiLite-Regular.woff") format("woff"),
-		url("/asset/font/LXGWWenKaiLite-Regular.ttf") format("truetype");
+		url("/asset/font/LXGWWenKai-Regular.woff2") format("woff2"),
+		url("/asset/font/LXGWWenKai-Regular.woff") format("woff"),
+		url("/asset/font/LXGWWenKai-Regular.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: "LXGW WenKai Lite";
+	font-family: "霞鹜文楷";
 	font-style: normal;
-	font-weight: bold;
+	font-weight: 700;
 	font-display: swap;
 	src: local("霞鹜文楷"),
-		url("/asset/font/LXGWWenKaiLite-Bold.ttf") format("woff2"),
-		url("/asset/font/LXGWWenKaiLite-Bold.ttf") format("woff"),
-		url("/asset/font/LXGWWenKaiLite-Bold.ttf") format("truetype");
+		url("/asset/font/LXGWWenKai-Bold.woff2") format("woff2"),
+		url("/asset/font/LXGWWenKai-Bold.woff") format("woff"),
+		url("/asset/font/LXGWWenKai-Bold.ttf") format("truetype");
+}
+
+/* Cascadia Code是可变字体，其支持200~700的字重, font-variation-settings */
+/* 可以为其批量设置字重可是该语法的兼容性几乎为零，因此我只好仅指定400和700字重 */
+@font-face {
+	font-family: "Cascadia Code";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local("Cascadia Code"),
+		url("/asset/font/CascadiaCode.woff2") format("woff2"),
+		url("/asset/font/CascadiaCode.woff") format("woff"),
+		url("/asset/font/CascadiaCode.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Cascadia Code";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: local("Cascadia Code"),
+		url("/asset/font/CascadiaCode.woff2") format("woff2"),
+		url("/asset/font/CascadiaCode.woff") format("woff"),
+		url("/asset/font/CascadiaCode.ttf") format("truetype");
 }
 
 #root {
 	block-size: 100%;
-	font-family: "LXGW WenKai Lite", sans-serif;
+	font-family: "霞鹜文楷", sans-serif;
 }

@@ -6,12 +6,12 @@ import * as chapterCatalogStore from "@/store/chapterCatalog";
 import { createEffect, createSignal, createUniqueId } from "solid-js";
 import { marked } from "marked";
 
+const VALID_LANGUAGES = [ "html", "css", "javascript", "typescript", "react", "json" ];
+const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
+
 hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
 } );
-
-const VALID_LANGUAGES = [ "html", "css", "javascript", "typescript", "react", "json" ]; // 可高亮处理的语种
-const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
 
 function Content () {
 
@@ -33,15 +33,7 @@ function Content () {
 
 	} );
 
-	return (
-		<article class={ style.content } innerHTML={ getHtml() } onClick={ handleClick } />
-	);
-
-	function handleClick ( event: Event ) {
-
-		console.log( event.target );
-
-	}
+	return <article class={ style.content } innerHTML={ getHtml() } />;
 
 }
 
@@ -117,29 +109,19 @@ function parseMarkdown ( markdown: string ) {
 	function parseCode ( code: string, language: string | undefined, escaped: boolean ) {
 
 		/* No language specified -> plain code */
-		if ( language === "" || language === void 0 ) {
-
-			const preString: string = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
-
-			return preString.slice( 0, - 6 ) + "<button></button>" + preString.slice( - 6 );
-
-		}
+		if ( language === "" || language === void 0 ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
 
 		/* Invalid language specified */
 		if ( ! VALID_LANGUAGES.includes( language ) ) {
 
-			const preString: string = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
-
 			console.log( `%cMarkdown format: You have used a language (${ language }) that does not support highlighting, it has now been processed as plain code. The languages that support highlighting are: ${ VALID_LANGUAGES.join( ", " ) }`, "color: #c52922" );
 
-			return preString.slice( 0, - 6 ) + "<button></button>" + preString.slice( - 6 );
+			return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
 
 		}
 
 		/* Valid language specified */
-		const string = hljs.highlight( code, { language } ).value;
-
-		return `<pre><code>${ string }</code><button></button></pre>`;
+		return `<pre><code>${ hljs.highlight( code, { language } ).value }</code></pre>`;
 
 	}
 
