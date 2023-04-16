@@ -3,6 +3,7 @@
     "editor.tabSize": 4,
     "editor.insertSpaces": false,
     "editor.formatOnSave": true,
+    "editor.fontLigatures": true,
     "eslint.format.enable": true,
     "[javascript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
