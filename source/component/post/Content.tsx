@@ -122,7 +122,7 @@ function parseMarkdown ( markdown: string ) {
 		}
 
 		/* Valid language specified */
-		return `<jynx-pre><code slot="code">${ hljs.highlight( code, { language } ).value }</code><button slot="expand">显示更多</button><button slot="collapse">显示更少</button></jynx-pre>`;
+		return `<jynx-pre><pre><code>${ hljs.highlight( code, { language } ).value }</code></pre></jynx-pre>`;
 
 	}
 

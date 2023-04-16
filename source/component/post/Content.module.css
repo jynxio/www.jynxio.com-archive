@@ -57,39 +57,22 @@
 	word-break: break-all;
 }
 
-.content jynx-pre>code {
-	overflow-x: auto;
-	display: block;
-	padding: 0;
-	word-break: initial;
-	border-radius: initial;
-}
-
-.content jynx-pre>button {
-	padding: 0;
-	margin: 0;
-	border: none;
-	outline: none;
-	cursor: pointer;
+.content pre {
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	margin-block: var(--block-gap);
+	border-radius: var(--border-radius);
 	background-color: var(--block-color);
 }
 
-.content pre {
-	/* padding-inline: 1rem; */
-	/* padding-block: 0.5rem; */
-	/* margin-block: var(--block-gap); */
-	/* border-radius: var(--border-radius); */
-	/* background-color: var(--block-color); */
-}
-
 .content pre>code {
-	/* overflow-x: auto;
+	overflow-x: auto;
 	display: block;
 	inline-size: 100%;
 	padding: 0;
 	word-break: initial;
 	border-radius: initial;
-	background-color: initial; */
+	background-color: initial;
 }
 
 /* Link */

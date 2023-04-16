@@ -2,15 +2,13 @@ import style from "./index.css?raw";
 
 const content = `
 <style>${ style }</style>
-<div class="code">
-	<slot name="code"></slot>
-</div>
-<div class="expand">
-	<slot name="expand"></slot>
-</div>
-<div class="collapse">
-	<slot name="collapse"></slot>
-</div>
+<pre>
+	<slot></slot>
+</pre>
+<button class="expand">
+	<span>显示更多</span>
+	<span>显示更少</span>
+</button>
 `.trim();
 const template = document.createElement( "template" );
 
@@ -22,7 +20,19 @@ class JynxPre extends HTMLElement {
 
 		super();
 
-		this.attachShadow( { mode: "closed" } ).appendChild( template.content.cloneNode( true ) );
+		const fragment = template.content.cloneNode( true ) as DocumentFragment;
+		const button = fragment.querySelector( "button" );
+
+		button!.addEventListener( "click", event => {
+
+			const button = event.currentTarget as HTMLElement;
+			const className = button.getAttribute( "class" );
+
+			button.setAttribute( "class", className === "expand" ? "collapse" : "expand" );
+
+		} );
+
+		this.attachShadow( { mode: "closed" } ).appendChild( fragment );
 
 	}
 
