@@ -34,8 +34,14 @@ function Content () {
 	} );
 
 	return (
-		<article class={ style.content } innerHTML={ getHtml() } />
+		<article class={ style.content } innerHTML={ getHtml() } onClick={ handleClick } />
 	);
+
+	function handleClick ( event: Event ) {
+
+		console.log( event.target );
+
+	}
 
 }
 
@@ -111,23 +117,29 @@ function parseMarkdown ( markdown: string ) {
 	function parseCode ( code: string, language: string | undefined, escaped: boolean ) {
 
 		/* No language specified -> plain code */
-		if ( ! language ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
+		if ( language === "" || language === void 0 ) {
+
+			const preString: string = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
+
+			return preString.slice( 0, - 6 ) + "<button></button>" + preString.slice( - 6 );
+
+		}
 
 		/* Invalid language specified */
-		const isValid = VALID_LANGUAGES.includes( language );
+		if ( ! VALID_LANGUAGES.includes( language ) ) {
 
-		if ( ! isValid ) {
+			const preString: string = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
 
 			console.log( `%cMarkdown format: You have used a language (${ language }) that does not support highlighting, it has now been processed as plain code. The languages that support highlighting are: ${ VALID_LANGUAGES.join( ", " ) }`, "color: #c52922" );
 
-			return marked.Renderer.prototype.code.apply( this, [ code, "", escaped ] );
+			return preString.slice( 0, - 6 ) + "<button></button>" + preString.slice( - 6 );
 
 		}
 
 		/* Valid language specified */
-		const processedCode = hljs.highlight( code, { language } ).value;
+		const string = hljs.highlight( code, { language } ).value;
 
-		return `<pre><code>${ processedCode }</code></pre>`;
+		return `<pre><code>${ string }</code><button></button></pre>`;
 
 	}
 

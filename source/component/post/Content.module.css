@@ -55,8 +55,6 @@
 }
 
 .content pre {
-	overflow: auto;
-	inline-size: 100%;
 	padding-inline: 1rem;
 	padding-block: 0.5rem;
 	margin-block: var(--block-gap);
@@ -65,10 +63,40 @@
 }
 
 .content pre>code {
+	overflow-x: auto;
+	overflow-y: initial;
+	display: block;
+	inline-size: 100%;
+	/* max-block-size: 16lh; */
 	padding: 0;
 	word-break: initial;
 	border-radius: initial;
 	background-color: initial;
+}
+
+.content pre>button {
+	position: sticky;
+	bottom: 0;
+	inline-size: 100%;
+	padding: 0;
+	padding-block-start: 0.5rem;
+	margin: 0;
+	border: none;
+	outline: none;
+	color: var(--comment-color);
+	user-select: none;
+	cursor: pointer;
+	background-color: var(--block-color);
+}
+
+.content pre>button>span:first-child {
+	display: block;
+	text-align: center;
+}
+
+.content pre>button>span:last-child {
+	display: none;
+	text-align: center;
 }
 
 /* Link */
