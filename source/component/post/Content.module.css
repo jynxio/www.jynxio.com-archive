@@ -4,7 +4,7 @@
 
 .content {
 	inline-size: 100%;
-	max-inline-size: 48rem;
+	max-inline-size: 52rem;
 	min-block-size: 100%;
 	padding: 1rem;
 	margin-inline: auto;
@@ -50,7 +50,7 @@
 	padding-block: 0.25rem;
 	border-radius: var(--border-radius);
 	background-color: var(--block-color);
-	font-family: "Cascadia Code";
+	font-family: "Fira Code", "霞鹜文楷等宽";
 	font-size: 90%;
 	font-weight: 400;
 	font-feature-settings: "liga" 1;
@@ -75,6 +75,37 @@
 	background-color: initial;
 }
 
+/* Blockquote */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content blockquote {
+	--bar-width: 5px;
+	position: relative;
+	padding-inline-start: calc(1rem + var(--bar-width));
+	padding-inline-end: 1rem;
+	padding-block: 0.5rem;
+	margin-block: var(--block-gap);
+	color: var(--comment-color);
+}
+
+.content blockquote::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	inline-size: var(--bar-width);
+	block-size: 100%;
+	border-radius: var(--border-radius);
+	background-color: var(--block-color);
+}
+
+.content blockquote>:first-child {
+	margin-block-start: 0;
+}
+
+.content blockquote>:last-child {
+	margin-block-end: 0;
+}
+
 /* Link */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content a {
@@ -88,6 +119,88 @@
 	inline-size: 1em;
 	block-size: 1em;
 	margin-inline-start: 0.125em;
-	vertical-align: super;
 	vertical-align: calc(-1 * (0.875lh - 1em) / 2);
+}
+
+/* Bold */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content b,
+.content strong {
+	font-weight: 700;
+}
+
+/* List */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content ol,
+.content ul {
+	list-style: none;
+	padding: 0;
+	padding-inline-start: 1rem;
+	margin-block: var(--block-gap);
+}
+
+.content li {
+	--markder-gap: 0.5rem;
+	padding: 0;
+	margin: 0.5rem;
+}
+
+.content li::before {
+	user-select: none;
+}
+
+.content li ul,
+.content li ol {
+	margin-block: 0;
+}
+
+/* 无序列表 */
+.content ul>li:not(.checkbox)::before {
+	display: inline-block;
+	content: "";
+	inline-size: 5px;
+	block-size: 5px;
+	margin-inline-end: var(--markder-gap);
+	border-radius: 9999px;
+	background-color: currentColor;
+}
+
+/* 有序列表 */
+.content ol {
+	counter-reset: index;
+}
+
+.content ol>li::before {
+	display: inline-block;
+	counter-increment: index;
+	content: counters(index, ".") "";
+	margin-inline-end: var(--markder-gap);
+}
+
+/* 任务列表 */
+.content li>input[type="checkbox"] {
+	display: none;
+}
+
+.content li>input[type="checkbox"]+label {
+	display: inline-block;
+	inline-size: 1em;
+	block-size: 1em;
+	margin-inline-end: var(--markder-gap);
+	user-select: none;
+	cursor: not-allowed;
+	vertical-align: calc(-1 * (0.875lh - 1em) / 2);
+}
+
+ul>li>input[type="checkbox"]+label>svg {
+	inline-size: 100%;
+	block-size: 100%;
+}
+
+ul>li>input[type="checkbox"]:checked+label>svg>polyline {
+	color: var(--link-color);
+}
+
+ul>li>input[type="checkbox"]:not(:checked)+label>svg {
+	color: var(--comment-color);
 }

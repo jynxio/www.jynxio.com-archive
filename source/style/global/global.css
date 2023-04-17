@@ -10,7 +10,6 @@ body {
 	font-display: swap;
 	src: local("霞鹜文楷"),
 		url("/asset/font/LXGWWenKai-Regular.woff2") format("woff2"),
-		url("/asset/font/LXGWWenKai-Regular.woff") format("woff"),
 		url("/asset/font/LXGWWenKai-Regular.ttf") format("truetype");
 }
 
@@ -21,7 +20,6 @@ body {
 	font-display: swap;
 	src: local("霞鹜文楷"),
 		url("/asset/font/LXGWWenKai-Bold.woff2") format("woff2"),
-		url("/asset/font/LXGWWenKai-Bold.woff") format("woff"),
 		url("/asset/font/LXGWWenKai-Bold.ttf") format("truetype");
 }
 
@@ -34,7 +32,6 @@ body {
 	font-display: swap;
 	src: local("Cascadia Code"),
 		url("/asset/font/CascadiaCode.woff2") format("woff2"),
-		url("/asset/font/CascadiaCode.woff") format("woff"),
 		url("/asset/font/CascadiaCode.ttf") format("truetype");
 }
 
@@ -45,8 +42,27 @@ body {
 	font-display: swap;
 	src: local("Cascadia Code"),
 		url("/asset/font/CascadiaCode.woff2") format("woff2"),
-		url("/asset/font/CascadiaCode.woff") format("woff"),
 		url("/asset/font/CascadiaCode.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Code";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local("Fira Code"),
+		url("/asset/font/FiraCode-Regular.woff2") format("woff2"),
+		url("/asset/font/FiraCode-Regular.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "霞鹜文楷等宽";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local("霞鹜文楷等宽"),
+		url("/asset/font/LXGWWenKaiMono-Regular.woff2") format("woff2"),
+		url("/asset/font/LXGWWenKaiMono-Regular.ttf") format("truetype");
 }
 
 #root {

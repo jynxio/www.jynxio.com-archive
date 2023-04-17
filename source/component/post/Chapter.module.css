@@ -5,6 +5,7 @@
 	inline-size: 100%;
 	block-size: 100%;
 	padding: 1rem;
+	padding-inline-start: 0;
 	user-select: none;
 }
 

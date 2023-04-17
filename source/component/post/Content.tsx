@@ -1,5 +1,4 @@
 import "highlight.js/styles/github-dark.css";
-import "@/component/jynx-ui/pre";
 import style from "./Content.module.css";
 import hljs from "highlight.js";
 import * as postCatalogStore from "@/store/postCatalog";
@@ -9,6 +8,7 @@ import { marked } from "marked";
 
 const VALID_LANGUAGES = [ "html", "css", "javascript", "typescript", "react", "json" ];
 const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
+const CHECKBOX_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-square\"><polyline points=\"9 11 12 14 22 4\"></polyline><path d=\"M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11\"></path></svg>";
 
 hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
@@ -16,6 +16,7 @@ hljs.configure( {
 
 function Content () {
 
+	const chapterObserver = [];
 	const [ getHtml, setHtml ] = createSignal( "" );
 
 	createEffect( () => {
@@ -30,7 +31,22 @@ function Content () {
 
 		fetch( url )
 			.then( res => res.text() )
-			.then( txt => setHtml( parseMarkdown( txt ) ) );
+			.then( txt => {
+
+				const { html, chapterCatalogData } = parseMarkdown( txt );
+
+				setHtml( html );
+				chapterCatalogStore.setData( chapterCatalogData );
+
+				chapterCatalogData.forEach( h1Node => {
+
+					console.log( document.getElementById( h1Node.uuid ) );
+
+					// TODO 从这里开始，为元素绑定observer，也别忘记要销毁之前创建的observer。
+
+				} );
+
+			} );
 
 	} );
 
@@ -50,8 +66,10 @@ function parseMarkdown ( markdown: string ) {
 		renderer: {
 			hr: parseHr,
 			heading: parseHeading,
+			listitem: parseListItem,
 			code: parseCode,
 			link: parseLink,
+			checkbox: parseCheckbox,
 		},
 	} );
 
@@ -63,9 +81,8 @@ function parseMarkdown ( markdown: string ) {
 	if ( title === void 0 ) throw new Error( "Markdown format: every markdown document must have an h1 tag" );
 
 	html = title + html;
-	chapterCatalogStore.setData( chapterCatalogData );
 
-	return html;
+	return ( { html, chapterCatalogData } );
 
 	function parseHr () {
 
@@ -110,25 +127,44 @@ function parseMarkdown ( markdown: string ) {
 	function parseCode ( code: string, language: string | undefined, escaped: boolean ) {
 
 		/* No language specified -> plain code */
-		if ( language === "" || language === void 0 ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
+		if ( language === "" || language === void 0 ) return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
 
 		/* Invalid language specified */
 		if ( ! VALID_LANGUAGES.includes( language ) ) {
 
 			console.log( `%cMarkdown format: You have used a language (${ language }) that does not support highlighting, it has now been processed as plain code. The languages that support highlighting are: ${ VALID_LANGUAGES.join( ", " ) }`, "color: #c52922" );
 
-			return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
+			return marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] );
 
 		}
 
 		/* Valid language specified */
-		return `<jynx-pre><pre><code>${ hljs.highlight( code, { language } ).value }</code></pre></jynx-pre>`;
+		return `<pre><code>${ hljs.highlight( code, { language } ).value }</code></pre>`;
 
 	}
 
 	function parseLink ( href: string, title: string, text: string ) {
 
 		return `<a href="${ href }" target="_blank">${ text + LINK_SVG }</a>`;
+
+	}
+
+	function parseListItem ( text: string, isCheckbox: boolean, isChecked: boolean ) {
+
+		if ( ! isCheckbox ) return `<li>${ text }</li>`;
+
+		const checked = isChecked ? style.checked : "";
+
+		return `<li class="${ style.checkbox + " " + checked }">${ text }</li>`;
+
+	}
+
+	function parseCheckbox ( isChecked: boolean ) {
+
+		const id = createUniqueId();
+		const checked = isChecked ? "checked" : "";
+
+		return `<input id="${ id }" type="checkbox" ${ checked } disabled /><label for="${ id }">${ CHECKBOX_SVG }</label>`;
 
 	}
 
