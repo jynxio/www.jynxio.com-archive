@@ -1,6 +1,7 @@
 .post {
-	--sidebar-width: 18rem;
-	--content-width: calc(100% - var(--sidebar-width) * 2);
+	--nav-width: 18rem;
+	--chapter-width: 13rem;
+	--content-width: calc(100% - var(--nav-width) - var(--chapter-width));
 }
 
 .post {
@@ -12,21 +13,22 @@
 .chapter {
 	position: fixed;
 	top: 0;
-	inline-size: var(--sidebar-width);
 	block-size: 100vh;
 	block-size: 100dvh;
 }
 
 .nav {
 	left: 0;
+	inline-size: var(--nav-width);
 }
 
 .chapter {
 	right: 0;
+	inline-size: var(--chapter-width);
 }
 
 .content {
 	inline-size: var(--content-width);
-	margin-inline: auto;
+	margin-inline-start: var(--nav-width);
 	min-block-size: 100%;
 }

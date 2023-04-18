@@ -21,20 +21,19 @@
 }
 
 .content h1 {
-	margin-block-end: 2rem;
 	font-size: 1.5rem;
 }
 
 .content h2 {
-	margin-block-start: 3rem;
+	margin-block-start: 4rem;
 	margin-block-end: 2rem;
-	font-size: 2rem;
+	font-size: 2.5rem;
 }
 
 .content h3 {
 	margin-block-start: 2rem;
-	margin-block-end: 1.3rem;
-	font-size: 1.2rem;
+	margin-block-end: 1rem;
+	font-size: 1.5rem;
 }
 
 /* Paragraph */
@@ -46,8 +45,8 @@
 /* Code */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content code {
-	padding-inline: 0.4rem;
-	padding-block: 0.25rem;
+	padding-inline: 6px;
+	padding-block: 2px;
 	border-radius: var(--border-radius);
 	background-color: var(--block-color);
 	font-family: "Fira Code", "霞鹜文楷等宽";
@@ -109,9 +108,12 @@
 /* Link */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content a {
-	border-block-end: 1px solid currentColor;
 	color: var(--link-color);
 	text-decoration-line: none;
+}
+
+.content a:hover {
+	border-block-end: 1px dashed var(--link-color);
 }
 
 .content a>svg {
@@ -126,43 +128,34 @@
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content b,
 .content strong {
-	font-weight: 700;
+	font-weight: 400;
 }
 
 /* List */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content ol,
 .content ul {
-	list-style: none;
 	padding: 0;
-	padding-inline-start: 1rem;
 	margin-block: var(--block-gap);
+	list-style: none;
 }
 
 .content li {
-	--markder-gap: 0.5rem;
-	padding: 0;
-	margin: 0.5rem;
-}
-
-.content li::before {
-	user-select: none;
-}
-
-.content li ul,
-.content li ol {
-	margin-block: 0;
+	position: relative;
+	padding-inline-start: 2rem;
+	margin-block: calc(var(--block-gap) / 2);
 }
 
 /* 无序列表 */
 .content ul>li:not(.checkbox)::before {
-	display: inline-block;
 	content: "";
+	position: absolute;
+	top: calc(1lh / 2);
+	left: 0;
 	inline-size: 5px;
 	block-size: 5px;
-	margin-inline-end: var(--markder-gap);
 	border-radius: 9999px;
-	background-color: currentColor;
+	background-color: var(--icon-color);
 }
 
 /* 有序列表 */
@@ -171,10 +164,11 @@
 }
 
 .content ol>li::before {
-	display: inline-block;
 	counter-increment: index;
-	content: counters(index, ".") "";
-	margin-inline-end: var(--markder-gap);
+	content: counters(index, ".") ".";
+	position: absolute;
+	left: 0;
+	color: var(--icon-color);
 }
 
 /* 任务列表 */
@@ -183,24 +177,55 @@
 }
 
 .content li>input[type="checkbox"]+label {
-	display: inline-block;
+	position: absolute;
+	top: calc(1lh / 2 - 0.5em);
+	left: 0;
 	inline-size: 1em;
 	block-size: 1em;
-	margin-inline-end: var(--markder-gap);
-	user-select: none;
 	cursor: not-allowed;
-	vertical-align: calc(-1 * (0.875lh - 1em) / 2);
 }
 
-ul>li>input[type="checkbox"]+label>svg {
+.content ul>li>input[type="checkbox"]+label>svg {
 	inline-size: 100%;
 	block-size: 100%;
+	color: var(--icon-color);
 }
 
-ul>li>input[type="checkbox"]:checked+label>svg>polyline {
+.content ul>li>input[type="checkbox"]:checked+label>svg>polyline {
 	color: var(--link-color);
 }
 
-ul>li>input[type="checkbox"]:not(:checked)+label>svg {
+.content ul>li>input[type="checkbox"]:not(:checked)+label>svg {
 	color: var(--comment-color);
+}
+
+/* Img */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content img {
+	display: block;
+	border-radius: var(--border-radius);
+}
+
+/* Table */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content table {
+	table-layout: auto;
+	width: 100%;
+}
+
+.content th,
+.content td {
+	background-color: var(--block-color);
+	border-radius: var(--border-radius);
+}
+
+.content table th,
+.content table td {
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	text-align: left;
+}
+
+.content table th {
+	font-weight: 400;
 }

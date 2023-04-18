@@ -1,55 +1,30 @@
 .chapter {
-	display: flex;
-	overflow: auto;
-	flex-direction: column;
+	position: relative;
 	inline-size: 100%;
 	block-size: 100%;
-	padding: 1rem;
-	padding-inline-start: 0;
+	border-inline-end: 1rem solid transparent;
+	border-block-end: 1rem solid transparent;
 	user-select: none;
 }
 
-.h1,
-.h2 {
-	display: flex;
-	align-items: center;
-	padding-inline: 1rem;
-	padding-block: 0.5rem;
-	margin-block-end: 0.5rem;
+.relative {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	inline-size: 100%;
+}
+
+.heading {
+	overflow: hidden;
+	inline-size: 100%;
+	margin-block-start: 5px;
+	color: var(--paragraph-color);
+	text-align: right;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	cursor: pointer;
 }
 
-.h1.selected,
-.h2.selected {
-	border-radius: var(--border-radius);
-	background-color: var(--block-color);
-}
-
-.h1:last-child,
-.h2:last-child {
-	margin-block-end: 0;
-}
-
-.name {
-	overflow: hidden;
-	color: var(--paragraph-color);
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.icon {
-	inline-size: 0.8lh;
-	block-size: 0.8lh;
-	margin-inline-end: 0.5rem;
-	color: var(--icon-color);
-}
-
-.icon>svg {
-	inline-size: 100%;
-	block-size: 100%;
-	color: inherit;
-}
-
-.h1 svg path:last-child {
+.heading:hover {
 	color: var(--link-color);
 }

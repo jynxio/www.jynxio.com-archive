@@ -24,7 +24,7 @@ function Content () {
 
 		setHtml( "" );
 		chapterCatalogStore.setData( void 0 );
-		document.documentElement.scrollTo( 0, 0 ); // TODO
+		document.documentElement.scrollTo( 0, 0 );
 
 		if ( url === void 0 ) return;
 
@@ -35,7 +35,7 @@ function Content () {
 				const { html, chapterCatalogData } = parseMarkdown( txt );
 
 				setHtml( html );
-				chapterCatalogStore.setData( chapterCatalogData ); // Note: setData必须发生在setHtml之后
+				chapterCatalogStore.setData( chapterCatalogData );
 
 			} );
 
@@ -47,8 +47,7 @@ function Content () {
 
 function parseMarkdown ( markdown: string ) {
 
-	type H2Node = { name: string, uuid: string };
-	type H1Node = { name: string, uuid: string, children: H2Node[] };
+	type H1Node = { name: string, uuid: string };
 
 	marked.use( {
 		gfm: true,
@@ -90,20 +89,18 @@ function parseMarkdown ( markdown: string ) {
 		case 1:
 			if ( title !== void 0 ) throw new Error( "Markdown format: each markdown document only allows one h1 tag to exist" );
 
-			title = `<h1 id="${ uuid }">${ text }</h1>`;
+			title = `<h1>${ text }</h1>`;
 
 			return "";
 
 		case 2:
 			if ( text === "typora-root-url: ...." ) return "";
 
-			chapterCatalogData.push( { name: text, uuid, children: [] } );
+			chapterCatalogData.push( { name: text, uuid } );
 
 			break;
 
 		case 3:
-			chapterCatalogData.at( - 1 )!.children.push( { name: text, uuid } );
-
 			break;
 
 		default:
