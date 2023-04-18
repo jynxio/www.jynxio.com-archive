@@ -16,7 +16,6 @@ hljs.configure( {
 
 function Content () {
 
-	const chapterObserver = [];
 	const [ getHtml, setHtml ] = createSignal( "" );
 
 	createEffect( () => {
@@ -25,7 +24,7 @@ function Content () {
 
 		setHtml( "" );
 		chapterCatalogStore.setData( void 0 );
-		document.documentElement.scrollTo( 0, 0 );
+		document.documentElement.scrollTo( 0, 0 ); // TODO
 
 		if ( url === void 0 ) return;
 
@@ -36,15 +35,7 @@ function Content () {
 				const { html, chapterCatalogData } = parseMarkdown( txt );
 
 				setHtml( html );
-				chapterCatalogStore.setData( chapterCatalogData );
-
-				chapterCatalogData.forEach( h1Node => {
-
-					console.log( document.getElementById( h1Node.uuid ) );
-
-					// TODO 从这里开始，为元素绑定observer，也别忘记要销毁之前创建的observer。
-
-				} );
+				chapterCatalogStore.setData( chapterCatalogData ); // Note: setData必须发生在setHtml之后
 
 			} );
 

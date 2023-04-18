@@ -23,26 +23,14 @@ body {
 		url("/asset/font/LXGWWenKai-Bold.ttf") format("truetype");
 }
 
-/* Cascadia Code是可变字体，其支持200~700的字重, font-variation-settings */
-/* 可以为其批量设置字重可是该语法的兼容性几乎为零，因此我只好仅指定400和700字重 */
 @font-face {
-	font-family: "Cascadia Code";
+	font-family: "霞鹜文楷等宽";
 	font-style: normal;
 	font-weight: 400;
 	font-display: swap;
-	src: local("Cascadia Code"),
-		url("/asset/font/CascadiaCode.woff2") format("woff2"),
-		url("/asset/font/CascadiaCode.ttf") format("truetype");
-}
-
-@font-face {
-	font-family: "Cascadia Code";
-	font-style: normal;
-	font-weight: 700;
-	font-display: swap;
-	src: local("Cascadia Code"),
-		url("/asset/font/CascadiaCode.woff2") format("woff2"),
-		url("/asset/font/CascadiaCode.ttf") format("truetype");
+	src: local("霞鹜文楷等宽"),
+		url("/asset/font/LXGWWenKaiMono-Regular.woff2") format("woff2"),
+		url("/asset/font/LXGWWenKaiMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -53,16 +41,6 @@ body {
 	src: local("Fira Code"),
 		url("/asset/font/FiraCode-Regular.woff2") format("woff2"),
 		url("/asset/font/FiraCode-Regular.ttf") format("truetype");
-}
-
-@font-face {
-	font-family: "霞鹜文楷等宽";
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-	src: local("霞鹜文楷等宽"),
-		url("/asset/font/LXGWWenKaiMono-Regular.woff2") format("woff2"),
-		url("/asset/font/LXGWWenKaiMono-Regular.ttf") format("truetype");
 }
 
 #root {

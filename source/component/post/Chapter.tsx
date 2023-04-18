@@ -35,7 +35,7 @@ function Chapter () {
 
 	function handleClick ( uuid: string ) {
 
-		store.setChapter( uuid );
+		document.getElementById( uuid )!.scrollIntoView( { behavior: "smooth", block: "start" } );
 
 	}
 
