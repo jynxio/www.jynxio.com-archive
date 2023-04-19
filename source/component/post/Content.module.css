@@ -56,7 +56,7 @@
 	word-break: break-all;
 }
 
-.content pre {
+.content .custom-pre {
 	padding-inline: 1rem;
 	padding-block: 0.5rem;
 	margin-block: var(--block-gap);
@@ -64,14 +64,52 @@
 	background-color: var(--block-color);
 }
 
-.content pre>code {
-	overflow-x: auto;
+.content .custom-pre code {
+	padding: initial;
+	background-color: initial;
+	border-radius: initial;
+}
+
+.content .custom-pre pre {
+	overflow: auto;
+}
+
+.content .custom-pre [class="collapsed"] pre {
+	max-block-size: 16rem;
+}
+
+.content .custom-pre [class="expanded"] pre {
+	max-block-size: initial;
+}
+
+.content .custom-pre button {
 	display: block;
 	inline-size: 100%;
 	padding: 0;
-	word-break: initial;
-	border-radius: initial;
-	background-color: initial;
+	margin: 0;
+	margin-block-start: 0.5rem;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	/* background-color: var(--block-color); */
+	color: var(--icon-color);
+	text-align: center;
+	cursor: pointer;
+}
+
+.content .custom-pre button>svg {
+	inline-size: var(--icon-size);
+	block-size: var(--icon-size);
+	margin-inline: auto;
+	transition: transform var(--triansition-easeOutBack) var(--triansition-time);
+}
+
+.content .custom-pre [class="collapsed"] button>svg {
+	transform: rotate(0deg);
+}
+
+.content .custom-pre [class="expanded"] button>svg {
+	transform: rotate(180deg);
 }
 
 /* Blockquote */

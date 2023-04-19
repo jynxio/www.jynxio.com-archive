@@ -17,8 +17,8 @@
 }
 
 .icon {
-	inline-size: 0.8lh;
-	block-size: 0.8lh;
+	inline-size: var(--icon-size);
+	block-size: var(--icon-size);
 	color: var(--icon-color);
 }
 
