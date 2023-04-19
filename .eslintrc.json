@@ -371,16 +371,6 @@
 				"ignoreRegExpLiterals": true
 			}
 		],
-		"operator-linebreak": [
-			"error",
-			"before",
-			{
-				"overrides": {
-					"?": "none",
-					":": "before"
-				}
-			}
-		],
 		"new-parens": [
 			"error",
 			"always"
@@ -888,7 +878,8 @@
 		],
 		"import/no-unresolved": "error",
 		"solid/components-return-once": "off",
-		"solid/no-innerhtml": "off"
+		"solid/no-innerhtml": "off",
+		"operator-linebreak": "off"
 	},
 	"settings": {
 		"import/parsers": {
