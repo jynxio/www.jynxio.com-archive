@@ -83,33 +83,74 @@
 }
 
 .content .custom-pre button {
-	display: block;
-	inline-size: 100%;
 	padding: 0;
 	margin: 0;
-	margin-block-start: 0.5rem;
 	border: none;
 	outline: none;
 	background-color: transparent;
-	/* background-color: var(--block-color); */
 	color: var(--icon-color);
-	text-align: center;
 	cursor: pointer;
 }
 
 .content .custom-pre button>svg {
 	inline-size: var(--icon-size);
 	block-size: var(--icon-size);
-	margin-inline: auto;
-	transition: transform var(--triansition-easeOutBack) var(--triansition-time);
 }
 
-.content .custom-pre [class="collapsed"] button>svg {
+.content .custom-pre [slot="collapse-button"] {
+	display: block;
+	inline-size: 100%;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	margin-block-start: 0.5rem;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	color: var(--icon-color);
+	cursor: pointer;
+}
+
+.content .custom-pre [slot="collapse-button"]>svg {
+	margin-inline: auto;
+	transition: transform var(--transition-easeOutBack) var(--transition-time);
+}
+
+.content .custom-pre [class="collapsed"] [slot="collapse-button"]>svg {
 	transform: rotate(0deg);
 }
 
-.content .custom-pre [class="expanded"] button>svg {
+.content .custom-pre [class="expanded"] [slot="collapse-button"]>svg {
 	transform: rotate(180deg);
+}
+
+.content .custom-pre [slot="copy-button"] {
+	margin-block-start: 0.5rem;
+}
+
+.content .custom-pre [slot="copy-button"]>svg {
+	color: var(--comment-color);
+}
+
+.content .custom-pre [slot="copy-button"]>svg>:nth-child(n+3) {
+	transform: scale(0);
+}
+
+.content .custom-pre [slot="copy-button"][class="resolved"]>svg>:nth-child(-n+2),
+.content .custom-pre [slot="copy-button"][class="rejected"]>svg>:nth-child(-n+2) {
+	display: none;
+}
+
+.content .custom-pre [slot="copy-button"][class="resolved"]>svg>:nth-child(3) {
+	color: #63ca5e;
+	transform: scale(1);
+	transition: transform var(--transition-easeInOutBack) var(--transition-time);
+}
+
+.content .custom-pre [slot="copy-button"][class="rejected"]>svg>:nth-child(n+4) {
+	color: var(--link-color);
+	transform: scale(1);
+	transition: transform var(--transition-easeInOutBack) var(--transition-time);
 }
 
 /* Blockquote */

@@ -9,7 +9,7 @@ function Chapter () {
 			<div class={ style.relative }>
 				<For each={ store.getData() }>
 					{
-						h1Node => <p class={ style.heading } onClick={ [ handleClick, h1Node.uuid ] }>{ h1Node.name }</p>
+						h1Node => <p class={ style.heading } onClick={ [ handleClick, h1Node.uuid ] }><span>{ h1Node.name }</span></p>
 					}
 				</For>
 			</div>

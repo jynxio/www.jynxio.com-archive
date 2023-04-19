@@ -16,15 +16,17 @@
 
 .heading {
 	overflow: hidden;
-	inline-size: 100%;
 	margin-block-start: 5px;
 	color: var(--paragraph-color);
 	text-align: right;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.heading>span {
 	cursor: pointer;
 }
 
-.heading:hover {
+.heading>span:hover {
 	color: var(--link-color);
 }

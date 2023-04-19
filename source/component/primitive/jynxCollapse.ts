@@ -1,16 +1,31 @@
 const content = `
 <style>
-    section:last-child {
-        position: sticky;
-        bottom: 0;
-    }
+.container {
+	position: relative;
+}
+
+.collapse-button {
+	position: sticky;
+	bottom: 0;
+}
+
+.copy-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
 </style>
-<section>
-    <slot name="panel"></slot>
-</section>
-<section>
-    <slot name="button"></slot>
-</section>
+<div class="container">
+	<section class="panel">
+	    <slot name="panel"></slot>
+	</section>
+	<section class="collapse-button">
+	    <slot name="collapse-button"></slot>
+	</section>
+	<section class="copy-button">
+		<slot name="copy-button"></slot>
+	</section>
+</div>
 `;
 const template = document.createElement( "template" );
 
@@ -28,14 +43,34 @@ class JynxCollapse extends HTMLElement {
 		this.attachShadow( { mode: "closed" } ).appendChild( fragmrnt );
 
 		const panel = this.querySelector( "[slot='panel']" ) as HTMLElement;
-		const button = this.querySelector( "[slot='button']" ) as HTMLElement;
+		const copyButton = this.querySelector( "[slot='copy-button']" ) as HTMLElement;
+		const collapseButton = this.querySelector( "[slot='collapse-button']" ) as HTMLElement;
 
 		const maxHeight = Number.parseInt( getComputedStyle( panel! ).getPropertyValue( "max-block-size" ), 10 ); // Integer
 		const offsetHeight = panel!.offsetHeight;                                                     // Integer
 
+		/* Copy button */
+		copyButton.setAttribute( "class", "idle" );   // "idle" | "pending" | "resolved" | "rejected"
+		copyButton.addEventListener( "click", () => {
+
+			if ( copyButton.getAttribute( "class" ) !== "idle" ) return;
+
+			const unicodes = this.getAttribute( "data-code" )!.split( "," );
+			const characters = unicodes.map( unicode => String.fromCodePoint( Number( unicode ) ) );
+			const data = characters.join( "" );
+
+			copyButton.setAttribute( "class", "pending" );
+			navigator.clipboard.writeText( data )
+				.then( () => copyButton.setAttribute( "class", "resolved" ) )
+				.catch( () => copyButton.setAttribute( "class", "rejected" ) )
+				.finally( () => setTimeout( () => copyButton.setAttribute( "class", "idle" ), 1000 ) );
+
+		} );
+
+		/* Collapse button */
 		if ( offsetHeight < maxHeight ) {
 
-			button.style.setProperty( "display", "none", "important" );
+			collapseButton.style.setProperty( "display", "none", "important" );
 
 			return;
 
@@ -46,7 +81,7 @@ class JynxCollapse extends HTMLElement {
 		const collapsed = "collapsed";
 		const expanded = "expanded";
 
-		button.addEventListener( "click", () => {
+		collapseButton.addEventListener( "click", () => {
 
 			const currentClassName = this.getAttribute( "class" );
 			const nextClassName = currentClassName === collapsed ? expanded : collapsed;
