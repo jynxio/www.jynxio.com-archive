@@ -72,6 +72,7 @@
 
 .content .custom-pre pre {
 	overflow: auto;
+	overscroll-behavior: none;
 }
 
 .content .custom-pre [class="collapsed"] pre {
@@ -134,6 +135,7 @@
 
 .content .custom-pre [slot="copy-button"]>svg>:nth-child(n+3) {
 	transform: scale(0);
+	transform-origin: center;
 }
 
 .content .custom-pre [slot="copy-button"][class="resolved"]>svg>:nth-child(-n+2),

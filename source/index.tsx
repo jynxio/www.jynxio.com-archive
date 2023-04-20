@@ -1,6 +1,6 @@
 import "@/style/global/reset.css";
 import "@/style/global/variable.css";
-import "@/style/global/global.css";
+import "@/style/global/base.css";
 
 import Home from "@/page/Home";
 import Post from "@/page/Post";
