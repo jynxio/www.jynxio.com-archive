@@ -32,10 +32,3 @@
 	margin-inline-start: var(--nav-width);
 	min-block-size: 100%;
 }
-
-.scrollbar {
-	position: fixed;
-	top: 0;
-	right: 0;
-	block-size: 100%;
-}
