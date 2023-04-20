@@ -31,7 +31,7 @@ const template = document.createElement( "template" );
 
 template.innerHTML = content;
 
-class JynxCollapse extends HTMLElement {
+class jynxPre extends HTMLElement {
 
 	constructor () {
 
@@ -98,4 +98,4 @@ class JynxCollapse extends HTMLElement {
 
 }
 
-customElements.define( "jynx-collapse", JynxCollapse );
+customElements.define( "jynx-pre", jynxPre );

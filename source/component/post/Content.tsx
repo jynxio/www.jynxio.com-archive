@@ -1,5 +1,5 @@
 import "highlight.js/styles/github-dark.css";
-import "@/component/primitive/jynxCollapse";
+import "@/component/primitive/jynxPre";
 import style from "./Content.module.css";
 import hljs from "highlight.js";
 import * as postCatalogStore from "@/store/postCatalog";
@@ -202,13 +202,13 @@ function parseMarkdown ( markdown: string ) {
 
 		return (
 			`<div class="${ style[ "custom-pre" ] }">` +
-			`<jynx-collapse data-code="${ data }">"` +
+			`<jynx-pre data-code="${ data }">"` +
 			"<pre slot='panel'>" +
 			"<code>" + codeContent + "</code>" +
 			"</pre>" +
 			"<button slot='collapse-button'>" + collapseSvg + "</button>" +
 			"<button slot='copy-button'>" + copySvg + "</button>" +
-			"</jynx-collapse>" +
+			"</jynx-pre>" +
 			"</div>"
 		);
 
