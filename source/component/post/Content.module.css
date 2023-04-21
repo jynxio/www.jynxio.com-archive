@@ -16,7 +16,7 @@
 .content h1,
 .content h2,
 .content h3 {
-	font-weight: bold;
+	font-weight: 700;
 	line-height: 1;
 }
 
@@ -44,6 +44,16 @@
 
 /* Code */
 /* ------------------------------------------------------------------------------------------------------------------ */
+.content pre,
+.content code {
+	scrollbar-width: none;
+}
+
+.content pre::-webkit-scrollbar,
+.content code::-webkit-scrollbar {
+	display: none;
+}
+
 .content code {
 	padding-inline: 6px;
 	padding-block: 2px;
