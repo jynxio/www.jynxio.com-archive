@@ -66,6 +66,10 @@
 	word-break: break-all;
 }
 
+.content code * {
+	font: inherit;
+}
+
 .content .custom-pre {
 	padding-inline: 1rem;
 	padding-block: 0.5rem;
