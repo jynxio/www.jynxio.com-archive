@@ -29,10 +29,10 @@ async function main () {
 	codeString = fc.deduplication( codeString );
 	headingString = fc.deduplication( headingString );
 
-	const subRes1 = await fc.subset( allString, "./asset/font/raw/LXGWWenKai-Regular.ttf", "./asset/font/subset/LXGWWenKai-Regular.ttf" );
-	const subRes2 = await fc.subset( headingString, "./asset/font/raw/LXGWWenKai-Bold.ttf", "./asset/font/subset/LXGWWenKai-Bold.ttf" );
-	const subRes3 = await fc.subset( codeString, "./asset/font/raw/FiraCode-Regular.ttf", "./asset/font/subset/FiraCode-Regular.ttf" );
-	const subRes4 = await fc.subset( codeString, "./asset/font/raw/LXGWWenKaiMono-Regular.ttf", "./asset/font/subset/LXGWWenKaiMono-Regular.ttf" );
+	await fc.subset( allString, "./asset/font/raw/LXGWWenKai-Regular.ttf", "./asset/font/subset/LXGWWenKai-Regular.ttf" );
+	await fc.subset( headingString, "./asset/font/raw/LXGWWenKai-Bold.ttf", "./asset/font/subset/LXGWWenKai-Bold.ttf" );
+	await fc.subset( codeString, "./asset/font/raw/FiraCode-Regular.ttf", "./asset/font/subset/FiraCode-Regular.ttf" );
+	await fc.subset( codeString, "./asset/font/raw/LXGWWenKaiMono-Regular.ttf", "./asset/font/subset/LXGWWenKaiMono-Regular.ttf" );
 
 	fs.writeFileSync( "./asset/font/subset/LXGWWenKai-Regular.woff2", ttf2woff2( fs.readFileSync( "./asset/font/subset/LXGWWenKai-Regular.ttf" ) ) );
 	fs.writeFileSync( "./asset/font/subset/LXGWWenKai-Bold.woff2", ttf2woff2( fs.readFileSync( "./asset/font/subset/LXGWWenKai-Bold.ttf" ) ) );
@@ -63,23 +63,23 @@ function parseMarkdown ( text ) {
 
 	function parseCode ( text ) {
 
-		code += text
+		code += text;
 
-		return `<pre><code>${ text }</code></pre>`
+		return `<pre><code>${ text }</code></pre>`;
 
 	}
 
 	function parseCodespan ( text ) {
 
-		code += text
+		code += text;
 
-		return `<code>${ text }</code>`
+		return `<code>${ text }</code>`;
 
 	}
 
 	function parseHeading ( text, level ) {
 
-		if ( level === 2 && text === "typora-root-url: ...." ) return ""
+		if ( level === 2 && text === "typora-root-url: ...." ) return "";
 
 		heading += text;
 
