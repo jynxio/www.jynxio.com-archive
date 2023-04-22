@@ -1,6 +1,3 @@
-// marked -> code字符 -> subset fira-code & lxgww-regu-mono -> woff2
-// marked -> h1, h2, h3 -> subset lxgww-bold -> woff2
-// marked -> all -> subset lxgww-regu -> woff2
 const fs = require( "fs" );
 const marked = require( "marked" );
 const fc = require( "font-caster" );
@@ -20,13 +17,11 @@ async function main () {
 
 		if ( file.name === ".DS_Store" ) continue;
 
-		console.log( file.name );
+		const { all, code, heading } = parseMarkdown( file.content ); // Bug: marked会把codespan中的某些符号翻译成转译字符，比如它会把>翻译成&gt;
 
-		const { all, code, heading } = parseMarkdown( file.content );
-
-		allString += fc.deduplication( all );
-		codeString += fc.deduplication( code );
-		headingString += fc.deduplication( heading );
+		allString += all;
+		codeString += code;
+		headingString += heading;
 
 	}
 
@@ -34,20 +29,15 @@ async function main () {
 	codeString = fc.deduplication( codeString );
 	headingString = fc.deduplication( headingString );
 
-	// const subRes1 = await fc.subset( allString, "./asset/font/LXGWWenKai-Regular.ttf", "./asset/font/LXGWWenKai-Regular-subset.ttf" );
-	// const subRes2 = await fc.subset( codeString, "./asset/font/FiraCode-Regular.ttf", "./asset/font/FiraCode-Regular-subset.ttf" );
-	// const subRes3 = await fc.subset( codeString, "./asset/font/LXGWWenKaiMono-Regular.ttf", "./asset/font/LXGWWenKaiMono-Regular-subset.ttf" );
-	// const subRes4 = await fc.subset( headingString, "./asset/font/LXGWWenKai-Bold.ttf", "./asset/font/LXGWWenKai-Bold-subset.ttf" );
+	const subRes1 = await fc.subset( allString, "./asset/font/raw/LXGWWenKai-Regular.ttf", "./asset/font/subset/LXGWWenKai-Regular.ttf" );
+	const subRes2 = await fc.subset( headingString, "./asset/font/raw/LXGWWenKai-Bold.ttf", "./asset/font/subset/LXGWWenKai-Bold.ttf" );
+	const subRes3 = await fc.subset( codeString, "./asset/font/raw/FiraCode-Regular.ttf", "./asset/font/subset/FiraCode-Regular.ttf" );
+	const subRes4 = await fc.subset( codeString, "./asset/font/raw/LXGWWenKaiMono-Regular.ttf", "./asset/font/subset/LXGWWenKaiMono-Regular.ttf" );
 
-	// fs.writeFileSync( "./asset/font/LXGWWenKai-Regular-subset.woff2", ttf2woff2( fs.readFileSync( "./asset/font/LXGWWenKai-Regular-subset.ttf" ) ) );
-	// fs.writeFileSync( "./asset/font/FiraCode-Regular-subset.woff2", ttf2woff2( fs.readFileSync( "./asset/font/FiraCode-Regular-subset.ttf" ) ) );
-	// fs.writeFileSync( "./asset/font/LXGWWenKaiMono-Regular-subset.woff2", ttf2woff2( fs.readFileSync( "./asset/font/LXGWWenKaiMono-Regular-subset.ttf" ) ) );
-	// fs.writeFileSync( "./asset/font/LXGWWenKai-Bold-subset.woff2", ttf2woff2( fs.readFileSync( "./asset/font/LXGWWenKai-Bold-subset.ttf" ) ) );
-
-	// console.log( subRes1 );
-	// console.log( subRes2 );
-	// console.log( subRes3 );
-	// console.log( subRes4 );
+	fs.writeFileSync( "./asset/font/subset/LXGWWenKai-Regular.woff2", ttf2woff2( fs.readFileSync( "./asset/font/subset/LXGWWenKai-Regular.ttf" ) ) );
+	fs.writeFileSync( "./asset/font/subset/LXGWWenKai-Bold.woff2", ttf2woff2( fs.readFileSync( "./asset/font/subset/LXGWWenKai-Bold.ttf" ) ) );
+	fs.writeFileSync( "./asset/font/subset/FiraCode-Regular.woff2", ttf2woff2( fs.readFileSync( "./asset/font/subset/FiraCode-Regular.ttf" ) ) );
+	fs.writeFileSync( "./asset/font/subset/LXGWWenKaiMono-Regular.woff2", ttf2woff2( fs.readFileSync( "./asset/font/subset/LXGWWenKaiMono-Regular.ttf" ) ) );
 
 }
 
