@@ -37,6 +37,7 @@
 	},
 	"include": [
 		"./source",
+		"./source/subset",
 		"./vite.config.js"
 	],
 	"exclude": [
