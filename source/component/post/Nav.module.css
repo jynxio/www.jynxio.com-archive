@@ -11,6 +11,7 @@
 }
 
 .nav>hr {
+	flex-shrink: 0;
 	block-size: 2rem;
 	inline-size: 100%;
 	border: none;
@@ -35,6 +36,7 @@
 /* ------------------------------------------------------------------------------------------------------------------ */
 .search {
 	display: flex;
+	flex-shrink: 0;
 	align-items: center;
 	inline-size: 100%;
 	block-size: 2.25rem;
@@ -112,6 +114,7 @@
 /* ------------------------------------------------------------------------------------------------------------------ */
 .control {
 	display: flex;
+	flex-shrink: 0;
 }
 
 .control>.icon {
