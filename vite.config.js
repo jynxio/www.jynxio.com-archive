@@ -52,8 +52,14 @@ export default defineConfig( ( { command, mode } ) => {
 			root: "./",
 			base: "/",
 			publicDir: "public",
+			resolve: {
+				alias: {
+					"@": path.resolve( __dirname, "./source" ),
+					"$": path.resolve( __dirname, "./" ),
+				},
+			},
 			build: {
-				outDir: "build",
+				outDir: "dist",
 				target: "esnext",
 				assetsInlineLimit: 4096,
 				chunkSizeWarningLimit: 1000,
