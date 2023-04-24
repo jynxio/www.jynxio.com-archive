@@ -4,7 +4,7 @@
 	font-weight: 400;
 	font-display: swap;
 	src: local("霞鹜文楷"),
-		url("/asset/font/subset/LXGWWenKai-Regular.woff2") format("woff2");
+		url("/source/asset/font/process/LXGWWenKai-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -13,7 +13,7 @@
 	font-weight: 700;
 	font-display: swap;
 	src: local("霞鹜文楷"),
-		url("/asset/font/subset/LXGWWenKai-Bold.woff2") format("woff2");
+		url("/source/asset/font/process/LXGWWenKai-Bold.woff2") format("woff2");
 }
 
 @font-face {
@@ -22,7 +22,7 @@
 	font-weight: 400;
 	font-display: swap;
 	src: local("霞鹜文楷等宽"),
-		url("/asset/font/subset/LXGWWenKaiMono-Regular.woff2") format("woff2");
+		url("/source/asset/font/process/LXGWWenKaiMono-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -31,7 +31,7 @@
 	font-weight: 400;
 	font-display: swap;
 	src: local("Fira Code"),
-		url("/asset/font/subset/FiraCode-Regular.woff2") format("woff2");
+		url("/source/asset/font/process/FiraCode-Regular.woff2") format("woff2");
 }
 
 /* ------------------------------------------------------------------------------------------------------------------ */

@@ -1,12 +1,12 @@
-import rawData from "$/asset/json/post-catalog-data.json";
+import rawData from "@/asset/catalog/data.json";
 import { createUniqueId } from "solid-js";
 import { createStore } from "solid-js/store";
 
 type Uuid = string | undefined;
-type RawPostNode = { name: string, path: string };
-type RawTopicNode = { name: string, path: string, children: RawPostNode[] };
-type PostNode = { name: string, path: string, uuid: string };
-type TopicNode = { name: string, path: string, uuid: string, children: PostNode[] };
+type RawPostNode = { alias: string, name: string };
+type RawTopicNode = { alias: string, name: string, children: RawPostNode[] };
+type PostNode = { alias: string, name: string, uuid: string };
+type TopicNode = { alias: string, name: string, uuid: string, children: PostNode[] };
 
 const processedData = process( rawData );
 const [ store, setStore ] = createStore( {
@@ -35,7 +35,7 @@ function getPostUrl () {
 
 	if ( ! selectedPost ) return;
 
-	return `./post/${ selectedTopic.path }/${ selectedPost.path }.md`;
+	return `./post/${ selectedTopic.name }/${ selectedPost.name }`;
 
 }
 
@@ -68,12 +68,12 @@ function process ( rawData: RawTopicNode[] ) {
 	const processedData = rawData.map( topicNode => {
 
 		return ( {
+			alias: topicNode.alias,
 			name: topicNode.name,
-			path: topicNode.path,
 			uuid: createUniqueId(),
 			children: topicNode.children.map( postNode => ( {
+				alias: postNode.alias,
 				name: postNode.name,
-				path: postNode.path,
 				uuid: createUniqueId(),
 			} ) ),
 		} ) as TopicNode;
