@@ -1,18 +1,19 @@
-<h1 align="center"><a href="https://www.jynxio.com">👋 Jynxio's blog</a></h1>
-<p align="center">Made by <a href="https://github.com/solidjs/solid">Solid.js</a> ❤️</p>
+<h1 align="center"><a href="https://www.jynxio.com">Jynxio's blog</a> (Made by <a href="https://github.com/solidjs/solid">Solid.js</a>)</h1>
 
-## Emoji
+<br/>
 
-| Emoji | Meaning                          |
-| ----- | -------------------------------- |
-| 🧹     | Chore                            |
-| 🐛     | Maintenance                      |
-| 🌱     | Progress                         |
-| ✨     | Feature                          |
-| 🚀     | Release (new post & new version) |
-| 📄     | Writing                          |
+<h2 align="center">Emoji</h2>
 
-## To-do List
+- 🧹 -> Chore
+- 🐛 -> Maintenance
+- 🌱 -> Progress o f features
+- 📄 -> Progress of writing
+- ✨ -> Feature
+- 🚀 -> Release (new post & new version)
+
+<br/>
+
+<h2 align="center">To-do List</h2>
 
 It’s going to be even better!
 
@@ -23,7 +24,9 @@ It’s going to be even better!
 - [ ] Cover page and creative page
 - [ ] Upgrade to [Astro](https://github.com/withastro/astro)
 
-## License
+<br/>
+
+<h2 align="center">License</h2>
 
 [Attribution-NonCommercial-NoDerivatives (BY-NC-ND) 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)
 
