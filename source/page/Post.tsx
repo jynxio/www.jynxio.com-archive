@@ -2,6 +2,9 @@ import style from "./Post.module.css";
 import Nav from "@/component/post/Nav";
 import Chapter from "@/component/post/Chapter";
 import Content from "@/component/post/Content";
+import { inject } from "@vercel/analytics";
+
+inject();
 
 function Post () {
 

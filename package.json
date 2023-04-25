@@ -6,7 +6,8 @@
     "license": "BY-NC-ND (4.0)",
     "scripts": {
         "start": "vite",
-        "build": "vite build",
+        "build": "pnpm run catalog && pnpm run subset && vite build",
+        "deploy": "vercel deploy --prod dist",
         "subset": "node ./source/util/subset.js",
         "catalog": "node ./source/util/catalog.js"
     },
@@ -27,6 +28,7 @@
     "dependencies": {
         "@solidjs/router": "^0.8.2",
         "@types/marked": "^4.0.8",
+        "@vercel/analytics": "^1.0.0",
         "highlight.js": "^11.7.0",
         "marked": "^4.3.0",
         "solid-js": "^1.7.3"
