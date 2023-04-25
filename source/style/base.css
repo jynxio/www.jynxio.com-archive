@@ -1,0 +1,78 @@
+@font-face {
+	font-family: "霞鹜文楷";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local("霞鹜文楷"),
+		url("/source/asset/font/process/LXGWWenKai-Regular.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "霞鹜文楷";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: local("霞鹜文楷"),
+		url("/source/asset/font/process/LXGWWenKai-Bold.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "霞鹜文楷等宽";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local("霞鹜文楷等宽"),
+		url("/source/asset/font/process/LXGWWenKaiMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Fira Code";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local("Fira Code"),
+		url("/source/asset/font/process/FiraCode-Regular.woff2") format("woff2");
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+* {
+	font-family: "霞鹜文楷";
+	font-style: normal;
+	font-weight: 400;
+}
+
+html {
+	block-size: 100%;
+}
+
+html,
+body {
+	background-color: #22262b;
+	overscroll-behavior: initial;
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #444 transparent;
+}
+
+*::-webkit-scrollbar {
+	inline-size: 16px;
+	background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	border-inline-end: 8px solid #444;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	border-inline-end-color: #555;
+}
+
+pre {
+	scrollbar-width: none;
+}
+
+pre::-webkit-scrollbar {
+	display: none;
+}

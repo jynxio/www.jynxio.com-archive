@@ -1,0 +1,34 @@
+.post {
+	--nav-width: 18rem;
+	--chapter-width: 13rem;
+	--content-width: calc(100% - var(--nav-width) - var(--chapter-width));
+}
+
+.post {
+	inline-size: 100%;
+	min-block-size: 100%;
+}
+
+.nav,
+.chapter {
+	position: fixed;
+	top: 0;
+	block-size: 100vh;
+	block-size: 100dvh;
+}
+
+.nav {
+	left: 0;
+	inline-size: var(--nav-width);
+}
+
+.chapter {
+	right: 0;
+	inline-size: var(--chapter-width);
+}
+
+.content {
+	inline-size: var(--content-width);
+	margin-inline-start: var(--nav-width);
+	min-block-size: 100%;
+}

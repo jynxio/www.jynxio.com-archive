@@ -1,0 +1,308 @@
+.content {
+	--block-gap: 1rem;
+}
+
+.content {
+	inline-size: 100%;
+	max-inline-size: 52rem;
+	min-block-size: 100%;
+	padding: 1rem;
+	margin-inline: auto;
+	color: var(--paragraph-color);
+}
+
+/* Heading */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content h1,
+.content h2,
+.content h3 {
+	font-weight: 700;
+	line-height: 1;
+}
+
+.content h1 {
+	font-size: 1.5rem;
+}
+
+.content h2 {
+	margin-block-start: 4rem;
+	margin-block-end: 2rem;
+	font-size: 2.5rem;
+}
+
+.content h3 {
+	margin-block-start: 2rem;
+	margin-block-end: 1rem;
+	font-size: 1.5rem;
+}
+
+/* Paragraph */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content p {
+	margin-block: var(--block-gap);
+}
+
+/* Code */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content code {
+	padding-inline: 6px;
+	padding-block: 2px;
+	border-radius: var(--border-radius);
+	background-color: var(--block-color);
+	font-family: "Fira Code", "霞鹜文楷等宽";
+	font-size: 90%;
+	font-weight: 400;
+	font-feature-settings: "liga" 1;
+	word-break: break-all;
+}
+
+.content code * {
+	font: inherit;
+}
+
+.content .custom-pre {
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	margin-block: var(--block-gap);
+	border-radius: var(--border-radius);
+	background-color: var(--block-color);
+}
+
+.content .custom-pre code {
+	padding: initial;
+	background-color: initial;
+	border-radius: initial;
+}
+
+.content .custom-pre pre {
+	overflow: auto;
+}
+
+.content .custom-pre [class="collapsed"] pre {
+	max-block-size: 16rem;
+}
+
+.content .custom-pre [class="expanded"] pre {
+	max-block-size: initial;
+}
+
+.content .custom-pre button {
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	color: var(--icon-color);
+	cursor: pointer;
+}
+
+.content .custom-pre button>svg {
+	inline-size: var(--icon-size);
+	block-size: var(--icon-size);
+}
+
+.content .custom-pre [slot="collapse-button"] {
+	display: block;
+	inline-size: 100%;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	margin-block-start: 0.5rem;
+	border: none;
+	outline: none;
+	background-color: transparent;
+	color: var(--icon-color);
+	cursor: pointer;
+}
+
+.content .custom-pre [slot="collapse-button"]>svg {
+	margin-inline: auto;
+	transition: transform var(--transition-easeOutBack) var(--transition-time);
+}
+
+.content .custom-pre [class="collapsed"] [slot="collapse-button"]>svg {
+	transform: rotate(0deg);
+}
+
+.content .custom-pre [class="expanded"] [slot="collapse-button"]>svg {
+	transform: rotate(180deg);
+}
+
+.content .custom-pre [slot="copy-button"] {
+	--offset: calc(0.5lh - var(--icon-size) / 2);
+	margin-block-start: var(--offset);
+	margin-inline-end: calc(-1 * (1rem - 0.5rem - var(--offset)));
+}
+
+.content .custom-pre [slot="copy-button"]>svg {
+	color: var(--comment-color);
+}
+
+.content .custom-pre [slot="copy-button"]>svg>:nth-child(n+3) {
+	transform: scale(0);
+	transform-origin: center;
+}
+
+.content .custom-pre [slot="copy-button"][class="resolved"]>svg>:nth-child(-n+2),
+.content .custom-pre [slot="copy-button"][class="rejected"]>svg>:nth-child(-n+2) {
+	display: none;
+}
+
+.content .custom-pre [slot="copy-button"][class="resolved"]>svg>:nth-child(3) {
+	color: #63ca5e;
+	transform: scale(1);
+	transition: transform var(--transition-easeInOutBack) var(--transition-time);
+}
+
+.content .custom-pre [slot="copy-button"][class="rejected"]>svg>:nth-child(n+4) {
+	color: var(--link-color);
+	transform: scale(1);
+	transition: transform var(--transition-easeInOutBack) var(--transition-time);
+}
+
+/* Blockquote */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content blockquote {
+	padding-inline-start: 2rem;
+	padding-block: 0.5lh;
+	margin-block: var(--block-gap);
+	color: var(--comment-color);
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iN3B4IiBoZWlnaHQ9IjI2cHgiIHZpZXdCb3g9IjAgMCA3IDI2IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPHRpdGxlPuOAsDwvdGl0bGU+CiAgICA8ZyBpZD0i44CwIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8cGF0aCBkPSJNOS41LDE1LjQ5NiBDMTAuNTQsMTUuNDk2IDExLjM5OCwxNC45NzYgMTMuMTQsMTMuMjYgQzE0LjU5NiwxMS44NTYgMTUuMTY4LDExLjQ5MiAxNiwxMS40NCBMMTYsMTAuNTA0IEMxNC44MDQsMTAuNTgyIDE0LjE4LDEwLjk3MiAxMi4zMzQsMTIuNzQgQzEwLjkwNCwxNC4xMTggMTAuMjI4LDE0LjU2IDkuNSwxNC41NiBDOC43NzIsMTQuNTYgOC4wNywxNC4xMTggNi42NjYsMTIuNzQgQzQuODQ2LDEwLjk3MiA0LjA5MiwxMC41MDQgMywxMC41MDQgQzEuOTM0LDEwLjUwNCAxLjE1NCwxMC45OTggLTAuNjY2LDEyLjc0IEMtMi4wOTYsMTQuMTE4IC0yLjc3MiwxNC41NiAtMy41LDE0LjU2IEMtNC4yMjgsMTQuNTYgLTQuOTMsMTQuMTE4IC02LjM2LDEyLjc0IEMtOC4yMDYsMTAuOTQ2IC04Ljc3OCwxMC41ODIgLTEwLDEwLjUwNCBMLTEwLDExLjQ0IEMtOS4xNjgsMTEuNDkyIC04LjYyMiwxMS44MyAtNy4xNjYsMTMuMjYgQy01LjMyLDE1LjAyOCAtNC41NjYsMTUuNDk2IC0zLjUsMTUuNDk2IEMtMi40NiwxNS40OTYgLTEuNjI4LDE0Ljk3NiAwLjE0LDEzLjI4NiBDMS41NDQsMTEuODgyIDIuMjQ2LDExLjQ0IDMsMTEuNDQgQzMuNzU0LDExLjQ0IDQuNDMsMTEuODgyIDUuODYsMTMuMjg2IEM3LjY4LDE1LjAyOCA4LjQzNCwxNS40OTYgOS41LDE1LjQ5NiBaIiBmaWxsPSIjOTk5OTk5IiBmaWxsLXJ1bGU9Im5vbnplcm8iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuMDAwMDAwLCAxMy4wMDAwMDApIHJvdGF0ZSgtMjcwLjAwMDAwMCkgdHJhbnNsYXRlKC0zLjAwMDAwMCwgLTEzLjAwMDAwMCkgIj48L3BhdGg+CiAgICA8L2c+Cjwvc3ZnPg==);
+	background-repeat: repeat-y;
+}
+
+.content blockquote>:first-child {
+	margin-block-start: 0;
+}
+
+.content blockquote>:last-child {
+	margin-block-end: 0;
+}
+
+/* Link */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content a {
+	color: var(--link-color);
+	text-decoration-line: none;
+}
+
+.content a:hover {
+	border-block-end: 1px dashed var(--link-color);
+}
+
+.content a>svg {
+	display: inline;
+	inline-size: 1em;
+	block-size: 1em;
+	margin-inline-start: 0.125em;
+	vertical-align: calc(-1 * (0.875lh - 1em) / 2);
+}
+
+/* Bold */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content b,
+.content strong {
+	font-weight: 400;
+}
+
+/* List */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content ol,
+.content ul {
+	padding: 0;
+	margin-block: var(--block-gap);
+	list-style: none;
+}
+
+.content li {
+	position: relative;
+	padding-inline-start: 2rem;
+	margin-block: calc(var(--block-gap) / 2);
+}
+
+/* 无序列表 */
+.content ul>li:not(.checkbox)::before {
+	content: "";
+	position: absolute;
+	top: calc(1lh / 2);
+	left: 0;
+	inline-size: 5px;
+	block-size: 5px;
+	border-radius: 9999px;
+	background-color: var(--icon-color);
+}
+
+/* 有序列表 */
+.content ol {
+	counter-reset: index;
+}
+
+.content ol>li::before {
+	counter-increment: index;
+	content: counters(index, ".") ".";
+	position: absolute;
+	left: 0;
+	color: var(--icon-color);
+}
+
+/* 任务列表 */
+.content li>input[type="checkbox"] {
+	display: none;
+}
+
+.content li>input[type="checkbox"]+label {
+	position: absolute;
+	top: calc(1lh / 2 - 0.5em);
+	left: 0;
+	inline-size: 1em;
+	block-size: 1em;
+	cursor: not-allowed;
+}
+
+.content ul>li>input[type="checkbox"]+label>svg {
+	inline-size: 100%;
+	block-size: 100%;
+	color: var(--icon-color);
+}
+
+.content ul>li>input[type="checkbox"]:checked+label>svg>polyline {
+	color: var(--link-color);
+}
+
+.content ul>li>input[type="checkbox"]:not(:checked)+label>svg {
+	color: var(--comment-color);
+}
+
+/* Img */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content img {
+	display: block;
+	max-block-size: 40vh;
+	max-block-size: 40dvh;
+	margin-inline: auto;
+	border-radius: var(--border-radius);
+}
+
+/* Table */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.content table {
+	table-layout: auto;
+	width: 100%;
+}
+
+.content th,
+.content td {
+	background-color: var(--block-color);
+	border-radius: var(--border-radius);
+}
+
+.content table th,
+.content table td {
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	text-align: left;
+}
+
+.content table th {
+	font-weight: 400;
+}

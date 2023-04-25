@@ -1,0 +1,61 @@
+.theme {
+	--line-thickness: 7%;
+
+	display: inline-block;
+	position: relative;
+	inline-size: 100%;
+	block-size: 100%;
+	color: inherit;
+}
+
+.theme>* {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: inherit;
+}
+
+.icon {
+	--block-size: calc(100% - var(--line-thickness) * 5.5);
+
+	overflow: hidden;
+	inline-size: 100%;
+	block-size: var(--block-size);
+}
+
+.icon>svg {
+	position: absolute;
+	inline-size: 100%;
+	block-size: calc(100% / var(--block-size));
+	transition: all cubic-bezier(0.68, -0.6, 0.32, 1.6) 500ms;
+}
+
+.icon:not(.selected)>svg {
+	visibility: hidden;
+	top: 100%;
+}
+
+.icon.selected>svg {
+	top: 0%;
+	visibility: visible;
+}
+
+.line {
+	block-size: var(--line-thickness);
+	border-radius: 9999px;
+	background-color: currentColor;
+}
+
+.line.long {
+	top: calc(100% - var(--line-thickness) * 3.3);
+	left: 50%;
+	inline-size: 90%;
+	transform: translate(-50%, -100%);
+}
+
+.line.short {
+	top: calc(100% - var(--line-thickness) * 0.5);
+	left: 50%;
+	inline-size: 50%;
+	transform: translate(-50%, -100%);
+}
