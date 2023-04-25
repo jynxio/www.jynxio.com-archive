@@ -11,6 +11,7 @@ const root = document.getElementById( "root" ) as HTMLElement;
 const code = () => (
 	<Router>
 		<Routes>
+			<Route path="/" component={ Post }/>
 			<Route path="/home" component={ Home }/>
 			<Route path="/post" component={ Post }/>
 		</Routes>

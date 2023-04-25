@@ -35,7 +35,9 @@ function getPostUrl () {
 
 	if ( ! selectedPost ) return;
 
-	return `./post/${ selectedTopic.name }/${ selectedPost.name }`;
+	const baseUrl = import.meta.env.BASE_URL;
+
+	return `${ baseUrl }post/post/${ selectedTopic.name }/${ selectedPost.name }`;
 
 }
 

@@ -47,7 +47,7 @@ class jynxPre extends HTMLElement {
 		const collapseButton = this.querySelector( "[slot='collapse-button']" ) as HTMLElement;
 
 		const maxHeight = Number.parseInt( getComputedStyle( panel! ).getPropertyValue( "max-block-size" ), 10 ); // Integer
-		const offsetHeight = panel!.offsetHeight;                                                     // Integer
+		const offsetHeight = panel!.offsetHeight;                                                                 // Integer
 
 		/* Copy button */
 		copyButton.setAttribute( "class", "idle" );   // "idle" | "pending" | "resolved" | "rejected"

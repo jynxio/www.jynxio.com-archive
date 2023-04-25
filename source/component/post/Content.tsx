@@ -10,7 +10,13 @@ import { marked } from "marked";
 type H1Node = { name: string, uuid: string };
 type CustomPreProps = { codeContent: string, collapseSvg: string, copySvg: string, codeData: string };
 
-const VALID_LANGUAGES = [ "html", "css", "javascript", "typescript", "react", "json" ];
+const VALID_LANGUAGES = [
+	[ "html", [ "html", "xml", "xhtml", "svg" ] ],
+	[ "javascript", [ "javascript", "js", "mjs", "jsx" ] ],
+	[ "typescript", [ "typescript", "ts", "mts", "tsx", "react", "solid" ] ],
+	[ "json", [ "json" ] ],
+	[ "css", [ "css" ] ],
+] as const;
 
 const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
 const COPY_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"></rect><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"></path><polyline points=\"20 6 9 17 4 12\"></polyline><line x1=\"18\" x2=\"6\" y1=\"6\" y2=\"18\"></line><line x1=\"6\" x2=\"18\" y1=\"6\" y2=\"18\"></line></svg>";
@@ -65,6 +71,7 @@ function parseMarkdown ( markdown: string ) {
 			code: parseCode,
 			link: parseLink,
 			checkbox: parseCheckbox,
+			image: parseImage,
 		},
 	} );
 
@@ -99,7 +106,7 @@ function parseMarkdown ( markdown: string ) {
 			return "";
 
 		case 2:
-			if ( text === "typora-root-url: ...." ) return "";
+			if ( text.includes( "typora-root-url:" ) ) return "";
 
 			chapterCatalogData.push( { name: text, uuid } );
 
@@ -119,25 +126,23 @@ function parseMarkdown ( markdown: string ) {
 
 	function parseCode ( code: string, language: string | undefined, escaped: boolean ) {
 
-		/* No language specified -> plain code */
-		if ( language === "" || language === void 0 ) {
+		/* Invalid language specified || No language specified */
+		let hljsLanguage: string | undefined;
 
-			const preSelf = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
-			const codeContent = extractCodeContent( preSelf );
+		outer:
+		for ( const pair of VALID_LANGUAGES ) for ( const alias of pair[ 1 ] ) {
 
-			return createCustomPre( {
-				codeContent,
-				collapseSvg: COLLAPSE_SVG,
-				copySvg: COPY_SVG,
-				codeData: code,
-			} );
+			if ( alias !== language ) continue; // Param language: "json", "", undefined, ...
+
+			hljsLanguage = pair[ 0 ];
+
+			break outer;
 
 		}
 
-		/* Invalid language specified */
-		if ( ! VALID_LANGUAGES.includes( language ) ) {
+		if ( ! hljsLanguage ) {
 
-			console.log( `%cMarkdown format: You have used a language (${ language }) that does not support highlighting, it has now been processed as plain code. The languages that support highlighting are: ${ VALID_LANGUAGES.join( ", " ) }`, "color: #c52922" );
+			console.log( `%cMarkdown format: You have not specified a language type or the language type you specified is not supported by hljs, so your code can only be rendered as plain code.\nThe language you specified is: ${ language }`, "color: #c52922" );
 
 			const preSelf = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
 			const codeContent = extractCodeContent( preSelf );
@@ -153,7 +158,7 @@ function parseMarkdown ( markdown: string ) {
 
 		/* Valid language specified */
 		return createCustomPre( {
-			codeContent: hljs.highlight( code, { language } ).value,
+			codeContent: hljs.highlight( code, { language: hljsLanguage } ).value,
 			collapseSvg: COLLAPSE_SVG,
 			copySvg: COPY_SVG,
 			codeData: code,
@@ -183,6 +188,15 @@ function parseMarkdown ( markdown: string ) {
 		const checked = isChecked ? "checked" : "";
 
 		return `<input id="${ id }" type="checkbox" ${ checked } disabled /><label for="${ id }">${ CHECKBOX_SVG }</label>`;
+
+	}
+
+	function parseImage ( href: string, title: string, text: string ) {
+
+		const baseUrl = import.meta.env.BASE_URL;
+		const url = `${ baseUrl }post/image${ href }`;
+
+		return `<img src="${ url }" alt="${ text }" />`;
 
 	}
 

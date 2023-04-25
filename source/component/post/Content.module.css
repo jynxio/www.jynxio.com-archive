@@ -76,7 +76,6 @@
 
 .content .custom-pre pre {
 	overflow: auto;
-	overscroll-behavior: none;
 }
 
 .content .custom-pre [class="collapsed"] pre {
@@ -130,7 +129,9 @@
 }
 
 .content .custom-pre [slot="copy-button"] {
-	margin-block-start: 0.5rem;
+	--offset: calc(0.5lh - var(--icon-size) / 2);
+	margin-block-start: var(--offset);
+	margin-inline-end: calc(-1 * (1rem - 0.5rem - var(--offset)));
 }
 
 .content .custom-pre [slot="copy-button"]>svg {
@@ -163,7 +164,7 @@
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content blockquote {
 	padding-inline-start: 2rem;
-	padding-block: 1rem;
+	padding-block: 0.5lh;
 	margin-block: var(--block-gap);
 	color: var(--comment-color);
 	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iN3B4IiBoZWlnaHQ9IjI2cHgiIHZpZXdCb3g9IjAgMCA3IDI2IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPHRpdGxlPuOAsDwvdGl0bGU+CiAgICA8ZyBpZD0i44CwIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8cGF0aCBkPSJNOS41LDE1LjQ5NiBDMTAuNTQsMTUuNDk2IDExLjM5OCwxNC45NzYgMTMuMTQsMTMuMjYgQzE0LjU5NiwxMS44NTYgMTUuMTY4LDExLjQ5MiAxNiwxMS40NCBMMTYsMTAuNTA0IEMxNC44MDQsMTAuNTgyIDE0LjE4LDEwLjk3MiAxMi4zMzQsMTIuNzQgQzEwLjkwNCwxNC4xMTggMTAuMjI4LDE0LjU2IDkuNSwxNC41NiBDOC43NzIsMTQuNTYgOC4wNywxNC4xMTggNi42NjYsMTIuNzQgQzQuODQ2LDEwLjk3MiA0LjA5MiwxMC41MDQgMywxMC41MDQgQzEuOTM0LDEwLjUwNCAxLjE1NCwxMC45OTggLTAuNjY2LDEyLjc0IEMtMi4wOTYsMTQuMTE4IC0yLjc3MiwxNC41NiAtMy41LDE0LjU2IEMtNC4yMjgsMTQuNTYgLTQuOTMsMTQuMTE4IC02LjM2LDEyLjc0IEMtOC4yMDYsMTAuOTQ2IC04Ljc3OCwxMC41ODIgLTEwLDEwLjUwNCBMLTEwLDExLjQ0IEMtOS4xNjgsMTEuNDkyIC04LjYyMiwxMS44MyAtNy4xNjYsMTMuMjYgQy01LjMyLDE1LjAyOCAtNC41NjYsMTUuNDk2IC0zLjUsMTUuNDk2IEMtMi40NiwxNS40OTYgLTEuNjI4LDE0Ljk3NiAwLjE0LDEzLjI4NiBDMS41NDQsMTEuODgyIDIuMjQ2LDExLjQ0IDMsMTEuNDQgQzMuNzU0LDExLjQ0IDQuNDMsMTEuODgyIDUuODYsMTMuMjg2IEM3LjY4LDE1LjAyOCA4LjQzNCwxNS40OTYgOS41LDE1LjQ5NiBaIiBmaWxsPSIjOTk5OTk5IiBmaWxsLXJ1bGU9Im5vbnplcm8iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuMDAwMDAwLCAxMy4wMDAwMDApIHJvdGF0ZSgtMjcwLjAwMDAwMCkgdHJhbnNsYXRlKC0zLjAwMDAwMCwgLTEzLjAwMDAwMCkgIj48L3BhdGg+CiAgICA8L2c+Cjwvc3ZnPg==);
@@ -276,6 +277,9 @@
 /* ------------------------------------------------------------------------------------------------------------------ */
 .content img {
 	display: block;
+	max-block-size: 40vh;
+	max-block-size: 40dvh;
+	margin-inline: auto;
 	border-radius: var(--border-radius);
 }
 

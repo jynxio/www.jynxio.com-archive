@@ -48,31 +48,31 @@ html {
 html,
 body {
 	background-color: #22262b;
-	overscroll-behavior: none;
+	overscroll-behavior: initial;
 }
 
-html {
+* {
 	scrollbar-width: thin;
 	scrollbar-color: #444 transparent;
 }
 
-html::-webkit-scrollbar {
-	inline-size: 8px;
+*::-webkit-scrollbar {
+	inline-size: 16px;
 	background-color: transparent;
 }
 
-html::-webkit-scrollbar-thumb {
-	background-color: #444;
+*::-webkit-scrollbar-thumb {
+	border-inline-end: 8px solid #444;
 }
 
-html::-webkit-scrollbar-thumb:hover {
-	background-color: #555;
+*::-webkit-scrollbar-thumb:hover {
+	border-inline-end-color: #555;
 }
 
-* {
+pre {
 	scrollbar-width: none;
 }
 
-*::-webkit-scrollbar {
+pre::-webkit-scrollbar {
 	display: none;
 }
