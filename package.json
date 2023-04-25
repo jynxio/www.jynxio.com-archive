@@ -18,6 +18,7 @@
         "eslint-plugin-import": "^2.27.5",
         "eslint-plugin-solid": "^0.12.1",
         "font-caster": "^1.0.3",
+        "fs-extra": "^11.1.1",
         "ttf2woff2": "^5.0.0",
         "typescript": "^5.0.4",
         "vite": "^4.3.1",
