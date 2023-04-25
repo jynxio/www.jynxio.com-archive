@@ -1,11 +1,9 @@
+import fs from "fs-extra";
 import path from "path";
 import solid from "vite-plugin-solid";
 import { defineConfig } from "vite";
 
 export default defineConfig( ( { command, mode } ) => {
-
-	console.log( "mode ->", mode );
-	console.log( "command ->", command );
 
 	switch ( command ) {
 
@@ -48,7 +46,10 @@ export default defineConfig( ( { command, mode } ) => {
 	function createProductionEnvironment () {
 
 		return {
-			plugins: [ solid() ],
+			plugins: [
+				solid(),
+				customCopy( path.resolve( __dirname, "./post" ), path.resolve( __dirname, "./dist/post" ) ),
+			],
 			root: "./",
 			base: "/",
 			publicDir: "public",
@@ -69,3 +70,15 @@ export default defineConfig( ( { command, mode } ) => {
 	}
 
 } );
+
+function customCopy ( inputPath, outputPath ) {
+
+	return {
+		name: "custom-copy",
+		apply: "build",
+		writeBundle () {
+			fs.copySync( inputPath, outputPath );
+		}	
+	};
+
+}
