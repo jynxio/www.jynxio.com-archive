@@ -38,6 +38,7 @@ async function main () {
 
 		const address = rootAdress + "/post/post/" + dir.name;
 
+		allString += dir.alias;
 		promises.push( fc.read( address ) );
 
 	}
