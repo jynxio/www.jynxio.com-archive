@@ -72,7 +72,7 @@ function calculateFactorial( n ) {
 
 > 真怀念啊！我记得我的第一个 DOM 程序就是一个汉诺塔动画的网页，她还很兴奋的鼓励了我呢！
 
-#### 概念
+### 概念
 
 斐波那契数列是一个特殊的数列，它的规律是：
 
@@ -81,7 +81,7 @@ function calculateFactorial( n ) {
 - `2号元素 = 1`
 - `n号元素 = n-1号元素 + n-2号元素`
 
-#### 实现
+### 实现
 
 这是第二次灵感乍现。
 
@@ -98,7 +98,7 @@ function calculateFibonacci ( n ) {
 }
 ```
 
-#### 优化
+### 优化
 
 这是 `calculateFibonacci` 函数的优化版本，你分别使用旧版与新版的 `calculateFibonacci` 函数来计算 `20` 的斐波那契数，便会发现新版本的计算速度要快的多。
 
