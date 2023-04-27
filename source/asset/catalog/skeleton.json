@@ -1,5 +1,9 @@
 [
 	{
+		"name": "introduction",
+		"alias": "介绍"
+	},
+	{
 		"name": "javascript",
 		"alias": "JavaScript"
 	},
