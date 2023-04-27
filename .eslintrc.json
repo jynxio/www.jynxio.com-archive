@@ -6,7 +6,13 @@
 		"node": true,
 		"worker": true
 	},
-	"overrides": [],
+	"overrides": [
+		{
+			"files": [
+				"*.config.js"
+			]
+		}
+	],
 	"extends": [
 		"eslint:recommended",
 		"plugin:solid/typescript"

@@ -77,8 +77,10 @@ function customCopy ( inputPath, outputPath ) {
 		name: "custom-copy",
 		apply: "build",
 		writeBundle () {
+
 			fs.copySync( inputPath, outputPath );
-		}	
+
+		},
 	};
 
 }

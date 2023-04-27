@@ -5,6 +5,7 @@
     "private": true,
     "license": "BY-NC-ND (4.0)",
     "scripts": {
+        "init": "pnpm run catalog && pnpm run subset",
         "start": "vite",
         "build": "pnpm run catalog && pnpm run subset && vite build",
         "deploy": "vercel deploy --prod dist",

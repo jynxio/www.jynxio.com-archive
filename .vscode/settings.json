@@ -19,5 +19,8 @@
     },
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
-    }
+    },
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.showTabs": true,
+    "workbench.editor.tabSizing": "shrink"
 }
