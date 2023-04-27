@@ -1,7 +1,8 @@
 import style from "./Nav.module.css";
-import * as store from "@/store/postCatalog";
 import Theme from "@/component/common/Theme";
-import { For, Show, batch, createSelector, createSignal } from "solid-js";
+import catalogData from "@/asset/catalog/data.json";
+import { useNavigate, useParams } from "@solidjs/router";
+import { For, Show, createSelector, createSignal } from "solid-js";
 
 function Nav () {
 
@@ -33,68 +34,76 @@ function Search () {
 
 function Catalog () {
 
-	const isTargetTopic = createSelector( store.getSelectedTopic );
-	const isTargetPost = createSelector( store.getSelectedPost );
+	const params = useParams();
+	const navigate = useNavigate();
+
+	const isTargetTopic = createSelector( getTopicName );
+	const isTargetPost = createSelector( getPostName );
 
 	return (
 		<section class={ style.catalog }>
-			<For each={ store.getData() }>{
-				topicNode => (
-					<>
-						<div class={ style.topic } classList={ { [ style.selected ]: isTargetTopic( topicNode.uuid ) } } onClick={ [ handleTopicClick, topicNode.uuid ] }>
-							<span class={ style.name }>{ topicNode.alias }</span>
-							<span class={ style.icon }>
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg>
-							</span>
-						</div>
-						<Show when={ isTargetTopic( topicNode.uuid ) }>
-							<For each={ topicNode.children }>{
-								postNode => (
-									<div class={ style.post } classList={ { [ style.selected ]: isTargetPost( postNode.uuid ) } } onClick={ [ handlePostClick, postNode.uuid ] }>
-										<span class={style.name}>{ postNode.alias }</span>
-										<data class={ style.data }>{ "2023/03/30 20:54" }</data>
-									</div>
-								)
-							}</For>
-						</Show>
-					</>
-				)
-			}</For>
+			<For each={ catalogData }>
+				{
+					topic => (
+						<>
+							<div
+								class={ style.topic }
+								classList={ { [ style.selected ]: isTargetTopic( topic.name ) } }
+								onClick={ [ handleTopicClick, topic.name ] }
+							>
+								<span class={ style.name }>{ topic.alias }</span>
+								<span class={ style.icon }><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg></span>
+							</div>
+							<Show when={ isTargetTopic( topic.name ) }>
+								<For each={ topic.children }>
+									{
+										post => (
+											<div
+												class={ style.post }
+												classList={ { [ style.selected ]: isTargetPost( post.name ) } }
+												onClick={ [ handlePostClick, post.name ] }
+											>
+												<span class={style.name}>{ post.alias }</span>
+												<data class={ style.data }>{ "2023/03/30 20:54" }</data>
+											</div>
+										)
+									}
+								</For>
+							</Show>
+						</>
+					)
+				}
+			</For>
 		</section>
 	);
 
-	function handleTopicClick ( topicUuid: string ) {
+	function getTopicName () {
 
-		/* If open a new topic */
-		if ( store.getSelectedTopic() !== topicUuid ) {
+		if ( ! params.id.startsWith( "post/" ) ) return "";
 
-			const topicData = store.getData().find( topicNode => topicNode.uuid === topicUuid );
-			const postData = topicData!.children[ 0 ];
-
-			batch( () => {
-
-				store.setSelectedTopic( topicUuid );
-				store.setSelectedPost( postData.uuid );
-
-			} );
-
-			return;
-
-		}
-
-		/* If close the topic */
-		batch( () => {
-
-			store.setSelectedTopic( void 0 );
-			store.setSelectedPost( void 0 );
-
-		} );
+		return params.id.slice( 5, params.id.indexOf( "/", 5 ) );
 
 	}
 
-	function handlePostClick ( postUuid: string ) {
+	function getPostName () {
 
-		store.setSelectedPost( postUuid );
+		if ( ! params.id.startsWith( "post/" ) ) return "";
+
+		return params.id.slice( params.id.indexOf( "/", 5 ) + 1 );
+
+	}
+
+	function handleTopicClick ( name: string ) {
+
+		getTopicName() === name
+			? navigate( "/" )
+			: navigate( `/post/${ name }/${ catalogData.find( topic => topic.name === name )!.children[ 0 ].name }` );
+
+	}
+
+	function handlePostClick ( name: string ) {
+
+		navigate( `/post/${ getTopicName() }/${ name }` );
 
 	}
 

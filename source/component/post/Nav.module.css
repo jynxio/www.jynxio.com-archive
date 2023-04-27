@@ -88,12 +88,13 @@
 	margin-block-start: 0
 }
 
-.catalog .topic.selected>.icon {
-	transform: rotate(90deg);
-}
-
 .catalog .topic>.icon {
 	margin-left: auto;
+	transition: transform var(--transition-easeOutBack) var(--transition-time);
+}
+
+.catalog .topic.selected>.icon {
+	transform: rotate(90deg);
 }
 
 .catalog .post {

@@ -23,7 +23,7 @@ async function main () {
 			const fileAddress = dirAddress + "/" + dirent.name;
 
 			aliasPromises.push( extractHeading( fileAddress ) );
-			dir.children.push( { name: dirent.name } );
+			dir.children.push( { name: dirent.name.trim().slice( 0, - 3 ) } );
 
 		}
 

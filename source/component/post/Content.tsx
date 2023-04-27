@@ -1,15 +1,18 @@
 import "highlight.js/styles/github-dark.css";
-import "@/component/primitive/jynxPre";
 import style from "./Content.module.css";
 import hljs from "highlight.js";
-import * as postCatalogStore from "@/store/postCatalog";
-import * as chapterCatalogStore from "@/store/chapterCatalog";
-import { createEffect, createSignal, createUniqueId } from "solid-js";
+import * as store from "@/store/chapter";
+import { useParams } from "@solidjs/router";
+import { createEffect, createResource, createUniqueId } from "solid-js";
 import { marked } from "marked";
 
 type H1Node = { name: string, uuid: string };
 type CustomPreProps = { codeContent: string, collapseSvg: string, copySvg: string, codeData: string };
 
+const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
+const COPY_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"></rect><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"></path><polyline points=\"20 6 9 17 4 12\"></polyline><line x1=\"18\" x2=\"6\" y1=\"6\" y2=\"18\"></line><line x1=\"6\" x2=\"18\" y1=\"6\" y2=\"18\"></line></svg>";
+const CHECKBOX_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-square\"><polyline points=\"9 11 12 14 22 4\"></polyline><path d=\"M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11\"></path></svg>";
+const COLLAPSE_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-down\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg>";
 const VALID_LANGUAGES = [
 	[ "html", [ "html", "xml", "xhtml", "svg" ] ],
 	[ "javascript", [ "javascript", "js", "mjs", "jsx" ] ],
@@ -18,52 +21,53 @@ const VALID_LANGUAGES = [
 	[ "css", [ "css" ] ],
 ] as const;
 
-const LINK_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
-const COPY_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"></rect><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"></path><polyline points=\"20 6 9 17 4 12\"></polyline><line x1=\"18\" x2=\"6\" y1=\"6\" y2=\"18\"></line><line x1=\"6\" x2=\"18\" y1=\"6\" y2=\"18\"></line></svg>";
-const CHECKBOX_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-square\"><polyline points=\"9 11 12 14 22 4\"></polyline><path d=\"M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11\"></path></svg>";
-const COLLAPSE_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-down\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg>";
-
 hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
 } );
 
 function Content () {
 
-	const [ getHtml, setHtml ] = createSignal( "" );
+	const params = useParams();
+	const [ getHtml ] = createResource( getUrl, getData, { initialValue: { html: "", chapters: [] } } );
 
-	createEffect( () => {
+	createEffect( () => store.set( getHtml()?.chapters || [] ) );
 
-		const url = postCatalogStore.getPostUrl();
+	return <article class={ style.content } innerHTML={ getHtml()?.html || "" } />;
 
-		setHtml( "" );
-		chapterCatalogStore.setData( void 0 );
-		document.documentElement.scrollTo( 0, 0 );
+	function getUrl () {
 
-		if ( url === void 0 ) return;
+		if ( ! params.id.startsWith( "post/" ) ) return "";
 
-		fetch( url )
-			.then( res => res.text() )
-			.then( txt => {
+		const firstSlashIndex = 4;
+		const secondSlashIndex = params.id.indexOf( "/", firstSlashIndex + 1 );
+		const topicName = params.id.slice( firstSlashIndex + 1, secondSlashIndex );
+		const postName = params.id.slice( secondSlashIndex + 1 );
 
-				const { html, chapterCatalogData } = parseMarkdown( txt );
+		return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
 
-				setHtml( html );
-				chapterCatalogStore.setData( chapterCatalogData );
+	}
 
-			} );
+	async function getData ( url: string ) {
 
-	} );
+		if ( url === "" ) return { html: "", chapters: [] };
 
-	return <article class={ style.content } innerHTML={ getHtml() } />;
+		const res = await fetch( url );
+		const txt = await res.text();
+		const { html, chapters } = await parseMarkdown( txt );
+
+		return { html, chapters };
+
+	}
 
 }
 
-function parseMarkdown ( markdown: string ) {
+async function parseMarkdown ( markdown: string ) {
 
+	/* Configuration */
 	marked.use( {
 		gfm: true,
 		xhtml: true,
-		async: false,
+		async: true,
 		renderer: {
 			hr: parseHr,
 			heading: parseHeading,
@@ -75,16 +79,15 @@ function parseMarkdown ( markdown: string ) {
 		},
 	} );
 
-	const chapterCatalogData = [] as H1Node[];
+	/* Parse */
+	const chapters = [] as H1Node[];
 
 	let title: string | undefined;
-	let html = marked.parse( markdown );
+	let html = await marked.parse( markdown );
 
 	if ( title === void 0 ) throw new Error( "Markdown format: every markdown document must have an h1 tag" );
 
-	html = title + html;
-
-	return ( { html, chapterCatalogData } );
+	return ( { html, chapters } );
 
 	function parseHr () {
 
@@ -103,12 +106,12 @@ function parseMarkdown ( markdown: string ) {
 
 			title = `<h1>${ text }</h1>`;
 
-			return "";
+			return title;
 
 		case 2:
 			if ( text.includes( "typora-root-url:" ) ) return "";
 
-			chapterCatalogData.push( { name: text, uuid } );
+			chapters.push( { name: text, uuid } );
 
 			break;
 
