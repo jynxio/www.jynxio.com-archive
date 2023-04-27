@@ -41,6 +41,14 @@
 	font-weight: 400;
 }
 
+* {
+	scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}
+
 html {
 	block-size: 100%;
 }
@@ -51,28 +59,20 @@ body {
 	overscroll-behavior: initial;
 }
 
-* {
+html {
 	scrollbar-width: thin;
 	scrollbar-color: #444 transparent;
 }
 
-*::-webkit-scrollbar {
-	inline-size: 16px;
+html::-webkit-scrollbar {
+	inline-size: 8px;
 	background-color: transparent;
 }
 
-*::-webkit-scrollbar-thumb {
-	border-inline-end: 8px solid #444;
+html::-webkit-scrollbar-thumb {
+	background-color: #444;
 }
 
-*::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
 	border-inline-end-color: #555;
-}
-
-pre {
-	scrollbar-width: none;
-}
-
-pre::-webkit-scrollbar {
-	display: none;
 }
