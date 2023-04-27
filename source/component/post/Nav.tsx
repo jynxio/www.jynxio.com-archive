@@ -64,7 +64,7 @@ function Catalog () {
 												onClick={ [ handlePostClick, post.name ] }
 											>
 												<span class={style.name}>{ post.alias }</span>
-												<data class={ style.data }>{ "2023/03/30 20:54" }</data>
+												<data class={ style.data }>{ post.time }</data>
 											</div>
 										)
 									}

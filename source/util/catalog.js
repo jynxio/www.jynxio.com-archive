@@ -21,9 +21,11 @@ async function main () {
 		for ( const dirent of dirents ) {
 
 			const fileAddress = dirAddress + "/" + dirent.name;
+			const name = dirent.name.trim().slice( 0, - 3 );
+			const time = createTime( fileAddress );
 
-			aliasPromises.push( extractHeading( fileAddress ) );
-			dir.children.push( { name: dirent.name.trim().slice( 0, - 3 ) } );
+			dir.children.push( { name, time } );
+			aliasPromises.push( createHeading( fileAddress ) );
 
 		}
 
@@ -51,11 +53,11 @@ async function main () {
 }
 
 /**
- * （异步）提取markdown文件的标题
+ * （异步）获取markdown文件的标题
  * @param { string } filePath markdown文件的路径
  * @returns { Promise } 敲定值是标题字符串，拒绝值是Error实例。
  */
-function extractHeading ( filePath ) {
+function createHeading ( filePath ) {
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -81,5 +83,24 @@ function extractHeading ( filePath ) {
 		} );
 
 	} );
+
+}
+
+/**
+ * 获取文件的最后修改时间
+ * @param { string } path 文件的绝对路径
+ * @returns { string } 最后修改时间的日期字符串
+ */
+function createTime ( path ) {
+
+	const iso = fs.statSync( path ).mtime;
+	const date = new Date( iso );
+	const year = date.getFullYear();
+	const month = ( "0" + ( date.getMonth() + 1 ) ).slice( - 2 );
+	const day = ( "0" + date.getDate() ).slice( - 2 );
+	const hour = ( "0" + date.getHours() ).slice( - 2 );
+	const minute = ( "0" + date.getMinutes() ).slice( - 2 );
+
+	return `${ year }/${ month }/${ day } ${ hour }:${ minute }`;
 
 }
