@@ -1,9 +1,8 @@
 import "highlight.js/styles/github-dark.css";
 import style from "./Content.module.css";
+import "@/component/primitive/jynxPre";
 import hljs from "highlight.js";
-import * as store from "@/store/chapter";
-import { useParams } from "@solidjs/router";
-import { createEffect, createResource, createUniqueId } from "solid-js";
+import { For, createResource, createUniqueId } from "solid-js";
 import { marked } from "marked";
 
 type H1Node = { name: string, uuid: string };
@@ -25,39 +24,52 @@ hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
 } );
 
-function Content () {
+function Content ( props: { path: string } ) {
 
-	const params = useParams();
-	const [ getHtml ] = createResource( getUrl, getData, { initialValue: { html: "", chapters: [] } } );
+	const [ getData ] = createResource( () => parseUrl( props.path ), fetchData, { initialValue: { html: "", chapters: [] } } );
 
-	createEffect( () => store.set( getHtml()?.chapters || [] ) );
+	return (
+		<section class={ style.content }>
+			<article class={ style.article } innerHTML={ getData().html } />
+			<aside class={ style.catalog }>
+				<For each={ getData().chapters }>
+					{
+						h1Node => <p class={ style.heading } onClick={ [ handleClick, h1Node.uuid ] }><span>{ h1Node.name }</span></p>
+					}
+				</For>
+			</aside>
+		</section>
+	);
 
-	return <article class={ style.content } innerHTML={ getHtml()?.html || "" } />;
+	function handleClick ( uuid: string ) {
 
-	function getUrl () {
-
-		if ( ! params.id.startsWith( "post/" ) ) return "";
-
-		const firstSlashIndex = 4;
-		const secondSlashIndex = params.id.indexOf( "/", firstSlashIndex + 1 );
-		const topicName = params.id.slice( firstSlashIndex + 1, secondSlashIndex );
-		const postName = params.id.slice( secondSlashIndex + 1 );
-
-		return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
-
-	}
-
-	async function getData ( url: string ) {
-
-		if ( url === "" ) return { html: "", chapters: [] };
-
-		const res = await fetch( url );
-		const txt = await res.text();
-		const { html, chapters } = await parseMarkdown( txt );
-
-		return { html, chapters };
+		document.documentElement.scrollTo( { top: document.getElementById( uuid )!.offsetTop - 16, left: 0, behavior: "smooth" } );
 
 	}
+
+}
+
+function parseUrl ( path: string ) {
+
+	const firstSlashIndex = path.indexOf( "/" );
+	const secondSlashIndex = path.lastIndexOf( "/" );
+
+	const topicName = path.slice( firstSlashIndex + 1, secondSlashIndex );
+	const postName = path.slice( secondSlashIndex + 1 );
+
+	return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
+
+}
+
+async function fetchData ( url: string ) {
+
+	if ( url === "" ) return { html: "", chapters: [] };
+
+	const res = await fetch( url );
+	const txt = await res.text();
+	const { html, chapters } = await parseMarkdown( txt );
+
+	return { html, chapters };
 
 }
 
