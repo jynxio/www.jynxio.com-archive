@@ -55,7 +55,7 @@ html {
 
 html,
 body {
-	background-color: #22262b;
+	background-color: var(--ground-color);
 	overscroll-behavior: initial;
 }
 

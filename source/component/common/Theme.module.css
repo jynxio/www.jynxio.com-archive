@@ -1,6 +1,5 @@
 .theme {
 	--line-thickness: 7%;
-
 	display: inline-block;
 	position: relative;
 	inline-size: 100%;
@@ -17,7 +16,6 @@
 
 .icon {
 	--block-size: calc(100% - var(--line-thickness) * 5.5);
-
 	overflow: hidden;
 	inline-size: 100%;
 	block-size: var(--block-size);
@@ -27,12 +25,14 @@
 	position: absolute;
 	inline-size: 100%;
 	block-size: calc(100% / var(--block-size));
-	transition: all cubic-bezier(0.68, -0.6, 0.32, 1.6) 500ms;
+	transition:
+		all cubic-bezier(0.68, -0.6, 0.32, 1.6) 500ms,
+		color cubic-bezier(0.68, -0.6, 0.32, 1.6) 0ms;
 }
 
 .icon:not(.selected)>svg {
-	visibility: hidden;
 	top: 100%;
+	visibility: hidden;
 }
 
 .icon.selected>svg {

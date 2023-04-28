@@ -1,8 +1,18 @@
-#root {
+:root {
 	/* Size */
 	--icon-size: 18px;
 
-	/* Color */
+	/* Animation */
+	--transition-easeInOutBack: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+	--transition-easeOutBack: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--transition-time: 500ms;
+
+	/* Other */
+	--border-radius: 4px;
+
+}
+
+:root.dark {
 	--line-color: #121212;
 	--block-color: #2e3136;
 	--ground-color: #22262b;
@@ -13,14 +23,17 @@
 	--heading-color: #ffffff;
 	--paragraph-color: #e7e7e7;
 	--comment-color: #999999;
-
-	/* Animation */
-	--transition-easeInOutBack: cubic-bezier(0.68, -0.6, 0.32, 1.6);
-	--transition-easeOutBack: cubic-bezier(0.34, 1.56, 0.64, 1);
-	--transition-time: 500ms;
-
 }
 
-#root {
-	--border-radius: 4px;
+:root.light {
+	--line-color: #e6e6e6;
+	--block-color: #dcdcdc;
+	--ground-color: #fff;
+
+	--icon-color: #000;
+	--link-color: #c52922;
+
+	--heading-color: #000;
+	--paragraph-color: #303030;
+	--comment-color: #999999;
 }

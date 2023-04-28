@@ -111,7 +111,14 @@ function Catalog () {
 
 function Control () {
 
-	const [ getTheme, setTheme ] = createSignal( "dark" as "light" | "dark" );
+	const themeKey = "www.jynxio.com-theme";
+
+	localStorage.getItem( themeKey ) || localStorage.setItem( themeKey, "dark" );
+
+	const theme = localStorage.getItem( themeKey ) as "dark" | "light";
+	const [ getTheme, setTheme ] = createSignal( theme );
+
+	document.documentElement.setAttribute( "class", theme );
 
 	return (
 		<section class={ style.control }>
@@ -130,11 +137,22 @@ function Control () {
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
 				</a>
 			</span>
-			<span class={ style.icon } onClick={ () => setTheme( prev => prev === "dark" ? "light" : "dark" ) }>
+			<span class={ style.icon } onClick={ handleClick }>
 				<Theme mode={ getTheme() } />
 			</span>
 		</section>
 	);
+
+	function handleClick () {
+
+		const nextTheme = getTheme() === "dark" ? "light" : "dark";
+
+		setTheme( nextTheme );
+
+		document.documentElement.setAttribute( "class", nextTheme );
+		localStorage.setItem( themeKey, nextTheme );
+
+	}
 
 }
 
