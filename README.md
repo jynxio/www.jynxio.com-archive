@@ -17,9 +17,9 @@
 
 It’s going to be even better!
 
-- [ ] Dynamic routing
-- [ ] Interactive animations
-- [ ] Light mode
+- [x] Dynamic routing
+- [x] Interactive animations
+- [x] Light mode
 - [ ] Fuzzy search
 - [ ] Cover page and creative page
 - [ ] Upgrade to [Astro](https://github.com/withastro/astro)
