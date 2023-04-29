@@ -1,5 +1,6 @@
 import style from "./Post.module.css";
 import Nav from "@/component/post/Nav";
+import Search from "@/component/post/Search";
 import { Show, lazy } from "solid-js";
 import { useParams } from "@solidjs/router";
 
@@ -14,11 +15,10 @@ function Post () {
 			<section class={ style.nav }>
 				<Nav />
 			</section>
-			<Show when={ params.id.startsWith( "post" ) }>
-				<section class={ style.content }>
-					<LazyContent path={ params.id } />
-				</section>
-			</Show>
+			<section class={ style.content }>
+				<Show when={ params.id.startsWith( "post" ) }><LazyContent path={ params.id } /></Show>
+			</section>
+			<Search/>
 		</div>
 	);
 

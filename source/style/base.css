@@ -35,6 +35,17 @@
 }
 
 /* ------------------------------------------------------------------------------------------------------------------ */
+/* Base */
+html {
+	block-size: 100%;
+}
+
+html,
+body {
+	background-color: var(--ground-color);
+}
+
+/* Font */
 * {
 	font-family: "霞鹜文楷";
 	font-style: normal;
@@ -49,16 +60,7 @@
 	display: none;
 }
 
-html {
-	block-size: 100%;
-}
-
-html,
-body {
-	background-color: var(--ground-color);
-	overscroll-behavior: initial;
-}
-
+/* Scrollbar */
 html,
 body {
 	scrollbar-width: thin;

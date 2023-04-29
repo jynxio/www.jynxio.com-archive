@@ -1,0 +1,90 @@
+.search {
+	position: fixed;
+	top: 0;
+	left: 0;
+	inline-size: 100vw;
+	block-size: 100vh;
+	background-color: #fff3;
+}
+
+.panel {
+	overflow: hidden;
+	position: absolute;
+	top: 20%;
+	left: 50%;
+	inline-size: 40vw;
+	inline-size: 40dvw;
+	max-block-size: 60vh;
+	max-block-size: 60dvh;
+	padding-inline: 1rem;
+	padding-block: 0.75rem;
+	border-radius: var(--border-radius);
+	background-color: var(--ground-color);
+	transform: translateX(-50%);
+}
+
+.panel>hr {
+	margin-block: 0.75rem;
+	border: none;
+	border-block-start: 1px solid var(--line-color);
+}
+
+/* Input panel */
+.input {
+	display: flex;
+	align-items: center;
+}
+
+.input>span:first-child {
+	flex-shrink: 0;
+	inline-size: var(--icon-size);
+	block-size: var(--icon-size);
+	color: var(--icon-color);
+}
+
+.input>span:first-child>svg {
+	inline-size: 100%;
+	block-size: 100%;
+}
+
+.input>span:last-child {
+	flex-grow: 1;
+}
+
+.input>span:last-child>input {
+	display: block;
+	inline-size: 100%;
+	block-size: 100%;
+	padding-inline-start: 1rem;
+	border: none;
+	outline: none;
+	color: var(--paragraph-color);
+	background-color: transparent;
+}
+
+.input>span:last-child>input::placeholder {
+	color: var(--comment-color);
+}
+
+/* Output panel */
+.output {
+	max-block-size: 20lh;
+	color: var(--paragraph-color);
+	user-select: none;
+}
+
+.output>p {
+	padding-inline: 1rem;
+	border-radius: var(--border-radius);
+	line-height: 2.5;
+	cursor: pointer;
+}
+
+.output>p:hover {
+	background-color: var(--block-color);
+}
+
+.output mark {
+	color: var(--link-color);
+	background-color: transparent;
+}
