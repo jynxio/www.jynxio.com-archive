@@ -1,13 +1,4 @@
 .search {
-	position: fixed;
-	top: 0;
-	left: 0;
-	inline-size: 100vw;
-	block-size: 100vh;
-	background-color: #fff3;
-}
-
-.panel {
 	overflow: hidden;
 	position: absolute;
 	top: 20%;
@@ -19,14 +10,21 @@
 	padding-inline: 1rem;
 	padding-block: 0.75rem;
 	border-radius: var(--border-radius);
-	background-color: var(--ground-color);
+	background-color: var(--line-color);
 	transform: translateX(-50%);
+	box-shadow:
+		2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
+		6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
+		12.5px 12.5px 10px rgba(0, 0, 0, 0.035),
+		22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),
+		41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
+		100px 100px 80px rgba(0, 0, 0, 0.07);
 }
 
-.panel>hr {
+.search>hr {
 	margin-block: 0.75rem;
 	border: none;
-	border-block-start: 1px solid var(--line-color);
+	border-block-start: 1px solid var(--block-color);
 }
 
 /* Input panel */
