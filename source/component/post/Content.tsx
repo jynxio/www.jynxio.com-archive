@@ -2,7 +2,9 @@ import "highlight.js/styles/github-dark.css";
 import style from "./Content.module.css";
 import "@/component/primitive/jynxPre";
 import hljs from "highlight.js";
+import routerHelper from "@/helper/routerHelper";
 import { For, createResource, createUniqueId } from "solid-js";
+import { useParams } from "@solidjs/router";
 import { marked } from "marked";
 
 type H1Node = { name: string, uuid: string };
@@ -24,9 +26,10 @@ hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
 } );
 
-function Content ( props: { path: string } ) {
+function Content () {
 
-	const [ getData ] = createResource( () => parseUrl( props.path ), fetchData, { initialValue: { html: "", chapters: [] } } );
+	const params = useParams();
+	const [ getData ] = createResource( () => parseUrl( params.path ), fetchData, { initialValue: { html: "", chapters: [] } } );
 
 	return (
 		<section class={ style.content }>
@@ -51,11 +54,8 @@ function Content ( props: { path: string } ) {
 
 function parseUrl ( path: string ) {
 
-	const firstSlashIndex = path.indexOf( "/" );
-	const secondSlashIndex = path.lastIndexOf( "/" );
-
-	const topicName = path.slice( firstSlashIndex + 1, secondSlashIndex );
-	const postName = path.slice( secondSlashIndex + 1 );
+	const topicName = routerHelper.post.parsePath( path ).topicName;
+	const postName = routerHelper.post.parsePath( path ).postName;
 
 	return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
 

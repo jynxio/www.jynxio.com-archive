@@ -1,8 +1,10 @@
 import style from "./Post.module.css";
 import Nav from "@/component/post/Nav";
+import checkOs from "@/helper/checkOs";
 import * as searchStore from "@/store/search";
 import { Show, lazy, onCleanup, onMount } from "solid-js";
 import { useParams } from "@solidjs/router";
+import routerHelper from "@/helper/routerHelper";
 
 const LazyContent = lazy( () => import( "@/component/post/Content" ) );
 const LazySearch = lazy( () => import( "@/component/post/Search" ) );
@@ -11,38 +13,41 @@ function Post () {
 
 	const params = useParams();
 
-	onMount( () => document.addEventListener( "keydown", handleKeyboard ) );
-	onCleanup( () => document.removeEventListener( "keydown", handleKeyboard ) );
+	onMount( () => document.addEventListener( "keydown", handleKeydown ) );
+	onCleanup( () => document.removeEventListener( "keydown", handleKeydown ) );
 
 	return (
 		<div class={ style.post }>
 			<section class={ style.nav }>
 				<Nav />
 			</section>
-			<section class={ style.content }>
-				<Show when={ params.id.startsWith( "post" ) }><LazyContent path={ params.id } /></Show>
-			</section>
-			<Show when={ searchStore.getEnabled() }><LazySearch/></Show>
+			<Show when={ routerHelper.post.checkPath( params.path ) }>
+				<section class={ style.content }>
+					<LazyContent />
+				</section>
+			</Show>
+			<Show when={ searchStore.getEnabled() }><LazySearch /></Show>
 		</div>
 	);
 
-	function handleKeyboard ( event: KeyboardEvent ) {
+	function handleKeydown ( event: KeyboardEvent ) {
 
-		/* 当Search bar处于开启状态 */
-		if ( searchStore.getEnabled() ) {
+		const key = event.key.toLowerCase();
 
-			if ( event.key.toLowerCase() !== "escape" ) return;
+		if ( key !== "escape" && key !== "k" && key !== "control" && key !== "meta" ) return;
 
-			return void searchStore.setEnabled( false );
+		/* Opening && esc key => close */
+		if ( searchStore.getEnabled() && key === "escape" ) return void searchStore.setEnabled( false );
 
-		}
+		/* Combination keys => switch */
+		const isPreKeyDown = checkOs() === "macOS" ? event.metaKey : event.ctrlKey;
 
-		/* 当Search bar处于关闭状态 */
-		if ( ! event.metaKey ) return;
+		if ( ! isPreKeyDown ) return;
 
 		if ( event.key.toLowerCase() !== "k" ) return;
 
-		searchStore.setEnabled( true );
+		event.preventDefault();
+		searchStore.setEnabled( prev => ! prev );
 
 	}
 

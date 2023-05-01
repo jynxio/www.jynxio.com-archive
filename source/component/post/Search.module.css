@@ -78,7 +78,7 @@
 	cursor: pointer;
 }
 
-.output>p:hover {
+.output>p.selected {
 	background-color: var(--block-color);
 }
 

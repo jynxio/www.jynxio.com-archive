@@ -3,6 +3,7 @@ import Theme from "@/component/common/Theme";
 import catalogData from "@/asset/catalog/data.json";
 import checkOs from "@/helper/checkOs";
 import * as searchStore from "@/store/search";
+import routerHelper from "@/helper/routerHelper";
 import { useNavigate, useParams } from "@solidjs/router";
 import { For, Show, createSelector, createSignal } from "solid-js";
 
@@ -47,8 +48,8 @@ function Catalog () {
 	const params = useParams();
 	const navigate = useNavigate();
 
-	const isTargetTopic = createSelector( getTopicName );
-	const isTargetPost = createSelector( getPostName );
+	const isTargetTopic = createSelector( () => routerHelper.post.parsePath( params.path ).topicName );
+	const isTargetPost = createSelector( () => routerHelper.post.parsePath( params.path ).postName );
 
 	return (
 		<section class={ style.catalog }>
@@ -87,33 +88,17 @@ function Catalog () {
 		</section>
 	);
 
-	function getTopicName () {
-
-		if ( ! params.id.startsWith( "post/" ) ) return "";
-
-		return params.id.slice( 5, params.id.indexOf( "/", 5 ) );
-
-	}
-
-	function getPostName () {
-
-		if ( ! params.id.startsWith( "post/" ) ) return "";
-
-		return params.id.slice( params.id.indexOf( "/", 5 ) + 1 );
-
-	}
-
 	function handleTopicClick ( name: string ) {
 
-		getTopicName() === name
+		routerHelper.post.parsePath( params.path ).topicName === name
 			? navigate( "/" )
-			: navigate( `/post/${ name }/${ catalogData.find( topic => topic.name === name )!.children[ 0 ].name }` );
+			: navigate( routerHelper.post.createPath( name, catalogData.find( topic => topic.name === name )!.children[ 0 ].name ) );
 
 	}
 
 	function handlePostClick ( name: string ) {
 
-		navigate( `/post/${ getTopicName() }/${ name }` );
+		navigate( routerHelper.post.createPath( routerHelper.post.parsePath( params.path ).topicName, name ) );
 
 	}
 

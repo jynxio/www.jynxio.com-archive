@@ -12,7 +12,7 @@ const root = document.getElementById( "root" ) as HTMLElement;
 const code = () => (
 	<Router>
 		<Routes>
-			<Route path="/*id" component={ Post }/>
+			<Route path="/*path" component={ Post }/>
 		</Routes>
 	</Router>
 );
