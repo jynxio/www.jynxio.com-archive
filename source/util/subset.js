@@ -24,6 +24,11 @@ const PROCESS_WOFF2_LXGW_REGULAR_PATH = ROOT_PATH + "/source/asset/font/process/
 const PROCESS_WOFF2_FIRACODR_REGULAR_PATH = ROOT_PATH + "/source/asset/font/process/FiraCode-Regular.woff2";
 const PROCESS_WOFF2_LXGWMONO_REGULAR_PATH = ROOT_PATH + "/source/asset/font/process/LXGWWenKaiMono-Regular.woff2";
 
+const ADDITIONAL_CHARACTERS_LXFW_BOLD = "";
+const ADDITIONAL_CHARACTERS_LXFW_REGULAR = "";
+const ADDITIONAL_CHARACTERS_FIRACODE_REGULAR = "CtrlK⌘";
+const ADDITIONAL_CHARACTERS_LXGWMONO_REGULAR = "";
+
 async function main () {
 
 	let allString = "";
@@ -49,13 +54,17 @@ async function main () {
 
 		if ( file.name === ".DS_Store" ) continue;
 
-		const { all, code, heading } = parseMarkdown( file.content ); // Bug: marked会把codespan中的某些符号翻译成转译字符，比如它会把>翻译成&gt;
+		const { all, code, heading } = parseMarkdown( file.content ); // BUG: marked会把codespan中的某些符号翻译成转译字符，比如它会把>翻译成&gt;
 
 		allString += all;
 		codeString += code;
 		headingString += heading;
 
 	}
+
+	allString += ADDITIONAL_CHARACTERS_LXFW_BOLD + ADDITIONAL_CHARACTERS_LXFW_REGULAR + ADDITIONAL_CHARACTERS_FIRACODE_REGULAR + ADDITIONAL_CHARACTERS_LXGWMONO_REGULAR;
+	codeString += ADDITIONAL_CHARACTERS_FIRACODE_REGULAR + ADDITIONAL_CHARACTERS_LXGWMONO_REGULAR;
+	headingString += ADDITIONAL_CHARACTERS_LXFW_BOLD;
 
 	allString = fc.deduplication( allString );
 	codeString = fc.deduplication( codeString );
