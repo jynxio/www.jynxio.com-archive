@@ -1,12 +1,9 @@
 .search {
-	overflow: hidden;
-	position: absolute;
+	position: fixed;
 	top: 20%;
 	left: 50%;
 	inline-size: 40vw;
 	inline-size: 40dvw;
-	max-block-size: 60vh;
-	max-block-size: 60dvh;
 	padding-inline: 1rem;
 	padding-block: 0.75rem;
 	border-radius: var(--border-radius);
@@ -66,15 +63,19 @@
 
 /* Output panel */
 .output {
-	max-block-size: 20lh;
+	--line-height: 2.5;
+	overflow: auto;
+	max-block-size: 10lh;
+	max-block-size: 10lh;
 	color: var(--paragraph-color);
 	user-select: none;
+	line-height: var(--line-height);
 }
 
 .output>p {
 	padding-inline: 1rem;
 	border-radius: var(--border-radius);
-	line-height: 2.5;
+	line-height: var(--line-height);
 	cursor: pointer;
 }
 
