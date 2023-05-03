@@ -2,8 +2,10 @@
 	position: fixed;
 	top: 20%;
 	left: 50%;
-	inline-size: 40vw;
-	inline-size: 40dvw;
+	inline-size: 42rem;
+	inline-size: 42rem;
+	max-inline-size: 80vw;
+	max-inline-size: 80dvw;
 	padding-inline: 1rem;
 	padding-block: 0.75rem;
 	border-radius: var(--border-radius);
@@ -73,9 +75,12 @@
 }
 
 .output>p {
+	overflow: hidden;
 	padding-inline: 1rem;
 	border-radius: var(--border-radius);
 	line-height: var(--line-height);
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	cursor: pointer;
 }
 
