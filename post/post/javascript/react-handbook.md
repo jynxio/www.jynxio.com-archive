@@ -4,13 +4,23 @@ typora-root-url: ./..\..\image
 
 # React 手册
 
-## 概述
+## Not indent-meaning
 
-此文用于记录 React API，并遵循下列准则：
+在 JSX 中，行与行之间的空白符和换行符会被忽略，行内的空白符和换行符才会被保留，这叫做「not indent-meaning」。比如对于下述 JSX 而言，在由其生成的 HTML 中，a 与 b 之间没有空格或换行，c 和 d 之间则有一个空格。
 
-- 直白易懂
-- 总是最新
-- 专属于我
+```jsx
+<section>
+	<span>a</span>
+    <span>b</span>
+</section>
+<section>
+	<span>c</span> <span>d</span>
+</section>
+```
+
+之所以会产生这种现象，是因为 JSX 根本就不是 HTML，而是一种用于快速创建 HTML 元素的语法糖，它们会被转译成 JavaScript 代码来运行，因此行首与行末的空白符、换行符都会被忽略（就像对待 JavaScript 代码一样），不过行内的空白符或换行符则会被转译成文本节点。
+
+> 另外，文本节点的样式会受到 `white-space` 属性的影响，对于默认值（`normal`）而言，连续的空白符会被合并，换行符则会被当作空白符来处理。
 
 ## UI 树与状态
 
@@ -118,7 +128,7 @@ setState( function createNextState ( previous_state ) { return next_state } );
 
 ![计算状态值](/javascript/react-handbook/setstate-queue-calculate.png)
 
-虽然我们多次调用了 `setState` 函数，但是 React 只更新了一次组件，React 官方把这种批处理 `setState` 函数的特性称为 batching。
+虽然我们多次调用了 `setState` 函数，但是 React 只更新了一次组件，React 官方把这种批处理 `setState` 函数的特性称为「batching」。
 
 ### 无效更新
 
@@ -285,15 +295,16 @@ useEffect(
 
 其中，React 使用 `Object.js` 来比较新旧 `state` 是否发生了变化。
 
-另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
+> 另外，因为 `useReducer` 所返回的 `dispatch` 是 [稳定的、不会改变的](https://zh-hans.reactjs.org/docs/hooks-reference.html#usereducer)，所以哪怕我们在 `effect` 函数中使用了 `dispatch` 函数，我们也不需要将其添加进 `dependency_array`。
+>
 
 ### React18 的糟糕更新
 
-> 这真是一个十分糟糕的更新，因为这个改动不仅没什么用，还给开发者带来了心智负担，你能想到或理解 `useEffect` 会有如此出人意料的行为吗？
+> 这真是一个十分糟糕的更新，因为这个改动不仅没什么用，还给开发者带来了额外的心智负担，你能想到或理解 `useEffect` 会有如此出人意料的行为吗？
 
 在 React 17 及之前的版本，`effect` 和 `clean` 总是在页面更新之后执行。但是从 React 18 开始，如果 `useEffect` 是由离散的输入事件所触发的（比如点击事件），那么 `effect` 和 `clean` 就会在页面更新之前执行。详见 [New in 18: useEffect fires synchronously when it's the result of a discrete input](https://github.com/reactwg/react-18/discussions/128) 和 [Timing of effects](https://reactjs.org/docs/hooks-reference.html#timing-of-effects)。不过无论如何，`effect` 和 `clean` 都会在 `layout effect` 和 `layout clean` 之后执行。
 
-> “如果 `useEffect` 是由离散的输入事件所触发的”是指：离散的输入事件触发了组件更新，然后组件更新触发了 `useEffect`。
+> “如果 `useEffect` 是由离散的输入事件所触发的”是指“离散的输入事件触发了组件更新，然后组件更新触发了 `useEffect`”。
 
 如下所示，`useEffect` 是由点击事件触发的，而点击事件是离散的输入事件，因此 `effect` 会在页面更新之前执行，这会导致，用户点击了 add 按钮之后，页面会在 1000ms 之后新增一个红色的 `<li>`。假如 `effect` 会在页面更新之后执行，那么用户点击了 add 按钮之后，页面就会立即新增一个黑色的 `<li>`，然后在 1000ms 之后，`<li>` 又变成红色。
 
