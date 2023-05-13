@@ -369,7 +369,7 @@
 			{
 				"code": 9999,
 				"tabWidth": 4,
-				"comments": 100,
+				"comments": 9999,
 				"ignoreTrailingComments": false,
 				"ignoreUrls": true,
 				"ignoreStrings": true,
