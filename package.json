@@ -8,6 +8,7 @@
         "init": "pnpm run catalog && pnpm run subset",
         "start": "vite",
         "build": "pnpm run catalog && pnpm run subset && vite build",
+        "preview": "vite preview",
         "deploy": "vercel deploy --prod dist",
         "subset": "node ./source/util/subset.js",
         "catalog": "node ./source/util/catalog.js"
