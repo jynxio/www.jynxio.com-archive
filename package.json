@@ -32,7 +32,7 @@
         "@vercel/analytics": "^1.0.0",
         "fuse.js": "^6.6.2",
         "highlight.js": "^11.8.0",
-        "marked": "^4.3.0",
+        "marked": "^5.0.2",
         "solid-js": "^1.7.4"
     }
 }

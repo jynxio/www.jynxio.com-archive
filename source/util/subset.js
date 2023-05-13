@@ -98,7 +98,9 @@ function parseMarkdown ( text ) {
 
 	marked.use( {
 		gfm: true,
-		xhtml: true,
+		xhtml: false,
+		mangle: false,
+		headerIds: false,
 		async: false,
 		renderer: {
 			code: parseCode,
