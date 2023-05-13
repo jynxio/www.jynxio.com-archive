@@ -14,6 +14,10 @@ typora-root-url: ./..\..\image
 
 ## 调试
 
+### 使用内建函数来调试
+
+> 本文采用该方法来进行调试。
+
 在 V8 引擎中，有一些内建的函数可以帮助开发者进行 debug，其中有一个名为 `%DebugPrint` 的函数可以帮助开发者观察 JavaScript 值的内部信息。不过，在使用 `%DebugPrint` 之类的内建函数之前，我们必须先执行 `--allow-natives-syntax` 命令。
 
 具体来说，在 Node 运行时中，我们可以通过如下做法来调用 `%DebugPrint` 函数，并让其打印字面量 `{a: 1}` 的内部信息。
@@ -29,7 +33,11 @@ internal information...           // output
 { a: 1 }                          // output
 ```
 
-> 我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在 Chromium 中使用这些内建函数，因为这些运行时都使用了 V8 引擎。
+另外，我们不仅可以在 Node 运行时中使用 V8 引擎的内建函数，也能在 Chromium 中使用这些内建函数，因为这些运行时都使用了 V8 引擎。
+
+### 使用编辑器插件来调试
+
+2023 年 5 月 12 日，TypeScript 官方团队发布了一个可以分析 JavaScript 在 V8 引擎中的执行情况的 VS Code 插件，该插件名为「deoptexplorer-vscode」，更多详细介绍，请见 [这条链接](https://devblogs.microsoft.com/typescript/introducing-deopt-explorer/)。
 
 ## 对象
 
