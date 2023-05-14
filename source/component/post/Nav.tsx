@@ -107,13 +107,21 @@ function Catalog () {
 function Control () {
 
 	const themeKey = "www.jynxio.com-theme";
+	const themeValue = ( (): ( "light" | "dark" ) => {
 
-	localStorage.getItem( themeKey ) || localStorage.setItem( themeKey, "dark" );
+		const storage = localStorage.getItem( themeKey );
 
-	const theme = localStorage.getItem( themeKey ) as "dark" | "light";
-	const [ getTheme, setTheme ] = createSignal( theme );
+		if ( storage === "dark" || storage === "light" ) return storage;
 
-	document.documentElement.setAttribute( "class", theme );
+		if ( matchMedia( "(prefers-color-scheme: dark)" ).matches ) return "dark";
+
+		return "light";
+
+	} )();
+
+	document.documentElement.classList.add( themeValue );
+
+	const [ getTheme, setTheme ] = createSignal( themeValue );
 
 	return (
 		<section class={ style.control }>
@@ -140,12 +148,14 @@ function Control () {
 
 	function handleClick () {
 
-		const nextTheme = getTheme() === "dark" ? "light" : "dark";
+		const themeValue = getTheme() === "dark" ? "light" : "dark";
 
-		setTheme( nextTheme );
+		themeValue === "dark"
+			? ( document.documentElement.classList.add( "dark" ), document.documentElement.classList.remove( "light" ) )
+			: ( document.documentElement.classList.remove( "dark" ), document.documentElement.classList.add( "light" ) );
 
-		document.documentElement.setAttribute( "class", nextTheme );
-		localStorage.setItem( themeKey, nextTheme );
+		setTheme( themeValue );
+		localStorage.setItem( themeKey, themeValue );
 
 	}
 

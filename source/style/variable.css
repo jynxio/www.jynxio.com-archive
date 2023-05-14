@@ -12,19 +12,6 @@
 
 }
 
-:root.dark {
-	--line-color: #121212;
-	--block-color: #2e3136;
-	--ground-color: #22262b;
-
-	--icon-color: #ffffff;
-	--link-color: #c52922;
-
-	--heading-color: #ffffff;
-	--paragraph-color: #e7e7e7;
-	--comment-color: #999999;
-}
-
 :root.light {
 	--line-color: #e6e6e6;
 	--block-color: #dcdcdc;
@@ -35,5 +22,18 @@
 
 	--heading-color: #000;
 	--paragraph-color: #303030;
+	--comment-color: #999999;
+}
+
+:root.dark {
+	--line-color: #121212;
+	--block-color: #2e3136;
+	--ground-color: #22262b;
+
+	--icon-color: #ffffff;
+	--link-color: #c52922;
+
+	--heading-color: #ffffff;
+	--paragraph-color: #e7e7e7;
 	--comment-color: #999999;
 }
