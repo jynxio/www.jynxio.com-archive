@@ -59,7 +59,7 @@ async function main () {
 		 *   marked.js会将行内代码和代码块中的某些字符转换为转义字符，比如「>」会被转译成「&gt;」，我通过使用「ADDITIONAL_CHARACTERS_FIRACODE_REGULAR」来缓解/修复这个问题。
 		 *   - relevant issue: https://github.com/markedjs/marked/issues/2727
 		 *   - playgroud: https://marked.js.org/demo/?text=%0A&options=%7B%0A%20%22async%22%3A%20false%2C%0A%20%22baseUrl%22%3A%20null%2C%0A%20%22breaks%22%3A%20false%2C%0A%20%22extensions%22%3A%20null%2C%0A%20%22gfm%22%3A%20true%2C%0A%20%22headerIds%22%3A%20true%2C%0A%20%22headerPrefix%22%3A%20%22%22%2C%0A%20%22highlight%22%3A%20null%2C%0A%20%22langPrefix%22%3A%20%22language-%22%2C%0A%20%22mangle%22%3A%20true%2C%0A%20%22pedantic%22%3A%20false%2C%0A%20%22sanitize%22%3A%20false%2C%0A%20%22sanitizer%22%3A%20null%2C%0A%20%22silent%22%3A%20false%2C%0A%20%22smartypants%22%3A%20false%2C%0A%20%22tokenizer%22%3A%20null%2C%0A%20%22walkTokens%22%3A%20null%2C%0A%20%22xhtml%22%3A%20false%0A%7D&version=master
-		 *   - HTML实体编码表: https://www.w3school.com.cn/charsets/ref_html_8859.asp
+		 *   - HTML实体编码表: https://developer.mozilla.org/en-US/docs/Glossary/Entity
 		 */
 		const { all, code, heading } = parseMarkdown( file.content );
 
