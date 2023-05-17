@@ -78,7 +78,9 @@ async function parseMarkdown ( markdown: string ) {
 	/* Configuration */
 	marked.use( {
 		gfm: true,
-		xhtml: true,
+		xhtml: false,
+		mangle: false,
+		headerIds: false,
 		async: true,
 		renderer: {
 			hr: parseHr,
