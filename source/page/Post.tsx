@@ -26,7 +26,7 @@ function Post () {
 					<LazyContent />
 				</section>
 			</Show>
-			<Show when={ searchStore.getEnabled() }><LazySearch /></Show>
+			<LazySearch />
 		</div>
 	);
 
