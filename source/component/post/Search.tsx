@@ -1,22 +1,23 @@
 import style from "./Search.module.css";
 import data from "@/asset/catalog/data.json";
 import Fuse from "fuse.js";
+import fuzzysort from "fuzzysort"; // TODO
+import checkOs from "@/helper/checkOs";
 import routerHelper from "@/helper/routerHelper";
 import * as store from "@/store/search";
 import { useNavigate } from "@solidjs/router";
-import { For, Show, createSelector, createSignal, onCleanup, onMount } from "solid-js";
+import { For, Show, createEffect, createSelector, createSignal, onCleanup, onMount } from "solid-js";
 
 type Item = { html: string, topicName: string, postName: string };
 type List = Item[];
 
-const options = {
+const fuse = new Fuse( data, {
 	includeScore: true,
 	includeMatches: true,
 	threshold: 0.2,
 	minMatchCharLength: 1,
 	keys: [ [ "children", "alias" ] ],
-};
-const fuse = new Fuse( data, options );
+} );
 
 function Search () {
 
@@ -31,14 +32,21 @@ function Search () {
 	onMount( () => {
 
 		inputRef?.focus();
-		document.addEventListener( "pointerdown", handleGlobalPointerDown );
-		document.addEventListener( "keydown", handleKeydown );
+		document.addEventListener( "pointerdown", handleClose );
+		document.addEventListener( "keydown", handleShortcut );
+		document.addEventListener( "keydown", handleSwitch );
 
 	} );
 	onCleanup( () => {
 
-		document.removeEventListener( "pointerdown", handleGlobalPointerDown );
-		document.removeEventListener( "keydown", handleKeydown );
+		document.removeEventListener( "pointerdown", handleClose );
+		document.removeEventListener( "keydown", handleShortcut );
+		document.removeEventListener( "keydown", handleSwitch );
+
+	} );
+	createEffect( () => {
+
+		store.getEnabled() && inputRef?.focus();
 
 	} );
 
@@ -58,9 +66,9 @@ function Search () {
 					<For each={ getList() }>{ ( item, getIndex ) => <p
 						innerHTML={ item.html }
 						classList={ { [ style.selected ]: isSelected( getIndex() ) } }
-						onPointerEnter={ [ handlePointerEnter, getIndex ] }
-						onPointerLeave={ [ handlePointerLeave, getIndex ] }
-						onPointerDown={ [ handleLocalPointerDown, getIndex ] }
+						onPointerEnter={ [ handleHover, getIndex ] }
+						onPointerLeave={ [ handleBlur, getIndex ] }
+						onPointerDown={ [ handleNavigate, getIndex ] }
 					/> }</For>
 				</section>
 			</aside>
@@ -77,12 +85,12 @@ function Search () {
 
 	}
 
-	function handleGlobalPointerDown ( event: PointerEvent ) {
+	function handleClose ( event: PointerEvent ) {
 
 		if ( ! searchRef ) return;
 
 		const target = event.target as HTMLElement;
-		const isFocus = searchRef!.contains( target );
+		const isFocus = searchRef.contains( target );
 
 		if ( isFocus ) return;
 
@@ -90,28 +98,28 @@ function Search () {
 
 	}
 
-	function handleLocalPointerDown ( getIndex: () => number ) {
+	function handleNavigate ( getIndex: () => number ) {
 
 		const item = getList()[ getIndex() ];
 
-		navigate( routerHelper.post.createPath( item.topicName, item.postName ) );
 		store.setEnabled( false );
+		navigate( routerHelper.post.createPath( item.topicName, item.postName ) );
 
 	}
 
-	function handlePointerLeave () {
+	function handleBlur () {
 
 		setSelectedIndex( - 1 );
 
 	}
 
-	function handlePointerEnter ( getIndex: () => number ) {
+	function handleHover ( getIndex: () => number ) {
 
 		setSelectedIndex( getIndex() );
 
 	}
 
-	function handleKeydown ( event: KeyboardEvent ) {
+	function handleSwitch ( event: KeyboardEvent ) {
 
 		if ( getList().length === 0 ) return;
 
@@ -146,6 +154,27 @@ function Search () {
 
 		navigate( routerHelper.post.createPath( item.topicName, item.postName ) );
 		store.setEnabled( false );
+
+	}
+
+	function handleShortcut ( event: KeyboardEvent ) {
+
+		const key = event.key.toLowerCase();
+
+		if ( key !== "escape" && key !== "k" && key !== "control" && key !== "meta" ) return;
+
+		/* Opening && esc key => close */
+		if ( store.getEnabled() && key === "escape" ) return void store.setEnabled( false );
+
+		/* Combination keys => switch */
+		const isPreKeyDown = checkOs() === "macOS" ? event.metaKey : event.ctrlKey;
+
+		if ( ! isPreKeyDown ) return;
+
+		if ( event.key.toLowerCase() !== "k" ) return;
+
+		event.preventDefault();
+		store.setEnabled( prev => ! prev );
 
 	}
 
