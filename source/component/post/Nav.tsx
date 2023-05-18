@@ -3,8 +3,7 @@ import Theme from "@/component/common/Theme";
 import catalogData from "@/asset/catalog/data.json";
 import checkOs from "@/helper/checkOs";
 import * as searchStore from "@/store/search";
-import routerHelper from "@/helper/routerHelper";
-import { useNavigate, useParams } from "@solidjs/router";
+import { A } from "@solidjs/router";
 import { For, Show, createSelector, createSignal } from "solid-js";
 
 function Nav () {
@@ -45,11 +44,11 @@ function Search () {
 
 function Catalog () {
 
-	const params = useParams();
-	const navigate = useNavigate();
+	const [ getTopicName, setTopicName ] = createSignal( "" );
+	const [ getPostName, setPostName ] = createSignal( "" );
 
-	const isTargetTopic = createSelector( () => routerHelper.post.parsePath( params.path ).topicName );
-	const isTargetPost = createSelector( () => routerHelper.post.parsePath( params.path ).postName );
+	const isTargetTopic = createSelector( getTopicName );
+	const isTargetPost = createSelector( getPostName );
 
 	return (
 		<section class={ style.catalog }>
@@ -62,8 +61,10 @@ function Catalog () {
 								classList={ { [ style.selected ]: isTargetTopic( topic.name ) } }
 								onClick={ [ handleTopicClick, topic.name ] }
 							>
-								<span class={ style.name }>{ topic.alias }</span>
-								<span class={ style.icon }><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg></span>
+								<A href="/" class={ style.link }>
+									<span class={ style.name }>{ topic.alias }</span>
+									<span class={ style.icon }><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg></span>
+								</A>
 							</div>
 							<Show when={ isTargetTopic( topic.name ) }>
 								<For each={ topic.children }>
@@ -74,8 +75,10 @@ function Catalog () {
 												classList={ { [ style.selected ]: isTargetPost( post.name ) } }
 												onClick={ [ handlePostClick, post.name ] }
 											>
-												<span class={style.name}>{ post.alias }</span>
-												<data class={ style.data }>{ post.time }</data>
+												<A href={ `/post/${ topic.name }/${ post.name }` } class={ style.link }>
+													<span class={style.name}>{ post.alias }</span>
+													<data class={ style.data }>{ post.time }</data>
+												</A>
 											</div>
 										)
 									}
@@ -90,15 +93,13 @@ function Catalog () {
 
 	function handleTopicClick ( name: string ) {
 
-		routerHelper.post.parsePath( params.path ).topicName === name
-			? navigate( "/" )
-			: navigate( routerHelper.post.createPath( name, catalogData.find( topic => topic.name === name )!.children[ 0 ].name ) );
+		setTopicName( getTopicName() === name ? "" : name );
 
 	}
 
 	function handlePostClick ( name: string ) {
 
-		navigate( routerHelper.post.createPath( routerHelper.post.parsePath( params.path ).topicName, name ) );
+		setPostName( name );
 
 	}
 
