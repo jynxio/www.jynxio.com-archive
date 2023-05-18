@@ -74,21 +74,24 @@
 	line-height: var(--line-height);
 }
 
-.output>p {
+.output>.link {
+	display: block;
 	overflow: hidden;
 	padding-inline: 1rem;
 	border-radius: var(--border-radius);
+	color: inherit;
 	line-height: var(--line-height);
 	text-overflow: ellipsis;
+	text-decoration: none;
 	white-space: nowrap;
 	cursor: pointer;
 }
 
-.output>p.selected {
+.output>.link.selected {
 	background-color: var(--block-color);
 }
 
-.output mark {
+.output>.link mark {
 	color: var(--link-color);
 	background-color: transparent;
 }

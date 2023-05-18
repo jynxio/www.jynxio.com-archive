@@ -1,11 +1,9 @@
 import style from "./Search.module.css";
 import data from "@/asset/catalog/data.json";
 import Fuse from "fuse.js";
-import fuzzysort from "fuzzysort"; // TODO
 import checkOs from "@/helper/checkOs";
-import routerHelper from "@/helper/routerHelper";
 import * as store from "@/store/search";
-import { useNavigate } from "@solidjs/router";
+import { A } from "@solidjs/router";
 import { For, Show, createEffect, createSelector, createSignal, onCleanup, onMount } from "solid-js";
 
 type Item = { html: string, topicName: string, postName: string };
@@ -22,9 +20,9 @@ const fuse = new Fuse( data, {
 function Search () {
 
 	let searchRef: HTMLElement | undefined;
+	let sectionRef: HTMLElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
 
-	const navigate = useNavigate();
 	const [ getSelectedIndex, setSelectedIndex ] = createSignal( - 1 ); // -1 represents that no one has been selected
 	const [ getList, setList ] = createSignal<List>( [] );
 	const isSelected = createSelector( getSelectedIndex );
@@ -62,8 +60,10 @@ function Search () {
 					</span>
 				</section>
 				<Show when={ getList().length }><hr /></Show>
-				<section class={ style.output }>
-					<For each={ getList() }>{ ( item, getIndex ) => <p
+				<section class={ style.output } ref={ sectionRef }>
+					<For each={ getList() }>{ ( item, getIndex ) => <A
+						href={ `/${ item.topicName }/${ item.postName }` }
+						class={ style.link }
 						innerHTML={ item.html }
 						classList={ { [ style.selected ]: isSelected( getIndex() ) } }
 						onPointerEnter={ [ handleHover, getIndex ] }
@@ -100,10 +100,7 @@ function Search () {
 
 	function handleNavigate ( getIndex: () => number ) {
 
-		const item = getList()[ getIndex() ];
-
 		store.setEnabled( false );
-		navigate( routerHelper.post.createPath( item.topicName, item.postName ) );
 
 	}
 
@@ -150,9 +147,9 @@ function Search () {
 		/* Key: enter */
 		if ( getSelectedIndex() === - 1 ) return;
 
-		const item = getList()[ getSelectedIndex() ];
+		const link = sectionRef?.children[ getSelectedIndex() ] as HTMLLinkElement;
 
-		navigate( routerHelper.post.createPath( item.topicName, item.postName ) );
+		link.click();
 		store.setEnabled( false );
 
 	}
