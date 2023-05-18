@@ -32,7 +32,6 @@
         "@types/marked": "^4.3.0",
         "@vercel/analytics": "^1.0.1",
         "fuse.js": "^6.6.2",
-        "fuzzysort": "^2.0.4",
         "highlight.js": "^11.8.0",
         "marked": "^5.0.2",
         "solid-js": "^1.7.5"
