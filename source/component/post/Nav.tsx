@@ -3,7 +3,7 @@ import Theme from "@/component/common/Theme";
 import catalogData from "@/asset/catalog/data.json";
 import checkOs from "@/helper/checkOs";
 import * as searchStore from "@/store/search";
-import { A } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 import { For, Show, createSelector, createSignal } from "solid-js";
 
 function Nav () {
@@ -44,11 +44,14 @@ function Search () {
 
 function Catalog () {
 
-	const [ getTopicName, setTopicName ] = createSignal( "" );
-	const [ getPostName, setPostName ] = createSignal( "" );
+	const params = useParams();
+	const navigate = useNavigate();
 
-	const isTargetTopic = createSelector( getTopicName );
-	const isTargetPost = createSelector( getPostName );
+	const createTopicName = () => params.path.split( "/" )[ 0 ] || "";
+	const createPostName = () => params.path.split( "/" )[ 1 ] || "";
+
+	const isTargetTopic = createSelector( createTopicName );
+	const isTargetPost = createSelector( createPostName );
 
 	return (
 		<section class={ style.catalog }>
@@ -59,12 +62,10 @@ function Catalog () {
 							<div
 								class={ style.topic }
 								classList={ { [ style.selected ]: isTargetTopic( topic.name ) } }
-								onClick={ [ handleTopicClick, topic.name ] }
+								onClick={ [ handleTopicClick, [ topic.name ] ] }
 							>
-								<A href="/" class={ style.link }>
-									<span class={ style.name }>{ topic.alias }</span>
-									<span class={ style.icon }><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg></span>
-								</A>
+								<span class={ style.name }>{ topic.alias }</span>
+								<span class={ style.icon }><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><polyline points="9 18 15 12 9 6" /></svg></span>
 							</div>
 							<Show when={ isTargetTopic( topic.name ) }>
 								<For each={ topic.children }>
@@ -73,12 +74,10 @@ function Catalog () {
 											<div
 												class={ style.post }
 												classList={ { [ style.selected ]: isTargetPost( post.name ) } }
-												onClick={ [ handlePostClick, post.name ] }
+												onClick={ [ handlePostClick, [ topic.name, post.name ] ] }
 											>
-												<A href={ `/post/${ topic.name }/${ post.name }` } class={ style.link }>
-													<span class={style.name}>{ post.alias }</span>
-													<data class={ style.data }>{ post.time }</data>
-												</A>
+												<span class={style.name}>{ post.alias }</span>
+												<data class={ style.data }>{ post.time }</data>
 											</div>
 										)
 									}
@@ -91,15 +90,15 @@ function Catalog () {
 		</section>
 	);
 
-	function handleTopicClick ( name: string ) {
+	function handleTopicClick ( [ topicName ]: [ string ] ) {
 
-		setTopicName( getTopicName() === name ? "" : name );
+		navigate( isTargetTopic( topicName ) ? "/" : `/${ topicName }` );
 
 	}
 
-	function handlePostClick ( name: string ) {
+	function handlePostClick ( [ topicName, postName ]: [ string, string ] ) {
 
-		setPostName( name );
+		navigate( `/${ topicName }/${ postName }` );
 
 	}
 
