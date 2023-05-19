@@ -127,3 +127,11 @@
 	margin-inline-start: auto;
 	margin-inline-end: 0;
 }
+
+.control>.icon>a>.identifier {
+	display: block;
+	inline-size: 0;
+	block-size: 0;
+	transform: scale(0);
+	opacity: 0;
+}
