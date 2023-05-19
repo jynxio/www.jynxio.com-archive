@@ -17,7 +17,7 @@
 	z-index: 999;
 	top: 0;
 	right: 0;
-	inline-size: 100%;
+	inline-size: calc(100% - var(--nav-width));
 	block-size: 100%;
 	backdrop-filter: blur(4px);
 }
@@ -28,7 +28,7 @@
 	left: 50%;
 	inline-size: 2rem;
 	block-size: 2rem;
-	color: var(--icon-color);
+	color: var(--link-color);
 	transform: translate(-50%, -50%);
 	animation: spin 1.5s linear infinite;
 }
