@@ -17,9 +17,11 @@ const fuse = new Fuse( data, {
 	keys: [ [ "children", "alias" ] ],
 } );
 
+/* 0 0 0 2px var(--link-color) -> 100 -> disappear */
+
 function Search () {
 
-	let searchRef: HTMLElement | undefined;
+	let barRef: HTMLDivElement | undefined;
 	let sectionRef: HTMLElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
 
@@ -29,7 +31,6 @@ function Search () {
 
 	onMount( () => {
 
-		inputRef?.focus();
 		document.addEventListener( "pointerdown", handleClose );
 		document.addEventListener( "keydown", handleShortcut );
 		document.addEventListener( "keydown", handleSwitch );
@@ -50,27 +51,29 @@ function Search () {
 
 	return (
 		<Show when={ store.getEnabled() }>
-			<aside class={ style.search } ref={ searchRef }>
-				<section class={ style.input }>
-					<span>
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8" /><line x1="21" x2="16.65" y1="21" y2="16.65" /></svg>
-					</span>
-					<span>
-						<input type="text" placeholder="搜索" onInput={ handleInput } ref={ inputRef }/>
-					</span>
-				</section>
-				<Show when={ getList().length }><hr /></Show>
-				<section class={ style.output } ref={ sectionRef }>
-					<For each={ getList() }>{ ( item, getIndex ) => <A
-						href={ `/${ item.topicName }/${ item.postName }` }
-						class={ style.link }
-						innerHTML={ item.html }
-						classList={ { [ style.selected ]: isSelected( getIndex() ) } }
-						onPointerEnter={ [ handleHover, getIndex ] }
-						onPointerLeave={ [ handleBlur, getIndex ] }
-						onPointerDown={ [ handleNavigate, getIndex ] }
-					/> }</For>
-				</section>
+			<aside class={ style.search } >
+				<div class={ style.bar } ref={ barRef }>
+					<section class={ style.input }>
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8" /><line x1="21" x2="16.65" y1="21" y2="16.65" /></svg>
+						</span>
+						<span>
+							<input type="text" placeholder="搜索" onInput={ handleInput } ref={ inputRef }/>
+						</span>
+					</section>
+					<Show when={ getList().length }><hr /></Show>
+					<section class={ style.output } ref={ sectionRef }>
+						<For each={ getList() }>{ ( item, getIndex ) => <A
+							href={ `/${ item.topicName }/${ item.postName }` }
+							class={ style.link }
+							innerHTML={ item.html }
+							classList={ { [ style.selected ]: isSelected( getIndex() ) } }
+							onPointerEnter={ [ handleHover, getIndex ] }
+							onPointerLeave={ [ handleBlur, getIndex ] }
+							onPointerDown={ [ handleNavigate, getIndex ] }
+						/> }</For>
+					</section>
+				</div>
 			</aside>
 		</Show>
 	);
@@ -87,10 +90,10 @@ function Search () {
 
 	function handleClose ( event: PointerEvent ) {
 
-		if ( ! searchRef ) return;
+		if ( ! barRef ) return;
 
 		const target = event.target as HTMLElement;
-		const isFocus = searchRef.contains( target );
+		const isFocus = barRef.contains( target );
 
 		if ( isFocus ) return;
 
