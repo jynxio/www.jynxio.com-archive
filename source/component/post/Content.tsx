@@ -2,8 +2,7 @@ import "highlight.js/styles/github-dark.css";
 import style from "./Content.module.css";
 import "@/component/primitive/jynxPre";
 import hljs from "highlight.js";
-import routerHelper from "@/helper/routerHelper";
-import { For, createResource, createUniqueId } from "solid-js";
+import { For, Show, createResource, createUniqueId } from "solid-js";
 import { useParams } from "@solidjs/router";
 import { marked } from "marked";
 
@@ -41,6 +40,11 @@ function Content () {
 					}
 				</For>
 			</aside>
+			<Show when={ getData.loading }>
+				<aside class={ style.loading }>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+				</aside>
+			</Show>
 		</section>
 	);
 
@@ -54,8 +58,11 @@ function Content () {
 
 function parseUrl ( path: string ) {
 
-	const topicName = routerHelper.post.parsePath( path ).topicName;
-	const postName = routerHelper.post.parsePath( path ).postName;
+	const [ topicName, postName ] = path.split( "/" );
+
+	if ( ! topicName ) return "";
+
+	if ( ! postName ) return "";
 
 	return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
 
