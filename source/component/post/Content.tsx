@@ -3,7 +3,6 @@ import style from "./Content.module.css";
 import "@/component/primitive/jynxPre";
 import hljs from "highlight.js";
 import { For, Show, createResource, createUniqueId } from "solid-js";
-import { useParams } from "@solidjs/router";
 import { marked } from "marked";
 
 type H1Node = { name: string, uuid: string };
@@ -25,13 +24,12 @@ hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
 } );
 
-function Content () {
+function Content ( props: { url: string } ) {
 
-	const params = useParams();
-	const [ getData ] = createResource( () => parseUrl( params.path ), fetchData, { initialValue: { html: "", chapters: [] } } );
+	const [ getData ] = createResource( () => props.url, createMarkdown, { initialValue: { html: "", chapters: [] } } );
 
 	return (
-		<section class={ style.content }>
+		<div class={ style.content }>
 			<article class={ style.article } innerHTML={ getData().html } />
 			<aside class={ style.catalog }>
 				<For each={ getData().chapters }>
@@ -45,7 +43,7 @@ function Content () {
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
 				</aside>
 			</Show>
-		</section>
+		</div>
 	);
 
 	function handleClick ( uuid: string ) {
@@ -56,31 +54,15 @@ function Content () {
 
 }
 
-function parseUrl ( path: string ) {
+async function createMarkdown ( url: string ) {
 
-	const [ topicName, postName ] = path.split( "/" );
-
-	if ( ! topicName ) return "";
-
-	if ( ! postName ) return "";
-
-	return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
-
-}
-
-async function fetchData ( url: string ) {
-
-	if ( url === "" ) return { html: "", chapters: [] };
-
+	/* Fetch */
 	const res = await fetch( url );
+
+	if ( ! res.ok ) throw new Error( "" );
+
+	/* Parse */
 	const txt = await res.text();
-	const { html, chapters } = await parseMarkdown( txt );
-
-	return { html, chapters };
-
-}
-
-async function parseMarkdown ( markdown: string ) {
 
 	/* Configuration */
 	marked.use( {
@@ -104,7 +86,7 @@ async function parseMarkdown ( markdown: string ) {
 	const chapters = [] as H1Node[];
 
 	let title: string | undefined;
-	let html = await marked.parse( markdown );
+	let html = await marked.parse( txt );
 
 	if ( title === void 0 ) throw new Error( "Markdown format: every markdown document must have an h1 tag" );
 
@@ -240,14 +222,14 @@ async function parseMarkdown ( markdown: string ) {
 
 		return (
 			`<div class="${ style[ "custom-pre" ] }">` +
-			`<jynx-pre data-code="${ data }">"` +
-			"<pre slot='panel'>" +
-			"<code>" + codeContent + "</code>" +
-			"</pre>" +
-			"<button slot='collapse-button'>" + collapseSvg + "</button>" +
-			"<button slot='copy-button'>" + copySvg + "</button>" +
-			"</jynx-pre>" +
-			"</div>"
+				`<jynx-pre data-code="${ data }">"` +
+				"<pre slot='panel'>" +
+				"<code>" + codeContent + "</code>" +
+				"</pre>" +
+				"<button slot='collapse-button'>" + collapseSvg + "</button>" +
+				"<button slot='copy-button'>" + copySvg + "</button>" +
+				"</jynx-pre>" +
+				"</div>"
 		);
 
 	}
