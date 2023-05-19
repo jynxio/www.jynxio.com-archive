@@ -3,10 +3,44 @@
 .content {
 	--catalog-width: 13rem;
 	--article-width: 100%;
+
 	inline-size: 100%;
 	min-block-size: 100vh;
 	min-block-size: 100dvh;
 	padding-inline-end: var(--catalog-width);
+}
+
+/* Loading */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.loading {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 999;
+	inline-size: 100%;
+	block-size: 100%;
+	backdrop-filter: blur(4px);
+}
+
+.loading>svg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	inline-size: 2rem;
+	block-size: 2rem;
+	color: var(--icon-color);
+	transform: translate(-50%, -50%);
+	animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 /* Catalog */
