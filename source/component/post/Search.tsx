@@ -17,8 +17,6 @@ const fuse = new Fuse( data, {
 	keys: [ [ "children", "alias" ] ],
 } );
 
-/* 0 0 0 2px var(--link-color) -> 100 -> disappear */
-
 function Search () {
 
 	let barRef: HTMLDivElement | undefined;
