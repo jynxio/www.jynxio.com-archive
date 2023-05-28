@@ -1,0 +1,2 @@
+- 模型压缩：[Google Draco](https://google.github.io/draco/)、[View3D Meshopt](https://naver.github.io/egjs-view3d/docs/tutorials/Compression/Meshopt)、[View3D Draco](https://naver.github.io/egjs-view3d/docs/tutorials/Compression/Draco)
+- 纹理压缩：[basis](https://github.com/BinomialLLC/basis_universal)
