@@ -442,8 +442,73 @@
 			"error",
 			{
 				"blankLine": "always",
+				"prev": "directive",
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
+				"prev": "directive",
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
+				"prev": "import",
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
 				"prev": "*",
-				"next": "block"
+				"next": "import"
+			},
+			{
+				"blankLine": "never",
+				"prev": "import",
+				"next": "import"
+			},
+			{
+				"blankLine": "always",
+				"prev": "cjs-import",
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
+				"prev": "*",
+				"next": "cjs-import"
+			},
+			{
+				"blankLine": "never",
+				"prev": "cjs-import",
+				"next": "cjs-import"
+			},
+			{
+				"blankLine": "always",
+				"prev": "export",
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
+				"prev": "*",
+				"next": "export"
+			},
+			{
+				"blankLine": "never",
+				"prev": "export",
+				"next": "export"
+			},
+			{
+				"blankLine": "always",
+				"prev": "cjs-export",
+				"next": "*"
+			},
+			{
+				"blankLine": "always",
+				"prev": "*",
+				"next": "cjs-export"
+			},
+			{
+				"blankLine": "never",
+				"prev": "cjs-export",
+				"next": "cjs-export"
 			},
 			{
 				"blankLine": "always",
@@ -453,7 +518,7 @@
 			{
 				"blankLine": "always",
 				"prev": "*",
-				"next": "block-like"
+				"next": "block"
 			},
 			{
 				"blankLine": "always",
@@ -463,17 +528,7 @@
 			{
 				"blankLine": "always",
 				"prev": "*",
-				"next": "break"
-			},
-			{
-				"blankLine": "always",
-				"prev": "break",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "case"
+				"next": "block-like"
 			},
 			{
 				"blankLine": "always",
@@ -483,82 +538,7 @@
 			{
 				"blankLine": "always",
 				"prev": "*",
-				"next": "cjs-export"
-			},
-			{
-				"blankLine": "always",
-				"prev": "cjs-export",
-				"next": "*"
-			},
-			{
-				"blankLine": "any",
-				"prev": "cjs-export",
-				"next": "cjs-export"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "cjs-import"
-			},
-			{
-				"blankLine": "always",
-				"prev": "cjs-import",
-				"next": "*"
-			},
-			{
-				"blankLine": "any",
-				"prev": "cjs-import",
-				"next": "cjs-import"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "class"
-			},
-			{
-				"blankLine": "always",
-				"prev": "class",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "const"
-			},
-			{
-				"blankLine": "always",
-				"prev": "const",
-				"next": "*"
-			},
-			{
-				"blankLine": "any",
-				"prev": "const",
-				"next": "const"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "continue"
-			},
-			{
-				"blankLine": "always",
-				"prev": "continue",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "debugger"
-			},
-			{
-				"blankLine": "always",
-				"prev": "debugger",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "default"
+				"next": "case"
 			},
 			{
 				"blankLine": "always",
@@ -568,187 +548,27 @@
 			{
 				"blankLine": "always",
 				"prev": "*",
-				"next": "directive"
-			},
-			{
-				"blankLine": "always",
-				"prev": "directive",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "do"
-			},
-			{
-				"blankLine": "always",
-				"prev": "do",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "export"
-			},
-			{
-				"blankLine": "always",
-				"prev": "export",
-				"next": "*"
-			},
-			{
-				"blankLine": "any",
-				"prev": "export",
-				"next": "export"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "expression"
-			},
-			{
-				"blankLine": "always",
-				"prev": "expression",
-				"next": "*"
-			},
-			{
-				"blankLine": "any",
-				"prev": "expression",
-				"next": "expression"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "for"
-			},
-			{
-				"blankLine": "always",
-				"prev": "for",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "if"
-			},
-			{
-				"blankLine": "always",
-				"prev": "if",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "iife"
-			},
-			{
-				"blankLine": "always",
-				"prev": "iife",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "import"
-			},
-			{
-				"blankLine": "always",
-				"prev": "import",
-				"next": "*"
-			},
-			{
-				"blankLine": "any",
-				"prev": "import",
-				"next": "import"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "let"
-			},
-			{
-				"blankLine": "always",
-				"prev": "let",
-				"next": "*"
+				"next": "default"
 			},
 			{
 				"blankLine": "any",
 				"prev": "let",
-				"next": "let"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "return"
-			},
-			{
-				"blankLine": "always",
-				"prev": "return",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "switch"
-			},
-			{
-				"blankLine": "always",
-				"prev": "switch",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "throw"
-			},
-			{
-				"blankLine": "always",
-				"prev": "throw",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "try"
-			},
-			{
-				"blankLine": "always",
-				"prev": "try",
-				"next": "*"
-			},
-			{
-				"blankLine": "always",
-				"prev": "*",
-				"next": "var"
-			},
-			{
-				"blankLine": "always",
-				"prev": "var",
 				"next": "*"
 			},
 			{
 				"blankLine": "any",
-				"prev": "var",
-				"next": "var"
-			},
-			{
-				"blankLine": "always",
 				"prev": "*",
-				"next": "while"
+				"next": "let"
 			},
 			{
-				"blankLine": "always",
-				"prev": "while",
+				"blankLine": "any",
+				"prev": "const",
 				"next": "*"
 			},
 			{
-				"blankLine": "always",
+				"blankLine": "any",
 				"prev": "*",
-				"next": "with"
-			},
-			{
-				"blankLine": "always",
-				"prev": "with",
-				"next": "*"
+				"next": "const"
 			}
 		],
 		"semi-spacing": [
