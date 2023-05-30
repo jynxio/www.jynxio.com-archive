@@ -1,14 +1,12 @@
 ## ref()
 
-创建一个可变的深层响应式对象，其结构为 `{ value }`。如果该深层响应式对象发生了更新，那么在 JSX 中任何使用了该深层响应式对象的运算表达式都会被重新执行。只要 `value` 属性值发生了任何修改，那么就会更新该深层响应式对象。
-
-> 对于如何判断状态是否发生了更新，react 使用 `Object.is`，solid 使用 `===`，而 vue 则定义了一套蛮复杂的方法。这似乎是因为 vue 是通过「监听」来实现「状态更新与否」的判断的，而被监听的数据的数据类型五花八门，vue 需要为每一种数据类型都定义一种监听方法。
+创建一个可变且深层的响应式状态，其结构为 `{ value }`。如果该响应式状态发生了更新，那么在 JSX 中任何使用了该响应式状态的运算表达式都会被重新执行。如果我们想更新响应式状态，那么就修改它的 `value` 属性的内容。
 
 ```js
 const state = ref(value);
 ```
 
-如果 `value` 是一个引用数据类型，那么此时 `ref` 就等同于 `reactive`，如果该引用数据类型内部含有一个 `ref` 实例，那么该 `ref` 实例会被解包，比如下例中 `josh` 和 `john` 的结构是一样的。
+如果 `value` 是一个引用数据类型，那么 `ref` 就会使用 `reactive` 来处理 `value`。如果该引用数据类型的内部使用了 `ref` 实例，那么该 `ref` 实例就会被解包处理，比如下例中的 `josh` 和 `john` 的结构是一样的。
 
 ```js
 const age = ref(18);
@@ -16,9 +14,11 @@ const josh = ref({ name: "josh", age });
 const john = ref({ name: "john", age: 18 });
 ```
 
+> 对于如何判断状态是否发生了更新，react 使用 `Object.is`，solid 使用 `===`，而 vue 则定义了一套蛮复杂的方法。
+>
+> 这似乎是因为 vue 是通过「监听」对响应式状态的操作来实现「状态更新与否」的判断的，由于被监听的数据的数据类型五花八门，所以 vue 需要为每一种数据类型都定义一种监听方法，这导致了这套判定机制变得复杂。
+
 ## reactive()
-
-
 
 ## nextTick()
 
@@ -28,9 +28,8 @@ const john = ref({ name: "john", age: 18 });
 function nextTick(callback?: () => void): Promise<void>
 ```
 
-为什么会有这个 API？因为 vue 不会在状态更新后立即更新 DOM，而是会把一段时间内的「状态更新任务」都收集到一个队列中去，然后在下一次的 DOM 更新前再处理队列中的所有任务，并计算出一个最终的状态值，接着再计算出最终的 DOM，最后再更新 DOM。
-
-> 这个行为似乎和 react 的 batching 是一模一样的，关于 batching 更多细节，请见 [react 手册](https://www.jynxio.com/javascript/react-handbook) 或 [Queueing a Series of State Updates](https://react.dev/learn/queueing-a-series-of-state-updates)。
+> 为什么会有这个 API？因为 Vue 不会在开发者更新状态之后就立即同步的更新 DOM，取而代之的是，Vue 会为每一个响应式状态都维护一个独立的关于状态更新的任务队列，然后 Vue 会将一段时间内的对所有响应式状态的更新任务都收集到各自的任务队列中去，然后直到下一次更新时机（tick）到来之时，再直接计算出所有需要更新的响应式状态的最终值，并一次性的更新 DOM。
+>
 
 其有两种使用风格：
 
