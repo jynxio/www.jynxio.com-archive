@@ -116,19 +116,15 @@ setState( function createNextState ( previous_state ) { return next_state } );
 - 挂载时：`useState` 函数会根据入参的类型来决定返回值：
   - 如果入参是一个函数，那么 React 就会立即调用这个函数，并用该函数的返回值来作为自己的第一个返回值。
   - 否则，React 就会直接用入参来作为自己的第一个返回值。
-- 更新时：`useState` 函数会忽略入参，并通过特殊手段来计算出一个值，然后再用这个值来作为自己的第一个返回值，关于“特殊手段”，详见下例。
+- 更新时：`useState` 函数会忽略入参，并通过特殊手段来计算出一个值，然后再用这个值来作为自己的第一个返回值，关于“特殊手段”，详见 batching。
 
 > 其中，“挂载”代表 React 首次调用组件构造器，“更新”代表 React 非首次调用组件构造器。
 
-比如，触发 `click` 事件之后，`handleClick` 函数会多次调用 `setA` 和 `setB`，它们的入参会被依次推入各自的任务队列中去。另外，`setA` 和 `setB` 也触发了组件的更新（异步的）。
+### batching
 
-![状态的任务队列](/javascript/react-handbook/setstate-queue-create.png)
+如果我们在同步代码中多次调用了 `setState`，那么 React 也只会更新一次组件，官方把这种批处理 `setState` 的特性称为「batching」。
 
-更新组件时，`useState` 函数会依次处理任务队列中的任务，然后计算出状态的值，然后返回这个值。
-
-![计算状态值](/javascript/react-handbook/setstate-queue-calculate.png)
-
-虽然我们多次调用了 `setState` 函数，但是 React 只更新了一次组件，React 官方把这种批处理 `setState` 函数的特性称为「batching」。
+请通过 [这篇博客](https://www.jynxio.com/javascript/batching) 来了解 batching 的具体细节，另外，我还在其中解释了“为什么我会认为 [Queueing a Series of State Updates](https://react.dev/learn/queueing-a-series-of-state-updates) 对 batching 的描述是有误的”。
 
 ### 无效更新
 
