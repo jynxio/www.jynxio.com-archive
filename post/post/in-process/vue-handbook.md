@@ -1,22 +1,67 @@
 ## ref()
 
-创建一个可变且深层的响应式状态，其结构为 `{ value }`。如果该响应式状态发生了更新，那么在 JSX 中任何使用了该响应式状态的运算表达式都会被重新执行。如果我们想更新响应式状态，那么就修改它的 `value` 属性的内容。
+创建一个可变且深层的响应式状态，其结构为 `{ value }`。
+
+如果该响应式状态发生了更新，那么在 JSX 中任何使用了该响应式状态的运算表达式都会被重新执行。如果我们想更新响应式状态，那么就修改它的 `value` 属性的内容。
 
 ```js
-const state = ref(value);
+const state = ref( value );
 ```
 
-如果 `value` 是一个引用数据类型，那么 `ref` 就会使用 `reactive` 来处理 `value`。如果该引用数据类型的内部使用了 `ref` 实例，那么该 `ref` 实例就会被解包处理，比如下例中的 `josh` 和 `john` 的结构是一样的。
+### 自动解包
+
+1. 如果在 template 内使用 ref 实例，那么该实例会被自动解包；
+2. 如果在 `ref()` 或 `reactive()` 内嵌套 ref 实例，那么内部的 ref 实例会被解包；
+
+情况一的示例代码：
+
+```vue
+<script setup>
+import { ref } from "vue";
+
+const age = ref( 18 );
+const name = ref( "jynxio" );
+const people = { age, name };
+</script>
+
+<template>
+	<!-- 自动解包，渲染：18 -->
+	<p>{{ age }}</p>
+	<!-- 自动解包，渲染：18 -->
+	<p>{{ people.age }}</p>
+	<!-- 手动解包，渲染：18 -->
+	<p>{{ people.age.value }}</p>
+	<!-- 不会自动解包，渲染：[object Object]1 -->
+	<p>{{ people.age + 1 }}</p>
+	<!-- 必须手动解包，渲染：19 -->
+	<p>{{ people.age.value + 1 }}</p>
+</template>
+```
+
+「`people.age` 和 `people.age.value` 都是合法操作」这种设计带来的混乱大于其带来的便利，它会诱导用户写出 `people.age + 1` 这种非法操作，因此总是使用 `people.age.value` 而不要使用 `people.age`。
+
+情况二的示例代码：
+
+// TODO 从「Ref Unwrapping in Reactive Objects」开始，关于自动解包，设计的好混乱
 
 ```js
-const age = ref(18);
-const josh = ref({ name: "josh", age });
-const john = ref({ name: "john", age: 18 });
+// josh和john的结构是一样的
+const john = ref( { age: 18 } );
+const josh = ref( { age: ref( 18 ) } );
+
+const john = reactive( { age: 18 } )
+const josh = reactive( { age: ref( 18 ) } )
 ```
 
-> 对于如何判断状态是否发生了更新，react 使用 `Object.is`，solid 使用 `===`，而 vue 则定义了一套蛮复杂的方法。
->
-> 这似乎是因为 vue 是通过「监听」对响应式状态的操作来实现「状态更新与否」的判断的，由于被监听的数据的数据类型五花八门，所以 vue 需要为每一种数据类型都定义一种监听方法，这导致了这套判定机制变得复杂。
+### 如何判断状态更新
+
+对于如何判断状态是否发生了更新，react 使用 `Object.is`，solid 使用 `===`，而 vue 则定义了一套蛮复杂的方法。这似乎是因为 vue 是通过「监听」对响应式状态的操作来实现「状态更新与否」的判断的，由于被监听的数据的数据类型是五花八门的，所以 vue 需要为每一种数据类型都定义一种监听方法，这就导致了这套判定机制变得复杂。
+
+### ref 是 reactive 的补丁
+
+`ref` 之所以要把入参包在 `{ value }` 结构中，是因为原始数据类型只有被改造成复杂数据类型才能成为响应式状态，所以我认为 `ref` 是 `reactive` 的补丁（因为 `reactive` 无法处理原始数据类型）。
+
+
 
 ## reactive()
 
@@ -79,3 +124,4 @@ shallowProxy.value === shallowRef(raw).value;          // true
 shallowProxy.value === shallowRef(shallowProxy).value; // true
 ```
 
+## 响应式状态是如何办到的
