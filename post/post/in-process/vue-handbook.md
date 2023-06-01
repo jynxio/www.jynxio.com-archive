@@ -8,60 +8,64 @@
 const state = ref( value );
 ```
 
-### 自动解包
+之所以要把 `ref()` 的返回值设计成 `{ value }` 结构，是因为原始数据类型必须被改造成复杂数据类型之后才能成为响应式状态。
 
-1. 如果在 template 内使用 ref 实例，那么该实例会被自动解包；
-2. 如果在 `ref()` 或 `reactive()` 内嵌套 ref 实例，那么内部的 ref 实例会被解包；
+## 混乱的解包规则
 
-情况一的示例代码：
+自动解包是指：ref 实例会直接被默认当作 ref.value 来处理。vue 的自动解包规则很混乱，请总是遵循最佳实践。
+
+### 最佳实践
+
+- 不要在 ref 实例或 reactive 实例的内部嵌入另一个 ref 实例或 reactive 实例；
+- 不要在 `ref()` 或 `reactive()` 调用中传入 ref 实例或 reactive 实例；
+- 在 template 中，对被直接调用的 ref 实例使用自动解包；
+- 在 template 中，对被以属性访问模式所调用的 ref 实例使用手动解包；
+
+### 解包规则
+
+1. 在 template 中的 ref 实例，有些会被自动解包，有些则不会；
+2. 在 `ref()` 内使用的 ref 实例，如果是直接使用，或者是被包裹在 `{}` 内使用，那么就会被解包；如果是被包裹在非 `{}` 内使用（比如数组、Map 等），那么就不会被解包；
+3. 在 `reactive()` 内使用的 `ref` 实例，如果被包裹在 `{}` 内使用，那么就会被解包；如果被包裹在非 `{}` 内使用（比如数组、Map 等），那么就不会被解包；
 
 ```vue
 <script setup>
 import { ref } from "vue";
 
+/* 示例2、示例3 */
+ref( ref( 0 ) ).value                   // 0（自动解包了）
+ref( { count: ref( 0 ) } ).value.count; // 0（自动解包了）
+reactive( { value: ref( 0 ) } ).value;  // 0（自动解包了）
+
+ref( [ ref( 1 ) ] ).value[ 0 ].value;   // 1（未自动解包）
+reactive( [ ref( 1 ) ] )[ 0 ].value;    // 1（未自动解包）
+
+const refState = ref( 0 );
+refState.value = ref( 1 ); // refState: 
+
+const reactiveState = ref( { value: 0 } );
+reactiveState.value = ref( 1 ); // reactiveState: Proxy(Object) {}
+
+/* 示例1 */
 const age = ref( 18 );
-const name = ref( "jynxio" );
-const people = { age, name };
+const josh = { age };
 </script>
 
 <template>
-	<!-- 自动解包，渲染：18 -->
-	<p>{{ age }}</p>
-	<!-- 自动解包，渲染：18 -->
-	<p>{{ people.age }}</p>
-	<!-- 手动解包，渲染：18 -->
-	<p>{{ people.age.value }}</p>
-	<!-- 不会自动解包，渲染：[object Object]1 -->
-	<p>{{ people.age + 1 }}</p>
-	<!-- 必须手动解包，渲染：19 -->
-	<p>{{ people.age.value + 1 }}</p>
+	<p>{{ age }}      => 18</p>
+	<p>{{ josh.age }} => 18</p>
+
+	<p>{{ age.value }}      => undefined</p>
+	<p>{{ josh.age.value }} => 18</p>
+
+	<p>{{ age + 1 }}      => 19</p>
+	<p>{{ josh.age + 1 }} => [object Object]1</p>
+
+	<p>{{ age.value + 1 }}      => NaN</p>
+	<p>{{ josh.age.value + 1 }} => 19</p>
 </template>
 ```
 
-「`people.age` 和 `people.age.value` 都是合法操作」这种设计带来的混乱大于其带来的便利，它会诱导用户写出 `people.age + 1` 这种非法操作，因此总是使用 `people.age.value` 而不要使用 `people.age`。
-
-情况二的示例代码：
-
-// TODO 从「Ref Unwrapping in Reactive Objects」开始，关于自动解包，设计的好混乱
-
-```js
-// josh和john的结构是一样的
-const john = ref( { age: 18 } );
-const josh = ref( { age: ref( 18 ) } );
-
-const john = reactive( { age: 18 } )
-const josh = reactive( { age: ref( 18 ) } )
-```
-
-### 如何判断状态更新
-
-对于如何判断状态是否发生了更新，react 使用 `Object.is`，solid 使用 `===`，而 vue 则定义了一套蛮复杂的方法。这似乎是因为 vue 是通过「监听」对响应式状态的操作来实现「状态更新与否」的判断的，由于被监听的数据的数据类型是五花八门的，所以 vue 需要为每一种数据类型都定义一种监听方法，这就导致了这套判定机制变得复杂。
-
-### ref 是 reactive 的补丁
-
-`ref` 之所以要把入参包在 `{ value }` 结构中，是因为原始数据类型只有被改造成复杂数据类型才能成为响应式状态，所以我认为 `ref` 是 `reactive` 的补丁（因为 `reactive` 无法处理原始数据类型）。
-
-
+> `josh.age` 和 `josh.age.value` 都是合法操作，这会诱导用户写出 `josh.age + 1` 这种非法操作。
 
 ## reactive()
 
