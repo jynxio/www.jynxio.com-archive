@@ -22,10 +22,49 @@ CSS Modules 的核心原理大致是「将类名哈希化」，以此来保证�
 
 ## 如何使用
 
-
+### 项目结构
 
 ```
+|- node_modules
+|- src
+    |- style
+        |- color.module.css
+        |- typography.module.css
+    |- index.js
+|- index.html
+|- package.json
+```
 
+### 基本用法
+
+这是打包前的代码：
+
+```css
+/* color.module.css */
+.red {
+    color: hsl(0 100% 50%);
+}
+```
+
+```js
+// index.js
+import style from "./color.module.css";
+
+elementNode.setAttribute( "class", style.red );
+```
+
+这是打包后的代码：
+
+```css
+/* color.module.css */
+._red_1jhzg_11 {
+    color: hsl(0 100% 50%);
+}
+```
+
+```js
+// index.js
+elementNode.setAttribute( "class", "._red_1jhzg_11" );
 ```
 
 
