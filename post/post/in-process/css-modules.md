@@ -1,4 +1,36 @@
-# CSS 模块
+# CSS Modules
+
+## 概述
+
+CSS Modules 是一种解决 CSS 全局污染和选择器名冲突的技术，它简洁易用，它不是 CSS 预处理器，它可以和 Sass、Less、PostCSS、Stylus 等预处理器一起工作。
+
+CSS Modules 的核心原理大致是「将类名哈希化」，以此来保证类名的唯一性，于是便可以解决全局污染和选择器名冲突问题了。下文的「如何使用」小节描述了 CSS Modules 的运作方式，阅读它！然后你就知道 CSS Modules 的具体原理了。
+
+## 如何启用
+
+在正式开始使用之前，你首先需要知道如何启用 CSS Modules。
+
+### 如果你正在使用开发服务器
+
+如果你正在使用诸如 Vite、Webpack 之类的开发服务器，那么 CSS Modules 功能已经以内建或插件的形式提供给了开发者。
+
+比如 Vite 内建支持 CSS Modules 特性，只要你用 `.module.css` 来作为 CSS 文件的命名后缀，那么该 CSS 文件就会启用 CSS Modules 特性，你可以从 [这里](https://vitejs.dev/guide/features.html#css-modules) 找到更多信息。
+
+### 如果你没有使用开发服务器
+
+如果你没有使用任何开发服务器，那么你就需要 [PostCSS-Modules](https://github.com/madyankin/postcss-modules) 这个家伙。
+
+## 如何使用
+
+
+
+```
+
+```
+
+
+
+## 路径约定
 
 ## CSS Modules Library
 
