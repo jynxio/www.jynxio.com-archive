@@ -41,9 +41,7 @@ CSS Modules 的核心原理大致是「将类名哈希化」，以此来保证�
 
 ```css
 /* color.module.css */
-.red {
-    color: hsl(0 100% 50%);
-}
+.red { color: hsl(0 100% 50%); }
 ```
 
 ```js
@@ -57,15 +55,89 @@ elementNode.setAttribute( "class", style.red );
 
 ```css
 /* color.module.css */
-._red_1jhzg_11 {
-    color: hsl(0 100% 50%);
-}
+._red_1jhzg_11 { color: hsl(0 100% 50%); }
 ```
 
 ```js
 // index.js
 elementNode.setAttribute( "class", "._red_1jhzg_11" );
 ```
+
+### 全局作用域
+
+凡是以 `:global(.className)` 形式所声明的类名都不会被哈希化，它们会保持原样，所以它们就是全局的。
+
+```css
+:global(.red) {
+    color: red;
+}
+```
+
+但是在 JavaScript 中，你就不能用和局部类名一样的方式来使用了，你必须得直接使用其全局类名字符串，因为：
+
+```js
+import style from "./color.module.css";
+
+console.log( style.red ); // undefined
+elementNode.classList.add( "red" ); // 你只能这样直接用类名
+```
+
+事实上，存在一个和 `:global()` 相对的语法 `:local()`，后者其实是默认启用的。比如，下述两行代码是等价的：
+
+```css
+.red { color: red; }
+:local(.red) { color: red; }
+```
+
+### 组合
+
+```css
+.baseStyle {
+    color: red;
+}
+
+.moreStyle {
+    composes: baseStyle;
+    font-weight: 700;
+}
+
+/* 打包成 */
+._baseStyle_981e2_11 { color: red; }
+._moreStyle_279f1_32 { font-weight: 700; }
+```
+
+```js
+import style from "./style.module.css";
+
+style.baseStyle; // _baseStyle_981e2_11
+style.moreStyle; // _baseStyle_981e2_11 _moreStyle_279f1_32
+```
+
+### 跨文件组合
+
+```css
+.test {
+    composes: className from "./another.module.css";
+}
+```
+
+### 多组合
+
+TODO：多组合的注意事项
+
+```css
+.test {
+    composes: className1 className2 className3;
+}
+
+.test {
+    composes: className1;
+    composes: className2;
+    composes: className3;
+}
+```
+
+
 
 ## 命名格式
 
