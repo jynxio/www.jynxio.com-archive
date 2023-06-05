@@ -13,17 +13,6 @@
 
 <br/>
 
-<h2 align="center">To-do List</h2>
-
-It’s going to be even better!
-
-- [x] Dynamic routing
-- [x] Interactive animations
-- [x] Light mode
-- [x] Fuzzy search
-- [ ] Cover page and creative page
-- [ ] Upgrade to [Astro](https://github.com/withastro/astro)
-
 <br/>
 
 <h2 align="center">License</h2>
