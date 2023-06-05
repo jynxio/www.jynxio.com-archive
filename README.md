@@ -1,22 +1,10 @@
-<h1 align="center"><a href="https://www.jynxio.com">Jynxio's blog</a> (Made by <a href="https://github.com/solidjs/solid">Solid.js</a>)</h1>
+<h1 align="center">Overview</h1>
+<h3 align="center"><a href="https://www.jynxio.com">www.jynxio.com</a></h3>
+<p align="center">This is a personal blog made by <a href="https://github.com/solidjs/solid">SolidJS</p>
+<p align="center">< Chore | Maintenance | Improvement | Writing | Feature | Release ></p>
+<p align="center">< 🧹 | 🐛 | 🌱 | 📄 | ✨ | 🚀 ></p>
 
-<br/>
+<br />
 
-<h2 align="center">Emoji</h2>
-
-- 🧹 -> Chore
-- 🐛 -> Maintenance
-- 🌱 -> Progress o f features
-- 📄 -> Progress of writing
-- ✨ -> Feature
-- 🚀 -> Release (new post & new version)
-
-<br/>
-
-<br/>
-
-<h2 align="center">License</h2>
-
-[Attribution-NonCommercial-NoDerivatives (BY-NC-ND) 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)
-
-[知识署名-禁止商业-禁止演绎（BY-NC-ND）4.0 国际许可协议](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.zh-Hans)
+<h1 align="center">License</h1>
+<p align="center"><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">CC BY-NC-ND 4.0</a></p>
