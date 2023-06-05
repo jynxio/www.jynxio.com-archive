@@ -67,9 +67,13 @@ elementNode.setAttribute( "class", style.red );
 elementNode.setAttribute( "class", "._red_1jhzg_11" );
 ```
 
+## 命名格式
 
+推荐使用驼峰命名法（camelCase），如此一来，我们就可以直接使用 `.` 属性访问符来访问类名了。即 `style.className`。你当然也可以用蛇形命名法或连字符命名法（kebab-casing），不过你就得使用计算属性的形式来访问类名了，即 `style[class-name]` 形式。
 
 ## 路径约定
+
+
 
 ## CSS Modules Library
 
