@@ -2,9 +2,54 @@
 
 ## 概述
 
-CSS Modules 是一种解决 CSS 全局污染和选择器名冲突的技术，它简洁易用，它不是 CSS 预处理器，它可以和 Sass、Less、PostCSS、Stylus 等预处理器一起工作。
+CSS Modules 是一种解决 CSS 全局污染的技术，它简洁易用，它不是 CSS 预处理器，它可以和 Sass、Less、PostCSS、Stylus 等预处理器一起工作。
 
-CSS Modules 的核心原理大致是「将类名哈希化」，以此来保证类名的唯一性，于是便可以解决全局污染和选择器名冲突问题了。下文的「如何使用」小节描述了 CSS Modules 的运作方式，阅读它！然后你就知道 CSS Modules 的具体原理了。
+## 原理
+
+CSS Modules 的核心原理是「对类名进行哈希化处理」，通过保证类名的唯一性来避免选择器的冲突，于是便可以避免样式的冲突了。具体来说，同一个样式文件内的相同类名的哈希化结果是相同的，不同样式文件内的相同类名的哈希化结果是不一样的，比如：
+
+- 样式表 A 内的所有 `.color` 都会被转换为 `._color_1xugd_37`；
+- 样式表 B 内的所有 `.color` 都会被转换为 `._color_kbtd9_37`；
+
+虽然我们在两个样式表（A 和 B）中使用了重复的类名，不过由于 CSS Modules 把他们哈希化成了不同的结果，所以实际上它们是不同的类名，于是它们的样式就不会发生冲突了。
+
+> CSS Modules 还可以对 id 进行哈希化处理！但我们不应该在样式表中使用 id 选择器，不是吗？
+>
+
+下面是一个由 Vite 驱动的 CSS Modules 示例：
+
+```
+# 文件结构
+|- index.jsx
+|- a.module.css
+|- b.module.css
+```
+
+```css
+/* a.module.css */
+.color { color: pink; }
+```
+
+```css
+/* b.module.css */
+.color { color: teal; }
+```
+
+```jsx
+// index.jsx
+import styleA from "./a.module.css";
+import styleB from "./b.module.css";
+
+function ReactComponent () {
+    styleA.color; // _color_1xugd_37
+    styleB.color; // _color_kbtd9_37
+
+    return <>
+    	<p className={ styleA.color }>a pink paragraph</p>
+    	<p className={ styleB.color }>a teal paragraph</p>
+    </>;
+}
+```
 
 ## 如何启用
 
@@ -18,50 +63,39 @@ CSS Modules 的核心原理大致是「将类名哈希化」，以此来保证�
 
 ### 如果你没有使用开发服务器
 
-如果你没有使用任何开发服务器，那么你就需要 [PostCSS-Modules](https://github.com/madyankin/postcss-modules) 这个家伙。
+如果你没有使用任何开发服务器，那么你就需要 [PostCSS-Modules](https://github.com/madyankin/postcss-modules) 了。
 
 ## 如何使用
 
-### 项目结构
+### 基础用法
 
 ```
-|- node_modules
-|- src
-    |- style
-        |- color.module.css
-        |- typography.module.css
-    |- index.js
-|- index.html
-|- package.json
+# 文件结构
+|- index.jsx
+」- style.module.css
 ```
-
-### 基本用法
-
-这是打包前的代码：
 
 ```css
-/* color.module.css */
-.red { color: hsl(0 100% 50%); }
+/* style.module.css */
+.color { color: pink; }
 ```
 
-```js
-// index.js
-import style from "./color.module.css";
+```jsx
+// index.jsx
+import style from "./style.module.css";
 
-elementNode.setAttribute( "class", style.red );
+function ReactComponent () {
+    return <p className={ style.color }>a pink paragraph</p>
+}
 ```
 
-这是打包后的代码：
+### :local()
 
-```css
-/* color.module.css */
-._red_1jhzg_11 { color: hsl(0 100% 50%); }
-```
+`:local()` 是一个由 CSS Modules 所定义的伪类选择器，它可以接受任意选择器，不过它只会对 ID 选择器和类名选择器进行哈希化处理。
 
-```js
-// index.js
-elementNode.setAttribute( "class", "._red_1jhzg_11" );
-```
+// TODO
+
+### :global()
 
 ### 全局作用域
 
