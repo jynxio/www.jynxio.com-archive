@@ -124,9 +124,39 @@ const ReactComponent = () => <span id={ "icon" } />
 
 因为 `:global()` 不会把其所接收到的类名选择器或 ID 选择器的标识符抛出到外界，所以 `style` 对象上根本就不存在 `icon` 属性，因此请直接使用 `"icon"` 字符串来为 `id` 属性赋值，而不要用 `style.icon`。
 
-### composes
+### Composition
 
-// TODO
+CSS Modules 允许
+
+// composes 可以写在非首行
+
+// composes 所组合的样式，如果发生了冲突，那么将会按照样式表中的书写顺序，从上到下来生效
+
+// composes 所接收的参数必须在当前样式之前
+
+// composes 的原理是把所有类名都组合在一起
+
+// 研究不同文件之间的 composes
+
+// 如果在a.module.css中，先使用composes导入了b.module.css的某个类名，然后再用composes导入了c.module.css的某个类名，那么 vite 打包时会先打包b.module.css中所有样式，然后再打包c.modulecss中所有样式！
+
+// 继续上一条，如果在d.module.css 中，先使用composes导入了c.module.css的某个类名，然后再用composes导入了b.module.css的某个类名，然后在 js 中先倒入 a 的模块，再倒入 d 的模块，你猜怎么着！最终 vite 会先打包c.modulecss中所有样式，然后再打包b.modulecss中所有样式！
+
+// 另外，如果你在a.module.css中，使用composes: color1 color2 from "./b.module.css"，那么color1和color2谁生效呢？这取决于color1和color2在b.module.css中谁更晚被定义！更晚被定义的就会生效！
+
+// 然后！如果你在a.module.css中，先在.colorA1{}中使用composes导入了b.module.css的某个样式，然后后用（指书写顺序更晚，在CSS文件中行数更大）composes导入了c.module.css，然后！你还在a.module.css的.colorA2（.colorA2比.colorA1的书写顺序更晚）中使用composes导入了c.module.css，然后后用composes导入了b.module.css，那么最终 Vite 会先打包整个c.module.css的样式，然后再打包整个b.module.css的样式！
+
+// 接上一条，如果有另一个d.module.css也做了和a.module.css同样的事情，然后在js脚本中你既导入了a.module.css的模块又导入了d.module.css的模块，那么会发生什么？bomb！
+
+// composes 会导入类名和 id 名的哈希值，如果你既用了类名选择器，又用了 id 选择器，那么为了要让你的样式生效，你就要为元素绑定类名和 id，可是如果在导出的一系列哈希值中，只有一个哈希值才有 id 样式，或者只有一个哈希值才有类名样式，那么你该怎么办？id 只能指绑定一个，那么你要怎么筛选出哪个 id 是声明了样式的呢？另一个问题，由于 composes 本身的复杂度，如果你既用 id 又用类名，那么最后 composes 会打包出什么 css 来？复杂度更爆炸了！所以... 不要用 id 来写 css modules！对吗？
+
+// 最后，不要循环composes，比如在a.module.css中composes了b.module.css，然后在b.module.css中composes了a.module.css，在 Vite 中，开发服务器和打包器都会死机（就是一直在工作，但是始终没更新或打包结果）。CSS Modules 没有要求打包器对这种情况跑出错误，因为它的原话是：The module system 「may」 emit an error。
+
+定义
+
+语法
+
+示例
 
 ```css
 .baseStyle {
@@ -182,7 +212,7 @@ TODO：多组合的注意事项
 
 ## 路径约定
 
-
+## 关于 @keyframes
 
 ## CSS Modules Library
 
