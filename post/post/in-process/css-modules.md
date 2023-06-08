@@ -128,15 +128,13 @@ const ReactComponent = () => <span id={ "icon" } />
 
 CSS Modules 允许
 
-// composes 可以写在非首行
+// composes 的原理是把所有类名都组合在一起，在组合好的哈希类名组合中，哈希类名的先后顺序不代表其所对应的样式所生效的顺序，实际上是没关系的，生效顺序只和打包后的样式文件中的样式的定义的先后顺序有关系，而这又很复杂...
 
-// composes 所组合的样式，如果发生了冲突，那么将会按照样式表中的书写顺序，从上到下来生效
+// composes 可以写在非首行（不符合规范，但确实可行
 
-// composes 所接收的参数必须在当前样式之前
+// 在一个文件内，某个选择器使用了 composes 来组合当前文件内的其他类名/id，那么composes所接收的参数必须在当前样式之前就被定义好。
 
-// composes 的原理是把所有类名都组合在一起
-
-// 研究不同文件之间的 composes
+// 在一个文件内，某个选择器使用 composes 来组合当前文件内的其他类名/id，样式生效的顺序就是所有样式在当前文件内定义的先后顺序，越晚的生效，和 composes: className1 className2 中的 className1 和 className2 的先后顺序没有关系，只和 className1 和 className2 在文件中的定义顺序有关系，越晚的生效。
 
 // 如果在a.module.css中，先使用composes导入了b.module.css的某个类名，然后再用composes导入了c.module.css的某个类名，那么 vite 打包时会先打包b.module.css中所有样式，然后再打包c.modulecss中所有样式！
 
@@ -151,6 +149,8 @@ CSS Modules 允许
 // composes 会导入类名和 id 名的哈希值，如果你既用了类名选择器，又用了 id 选择器，那么为了要让你的样式生效，你就要为元素绑定类名和 id，可是如果在导出的一系列哈希值中，只有一个哈希值才有 id 样式，或者只有一个哈希值才有类名样式，那么你该怎么办？id 只能指绑定一个，那么你要怎么筛选出哪个 id 是声明了样式的呢？另一个问题，由于 composes 本身的复杂度，如果你既用 id 又用类名，那么最后 composes 会打包出什么 css 来？复杂度更爆炸了！所以... 不要用 id 来写 css modules！对吗？
 
 // 最后，不要循环composes，比如在a.module.css中composes了b.module.css，然后在b.module.css中composes了a.module.css，在 Vite 中，开发服务器和打包器都会死机（就是一直在工作，但是始终没更新或打包结果）。CSS Modules 没有要求打包器对这种情况跑出错误，因为它的原话是：The module system 「may」 emit an error。
+
+// 如果composes一个global，那么global先生效还是后生效呢？如果这个global是被放在一个style.css文件中呢？如果这个global是被一个style.module.css的:global()所声明的呢？... 似乎谁先生效取决于导入顺序，而和composes 本身没有任何关系，对吗？
 
 定义
 
