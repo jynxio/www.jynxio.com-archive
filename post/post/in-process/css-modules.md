@@ -2,20 +2,33 @@
 
 ## 概述
 
-CSS Modules 是一种解决 CSS 全局污染的技术，它简洁易用，它不是 CSS 预处理器，它可以和 Sass、Less、PostCSS、Stylus 等预处理器一起工作。
+[CSS Modules](https://github.com/css-modules/css-modules) 是一种解决 CSS 全局污染的技术，它的核心原理是对类名进行哈希化处理，以使得类名可以在 CSS 的全局作用域中保持唯一性。具体来说，同一个模块样式表中的同名类名的哈希化结果是相同的，不同模块样式表之间的同名类名的哈希化结果是不同的，比如：
+
+- 模块样式表 A 中的 `.color` 会被转化为 `._color_1xugd_37`；
+- 模块样式表 B 中的 `.color` 会被转换为 `._color_kbtd9_37`；
+
+虽然我们在两个模块样式表中使用了重复的类名，但是它们所对应的样式却并不会发生冲突，这是因为 CSS Modules 会把它们处理成不同的类名。这意味着我们可以在不同的模块样式表之间使用相同的类名了。
+
+> CSS Modules 这个名称会让人误以为它是通过创造出局部作用域来解决 CSS 全局污染问题的，而实际上并非如此。CSS Modules 是通过保证类名的唯一性来解决 CSS 全局污染问题的，它从来没有创造出局部作用域。
 
 ## 术语
 
-TODO
+在继续阅读本文之前，我们需要先约定好一些术语的定义。
 
-## 原理
+| 名词       | 含义                                                 |
+| ---------- | ---------------------------------------------------- |
+| 样式声明   | 如 `inline-size: 100%`                               |
+| 样式       | 样式声明的集合，如 `{ inline-size: 100% }`           |
+| 样式表     | 样式集合的文件，如 `style.css`                       |
+| 模块样式表 | 指采用了 CSS Modules 的样式表，如 `style.module.css` |
 
-CSS Modules 的核心原理是「对类名选择器和 ID 选择器的标识符进行哈希化处理」，然后通过标识符的唯一性来避免选择器之间的冲突，于是便就可以避免样式冲突了。具体来说，同一个样式表文件内的相同的标识符（指类名选择器和 ID 选择器的标识符）的哈希化结果是相同的，不同样式表文件之间的相同的标识符的哈希化结果是不一样的：
+注意，「模块样式表」是我自创的术语。
 
-- 样式表 A 内的所有 `.color` 和 `#color` 都会被转换为 `._color_1xugd_37` 和 `#_color_1xugd_37`；
-- 样式表 B 内的所有 `.color` 和 `#color` 都会被转换为 `._color_kbtd9_37` 和 `#_color_kbtd9_37`；
+## 最佳实践
 
-虽然我们在两个样式表（A 和 B）中使用了重复的标识符（即 `color`），不过由于 CSS Modules 把它们哈希化成了不同的结果，所以实际上它们是不同的标识符，于是它们的样式就不会发生冲突了。
+## 也能处理 ID 选择器
+
+## 范例
 
 下面是一个由 Vite 驱动的 CSS Modules 示例：
 
@@ -54,7 +67,7 @@ function ReactComponent () {
 }
 ```
 
-## 如何启用
+## 启用
 
 在正式开始使用之前，你首先需要知道如何启用 CSS Modules。
 
@@ -68,9 +81,9 @@ function ReactComponent () {
 
 如果你没有使用任何开发服务器，那么你就需要 [PostCSS-Modules](https://github.com/madyankin/postcss-modules) 了。
 
-## 如何使用
+## 基础用法
 
-### 基础用法
+下面演示了 CSS Modules 的基础用法。
 
 ```
 # 文件结构
@@ -87,10 +100,14 @@ function ReactComponent () {
 // index.jsx
 import style from "./style.module.css";
 
-const ReactComponent = () => <p className={ style.color } />;
+function ReactComponent () {
+    return <p className={ style.color }/>; // <p class="_color_kbtd9_37"></p>
+}
 ```
 
-### :local()
+## 创建局部选择器
+
+## :local() 伪类选择器
 
 `:local()` 是一个由 CSS Modules 所定义的伪类选择器（不是原生的 CSS 伪类选择器），它可以接受任意数量的任意选择器，不过它只会对 ID 选择器和类名选择器的标识符进行哈希化处理。比如，在 CSS Modules 文件中，`:local(.icon > svg)` 选择器最后会被转换为为 `_icon_9adfw_81 > svg`。
 
@@ -104,7 +121,7 @@ const ReactComponent = () => <p className={ style.color } />;
 
 关于其使用方法，请见上文的「基础用法」。
 
-### :global()
+## :global() 伪类选择器
 
 `:global()` 是一个由 CSS Modules 所定义的伪类选择器（不是原生的 CSS 伪类选择器），它可以接受任意数量的任意选择器，它不会对任何选择器进行任何处理，因此它被用于在 CSS Modules 样式表中创建全局样式。另外，它不会将其所接收到的类名选择器和 ID 选择器的标识符抛出到外界，这是它与 `:local()` 的第二个区别。
 
@@ -129,9 +146,17 @@ const ReactComponent = () => <span id={ "icon" } />
 > 因为 `:global()` 不会把其所接收到的类名选择器或 ID 选择器的标识符抛出到外界，所以 `style` 对象上根本就不存在 `icon` 属性，因此请直接使用 `"icon"` 字符串来为 `id` 属性赋值，而不要用 `style.icon`。
 >
 
-### Composition
+## composes 关键字
 
-CSS Modules 有一项名为「composition」的特性，该特性允许用户对样式进行组合，参与组合的样式的来源有 3 种，分别是：同文件内的其它样式、不同文件的其它样式、全局样式。
+CSS Modules 有一项名为「composition」的特性，该特性允许用户对样式进行组合，以便于样式的复用。参与组合的样式来源有 3 种，分别是：
+
+- 同一个模块样式表中的其他样式；
+- 另一个模块样式表中的样式；
+- 全局样式；
+
+
+
+你需要使用 `composes` 关键字来使用该特性，
 
 ```
 # 文件结构
