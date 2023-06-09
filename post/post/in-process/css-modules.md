@@ -4,6 +4,10 @@
 
 CSS Modules 是一种解决 CSS 全局污染的技术，它简洁易用，它不是 CSS 预处理器，它可以和 Sass、Less、PostCSS、Stylus 等预处理器一起工作。
 
+## 术语
+
+TODO
+
 ## 原理
 
 CSS Modules 的核心原理是「对类名选择器和 ID 选择器的标识符进行哈希化处理」，然后通过标识符的唯一性来避免选择器之间的冲突，于是便就可以避免样式冲突了。具体来说，同一个样式表文件内的相同的标识符（指类名选择器和 ID 选择器的标识符）的哈希化结果是相同的，不同样式表文件之间的相同的标识符的哈希化结果是不一样的：
@@ -71,7 +75,7 @@ function ReactComponent () {
 ```
 # 文件结构
 |- index.jsx
-」- style.module.css
+|- style.module.css
 ```
 
 ```css
@@ -109,7 +113,7 @@ const ReactComponent = () => <p className={ style.color } />;
 ```
 # 文件结构
 |- index.jsx
-」- style.module.css
+|- style.module.css
 ```
 
 ```css
@@ -122,11 +126,72 @@ const ReactComponent = () => <p className={ style.color } />;
 const ReactComponent = () => <span id={ "icon" } />
 ```
 
-因为 `:global()` 不会把其所接收到的类名选择器或 ID 选择器的标识符抛出到外界，所以 `style` 对象上根本就不存在 `icon` 属性，因此请直接使用 `"icon"` 字符串来为 `id` 属性赋值，而不要用 `style.icon`。
+> 因为 `:global()` 不会把其所接收到的类名选择器或 ID 选择器的标识符抛出到外界，所以 `style` 对象上根本就不存在 `icon` 属性，因此请直接使用 `"icon"` 字符串来为 `id` 属性赋值，而不要用 `style.icon`。
+>
 
 ### Composition
 
-CSS Modules 允许
+CSS Modules 有一项名为「composition」的特性，该特性允许用户对样式进行组合，参与组合的样式的来源有 3 种，分别是：同文件内的其它样式、不同文件的其它样式、全局样式。
+
+```
+# 文件结构
+|- node_modules
+|- src
+  |- global.css
+  |- a.module.css
+  |- b.module.css
+  |- c.module.css
+```
+
+```css
+/* global.css */
+.g1, .g2, .g3 {}
+```
+
+```css
+/* a.module.css */
+.a1, .a2, .a3 {}
+```
+
+```css
+/* b.module.css */
+.b1, .b2, .b3 {}
+```
+
+```css
+/* c.module.css */
+.c1, .c2, .c3 {}
+
+.c4 {
+    /* 导入同文件样式（方式一） */
+    composes: c1 c2 c3;
+    /* 导入同文件样式（方式二） */
+    composes: c1;
+    composes: c2;
+    composes: c3;
+
+    /* 导入跨文件样式（方式一） */
+    composes: a1 a2 a3 from "./a.module.css";
+    /* 导入跨文件样式（方式二） */
+    composes: a1 from "./a.module.css";
+    composes: a2 from "./a.module.css";
+    composes: a3 from "./a.module.css";
+    
+    /* 导入全局样式（方式一） */
+    composes: g1 g2 g3 from global;
+    /* 导入全局样式（方式二） */
+    composes: g1 from global;
+    composes: g2 from global;
+    composes: g3 from global;
+    
+    /* 此处开始书写样式规则 */
+    color: rebeccapurple;
+}
+```
+
+
+
+允许将样式彼此组合在一起，这便是
 
 // composes 的原理是把所有类名都组合在一起，在组合好的哈希类名组合中，哈希类名的先后顺序不代表其所对应的样式所生效的顺序，实际上是没关系的，生效顺序只和打包后的样式文件中的样式的定义的先后顺序有关系，而这又很复杂...
 
@@ -150,7 +215,13 @@ CSS Modules 允许
 
 // 最后，不要循环composes，比如在a.module.css中composes了b.module.css，然后在b.module.css中composes了a.module.css，在 Vite 中，开发服务器和打包器都会死机（就是一直在工作，但是始终没更新或打包结果）。CSS Modules 没有要求打包器对这种情况跑出错误，因为它的原话是：The module system 「may」 emit an error。
 
+// 如果导入一个虚空样式，比如导入 z1 from "./c.module.css"，那么 z1 的值是 undefined，然后 CSS Modules 会把它字符串化为 "undefined" 并拼接到结果中去。
+
 // 如果composes一个global，那么global先生效还是后生效呢？如果这个global是被放在一个style.css文件中呢？如果这个global是被一个style.module.css的:global()所声明的呢？... 似乎谁先生效取决于导入顺序，而和composes 本身没有任何关系，对吗？
+
+// 如果global是由style.css文件声明的，那么global的生效时机就取决于import的先后，我通常会把她放在最前，这样子就能保证global样式不会覆盖任意样式。如果global是由某个.module.css的:global()声明的，然后.module.css又有composes的话，global的生效顺序就取决于其打包顺序了，但是它会被打包在那个位置？取决于composes，然后就会引发前面讨论过的问题，超级麻烦！所以不要用:global()来声明全局样式。
+
+// composes globalClassName from global 就是单纯的组合上一个 globalClassName，它不涉及任何的文件导入，它不会影响打包器对文件的打包顺序。
 
 定义
 
