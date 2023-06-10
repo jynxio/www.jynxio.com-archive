@@ -2,17 +2,17 @@
 
 ## 概述
 
-如果样式规则之间发生了重叠，那么 CSS 就会通过层叠算法（cascade algorithm）和优先级算法（specificity algorithm）来决定应该保留哪些样式规则。
+如果样式声明之间发生了重叠，那么 CSS 就会通过层叠算法（cascade algorithm）和优先级算法（specificity algorithm）来决定应该保留哪些样式声明。
 
 ## 原理
 
-1. 重要性更高的样式规则优先；
-2. 如果重要性相同，那么优先级更高的样式规则优先；
-3. 如果重要性和优先级都相同，那么后定义的样式规则优先；
+1. 重要性更高的样式声明优先；
+2. 如果重要性相同，那么优先级更高的样式声明优先；
+3. 如果重要性和优先级都相同，那么后定义的样式声明优先；
 
 ## 重要性
 
-样式规则的重要性（precedence）取决于：origin、layer、important。下表是样式规则重要性的速查表，其重要性由上到下逐渐递增。
+样式声明的重要性（precedence）取决于：origin、layer、important。下表是样式声明重要性的速查表，其重要性由上到下逐渐递增。
 
 ```
 user-agent & first declared layer
@@ -50,7 +50,7 @@ any & transitions
 
 ### Origin
 
-Origin 是指样式规则的来源，样式规则只有 3 种来源，分别是：
+Origin 是指样式声明的来源，样式声明只有 3 种来源，分别是：
 
 - 用户样式表（user stylesheets）
 - 开发者样式表（author stylesheets）
@@ -58,9 +58,9 @@ Origin 是指样式规则的来源，样式规则只有 3 种来源，分别是�
 
 其中，用户代理样式表是指浏览器的默认样式表，一些浏览器通过使用内置的 `.css` 文件来实现默认样式，比如 [Chromium 源码中的默认样式表](https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/html/resources/html.css)，一些浏览器通过代码来模拟默认样式。
 
-开发者样式表是指由开发者编写的样式规则的集合，由于开发者就是网页的作者，所以开发者样式表叫做“author stylesheets”。开发者编写样式的途径有：`.css` 文件、`<style>` 标签、`style` 属性。
+开发者样式表是指由开发者编写的样式声明的集合，由于开发者就是网页的作者，所以开发者样式表叫做“author stylesheets”。开发者编写样式的途径有：`.css` 文件、`<style>` 标签、`style` 属性。
 
-用户样式表是指用户向浏览器注入的样式规则的集合，用户是指网页的读者。Firefox 浏览器允许用户通过在指定文件夹下放置 `.css` 文件的方式来向浏览器注入样式规则，而 Chrome 浏览器则必须借助插件才能完成类似的过程。如果你还不理解用户样式表，那么请阅读 [这篇文章](https://www.thoughtco.com/user-style-sheet-3469931)。
+用户样式表是指用户向浏览器注入的样式声明的集合，用户是指网页的读者。Firefox 浏览器允许用户通过在指定文件夹下放置 `.css` 文件的方式来向浏览器注入样式声明，而 Chrome 浏览器则必须借助插件才能完成类似的过程。如果你还不理解用户样式表，那么请阅读 [这篇文章](https://www.thoughtco.com/user-style-sheet-3469931)。
 
 ### Layer
 
@@ -72,11 +72,11 @@ Origin 是指样式规则的来源，样式规则只有 3 种来源，分别是�
 
 animation 使用 `@keyframes` 来定义动画，需要注意的是：
 
-- `@keyframes` 块内的样式规则不能使用 `!important`
-- `@keyframes` 块内的样式规则不会参与层叠
+- `@keyframes` 块内的样式声明不能使用 `!important`
+- `@keyframes` 块内的样式声明不会参与层叠
 - `@keyframes` 块本身会参与层叠
 
-如果块内的样式规则使用了 `!important`，那么这条样式规则就会被忽略，详见下例。
+如果块内的样式声明使用了 `!important`，那么这条样式声明就会被忽略，详见下例。
 
 ```css
 @keyframes {
@@ -105,7 +105,7 @@ animation 使用 `@keyframes` 来定义动画，需要注意的是：
 
 ## 优先级
 
-样式规则的优先级（specificity）等于组合选择器的优先级，组合选择器的优先级的计算公式如下（含义越具体，优先级越高）：
+样式声明的优先级（specificity）等于组合选择器的优先级，组合选择器的优先级的计算公式如下（含义越具体，优先级越高）：
 
 | 选择器               | 优先级  |
 | -------------------- | ------- |
