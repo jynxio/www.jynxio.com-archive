@@ -2,18 +2,11 @@
 
 ## 概述
 
-[CSS Modules](https://github.com/css-modules/css-modules) 是一种解决 CSS 全局污染的技术，它的核心原理是对类名进行哈希化处理，以使得类名可以在 CSS 的全局作用域中保持唯一性。具体来说，同一个模块样式表中的同名类名的哈希化结果是相同的，不同模块样式表之间的同名类名的哈希化结果是不同的，比如：
-
-- 模块样式表 A 中的 `.color` 会被转化为 `._color_1xugd_37`；
-- 模块样式表 B 中的 `.color` 会被转换为 `._color_kbtd9_37`；
-
-虽然我们在两个模块样式表中使用了重复的类名，但是它们所对应的样式却并不会发生冲突，这是因为 CSS Modules 会把它们处理成不同的类名。这意味着我们可以在不同的模块样式表之间使用相同的类名了。
-
-> CSS Modules 这个名称会让人误以为它是通过创造出局部作用域来解决 CSS 全局污染问题的，而实际上并非如此。CSS Modules 是通过保证类名的唯一性来解决 CSS 全局污染问题的，它从来没有创造出局部作用域。
+[CSS Modules](https://github.com/css-modules/css-modules) 是一种解决 CSS 全局污染的技术，它赋予了我们在不同的样式表之间使用重复类名的能力。
 
 ## 术语
 
-在继续阅读本文之前，我们需要先约定好一些术语的定义。
+在正式开始阅读本文之前，我们需要先约定好一些术语的定义。
 
 | 名词       | 含义                                                 |
 | ---------- | ---------------------------------------------------- |
@@ -22,52 +15,204 @@
 | 样式表     | 样式集合的文件，如 `style.css`                       |
 | 模块样式表 | 指采用了 CSS Modules 的样式表，如 `style.module.css` |
 
-注意，「模块样式表」是我自创的术语。
+> 注意，「模块样式表」是我自创的术语。
+
+## 原理
+
+CSS Modules 核心原理是对类名进行哈希化处理，以使得类名可以在 CSS 的全局作用域中保持唯一性。具体来说，同一个模块样式表中的同名类名的哈希化结果是相同的，不同模块样式表之间的同名类名的哈希化结果是不同的，比如：
+
+- 模块样式表 A 中的 `.color` 会被转译为 `._color_1xugd_37`；
+- 模块样式表 B 中的 `.color` 会被转译为 `._color_kbtd9_37`；
+
+虽然我们在两个模块样式表中使用了重复的类名，但是它们所对应的样式却并不会发生冲突，这是因为 CSS Modules 会把它们转译成不同的类名。
+
+### 它其实还可以哈希化 ID！
+
+CSS Modules 不仅仅会对类名进行哈希化处理，它还会对 ID 进行哈希化处理，比如：
+
+- 模块样式表 A 中的 `.color` 和 `#color` 会被转译为 `._color_1xugd_37` 和 `#_color_1xugd_37`；
+- 模块样式表 B 中的 `.color` 和 `#color` 会被转译为 `._color_kbtd9_37` 和 `#_color_kbtd9_37`；
+
+### 别误会！它才没有创建局部作用域
+
+CSS Modules 的名字和作用会让人误以为它会创建局部作用域，并且 `:local()` 和 `:global()` 这两个伪类选择器会进一步加深这种误会。然而实际上，CSS Modules 不会（也无法）创建出任何局部作用域。
+
+值得重申的是：CSS Modules 的原理是对类名进行哈希化，而不是创建局部作用域并将类名限制在该作用域内。
 
 ## 最佳实践
 
-## 也能处理 ID 选择器
+CSS Modules 的某些特性容易引发意料之外的情况，为了避免此类事故，请让我们克制的使用它。下面是我总结的几条最佳实践，它可以帮助我们避免意外之外的情况。
 
-## 范例
+- 禁止在模块样式表中使用 ID 选择器；
+- 禁止在模块样式表中使用 `:global()`；
+- 禁止使用 `composes` 导入另一个模块样式表中的其他样式；
+- 如果需要使用 `composes` 来导入另一个模块样式表中的其他样式，那么务必确保导入者和被导入者之间没有样式冲突；
+- 如果你使用 `composes` 来导入同一个模块样式表的其他样式，那么务必确保被导入者的声明顺序在导入者之前（暂时性死区）；
+- 如果你使用 `composes` 来导入另一个模块样式表的其他样式，那么请务必确保被导入者没有导入导入者（循环导入）；
 
-下面是一个由 Vite 驱动的 CSS Modules 示例：
+下面是一个遵循最佳实践的案例：
 
 ```
 # 文件结构
-|- index.jsx
-|- a.module.css
-|- b.module.css
-```
-
-```css
-/* a.module.css */
-.color {}
-#color {}
-```
-
-```css
-/* b.module.css */
-.color {}
-#color {}
+|- ...
+|- node_modules
+|- src
+  |- index.jsx
+  |- reset.css
+  |- global.css
+  |- Component.jsx
+  |- Component.module.css
 ```
 
 ```jsx
-// index.jsx
-import styleA from "./a.module.css";
-import styleB from "./b.module.css";
+// index.jsx - 入口文件
+import "./reset.css";
+import "./global.css";
 
-function ReactComponent () {
-    return <>
-	    <p id={ styleA.color } className={ styleA.color }>{ styleA.color }</p>
-	    { /* <p id="_color_1xugd_37" class="_color_1xugd_37">_color_1xugd_37</p> */ }
+// ...
+```
 
-	    <p id={ styleA.color } className={ styleB.color }>{ styleB.color }</p>
-	    { /* <p id="_color_kbtd9_37" class="_color_kbtd9_37">_color_kbtd9_37</p> */ }
-    </>;
+```jsx
+import style from "./Component.module.css";
+
+function Component () {
+    style.button; // _button_db0cy_23 _reset_db0cy_1 _appearance_db0cy_9 _content_db0cy_18
+    
+    return <button className={ style.button }>Submit</button>;
 }
 ```
 
-## 启用
+```css
+.reset {
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.appearance {
+    inline-size: 9rem;
+    padding: 0.4rem 1rem;
+    margin: 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid hsl(210 61% 31%);
+    background-color: hsla(210 61% 51% / 0.1);
+}
+
+.content {
+    color: hsl(210 61% 31%);;
+    font-family: cursive;
+}
+
+.button {
+    composes: reset appearance content;
+}
+```
+
+### 为什么禁用 ID 选择器？
+
+假设我们在一个模块样式表中使用了很多个类名选择器和 ID 选择器，然后我们在另一个 JavaScript 文件中导入了该模块样式表，并且准备把类名和 ID 赋值给相应的元素时，请问哪些要作为类名来赋值？哪些要作为 ID 来赋值呢？这很难记住，对不对？
+
+为了避免出现这种情况，我们应该只使用类名选择器或 ID 选择器中的其中一种，那么为什么要选择类名选择器呢？原因有 3:
+
+- 类名选择器比 ID 选择器更流行；
+- 如果元素的样式有许多种来源，那么我们可以通过组合类名的方式来解决该需求，然而我们却并不能组合 ID，因为每个元素的 ID 必须是唯一的；
+- CSS Modules 的 composition 的工作原理是把多个标识符（类名或 ID）组合在一起（以空白符来分隔不同的标识符），显然的是，类名可以被组合在一起，但 ID 不应该被组合在一起；
+
+### 为什么禁用 :global()？
+
+假设我们在许多模块样式表中都使用了 `:global()` 来创建全局样式，那么请问我们最后一共有哪些全局样式呢？
+
+更加致命的是，如果这些全局样式之间发生了冲突，并且它们的选择器的重要性和优先级都是相同的，那么谁才是冲突的胜者呢？这就取决于谁是最晚定义的，可是谁才是最晚定义的呢？这就取决于模块样式表们的导入顺序了，可是模块样式表们的导入顺序是由什么决定的呢？是由 `import` 和 `composes` 共同决定的... 这一切真的很棘手，不是吗？
+
+### 为什么禁用 composes 的跨文件导入？
+
+因为如果我们使用 `composes` 来导入另一个模块样式文件的样式，那么 `composes` 就会影响模块样式文件之间的打包顺序，继而影响到最终的样式呈现。
+
+详见下例：
+
+```css
+/* a.module.css */
+.a { color: red }
+
+/* b.module.css */
+.b { color: green }
+
+/* c.module.css */
+.c {
+    composes: a from "./a.module.css";
+    composes: b from "./b.module.css";
+}
+
+/* d.module.css */
+.d {
+    composes: b from "./b.module.css";
+    composes: a from "./a.module.css";
+}
+```
+
+```jsx
+// Example 1
+import styleC from "./c.module.css";
+
+function ReactComponent () {
+    return <p className={ styleC.c }>It's green!</p>;
+}
+
+// CSS的打包结果:
+// ._a_11uf4_1 { color:red }
+// ._b_i759l_1 { color:green }
+// ._c_jpvh6_1 {}
+```
+
+```jsx
+// Example 2
+import styleD from "./c.module.css";
+
+function ReactComponent () {
+    return <p className={ styleD.d }>It's red!</p>;
+}
+
+// CSS的打包结果:
+// ._b_i759l_1 { color:green }
+// ._a_11uf4_1 { color:red }
+// ._d_vbmg7_1 {}
+```
+
+```jsx
+// Example 3
+import styleC from "./c.module.css";
+import styleD from "./c.module.css";
+
+function ReactComponent () {
+    return <p className={ styleC.c }>It's red!</p>;
+}
+
+// CSS的打包结果
+// ._c_jpvh6_1 {}
+// ._b_i759l_1 { color:green }
+// ._a_11uf4_1 { color:red }
+// ._d_vbmg7_1 {}
+```
+
+```jsx
+// Example 4
+import styleD from "./c.module.css";
+import styleC from "./c.module.css";
+
+function ReactComponent () {
+    return <p className={ styleC.c }>It's green!</p>;
+}
+
+// CSS的打包结果
+// ._d_vbmg7_1 {}
+// ._a_11uf4_1 { color:red }
+// ._b_i759l_1 { color:green }
+// ._c_jpvh6_1 {}
+```
+
+## 如何启用
 
 在正式开始使用之前，你首先需要知道如何启用 CSS Modules。
 
@@ -81,138 +226,158 @@ function ReactComponent () {
 
 如果你没有使用任何开发服务器，那么你就需要 [PostCSS-Modules](https://github.com/madyankin/postcss-modules) 了。
 
-## 基础用法
+## :local()
 
-下面演示了 CSS Modules 的基础用法。
-
-```
-# 文件结构
-|- index.jsx
-|- style.module.css
-```
+`:local()` 是一个由 CSS Modules 所定义的伪类选择器，它不是原生的 CSS 伪类选择器，它可以接受任意数量的任意选择器，并对其中的 ID 选择器和类名选择器的标识符进行哈希化。其语法如下：
 
 ```css
-/* style.module.css */
-.color {}
-```
-
-```jsx
-// index.jsx
-import style from "./style.module.css";
-
-function ReactComponent () {
-    return <p className={ style.color }/>; // <p class="_color_kbtd9_37"></p>
-}
-```
-
-## 创建局部选择器
-
-## :local() 伪类选择器
-
-`:local()` 是一个由 CSS Modules 所定义的伪类选择器（不是原生的 CSS 伪类选择器），它可以接受任意数量的任意选择器，不过它只会对 ID 选择器和类名选择器的标识符进行哈希化处理。比如，在 CSS Modules 文件中，`:local(.icon > svg)` 选择器最后会被转换为为 `_icon_9adfw_81 > svg`。
-
-另外，`:local()` 是默认启用的，因此下述的两则样式是等价的：
-
-```css
-/* style.module.css */
-.icon > svg {}
 :local(.icon > svg) {}
+:local(#icon > svg) {}
 ```
 
-关于其使用方法，请见上文的「基础用法」。
+`:local()` 会对 ID 选择器和类名选择器的标识符进行哈希化，比如：
 
-## :global() 伪类选择器
+```css
+/* style.module.css */
+:local(.icon > svg) {}
+:local(#icon > svg) {}
 
-`:global()` 是一个由 CSS Modules 所定义的伪类选择器（不是原生的 CSS 伪类选择器），它可以接受任意数量的任意选择器，它不会对任何选择器进行任何处理，因此它被用于在 CSS Modules 样式表中创建全局样式。另外，它不会将其所接收到的类名选择器和 ID 选择器的标识符抛出到外界，这是它与 `:local()` 的第二个区别。
-
-关于其使用方法，请见下例：
-
+/* bundle.css */
+._icon_9adfw_81 > svg {}
+#_icon_9adfw_81 > svg {}
 ```
-# 文件结构
-|- index.jsx
-|- style.module.css
+
+`:local()` 是默认启用的，`.icon {}` 会被视为 `:local(.icon) {}`。
+
+## :global()
+
+`:global()` 是一个由 CSS Modules 所定义的伪类选择器，它不是原生的 CSS 伪类选择器，它可以接受任意数量的任意选择器，它不会对任何选择器进行任何处理，因此它被用于在模块样式表中创建全局样式。其语法如下：
+
+```css
+:global(.icon > svg) {}
+:local(#icon > svg) {}
 ```
+
+`:global()` 不会对 ID 选择器和类名选择器的标识符进行哈希化，比如：
 
 ```css
 /* style.module.css */
 :global(.icon > svg) {}
+:global(#icon > svg) {}
+
+/* bundle.css */
+.icon > svg {}
+#icon > svg {}
+```
+
+`:global()` 不会将其所接收到的类名选择器和 ID 选择器的标识符抛出到外界，比如：
+
+```css
+/* style.module.css */
+:global(.icon) {}
 ```
 
 ```jsx
-// index.jsx
-const ReactComponent = () => <span id={ "icon" } />
+import style from "./style.module.css";
+
+function Component () {
+    style.icon; // undefined
+    
+    return <p className="icon" />;
+}
 ```
 
-> 因为 `:global()` 不会把其所接收到的类名选择器或 ID 选择器的标识符抛出到外界，所以 `style` 对象上根本就不存在 `icon` 属性，因此请直接使用 `"icon"` 字符串来为 `id` 属性赋值，而不要用 `style.icon`。
->
+## composes
 
-## composes 关键字
-
-CSS Modules 有一项名为「composition」的特性，该特性允许用户对样式进行组合，以便于样式的复用。参与组合的样式来源有 3 种，分别是：
+CSS Modules 有一项名为「composition」的特性，该特性允许用户对样式进行组合，以便于样式的复用。参与组合的样式可以有 3 种来源，分别是：
 
 - 同一个模块样式表中的其他样式；
 - 另一个模块样式表中的样式；
 - 全局样式；
 
+你需要通过 `composes` 关键字来使用 composition 特性，这是一个由 CSS Modules 所定义的私有的关键字。
 
+### 原理
 
-你需要使用 `composes` 关键字来使用该特性，
+composition 的原理是「组合」，具体来说 composition 会把被导入者的标识符附加到导入者的标识符之后，就像把多个字符串拼接在一起那样，并且会以空白符来作为标识符和标识符之间的分隔符。另外，局部类名需要经过哈希化之后才能进行拼接，全局类名则可以直接参与拼接。
 
-```
-# 文件结构
-|- node_modules
-|- src
-  |- global.css
-  |- a.module.css
-  |- b.module.css
-  |- c.module.css
-```
+比如在下例中，标识符 `a1`、`a2`、`a3`、`b1`、`b2` 首先会被哈希化为 `_a1_hns8f_92`、`_a2_kms6o_46`、`_a3_qiu4s_35`、`_b1_uhb51_10`、`_b2_pqu7_41`，而标识符 `g1`、`g2` 则不会被哈希化，然后 CSS Modules 会把所有处理好的标识符都按照其导入的先后顺序来拼接至 `_a3_qiu4s_35` 之后，最后类名 `a3` 会被 CSS Modules 转译为 `_a3_qiu4s_35 _a1_hns8f_92 _a2_kms6o_46 _b1_uhb51_10 _b2_pqu7_41 g1 g2`。
 
 ```css
-/* global.css */
-.g1, .g2, .g3 {}
+.a1 {}
+.a2 {}
+.a3 {
+    composes: a1 a2;
+    composes: b1 b2 from "./b.module.css";
+    composes: g1 g2 from global;
+}
 ```
+
+于是，类名 `a3` 就变成了一系列类名的集合体，把类名 `a3` 绑定至元素身上，就相当于把这一系列类名都绑定到元素身上。
+
+```jsx
+import style from "./style.module.css";
+
+function Component () {
+    return <p className={ style.a3 } />;
+}
+```
+
+### 危险
+
+composition 是实用的，也是危险的，其危险之处在于：`composes` 会影响模块样式表之间的打包顺序。
+
+> 仅当我们使用 `composes` 来导入其他模块样式表时，它才会影响模块样式表之间的打包顺序。
+
+
+
+### 导入自同文件
+
+```css
+.a {}
+.b {}
+.c {
+    composes: a b;
+}
+```
+
+注意，请保证被导入者是已经提前声明好的，比如上例中的 `.a` 和 `.b` 必须在 `.c` 之前。
+
+### 导入自异文件
 
 ```css
 /* a.module.css */
-.a1, .a2, .a3 {}
+.a1 {}
+.a2 {}
 ```
 
 ```css
 /* b.module.css */
-.b1, .b2, .b3 {}
+.b1 {}
+.b2 {}
 ```
 
 ```css
 /* c.module.css */
-.c1, .c2, .c3 {}
-
-.c4 {
-    /* 导入同文件样式（方式一） */
-    composes: c1 c2 c3;
-    /* 导入同文件样式（方式二） */
-    composes: c1;
-    composes: c2;
-    composes: c3;
-
-    /* 导入跨文件样式（方式一） */
-    composes: a1 a2 a3 from "./a.module.css";
-    /* 导入跨文件样式（方式二） */
-    composes: a1 from "./a.module.css";
-    composes: a2 from "./a.module.css";
-    composes: a3 from "./a.module.css";
-    
-    /* 导入全局样式（方式一） */
-    composes: g1 g2 g3 from global;
-    /* 导入全局样式（方式二） */
-    composes: g1 from global;
-    composes: g2 from global;
-    composes: g3 from global;
-    
-    /* 此处开始书写样式规则 */
-    color: rebeccapurple;
+.c {
+    composes: a1 a2 from "./a.module.css";
+    composes: b1 b2 from "./b.module.css";
 }
 ```
+
+注意，请保证被导入者没有导入导入者（即循环导入），比如上例中的 `a.module.css` 和 `b.module.css` 不能再导入 `c.module.css`，否则就会造成循环导入。
+
+另外，`composes` 会影响模块样式表的打包顺序，你可以从「最佳实践」的「为什么禁用 composes 的跨文件导入」中获得更多细节。
+
+### 导入全局样式
+
+```css
+.a {
+    composes: globalClassName from global;
+}
+```
+
+
 
 
 
