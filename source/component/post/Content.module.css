@@ -1,13 +1,27 @@
-/* Content */
+/* Welcome */
 /* ------------------------------------------------------------------------------------------------------------------ */
-.content {
-	--catalog-width: 13rem;
-	--article-width: 100%;
-
+.welcome {
 	inline-size: 100%;
-	min-block-size: 100vh;
-	min-block-size: 100dvh;
-	padding-inline-end: var(--catalog-width);
+	block-size: 100vh;
+	block-size: 100dvh;
+	color: var(--comment-color);
+	font-size: 66px;
+	line-height: 100vh;
+	line-height: 100dvh;
+	text-align: center;
+}
+
+/* Missing */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.missing {
+	inline-size: 100%;
+	block-size: 100vh;
+	block-size: 100dvh;
+	color: var(--comment-color);
+	font-size: 66px;
+	line-height: 100vh;
+	line-height: 100dvh;
+	text-align: center;
 }
 
 /* Loading */
@@ -41,6 +55,18 @@
 	100% {
 		transform: rotate(360deg);
 	}
+}
+
+/* Reading */
+/* ------------------------------------------------------------------------------------------------------------------ */
+.reading {
+	--catalog-width: 13rem;
+	--article-width: 100%;
+
+	inline-size: 100%;
+	min-block-size: 100vh;
+	min-block-size: 100dvh;
+	padding-inline-end: var(--catalog-width);
 }
 
 /* Catalog */

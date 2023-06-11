@@ -4,6 +4,7 @@ import "@/component/primitive/jynxPre";
 import hljs from "highlight.js";
 import { For, Show, createResource, createUniqueId } from "solid-js";
 import { marked } from "marked";
+import { useParams } from "@solidjs/router";
 
 type H1Node = { name: string, uuid: string };
 type CustomPreProps = { codeContent: string, collapseSvg: string, copySvg: string, codeData: string };
@@ -24,26 +25,70 @@ hljs.configure( {
 	languages: [ "html", "css", "javascript", "typescript", "json" ],
 } );
 
-function Content ( props: { url: string } ) {
+function Content () {
 
-	const [ getData ] = createResource( () => props.url, createMarkdown, { initialValue: { html: "", chapters: [] } } );
+	const params = useParams();
+	const getUrl = () => {
+
+		const [ topicName, postName ] = params.path.split( "/" );
+
+		if ( ! topicName ) return;
+
+		if ( ! postName ) return;
+
+		return `${ import.meta.env.BASE_URL }post/post/${ topicName }/${ postName }.md`;
+
+	};
+	const [ getData ] = createResource( getUrl, createMarkdown );
 
 	return (
-		<div class={ style.content }>
-			<article class={ style.article } innerHTML={ getData().html } />
-			<aside class={ style.catalog }>
-				<For each={ getData().chapters }>
-					{
-						h1Node => <p class={ style.heading } onClick={ [ handleClick, h1Node.uuid ] }><span>{ h1Node.name }</span></p>
-					}
-				</For>
-			</aside>
-			<Show when={ getData.loading }>
-				<aside class={ style.loading }>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
-				</aside>
-			</Show>
+		<div>
+			<Welcome display={ typeof getUrl() === "undefined" } />
+			<Loading display={ typeof getUrl() === "string" && getData.loading } />
+			<Missing display={ typeof getUrl() === "string" && ! getData.loading && ! getData() } />
+			<Reading display={ typeof getUrl() === "string" && ! getData.loading && Boolean( getData() ) } data={ getData() } />
 		</div>
+	);
+
+}
+
+function Welcome ( props: { display: boolean } ) {
+
+	return <div style={ { display: props.display ? void 0 : "none" } } class={ style.welcome }>:P</div>;
+
+}
+
+function Missing ( props: { display: boolean } ) {
+
+	return <div style={ { display: props.display ? void 0 : "none" } } class={ style.missing }>xP</div>;
+
+}
+
+function Loading ( props: { display: boolean } ) {
+
+	return (
+		<aside style={ { display: props.display ? void 0 : "none" } } class={ style.loading }>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+		</aside>
+	);
+
+}
+
+function Reading ( props: { display: boolean; data?: { html: string, chapters: H1Node[] } } ) {
+
+	return (
+		<Show when={ props.display } >
+			<div style={ { display: props.display ? void 0 : "none" } } class={ style.content }>
+				<article class={ style.article } innerHTML={ props.data!.html } />
+				<aside class={ style.catalog }>
+					<For each={ props.data!.chapters }>
+						{
+							h1Node => <p class={ style.heading } onClick={ [ handleClick, h1Node.uuid ] }><span>{ h1Node.name }</span></p>
+						}
+					</For>
+				</aside>
+			</div>
+		</Show>
 	);
 
 	function handleClick ( uuid: string ) {
@@ -59,7 +104,7 @@ async function createMarkdown ( url: string ) {
 	/* Fetch */
 	const res = await fetch( url );
 
-	if ( ! res.ok ) throw new Error( "" );
+	if ( ! res.ok ) return;
 
 	/* Parse */
 	const txt = await res.text();
