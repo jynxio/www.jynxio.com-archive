@@ -129,3 +129,53 @@ shallowProxy.value === shallowRef(shallowProxy).value; // true
 ```
 
 ## 响应式状态是如何办到的
+
+## 吐槽
+
+`v-bind` 的语法糖是 `:`，`v-on` 的语法糖是 `@`，然后 `:` 和 `@` 组合在一起之后的语法糖是 `v-model`，这个命名有点混乱！
+
+如果 `watch` 的第一个参数是 ref 实例，那么第二个函数参数的入参就是 ref 实例的解包，如果第一个参数是 reactive 实例，那么第二个函数参数的入参就是 reactive 实例本身，这不统一。
+
+```js
+const countRef = ref(0)
+const countRea = reactive(0)
+
+watch(countRef, value => {
+	value; // countRef.value
+})
+watch(countRea, value => {
+    value; // countRea
+})
+```
+
+我不喜欢把 JavaScript 写在字符串里，可是 Vue 的 template 到处都是这些东西！
+
+事实上，emit 特性还不错！比 React 和 Solid 的「传递函数给后代组件来实现双向通信」要更舒适。
+
+下例中，如果 3 个 input 的 value 存在于 checkedNames 数组中，那么 input 就会显示为勾选，同时切换 input 的勾选状态也会将其 value 值添加进 checkedNames 数组中或从 checkedNames 数组中移除。这确实挺便利... 但是如果 Vue 不告诉你它的 v-model 可以做这件事情，你就根本猜不到，如果 Vue 的特性都是类似于这样的话，那么就意味着「如果你想要越多的便利，那么就要记住越多的繁文缛节」。
+
+```vue
+<script setup>
+const checkedNames = ref([ 'Jack', 'John' ])
+const pickedName = ref('One')
+</script>
+
+<template>
+    <div>
+        <h2>Mutiple Checkbox</h2>
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+        <label for="jack">Add/remove 'Jack' in checkedNames</label>
+        <input type="checkbox" id="john" value="John" v-model="checkedNames" />
+        <label for="john">Add/remove 'John' in checkedNames</label>
+        <input type="checkbox" id="josh" value="Josh" v-model="checkedNames" />
+        <label for="josh">Add/remove 'Josh' in checkedNames</label>
+        
+        <h2>Radio</h2>
+        <input type="radio" id="one" value="One" v-model="pickedName" />
+        <label for="one">Toggle pickedName's value to 'One'</label>
+        <input type="radio" id="two" value="Two" v-model="pickedName" />
+        <label fpr="two">Toggle pickedName's value to 'Two'</label>
+    </div>
+</template>
+```
+
