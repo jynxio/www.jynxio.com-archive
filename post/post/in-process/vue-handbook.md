@@ -128,6 +128,33 @@ shallowProxy.value === shallowRef(raw).value;          // true
 shallowProxy.value === shallowRef(shallowProxy).value; // true
 ```
 
+## $emit
+
+它比 `defineEmits` 要更简洁
+
+```vue
+<script setup>
+// App.vue
+import Toggle from './Toggle.vue'
+import { ref } from 'vue'
+
+const visible = ref(false)
+</script>
+
+<template>
+    <h1 v-show="visible">Heading</h1>
+    <Toggle @fn="visible = !visible" />
+</template>
+```
+
+```vue
+<template>
+	<button @click="$emit('fn')">Toggle</button>
+</template>
+```
+
+
+
 ## 响应式状态是如何办到的
 
 ## 吐槽
@@ -176,6 +203,23 @@ const pickedName = ref('One')
         <input type="radio" id="two" value="Two" v-model="pickedName" />
         <label fpr="two">Toggle pickedName's value to 'Two'</label>
     </div>
+</template>
+```
+
+奇怪的语法糖：从 Vue 3 开始，用户可以用烤串命名法来调用一个组件，哪怕该组件在导入时使用了大驼峰命名法，这样子做的可读性确实更好，可是... 风格也很分裂。可见 [该官方示例](https://vuejs.org/examples/#svg) 或下述示例代码：
+
+```vue
+<script setup>
+import MyName from "./MyName.vue";
+</script>
+
+<template>
+<MyName />
+<myName />
+<my-name />
+<My-name />
+<my-Name />
+<My-Name />
 </template>
 ```
 
