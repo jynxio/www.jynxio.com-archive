@@ -13,6 +13,8 @@ class Tween {
 
 	private isRunning = false;
 
+	private requestId: undefined | number = void 0;
+
 	private beginEvents = new Set<EventHandler<"begin">>();
 
 	private updateEvents = new Set<EventHandler<"update">>();
@@ -26,7 +28,7 @@ class Tween {
 		that.isRunning = true;
 		that.clock = performance.now();
 		that.timestamp === 0 && Array.from( that.updateEvents.values() ).forEach( event => event( 0 ) );
-		requestAnimationFrame( function loop ( timestamp ) {
+		that.requestId = requestAnimationFrame( function loop ( timestamp ) {
 
 			if ( ! that.isRunning ) return;
 
@@ -45,7 +47,7 @@ class Tween {
 			const percentage = that.timestamp / that.duration;
 			for ( const event of that.updateEvents.values() ) event( percentage );
 
-			requestAnimationFrame( loop );
+			that.requestId = requestAnimationFrame( loop );
 
 		} );
 
@@ -65,6 +67,9 @@ class Tween {
 
 		this.isRunning = false;
 		this.timestamp = 0;
+		this.clock = 0;
+
+		this.requestId !== void 0 && cancelAnimationFrame( this.requestId );
 
 		return this;
 
