@@ -20,6 +20,7 @@ const fuse = new Fuse( data, {
 
 function Search () {
 
+	let searchRef: HTMLHtmlElement | undefined;
 	let barRef: HTMLDivElement | undefined;
 	let sectionRef: HTMLElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
@@ -28,9 +29,19 @@ function Search () {
 	const [ getList, setList ] = createSignal<List>( [] );
 	const isSelected = createSelector( getSelectedIndex );
 
-	const fadeIn = ( percentage: number ) => barRef && barRef.style.setProperty( "opacity", String( percentage ) );
-	const fadeOut = ( percentage: number ) => barRef && barRef.style.setProperty( "opacity", String( 1 - percentage ) );
-	const tween = new Tween().setDuration( 500 );
+	const fadeIn = ( percentage: number ) => {
+
+		searchRef && searchRef.style.setProperty( "opacity", String( easeOutBack( percentage ) ) );
+		barRef && barRef.style.setProperty( "transform", `translateX(-50%) scale(${ 1.1 - 0.1 * easeOutBack( percentage ) })` );
+
+	};
+	const fadeOut = ( percentage: number ) => {
+
+		searchRef && searchRef.style.setProperty( "opacity", String( 1 - easeOutBack( percentage ) ) );
+		barRef && barRef.style.setProperty( "transform", `translateX(-50%) scale(${ 1 + 0.1 * easeOutBack( percentage ) })` );
+
+	};
+	const tween = new Tween().setDuration( 300 );
 
 	onMount( () => {
 
@@ -48,16 +59,18 @@ function Search () {
 	} );
 	createEffect( () => {
 
-		/* TODO: 防抖、fadeOut、缓动函数、代码结构 */
+		/* TODO: fadeOut、代码结构 */
 
 		if ( store.getEnabled() ) {
 
+			tween.reset();
 			tween.removeEventListener( "update", fadeOut );
 			tween.addEventListener( "update", fadeIn );
 			tween.play();
 
 		} else {
 
+			tween.reset();
 			tween.removeEventListener( "update", fadeIn );
 			tween.addEventListener( "update", fadeOut );
 			tween.play();
@@ -70,7 +83,7 @@ function Search () {
 
 	return (
 		<Show when={ store.getEnabled() }>
-			<aside class={ style.search }>
+			<aside class={ style.search } ref={ searchRef }>
 				<div class={ style.bar } ref={ barRef }>
 					<section class={ style.input }>
 						<span>
@@ -244,6 +257,15 @@ function createList ( data: any ) {
 	}
 
 	return list;
+
+}
+
+function easeOutBack ( x: number ) {
+
+	const c1 = 1.70158;
+	const c3 = c1 + 1;
+
+	return 1 + c3 * ( x - 1 ) ** 3 + c1 * ( x - 1 ) ** 2;
 
 }
 
