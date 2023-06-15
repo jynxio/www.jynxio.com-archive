@@ -2,7 +2,6 @@ import style from "./Search.module.css";
 import checkOs from "@/helper/checkOs";
 import data from "@/asset/catalog/data.json";
 import Fuse from "fuse.js";
-import Tween from "@/helper/Tween";
 import * as store from "@/store/search";
 import { A } from "@solidjs/router";
 import { For, Show, createEffect, createSelector, createSignal, onCleanup, onMount } from "solid-js";
@@ -20,7 +19,6 @@ const fuse = new Fuse( data, {
 
 function Search () {
 
-	let searchRef: HTMLHtmlElement | undefined;
 	let barRef: HTMLDivElement | undefined;
 	let sectionRef: HTMLElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
@@ -28,20 +26,6 @@ function Search () {
 	const [ getSelectedIndex, setSelectedIndex ] = createSignal( - 1 ); // -1 represents that no one has been selected
 	const [ getList, setList ] = createSignal<List>( [] );
 	const isSelected = createSelector( getSelectedIndex );
-
-	const fadeIn = ( percentage: number ) => {
-
-		searchRef && searchRef.style.setProperty( "opacity", String( easeOutBack( percentage ) ) );
-		barRef && barRef.style.setProperty( "transform", `translateX(-50%) scale(${ 1.1 - 0.1 * easeOutBack( percentage ) })` );
-
-	};
-	const fadeOut = ( percentage: number ) => {
-
-		searchRef && searchRef.style.setProperty( "opacity", String( 1 - easeOutBack( percentage ) ) );
-		barRef && barRef.style.setProperty( "transform", `translateX(-50%) scale(${ 1 + 0.1 * easeOutBack( percentage ) })` );
-
-	};
-	const tween = new Tween().setDuration( 300 );
 
 	onMount( () => {
 
@@ -57,33 +41,11 @@ function Search () {
 		document.removeEventListener( "keydown", handleSwitch );
 
 	} );
-	createEffect( () => {
-
-		/* TODO: fadeOut、代码结构 */
-
-		if ( store.getEnabled() ) {
-
-			tween.reset();
-			tween.removeEventListener( "update", fadeOut );
-			tween.addEventListener( "update", fadeIn );
-			tween.play();
-
-		} else {
-
-			tween.reset();
-			tween.removeEventListener( "update", fadeIn );
-			tween.addEventListener( "update", fadeOut );
-			tween.play();
-
-		}
-
-		store.getEnabled() && inputRef?.focus();
-
-	} );
+	createEffect( () => store.getEnabled() && inputRef?.focus() );
 
 	return (
 		<Show when={ store.getEnabled() }>
-			<aside class={ style.search } ref={ searchRef }>
+			<aside class={ style.search }>
 				<div class={ style.bar } ref={ barRef }>
 					<section class={ style.input }>
 						<span>
@@ -257,15 +219,6 @@ function createList ( data: any ) {
 	}
 
 	return list;
-
-}
-
-function easeOutBack ( x: number ) {
-
-	const c1 = 1.70158;
-	const c3 = c1 + 1;
-
-	return 1 + c3 * ( x - 1 ) ** 3 + c1 * ( x - 1 ) ** 2;
 
 }
 
