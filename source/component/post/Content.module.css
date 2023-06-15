@@ -33,7 +33,7 @@
 	right: 0;
 	inline-size: calc(100% - var(--nav-width));
 	block-size: 100%;
-	backdrop-filter: blur(4px);
+	backdrop-filter: blur(18px);
 }
 
 .loading>svg {
