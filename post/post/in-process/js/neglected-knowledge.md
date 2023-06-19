@@ -14,3 +14,25 @@
 ## Fugu API Tracker
 
 Chromium 在持续发布有趣的 API，你可以通过 [Fugu API Tracker](https://fugu-tracker.web.app/) 来跟踪这些信息。
+
+## 用前一个参数来作为后一个参数的默认值
+
+我们可以用前一个参数的值来作为后一个参数的默认值，反过来则不可以。
+
+```js
+( function ( bool, num = + bool ) {
+
+    console.log( bool ); // true
+    console.log( num );  // 1
+
+} )( true );
+
+( function ( bool = Boolean( num ), num ) {
+
+    // ReferenceError: Cannot access 'num' before initialization
+    console.log( bool ); // true
+    console.log( num );  // 1
+
+} )( undefined, 1 );
+```
+
