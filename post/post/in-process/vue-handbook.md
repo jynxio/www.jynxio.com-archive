@@ -128,6 +128,24 @@ shallowProxy.value === shallowRef(raw).value;          // true
 shallowProxy.value === shallowRef(shallowProxy).value; // true
 ```
 
+## watch
+
+watch 会自动的深层次的监听 `reactive` 实例，但只会浅层的监听 `ref` 实例（即只会监听 `ref` 实例的 `value` 属性是否发生变化）。
+
+```js
+const r1 = ref(0)
+const r2 = ref({ count: 0 });
+const r3 = reactive({ value: { count: 0 } })
+
+watch(r1, () => console.log('r1'))
+watch(r2, () => console.log('r2'))
+watch(r3, () => console.log('r3'))
+
+r1.value++;       // 触发监听
+r2.value.count++; // 不触发
+r3.value.count++; // 触发监听
+```
+
 ## $emit
 
 它比 `defineEmits` 要更简洁
