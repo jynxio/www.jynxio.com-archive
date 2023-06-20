@@ -1,38 +1,51 @@
-## queryLocalFonts
 
-`globalThis.queryLocalFonts` 可以异步获取所有本地字体数据，包括字体名与字形数据（SFNT）。这似乎对 WebGL Fonts 很有帮助，比如我们可以尝试直接根据 SFNT 数据来绘制字体，而无需再下载庞大的字体文件。不过，如何使用 SFNT 数据来绘制字体似乎成为了另一个棘手的问题...
 
-该 API 目前仅在 Chromium 中可用。
+# 冷知识
 
-## WebGL Font
+## WebGPU Font
 
-除了 `queryLocalFonts` 外，还有 2 个办法可以帮助你在无需下载外部字体文件的情况下在 WebGL 中绘制字体。
+如果你想在 WebGPU 中渲染字体，那么这里有 4 种思路：
 
-- 如果你需要绘制 2d 文字，那么你可以将文字写在 `<canvas>` 上，然后在 WebGL 中使用 `<canvas>` 贴图；
-- 如果你需要绘制 3d 文字，那么你可以将文字写在 `<canvas>` 上，然后通过 [potrace](https://potrace.sourceforge.net/) 来矢量化画布位图，然后再根据矢量化的结果来绘制 3d 文字。
+- 下载并解析字体文件，然后根据解析结果绘制字体；
+- 使用 `globalThis.queryLocalFonts` API 来异步获取本地的所有字体数据（包括字体名与字形），然后根据字形数据（SFNT）来绘制字体；
+- 将需要绘制的字体书写在画布上，然后使用该画布贴图来渲染 2d 字体；
+- 将需要绘制的字体书写在画布上，然后通过 [potrace](https://potrace.sourceforge.net/) 来矢量化画布位图，最后使用矢量化的结果来绘制 3d 字体；
 
-## Fugu API Tracker
+> `globalThis.queryLocalFonts` API 目前仅可用于在 Chromium。
 
-Chromium 在持续发布有趣的 API，你可以通过 [Fugu API Tracker](https://fugu-tracker.web.app/) 来跟踪这些信息。
+## Chromium API
 
-## 用前一个参数来作为后一个参数的默认值
+Chromium 在持续发布有趣的 API，你可以在 [Fugu API Tracker](https://fugu-tracker.web.app/) 里找到这些信息。
 
-我们可以用前一个参数的值来作为后一个参数的默认值，反过来则不可以。
+## 函数形参
+
+在 JavaScript 函数中，后面的形参可以直接访问到前面的形参（反之不可），于是我们便可以这样做：
 
 ```js
 ( function ( bool, num = + bool ) {
-
-    console.log( bool ); // true
-    console.log( num );  // 1
-
+	bool; // true
+    num;  // 1
 } )( true );
+```
 
-( function ( bool = Boolean( num ), num ) {
+## 定义事件的空间范围
 
-    // ReferenceError: Cannot access 'num' before initialization
-    console.log( bool ); // true
-    console.log( num );  // 1
+如果把用户事件绑定在 SVG 图形元素上，那么这些用户事件的触发范围便取决于 SVG 图形元素的形状（`<text>` 元素除外），比如：
 
-} )( undefined, 1 );
+- 如果把点击事件绑定在心形的 `<path>` 元素上，那么触发范围就是心形；
+- 如果把点击事件绑定在弧形的 `<path>` 元素上，那么触发范围就是弧线；
+- 如果把点击事件绑定在 `<circle>` 元素上，那么触发范围就是圆形；
+- 如果把点击事件绑定在 `<text>` 元素上，那么触发范围就是该文本的矩形包围盒；
+
+```jsx
+function Component () {
+    return (
+    	<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <circle onClick={} />
+            <path onClick={} />
+            <text onClick={} />
+    </svg>
+    );
+}
 ```
 
