@@ -30,15 +30,15 @@ function Search () {
 	onMount( () => {
 
 		document.addEventListener( "pointerdown", handleClose );
-		document.addEventListener( "keydown", handleShortcut );
-		document.addEventListener( "keydown", handleSwitch );
+		document.addEventListener( "keyup", handleShortcut );
+		document.addEventListener( "keyup", handleSwitch );
 
 	} );
 	onCleanup( () => {
 
 		document.removeEventListener( "pointerdown", handleClose );
-		document.removeEventListener( "keydown", handleShortcut );
-		document.removeEventListener( "keydown", handleSwitch );
+		document.removeEventListener( "keyup", handleShortcut );
+		document.removeEventListener( "keyup", handleSwitch );
 
 	} );
 	createEffect( () => store.getEnabled() && inputRef?.focus() );
@@ -154,21 +154,17 @@ function Search () {
 	function handleShortcut ( event: KeyboardEvent ) {
 
 		const key = event.key.toLowerCase();
-
-		if ( key !== "escape" && key !== "k" && key !== "control" && key !== "meta" ) return;
-
-		/* Opening && esc key => close */
-		if ( store.getEnabled() && key === "escape" ) return void store.setEnabled( false );
-
-		/* Combination keys => switch */
 		const isPreKeyDown = checkOs() === "macOS" ? event.metaKey : event.ctrlKey;
+		const enabled
+			= key === "k" && isPreKeyDown ? ! store.getEnabled() // Ctrl+k or ⌘+k => switch
+			: key === "escape" && store.getEnabled() ? false     // Escape => close
+			: key === "/" && ! store.getEnabled() ? true         // Slash => open
+			: store.getEnabled();                                // Nothing
 
-		if ( ! isPreKeyDown ) return;
-
-		if ( event.key.toLowerCase() !== "k" ) return;
+		if ( enabled === store.getEnabled() ) return;
 
 		event.preventDefault();
-		store.setEnabled( prev => ! prev );
+		store.setEnabled( enabled );
 
 	}
 

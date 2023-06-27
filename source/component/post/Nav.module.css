@@ -53,9 +53,6 @@
 
 .search>.shortcut {
 	margin-inline-start: auto;
-	color: var(--icon-color);
-	font-family: system-ui;
-	font-size: 90%;
 }
 
 /* Catalog */
