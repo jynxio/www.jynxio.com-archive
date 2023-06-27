@@ -4,7 +4,7 @@ import data from "@/asset/catalog/data.json";
 import Fuse from "fuse.js";
 import * as store from "@/store/search";
 import { A } from "@solidjs/router";
-import { For, Show, createEffect, createSelector, createSignal, onCleanup, onMount } from "solid-js";
+import { For, Show, createSelector, createSignal, onCleanup, onMount } from "solid-js";
 
 type Item = { html: string, topicName: string, postName: string };
 type List = Item[];
@@ -21,7 +21,6 @@ function Search () {
 
 	let barRef: HTMLDivElement | undefined;
 	let sectionRef: HTMLElement | undefined;
-	let inputRef: HTMLInputElement | undefined;
 
 	const [ getSelectedIndex, setSelectedIndex ] = createSignal( - 1 ); // -1 represents that no one has been selected
 	const [ getList, setList ] = createSignal<List>( [] );
@@ -30,29 +29,28 @@ function Search () {
 	onMount( () => {
 
 		document.addEventListener( "pointerdown", handleClose );
-		document.addEventListener( "keyup", handleShortcut );
-		document.addEventListener( "keyup", handleSwitch );
+		document.addEventListener( "keydown", handleShortcut );
+		document.addEventListener( "keydown", handleSelect );
 
 	} );
 	onCleanup( () => {
 
 		document.removeEventListener( "pointerdown", handleClose );
-		document.removeEventListener( "keyup", handleShortcut );
-		document.removeEventListener( "keyup", handleSwitch );
+		document.removeEventListener( "keydown", handleShortcut );
+		document.removeEventListener( "keydown", handleSelect );
 
 	} );
-	createEffect( () => store.getEnabled() && inputRef?.focus() );
 
 	return (
 		<Show when={ store.getEnabled() }>
-			<aside class={ style.search }>
+			<aside class={ style.search } style={ { display: store.getEnabled() ? "" : "none" } }>
 				<div class={ style.bar } ref={ barRef }>
 					<section class={ style.input }>
 						<span>
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8" /><line x1="21" x2="16.65" y1="21" y2="16.65" /></svg>
 						</span>
 						<span>
-							<input type="text" placeholder=" 搜索" onInput={ handleInput } ref={ inputRef }/>
+							<input type="text" placeholder=" 搜索" onInput={ handleInput } ref={ ref => Promise.resolve().then( () => ( ref.focus(), ref.value = "" ) ) }/>
 						</span>
 					</section>
 					<Show when={ getList().length }><hr /></Show>
@@ -89,9 +87,7 @@ function Search () {
 		const target = event.target as HTMLElement;
 		const isFocus = barRef.contains( target );
 
-		if ( isFocus ) return;
-
-		store.setEnabled( false );
+		isFocus || store.setEnabled( false );
 
 	}
 
@@ -113,7 +109,7 @@ function Search () {
 
 	}
 
-	function handleSwitch ( event: KeyboardEvent ) {
+	function handleSelect ( event: KeyboardEvent ) {
 
 		if ( getList().length === 0 ) return;
 
@@ -122,24 +118,10 @@ function Search () {
 		if ( key !== "arrowup" && key !== "arrowdown" && key !== "enter" ) return;
 
 		/* Key: arrow up */
-		if ( key === "arrowup" ) {
-
-			getSelectedIndex() <= 0
-				? setSelectedIndex( getList().length - 1 )
-				: setSelectedIndex( prev => prev - 1 );
-
-			return;
-
-		}
+		if ( key === "arrowup" ) return void ( getSelectedIndex() <= 0 ? setSelectedIndex( getList().length - 1 ) : setSelectedIndex( prev => prev - 1 ) );
 
 		/* Key: arrow down */
-		if ( key === "arrowdown" ) {
-
-			setSelectedIndex( prev => ( prev + 1 ) % getList().length );
-
-			return;
-
-		}
+		if ( key === "arrowdown" ) return void setSelectedIndex( prev => ( prev + 1 ) % getList().length );
 
 		/* Key: enter */
 		if ( getSelectedIndex() === - 1 ) return;
