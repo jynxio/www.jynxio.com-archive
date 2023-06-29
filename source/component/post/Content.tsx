@@ -159,7 +159,7 @@ async function createMarkdown ( url: string ) {
 		case 2:
 			if ( text.includes( "typora-root-url:" ) ) return "";
 
-			chapters.push( { name: text, uuid } );
+			chapters.push( { name: text.replace( /&#39;/g, "'" ), uuid } ); // BUG：replace方法用于处理转义字符，但是此处只处理了&#39;
 
 			break;
 
