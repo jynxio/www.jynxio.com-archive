@@ -28,3 +28,10 @@ function createPlugin () {
 	};
 
 }
+
+/*
+ * 核心：https://github.com/remarkjs/remark#example-support-for-gfm-and-frontmatter
+ * 类型信息参考：https://github.com/syntax-tree/mdast
+ * markdown AST 库：https://github.com/syntax-tree/mdast-util-from-markdown
+ * mdast-util-from-markdown和mdast的区别到底是什么？
+ */
