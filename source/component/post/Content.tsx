@@ -195,11 +195,8 @@ async function createMarkdown ( url: string ) {
 
 			console.log( `%cMarkdown format: You have not specified a language type or the language type you specified is not supported by hljs, so your code can only be rendered as plain code.\nThe language you specified is: ${ language }`, "color: #c52922" );
 
-			const preSelf = marked.Renderer.prototype.code.apply( this, [ code, language, escaped ] ).trim();
-			const codeContent = extractCodeContent( preSelf );
-
 			return createCustomPre( {
-				codeContent,
+				codeContent: code,
 				collapseSvg: COLLAPSE_SVG,
 				copySvg: COPY_SVG,
 				codeData: code,
@@ -251,15 +248,6 @@ async function createMarkdown ( url: string ) {
 
 	}
 
-	function extractCodeContent ( preSelf: string ) {
-
-		const startIndex = preSelf.indexOf( ">", 10 ) + 1;
-		const endIndex = - 13;
-
-		return preSelf.slice( startIndex, endIndex );
-
-	}
-
 	function createCustomPre ( { codeContent, collapseSvg, copySvg, codeData }: CustomPreProps ) {
 
 		const unicodes = Array.from( codeData ).map( character => character.codePointAt( 0 ) );
@@ -267,14 +255,14 @@ async function createMarkdown ( url: string ) {
 
 		return (
 			`<div class="${ style[ "custom-pre" ] }">` +
-				`<jynx-pre data-code="${ data }">"` +
-				"<pre slot='panel'>" +
-				"<code>" + codeContent + "</code>" +
-				"</pre>" +
-				"<button slot='collapse-button'>" + collapseSvg + "</button>" +
-				"<button slot='copy-button'>" + copySvg + "</button>" +
-				"</jynx-pre>" +
-				"</div>"
+			`<jynx-pre data-code="${ data }">"` +
+			"<pre slot='panel'>" +
+			"<code>" + codeContent + "</code>" +
+			"</pre>" +
+			"<button slot='collapse-button'>" + collapseSvg + "</button>" +
+			"<button slot='copy-button'>" + copySvg + "</button>" +
+			"</jynx-pre>" +
+			"</div>"
 		);
 
 	}
