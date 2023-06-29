@@ -4,6 +4,8 @@ import remarkParse from "remark-parse";
 import remarkStringify from "remark-stringify";
 import { visit } from "unist-util-visit";
 
+// Hr, heading, listitem, code, link, checkbox, image
+
 const filePath = new URL( "./promisesaplus.md", import.meta.url );
 const markdown = await readFile( filePath, { encoding: "utf8" } );
 
@@ -17,17 +19,21 @@ function createPlugin () {
 
 	return tree => {
 
-		visit( tree, node => {
+		console.log( tree );
 
-			if ( node.type !== "heading" ) return;
+		// Visit( tree, node => {
 
-			console.log( node );
+		// 	if ( node.type !== "heading" ) return;
 
-		} );
+		// 	console.log( node );
+
+		// } );
 
 	};
 
 }
+
+function handleHr () {}
 
 /*
  * 核心：https://github.com/remarkjs/remark#example-support-for-gfm-and-frontmatter

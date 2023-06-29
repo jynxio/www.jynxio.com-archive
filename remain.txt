@@ -7,3 +7,9 @@ import.meta.glob( "../post/post/javascript/*.md", { eager: true, as: "raw" } );
 
 vite.config.js
 assetsInclude: [ "**/*.md" ],
+
+1.生产环境下的静态的md转译和语法高亮；
+2.开发环境下的动态的md转译和语法高亮；
+3.文件/配置式路由：
+	1.自动生成所有文章的目录；
+	2.根据文章的地址来设置网页的路由；
