@@ -78,7 +78,7 @@ function Reading ( props: { display: boolean; data?: { html: string, chapters: H
 
 	return (
 		<Show when={ props.display } >
-			<div style={ { display: props.display ? void 0 : "none" } } class={ style.content }>
+			<div style={ { display: props.display ? void 0 : "none" } } class={ style.reading }>
 				<article class={ style.article } innerHTML={ props.data!.html } />
 				<aside class={ style.catalog }>
 					<For each={ props.data!.chapters }>

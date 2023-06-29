@@ -60,9 +60,9 @@
 /* Reading */
 /* ------------------------------------------------------------------------------------------------------------------ */
 .reading {
-	--catalog-width: 13rem;
+	--catalog-width: 12rem;
 	--article-width: 100%;
-
+	--article-max-width: 52rem;
 	inline-size: 100%;
 	min-block-size: 100vh;
 	min-block-size: 100dvh;
@@ -108,7 +108,7 @@
 .article {
 	--block-gap: 1rem;
 	inline-size: var(--article-width);
-	max-inline-size: 52rem;
+	max-inline-size: var(--article-max-width);
 	padding: 1rem;
 	margin-inline: auto;
 	color: var(--paragraph-color);
