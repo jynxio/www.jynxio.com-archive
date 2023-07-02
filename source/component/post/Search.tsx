@@ -4,7 +4,7 @@ import data from "@/asset/catalog/data.json";
 import Fuse from "fuse.js";
 import * as store from "@/store/search";
 import { A } from "@solidjs/router";
-import { For, Show, createSelector, createSignal, onCleanup, onMount } from "solid-js";
+import { For, Show, batch, createSelector, createSignal, onCleanup, onMount } from "solid-js";
 
 type Item = { html: string, topicName: string, postName: string };
 type List = Item[];
@@ -149,7 +149,12 @@ function Search () {
 		if ( enabled === store.getEnabled() ) return;
 
 		event.preventDefault();
-		store.setEnabled( enabled );
+		batch( () => {
+
+			enabled && setList( [] );    // 清除历史搜索记录
+			store.setEnabled( enabled );
+
+		} );
 
 	}
 
