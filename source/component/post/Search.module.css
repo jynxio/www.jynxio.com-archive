@@ -84,6 +84,7 @@
 	overflow: hidden;
 	padding-inline: 1rem;
 	border-radius: var(--border-radius);
+	outline: none;
 	color: inherit;
 	line-height: var(--line-height);
 	text-overflow: ellipsis;
@@ -92,7 +93,8 @@
 	cursor: pointer;
 }
 
-.output>.link.selected {
+.output>.link.selected,
+.output>.link:focus {
 	background-color: var(--block-color);
 }
 
