@@ -93,6 +93,9 @@ function Search () {
 
 	function handleNavigate ( getIndex: () => number ) {
 
+		const link = sectionRef?.children[ getIndex() ] as HTMLLinkElement | undefined;
+
+		link?.click();
 		store.setEnabled( false );
 
 	}
