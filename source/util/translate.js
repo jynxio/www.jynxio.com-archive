@@ -1,7 +1,8 @@
-import util from "node:util";
 import shiki from "shiki";
-import { readFile, writeFile } from "node:fs/promises";
+import util from "node:util";
+import { writeFile } from "node:fs/promises";
 import { nanoid } from "nanoid";
+import { readFile, readdir } from "node:fs/promises";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { gfm } from "micromark-extension-gfm";
 import { gfmFromMarkdown } from "mdast-util-gfm";
@@ -9,40 +10,65 @@ import { toHast } from "mdast-util-to-hast";
 import { toHtml } from "hast-util-to-html";
 import { parseSync } from "svgson";
 
-const highlighter = await shiki.getHighlighter( { theme: "nord", langs: [ "javascript" ] } );
-const codeMap = new Map();
-
 const SVG_STRING_LINK = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
 const SVG_STRING_CHECKBOX = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-square\"><polyline points=\"9 11 12 14 22 4\"></polyline><path d=\"M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11\"></path></svg>";
 const SVG_STRING_COPY = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\"stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"></rect><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"></path><polyline points=\"20 6 9 17 4 12\"></polyline><line x1=\"18\" x2=\"6\" y1=\"6\" y2=\"18\"></line><line x1=\"6\" x2=\"18\" y1=\"6\" y2=\"18\"></line></svg>";
 const SVG_STRING_COLLAPSE = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chevron-down\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg>";
+const SVG_STRING_LINK_MAST = svg2mast( SVG_STRING_LINK );
+const SVG_STRING_CHECKBOX_MAST = svg2mast( SVG_STRING_CHECKBOX );
 
-/* TODO 如何向外传递着两份数据？ */
-let h1Count = 0;    // 统计一级标题的数量
-const h2Array = []; // 收集所有的二级标题
+const catalog = [
+	{
+		"name": "introduction",
+		"alias": "介绍",
+	},
+	{
+		"name": "javascript",
+		"alias": "JavaScript",
+	},
+	{
+		"name": "css",
+		"alias": "CSS",
+	},
+	{
+		"name": "browser",
+		"alias": "浏览器",
+	},
+	{
+		"name": "algorithm-and-data-structure",
+		"alias": "算法与数据结构",
+	},
+	{
+		"name": "orther",
+		"alias": "其他",
+	},
+];
 
-const filePath = new URL( "./promisesaplus.md", import.meta.url );
-const markdown = await readFile( filePath, { encoding: "utf8" } );
-const mast = fromMarkdown( markdown, {
-	extensions: [ gfm() ],
-	mdastExtensions: [ gfmFromMarkdown() ],
-} );
+const highlighter = await shiki.getHighlighter( { theme: "nord" } );
 
-processMast( mast );
+for ( const dir of catalog ) {
 
-const hast = toHast( mast );
-let html = toHtml( hast );
+	const url = new URL( `./post/post/${ dir.name }`, import.meta.url );
+	const dirents = await readdir( url, { encoding: "utf8", withFileTypes: true } );
+	dir.children = [];
 
-writeFile( "./promiseaplus.html", html );
+	for ( const dirent of dirents ) {
 
-for ( const [ k, v ] of codeMap ) {
+		const name = dirent.name.trim().slice( 0, - 3 );
+		dir.children.push( { name } );
 
-	const from = html.indexOf( k );
-	const to = from + Array.from( k ).length;
+		/*
+		 * TODO 获取md文件地址 -> 读取文件，执行转译，存储在别地 -> ...
+		 * const filePath = new URL("./promisesaplus.md", import.meta.url);
+		 * const markdown = await readFile(filePath, { encoding: "utf8" });
+		 * writeFile("./promiseaplus.html", html)
+		 */
 
-	html = html.slice( 0, from ) + v + html.slice( to );
+	}
 
 }
+
+log( catalog );
 
 function log ( msg ) {
 
@@ -50,8 +76,40 @@ function log ( msg ) {
 
 }
 
+function markdown2html ( markdown ) {
+
+	// TODO 如何向外传递着两份数据？
+	let h1Count = 0;    // 统计一级标题的数量
+	const h2Array = []; // 收集所有的二级标题
+	const codeMap = new Map();
+
+	const mast = fromMarkdown( markdown, {
+		extensions: [ gfm() ],
+		mdastExtensions: [ gfmFromMarkdown() ],
+	} );
+
+	processMast( mast );
+
+	const hast = toHast( mast );
+	const html = toHtml( hast );
+	let newHtml = "";
+
+	for ( const [ k, v ] of codeMap ) {
+
+		const from = html.indexOf( k );
+		const to = from + Array.from( k ).length;
+
+		html = html.slice( 0, from ) + v + html.slice( to );
+
+	}
+
+	return newHtml;
+
+}
+
 function processMast ( mast ) {
 
+	// Data.hName, data.hProperties, data.hChildren
 	( function deepTrave ( node, parent ) {
 
 		switch ( node.type ) {
@@ -80,8 +138,7 @@ function processMast ( mast ) {
 			processCodeNode( node );
 			break;
 
-		default:
-			break;
+		default: break;
 
 		}
 
@@ -109,13 +166,8 @@ function processHeadingNode ( node ) {
 		if ( ! node.data.hProperties ) node.data.hProperties = {};
 		node.data.hProperties.id = nanoid();
 		h2Array.push( node.children[ 0 ].value ); // TODO 请检查是否会产生转义字符bug（请通过查看react-handbook页面来进行检查）
-		break;
 
 	case 3:
-		break;
-
-	default:
-		break;
 
 	}
 
@@ -141,7 +193,7 @@ function processLinkNode ( node ) {
 
 	node.data.hProperties.target = "_blank";
 	node.data.hChildren.push( { type: "text", value: node.children[ 0 ].value } );
-	node.data.hChildren.push( svg2mast( SVG_STRING_LINK ) );
+	node.data.hChildren.push( structuredClone( SVG_STRING_LINK_MAST ) );
 
 }
 
@@ -170,7 +222,7 @@ function processListItemNode ( node ) {
 					type: "element",
 					tagName: "label",
 					properties: { for: id },
-					children: [ svg2mast( SVG_STRING_CHECKBOX ) ],
+					children: [ structuredClone( SVG_STRING_CHECKBOX_MAST ) ],
 				},
 			],
 		},
@@ -227,47 +279,5 @@ function svg2mast ( svgString ) {
 	} )( json );
 
 	return json;
-
-}
-
-function pre2mast ( codeString ) {
-
-	return {
-		type: "element",
-		tagName: "div",
-		children: [
-			{
-				type: "element",
-				tagName: "jynx-pre",
-				properties: { "data-code": Array.from( codeString ).map( character => character.codePointAt( 0 ) ).join() },
-				children: [
-					{
-						type: "element",
-						tagName: "pre",
-						properties: { slot: "panel" },
-						children: [
-							{
-								type: "element",
-								tagName: "code",
-								children: [ { type: "text", value: codeString } ],
-							},
-						],
-					},
-					{
-						type: "element",
-						tagName: "button",
-						properties: { slot: "collapse-button" },
-						children: [ svg2mast( SVG_STRING_COLLAPSE ) ],
-					},
-					{
-						type: "element",
-						tagName: "button",
-						properties: { slot: "copy-button" },
-						children: [ svg2mast( SVG_STRING_COPY ) ],
-					},
-				],
-			},
-		],
-	};
 
 }
