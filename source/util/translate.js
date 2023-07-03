@@ -10,6 +10,7 @@ import { toHtml } from "hast-util-to-html";
 import { parseSync } from "svgson";
 
 const highlighter = await shiki.getHighlighter( { theme: "nord", langs: [ "javascript" ] } );
+const codeMap = new Map();
 
 const SVG_STRING_LINK = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" x2=\"21\" y1=\"14\" y2=\"3\"></line></svg>";
 const SVG_STRING_CHECKBOX = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check-square\"><polyline points=\"9 11 12 14 22 4\"></polyline><path d=\"M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11\"></path></svg>";
@@ -30,9 +31,18 @@ const mast = fromMarkdown( markdown, {
 processMast( mast );
 
 const hast = toHast( mast );
-const html = toHtml( hast );
+let html = toHtml( hast );
 
 writeFile( "./promiseaplus.html", html );
+
+for ( const [ k, v ] of codeMap ) {
+
+	const from = html.indexOf( k );
+	const to = from + Array.from( k ).length;
+
+	html = html.slice( 0, from ) + v + html.slice( to );
+
+}
 
 function log ( msg ) {
 
@@ -171,14 +181,28 @@ function processListItemNode ( node ) {
 
 function processCodeNode ( node ) {
 
-	node.type = "root";
-	node.data = {};
-	node.data.hChildren = [ pre2mast( node.value ) ];
+	const uuid = nanoid();
+	const preString = highlighter.codeToHtml( node.value, { lang: node.lang } );
+	const from = preString.indexOf( "<code>" ) + 6;
+	const to = preString.lastIndexOf( "</code>" );
+	const codeString = preString.slice( from, to );
+	const divString =
+        "<div>" +
+        `<jynx-pre data-code="${ Array.from( node.value ).map( character => character.codePointAt( 0 ) ).join() }">` + // Data-code
+        "<pre slot='panel'>" +
+        "<code>" + codeString + "</code>" +
+        "</pre>" +
+        "<button slot='collapse-button'>" + SVG_STRING_COLLAPSE + "</button>" +
+        "<button slot='copy-button'>" + SVG_STRING_COPY + "</button>" +
+        "</jynx-pre>" +
+        "</div>";
 
-	const tokens = highlighter.codeToThemedTokens( node.value, "javascript" );
-	const html = shiki.renderToHtml( tokens );
+	codeMap.set( uuid, divString );
+	node.type = "text";
+	node.value = uuid;
 
-	// Const html = highlighter.codeToHtml( node.value, { lang: "js" } );
+	delete node.meta;
+	delete node.lang;
 
 }
 
