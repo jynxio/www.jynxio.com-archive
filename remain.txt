@@ -19,3 +19,6 @@ assetsInclude: [ "**/*.md" ],
 - 优化页面的tab导航行为，目前页面的超链接、代码复制按钮都接受聚焦，但是聚焦后的元素无任何样式变化，
   因此用户无法察觉到元素是否被聚焦了，你需要重新思考应该为哪些元素添加聚焦行为、添加啥样的聚焦样式。
   参考[tabindex元素聚焦属性](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/tabindex)
+
+markdown转译器：
+- 将data-pre从html中分离出去，修改jynx-pre，使其可以通过网络请求来获取code数据
