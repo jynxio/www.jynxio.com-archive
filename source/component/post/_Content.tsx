@@ -178,8 +178,8 @@ async function createMarkdown ( url: string ) {
 				processImageNode( node );
 				break;
 
-			case "listItem":
-				processListItemNode( node );
+			case "list":
+				processListNode( node );
 				break;
 
 			case "code":
@@ -242,31 +242,41 @@ async function createMarkdown ( url: string ) {
 
 	}
 
-	function processListItemNode ( node ) {
+	function processListNode ( node ) {
 
-		if ( node.checked === null ) return;
+		node.children.forEach( child => {
 
-		const id = nanoid();
+			if ( child.checked === null ) return;
 
-		node.children[ 0 ].children.unshift( {
-			type: "root",
-			data: {
-				hChildren: [
-					{
-						type: "element",
-						tagName: "input",
-						properties: { id, disabled: true, type: "checkbox", checked: node.checked },
-					},
-					{
-						type: "element",
-						tagName: "label",
-						properties: { for: id },
-						children: [ structuredClone( SVG_STRING_CHECKBOX_MAST ) ],
-					},
-				],
-			},
+			const id = nanoid();
+
+			child.children[ 0 ].children.unshift( {
+				type: "root",
+				data: {
+					hChildren: [
+						{
+							type: "element",
+							tagName: "input",
+							properties: { id, disabled: true, type: "checkbox", checked: child.checked },
+						},
+						{
+							type: "element",
+							tagName: "label",
+							properties: { for: id },
+							children: [ svg2mast( SVG_STRING_CHECKBOX ) ],
+						},
+					],
+				},
+			} );
+			child.data = {
+				hProperties: {
+					class: style.checkbox + " " + style.checked,
+				},
+			};
+
+			delete child.checked;
+
 		} );
-		node.checked = null;
 
 	}
 
