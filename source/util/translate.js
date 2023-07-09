@@ -44,6 +44,7 @@ const catalog = [
 	},
 ];
 
+const codeMap = new Map();
 const highlighter = await shiki.getHighlighter( { theme: "nord" } );
 
 for ( const dir of catalog ) {
@@ -92,14 +93,14 @@ function markdown2html ( markdown ) {
 
 	const hast = toHast( mast );
 	const html = toHtml( hast );
-	let newHtml = "";
+	let newHtml = html;
 
 	for ( const [ k, v ] of codeMap ) {
 
-		const from = html.indexOf( k );
+		const from = newHtml.indexOf( k );
 		const to = from + Array.from( k ).length;
 
-		html = html.slice( 0, from ) + v + html.slice( to );
+		newHtml = newHtml.slice( 0, from ) + v + newHtml.slice( to );
 
 	}
 
@@ -130,8 +131,8 @@ function processMast ( mast ) {
 			processImageNode( node );
 			break;
 
-		case "listItem":
-			processListItemNode( node );
+		case "list":
+			processListNode( node );
 			break;
 
 		case "code":
@@ -203,31 +204,41 @@ function processImageNode ( node ) {
 
 }
 
-function processListItemNode ( node ) {
+function processListNode ( node ) {
 
-	if ( node.checked === null ) return;
+	node.children.forEach( child => {
 
-	const id = nanoid();
+		if ( child.checked === null ) return;
 
-	node.children[ 0 ].children.unshift( {
-		type: "root",
-		data: {
-			hChildren: [
-				{
-					type: "element",
-					tagName: "input",
-					properties: { id, disabled: true, type: "checkbox", checked: node.checked },
-				},
-				{
-					type: "element",
-					tagName: "label",
-					properties: { for: id },
-					children: [ structuredClone( SVG_STRING_CHECKBOX_MAST ) ],
-				},
-			],
-		},
+		const id = nanoid();
+
+		child.children[ 0 ].children.unshift( {
+			type: "root",
+			data: {
+				hChildren: [
+					{
+						type: "element",
+						tagName: "input",
+						properties: { id, disabled: true, type: "checkbox", checked: child.checked },
+					},
+					{
+						type: "element",
+						tagName: "label",
+						properties: { for: id },
+						children: [ SVG_STRING_CHECKBOX_MAST ],
+					},
+				],
+			},
+		} );
+		child.data = {
+			hProperties: {
+				class: "checkbox" + child.checked ? " checked" : "",
+			},
+		};
+
+		delete child.checked;
+
 	} );
-	node.checked = null;
 
 }
 
