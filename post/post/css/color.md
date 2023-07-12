@@ -102,7 +102,7 @@ IE 11 不支持该语法，如果你需要兼容 IE 11，那么请使用 `hsl( h
 
 CSS 的默认颜色空间是 sRGB（standard RGB color space），由命名颜色、`hex code`、`rgb()`、`hsl()` 所创建出来的颜色都是基于 sRGB 的，如果我们想要创建出基于其它颜色空间的颜色，那么我们就必须使用 `color()`。
 
-> 颜色空间是指一系列颜色的集合，常用的颜色空间有 sRGB、Adobe RGB、DCI-P3。请注意，下文出现的 display-p3 不等价于 DCI-P3，你可以把 display-p3 立即为 DCI-P3 的变种，display-p3 是由 Apple 公司创造的。
+> 颜色空间是指一系列颜色的集合，常用的颜色空间有 sRGB、Adobe RGB、DCI-P3。请注意，下文出现的 display-p3 不等价于 DCI-P3，你可以把 display-p3 理解为 DCI-P3 的变种，display-p3 是由 Apple 公司创造的。
 
 ### 语法
 
