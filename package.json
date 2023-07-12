@@ -4,6 +4,7 @@
     "author": "Jynxio",
     "private": true,
     "license": "BY-NC-ND (4.0)",
+    "type": "module",
     "scripts": {
         "init": "pnpm run catalog && pnpm run subset",
         "start": "vite",
