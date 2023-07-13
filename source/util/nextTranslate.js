@@ -17,9 +17,11 @@ const files = await Promise.all( dirData.map( ( { name } ) => {
 
 } ) );
 
-console.log( files );
+console.log( dirData );
 
 /*  */
 function main ( markdown ) {
 
 }
+
+function createCatalog () {}
