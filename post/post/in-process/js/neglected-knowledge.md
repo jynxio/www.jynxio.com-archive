@@ -49,3 +49,11 @@ function Component () {
 }
 ```
 
+## 更丝滑的进度提示条
+
+2023 年 5 月，Chromium 宣布推出了新的 API 来实现更加丝滑的进度提示条功能，你可以选择单纯使用 CSS 来实现，或者使用少量 JS 来实现。新的 API 要求 Chrome/Edge 115 以上。
+
+下面是关于该功能的参考链接：
+
+- 如何使用新 API 来实现进度提示条：https://developer.chrome.com/blog/scroll-animation-performance-case-study/
+- 关于新 API 的更多细节，以及如何用它来实现进度提示条以外的更多功能：https://developer.chrome.com/articles/scroll-driven-animations/
