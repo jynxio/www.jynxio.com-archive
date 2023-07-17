@@ -3,8 +3,8 @@
 **/node_modules
 
 # Production
-build
 dist
+build
 
 # Asset
 post
