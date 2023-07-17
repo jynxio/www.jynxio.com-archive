@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [solid()],
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './source'),
+            '@': path.resolve(__dirname, './src'),
             '$': path.resolve(__dirname, './'),
         },
     },
