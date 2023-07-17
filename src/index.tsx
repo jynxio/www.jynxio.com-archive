@@ -1,5 +1,5 @@
-import '@/style/reset.css';
-import '@/style/global.css';
+import '@/reset.css';
+import '@/global.css';
 import Post from '@/pages/Post';
 import { render } from 'solid-js/web';
 import { Route, Router, Routes } from '@solidjs/router';
