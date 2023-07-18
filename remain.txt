@@ -5,6 +5,3 @@
   参考[tabindex元素聚焦属性](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/tabindex)
 - 使用<portal>来优化Search功能
 - 使用中文网字库来优化字体加载
-- 让stylelint参与构建过程，比如当某个样式表发现错误时，阻止构建
-- 激活stylelint的autofix功能
-- style自动排序，postcss-sorting或stylelint-order
