@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const INPUT_PATH = '/src/configs/baseCatalog.json';
-const OUTPUT_PATH = '/src/configs/detailCatalog.json';
+const OUTPUT_PATH = '/src/temps/configs/detailCatalog.json';
 const BLOG_BASE_PATH = '/blog/post/';
 
 main();
