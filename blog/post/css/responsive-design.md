@@ -473,7 +473,7 @@ img {
 
 如果你为同一幅图像制作了多个不同分辨率的版本，那么你就可以通过 `<img>` 标签的 `srcset` 属性来让浏览器智能的下载合适版本的图像，这可以节省流量和加速图像资源的加载速度。
 
-详请参阅 [Responsive images with `srcset`](https://web.dev/learn/design/responsive-images/#responsive-images-with-srcset) 和 [The picture element](https://web.dev/learn/design/picture-element/)。
+详请参阅 [Responsive images with srcset](https://web.dev/learn/design/responsive-images/#responsive-images-with-srcset) 和 [The picture element](https://web.dev/learn/design/picture-element/)。
 
 ## 主题
 
