@@ -4,8 +4,8 @@
 # Development
 node_modules
 package-lock.json
-source/asset/catalog/data.json
-source/asset/font/process
+src/temps
+public/blog
 
 # Production
 build
