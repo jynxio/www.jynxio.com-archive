@@ -1,6 +1,6 @@
 import style from './Search.module.css';
 import checkOs from '@/helpers/checkOs';
-import data from '@/configs/detailCatalog.json';
+import data from '@/temps/configs/detailCatalog.json';
 import Fuse from 'fuse.js';
 import * as store from '@/stores/search';
 import { Portal } from 'solid-js/web';

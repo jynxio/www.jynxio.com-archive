@@ -1,6 +1,6 @@
 import style from './Nav.module.css';
 import Theme from '@/components/blog/Theme';
-import catalogData from '@/configs/detailCatalog.json';
+import catalogData from '@/temps/configs/detailCatalog.json';
 import * as searchStore from '@/stores/search';
 import { useNavigate, useParams } from '@solidjs/router';
 import { For, Show, createSelector, createSignal } from 'solid-js';

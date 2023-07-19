@@ -9,7 +9,7 @@ function Post() {
 
         if (!topicName || !postName) return; // 当getUrl返回false、null、undefined时，不会触发createResource
 
-        return `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.txt`;
+        return `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.html`;
     };
     const [getHtml] = createResource(getUrl, async url => {
         const res = await fetch(url);
@@ -17,10 +17,14 @@ function Post() {
         return res.ok ? await res.text() : undefined;
     });
 
-    createEffect(() => console.log(getHtml()));
+    // createEffect(() => console.log(getHtml()));
 
     // TODO
-    return <div></div>;
+    return (
+        <div class={style.reading}>
+            <article class={style.article} innerHTML={getHtml()} />
+        </div>
+    );
 }
 
 function Welcome() {
