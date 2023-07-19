@@ -5,3 +5,4 @@
   参考[tabindex元素聚焦属性](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/tabindex)
 - 使用<portal>来优化Search功能
 - 使用中文网字库来优化字体加载
+- 尝试使用remark来做事情，而不是用remark的底层库，astro不仅使用了gfm，还用了smartpats（https://docs.astro.build/en/guides/markdown-content/#configuring-markdown-and-mdx）
