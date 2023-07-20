@@ -5,32 +5,53 @@ import { createComputed, createResource, createSignal, Switch, Match } from 'sol
 
 defineJynxPre();
 
+// 如果没有发起网路请求，那么就标记为idle状态；如果发起了网络请求，且发起后的200ms内还没有敲定，
+// 那么就标记为pending状态；如果发起后的3000ms内还没有敲定，那么就标记为rejected状态；如果网络
+// 请求成功了，那么就标记为resolved状态；如果网络请求失败了，那么就标记为rejected状态；如果点击
+// 了新的文章，那么就会发起新的网络请求；
+
+// TODO 如果对某篇文章的网络请求失败了，那么应该设计一个机关，让用户可以重新请求该文章，比如点击空白处即可重新请求。
+
 function Post() {
-    let controller: AbortController;
+    let controller = new AbortController();
     let handleDelay: NodeJS.Timeout;
     let handleTimeout: NodeJS.Timeout;
 
-    const params = useParams();
+    const DELAY_TIME = 200;
+    const TIMEOUT_TIME = 3000;
+
+    const [getState, setState] = createSignal<'idle' | 'pending' | 'resolved' | 'rejected'>('idle');
     const [getHtml] = createResource(
-        () => params.path.split('/'),
-        async ([topicName, postName]) => {
+        () => useParams().path,
+        async path => {
+            const [topicName, postName] = path.split('/');
+
+            controller.abort();
+            controller = new AbortController();
+            clearTimeout(handleDelay);
+            clearTimeout(handleTimeout);
+
             if (!topicName || !postName) return '';
 
-            controller = new AbortController();
+            handleDelay = setTimeout(() => getHtml.state === 'refreshing' && setState('pending'), DELAY_TIME);
+            handleTimeout = setTimeout(() => getHtml.state === 'refreshing' && controller.abort(), TIMEOUT_TIME);
+
             const url = `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.html`;
             const res = await fetch(url, { signal: controller.signal });
 
-            return res.ok ? await res.text() : Promise.reject(new Error('404 (Not Found)'));
+            return res.ok ? await res.text() : Promise.reject(new Error('Not Found or Timeout'));
         },
         { initialValue: '' },
     );
-    const [getState, setState] = createSignal<'idle' | 'pending' | 'resolved' | 'rejected'>('idle');
 
-    // FIXME 似乎不应该使用initialValue
-    // FIXME 当快速连续点击不同的链接时，getHtml的返回值会出错
     createComputed(() => {
-        if (getHtml.state === 'ready' && !getHtml()) {
+        if (getHtml.state === 'ready' && getHtml() === '') {
             setState('idle');
+
+            clearTimeout(handleDelay);
+            clearTimeout(handleTimeout);
+        } else if (getHtml.state === 'ready' && getHtml() !== '') {
+            setState('resolved');
 
             clearTimeout(handleDelay);
             clearTimeout(handleTimeout);
@@ -39,18 +60,6 @@ function Post() {
 
             clearTimeout(handleDelay);
             clearTimeout(handleTimeout);
-        } else if (getHtml.state === 'ready' && getHtml()) {
-            setState('resolved');
-
-            clearTimeout(handleDelay);
-            clearTimeout(handleTimeout);
-        } else if (getHtml.state === 'refreshing') {
-            handleDelay = setTimeout(() => {
-                getHtml.state === 'refreshing' && setState('pending');
-            }, 200);
-            handleTimeout = setTimeout(() => {
-                getHtml.state === 'refreshing' && controller.abort();
-            }, 3000);
         }
     });
 

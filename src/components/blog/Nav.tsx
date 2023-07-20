@@ -219,10 +219,8 @@ function Control() {
         const themeValue = getTheme() === 'dark' ? 'light' : 'dark';
 
         themeValue === 'dark'
-            ? (document.documentElement.classList.add('dark'),
-              document.documentElement.classList.remove('light'))
-            : (document.documentElement.classList.remove('dark'),
-              document.documentElement.classList.add('light'));
+            ? (document.documentElement.classList.add('dark'), document.documentElement.classList.remove('light'))
+            : (document.documentElement.classList.remove('dark'), document.documentElement.classList.add('light'));
 
         setTheme(themeValue);
         localStorage.setItem(themeKey, themeValue);

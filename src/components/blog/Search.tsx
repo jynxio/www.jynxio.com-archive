@@ -46,10 +46,7 @@ function Search() {
     return (
         <Portal mount={document.querySelector('body')!}>
             <Show when={store.getEnabled()}>
-                <aside
-                    class={style.container}
-                    style={{ display: store.getEnabled() ? '' : 'none' }}
-                >
+                <aside class={style.container} style={{ display: store.getEnabled() ? '' : 'none' }}>
                     <div class={style.bar} ref={barRef}>
                         <section class={style.input}>
                             <span>
@@ -74,11 +71,7 @@ function Search() {
                                     type="text"
                                     placeholder=" 搜索"
                                     onInput={handleInput}
-                                    ref={ref =>
-                                        Promise.resolve().then(
-                                            () => (ref.focus(), (ref.value = '')),
-                                        )
-                                    }
+                                    ref={ref => Promise.resolve().then(() => (ref.focus(), (ref.value = '')))}
                                 />
                             </span>
                         </section>
@@ -152,8 +145,7 @@ function Search() {
                 : setSelectedIndex(prev => prev - 1));
 
         /* Key: arrow down */
-        if (key === 'arrowdown')
-            return void setSelectedIndex(prev => (prev + 1) % getList().length);
+        if (key === 'arrowdown') return void setSelectedIndex(prev => (prev + 1) % getList().length);
 
         /* Key: enter */
         if (getSelectedIndex() === -1) return;
