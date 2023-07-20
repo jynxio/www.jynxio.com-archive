@@ -1,28 +1,76 @@
 import style from './Post.module.css';
+import defineJynxPre from '@/web-components/createJyxPre';
 import { useParams } from '@solidjs/router';
-import { createEffect, createResource } from 'solid-js';
+import { createComputed, createResource, createSignal, Switch, Match } from 'solid-js';
+
+defineJynxPre();
 
 function Post() {
+    let controller: AbortController;
+    let handleDelay: NodeJS.Timeout;
+    let handleTimeout: NodeJS.Timeout;
+
     const params = useParams();
-    const getUrl = () => {
-        const [topicName, postName] = params.path.split('/');
+    const [getHtml] = createResource(
+        () => params.path.split('/'),
+        async ([topicName, postName]) => {
+            if (!topicName || !postName) return '';
 
-        if (!topicName || !postName) return; // 当getUrl返回false、null、undefined时，不会触发createResource
+            controller = new AbortController();
+            const url = `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.html`;
+            const res = await fetch(url, { signal: controller.signal });
 
-        return `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.html`;
-    };
-    const [getHtml] = createResource(getUrl, async url => {
-        const res = await fetch(url);
+            return res.ok ? await res.text() : Promise.reject(new Error('404 (Not Found)'));
+        },
+        { initialValue: '' },
+    );
+    const [getState, setState] = createSignal<'idle' | 'pending' | 'resolved' | 'rejected'>('idle');
 
-        return res.ok ? await res.text() : undefined;
+    // FIXME 似乎不应该使用initialValue
+    // FIXME 当快速连续点击不同的链接时，getHtml的返回值会出错
+    createComputed(() => {
+        if (getHtml.state === 'ready' && !getHtml()) {
+            setState('idle');
+
+            clearTimeout(handleDelay);
+            clearTimeout(handleTimeout);
+        } else if (getHtml.state === 'errored') {
+            setState('rejected');
+
+            clearTimeout(handleDelay);
+            clearTimeout(handleTimeout);
+        } else if (getHtml.state === 'ready' && getHtml()) {
+            setState('resolved');
+
+            clearTimeout(handleDelay);
+            clearTimeout(handleTimeout);
+        } else if (getHtml.state === 'refreshing') {
+            handleDelay = setTimeout(() => {
+                getHtml.state === 'refreshing' && setState('pending');
+            }, 200);
+            handleTimeout = setTimeout(() => {
+                getHtml.state === 'refreshing' && controller.abort();
+            }, 3000);
+        }
     });
 
-    // createEffect(() => console.log(getHtml()));
-
-    // TODO
     return (
-        <div class={style.reading}>
-            <article class={style.article} innerHTML={getHtml()} />
+        <div>
+            <Switch>
+                <Match when={getState() === 'idle'}>
+                    <Welcome />
+                </Match>
+                <Match when={getState() === 'pending'}>
+                    <Loader />
+                </Match>
+                <Match when={getState() === 'rejected'}>
+                    <Missing />
+                </Match>
+                <Match when={getState() === 'resolved'}>
+                    <Content html={getHtml()} />
+                    <Topic />
+                </Match>
+            </Switch>
         </div>
     );
 }
@@ -35,13 +83,21 @@ function Missing() {
     return <div class={style.missing}>xP</div>;
 }
 
-function Content() {}
+function Content(props: { html: string }) {
+    return (
+        <div class={style.content}>
+            <article class={style.article} innerHTML={props.html} />
+        </div>
+    );
+}
 
-function Topic() {}
+function Topic() {
+    return <></>;
+}
 
 function Loader() {
     return (
-        <aside class={style.loading}>
+        <aside class={style.loader}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
