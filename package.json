@@ -7,7 +7,7 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "build:catalog": "ts-node ./src/utils/createDetailCatalog.ts",
+        "build:catalog": "node --loader ts-node/esm ./src/utils/createDetailCatalog.ts",
         "build:html": "node ./src/utils/createHtml.js"
     },
     "dependencies": {
