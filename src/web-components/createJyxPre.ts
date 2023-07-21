@@ -44,10 +44,7 @@ class jynxPre extends HTMLElement {
         const copyButton = this.querySelector("[slot='copy-button']") as HTMLElement;
         const collapseButton = this.querySelector("[slot='collapse-button']") as HTMLElement;
 
-        const maxHeight = Number.parseInt(
-            getComputedStyle(panel!).getPropertyValue('max-block-size'),
-            10,
-        ); // Integer
+        const maxHeight = Number.parseInt(getComputedStyle(panel!).getPropertyValue('max-block-size'), 10); // Integer
         const offsetHeight = panel!.offsetHeight; // Integer
 
         /* Copy button */
@@ -55,13 +52,12 @@ class jynxPre extends HTMLElement {
         copyButton.addEventListener('click', () => {
             if (copyButton.getAttribute('class') !== 'idle') return;
 
-            const unicodes = this.getAttribute('data-code')!.split(',');
-            const characters = unicodes.map(unicode => String.fromCodePoint(Number(unicode)));
-            const data = characters.join('');
-
+            // FIXME 没有pending动画、切换回idle时也没有动画、copy按钮的svg内融合了多个svg，这也不太合理
             copyButton.setAttribute('class', 'pending');
-            navigator.clipboard
-                .writeText(data)
+            const url = this.getAttribute('data-url') || '';
+            fetch(url)
+                .then(res => res.text())
+                .then(text => navigator.clipboard.writeText(text))
                 .then(() => copyButton.setAttribute('class', 'resolved'))
                 .catch(() => copyButton.setAttribute('class', 'rejected'))
                 .finally(() => setTimeout(() => copyButton.setAttribute('class', 'idle'), 1000));

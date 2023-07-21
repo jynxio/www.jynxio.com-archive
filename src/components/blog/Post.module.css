@@ -1,31 +1,27 @@
 /**
- * Welcome
+ * Container
  * -----------------------------------------------------------------------------------------------------------------
  */
-.welcome {
+.container {
+    position: relative;
     inline-size: 100%;
-    block-size: 100vh;
-    block-size: 100dvh;
-    color: var(--comment-color);
-    font-size: 66px;
-    line-height: 100vh;
-    line-height: 100dvh;
-    text-align: center;
+    block-size: 100%;
 }
 
 /**
- * Missing
+ * Welcome & Missing
  * -----------------------------------------------------------------------------------------------------------------
  */
+.welcome,
 .missing {
-    inline-size: 100%;
-    block-size: 100vh;
-    block-size: 100dvh;
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
     color: var(--comment-color);
     font-size: 66px;
-    line-height: 100vh;
-    line-height: 100dvh;
-    text-align: center;
+    user-select: none;
+    translate: -50% -50%;
 }
 
 /**
@@ -33,11 +29,11 @@
  * -----------------------------------------------------------------------------------------------------------------
  */
 .loader {
-    position: fixed;
-    z-index: 999;
+    position: absolute;
+    z-index: 1;
     top: 0;
-    right: 0;
-    inline-size: calc(100% - var(--nav-width));
+    left: 0;
+    inline-size: 100%;
     block-size: 100%;
     backdrop-filter: blur(5px);
 
@@ -48,38 +44,24 @@
         inline-size: 2rem;
         block-size: 2rem;
         color: var(--link-color);
-        transform: translate(-50%, -50%);
+        translate: -50% -50%;
+        rotate: 0deg;
         animation: spin 1.5s linear infinite;
     }
 }
 
 @keyframes spin {
     0% {
-        transform: rotate(0deg);
+        rotate: 0deg;
     }
 
     100% {
-        transform: rotate(360deg);
+        rotate: 360deg;
     }
 }
 
 /**
- * Reading
- * -----------------------------------------------------------------------------------------------------------------
- */
-.content {
-    --catalog-width: 12rem;
-    --article-width: 100%;
-    --article-max-width: 52rem;
-
-    inline-size: 100%;
-    min-block-size: 100vh;
-    min-block-size: 100dvh;
-    padding-inline-end: var(--catalog-width);
-}
-
-/**
- * Catalog
+ * Topic
  * -----------------------------------------------------------------------------------------------------------------
  */
 .topic {
@@ -89,14 +71,14 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    inline-size: var(--catalog-width);
+    inline-size: 12rem;
     block-size: 100vh;
     block-size: 100dvh;
     padding-inline-end: 1rem;
     padding-block-end: 1rem;
     user-select: none;
 
-    & .heading {
+    & li {
         overflow: hidden;
         margin-block-start: 5px;
         color: var(--paragraph-color);
@@ -120,16 +102,39 @@
  */
 .article {
     --block-gap: 1rem;
+    --content-inline-size: 52rem;
 
-    inline-size: var(--article-width);
-    max-inline-size: var(--article-max-width);
-    padding: 1rem;
-    margin-inline: auto;
-    color: var(--paragraph-color);
+    overflow: auto;
+    block-size: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+
+    &::-webkit-scrollbar {
+        display: initial;
+        inline-size: 8px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #444;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+
+    > article {
+        max-inline-size: var(--content-inline-size);
+        border-inline: var(--block-gap) solid transparent;
+        border-block: var(--block-gap) solid transparent;
+        margin-inline: auto;
+        color: var(--paragraph-color);
+    }
 }
 
 /**
  * Article -> Heading
+ * -----------------------------------------------------------------------------------------------------------------
  */
 .article h1,
 .article h2,
@@ -141,6 +146,7 @@
 
 .article h1 {
     font-size: 1.5rem;
+    margin-block: var(--block-gap);
 }
 
 .article h2 {

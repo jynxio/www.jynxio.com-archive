@@ -1,7 +1,8 @@
 import style from './Post.module.css';
 import defineJynxPre from '@/web-components/createJyxPre';
 import { useParams } from '@solidjs/router';
-import { createComputed, createResource, createSignal, Switch, Match } from 'solid-js';
+import { createComputed, createResource, createSignal, Switch, Match, For } from 'solid-js';
+import { Portal } from 'solid-js/web';
 
 defineJynxPre();
 
@@ -17,11 +18,11 @@ function Post() {
     let handleDelay: NodeJS.Timeout;
     let handleTimeout: NodeJS.Timeout;
 
-    const DELAY_TIME = 200;
-    const TIMEOUT_TIME = 3000;
+    const DELAY_TIME = 100;
+    const TIMEOUT_TIME = 5000;
 
     const [getState, setState] = createSignal<'idle' | 'pending' | 'resolved' | 'rejected'>('idle');
-    const [getHtml] = createResource(
+    const [getArticle] = createResource(
         () => useParams().path,
         async path => {
             const [topicName, postName] = path.split('/');
@@ -31,31 +32,45 @@ function Post() {
             clearTimeout(handleDelay);
             clearTimeout(handleTimeout);
 
-            if (!topicName || !postName) return '';
+            if (!topicName || !postName) return { htmlString: '', topicList: [] };
 
-            handleDelay = setTimeout(() => getHtml.state === 'refreshing' && setState('pending'), DELAY_TIME);
-            handleTimeout = setTimeout(() => getHtml.state === 'refreshing' && controller.abort(), TIMEOUT_TIME);
+            handleDelay = setTimeout(() => getArticle.state === 'refreshing' && setState('pending'), DELAY_TIME);
+            handleTimeout = setTimeout(() => getArticle.state === 'refreshing' && controller.abort(), TIMEOUT_TIME);
 
-            const url = `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.html`;
-            const res = await fetch(url, { signal: controller.signal });
+            const [htmlString, topicList] = await Promise.all([
+                (async (): Promise<string> => {
+                    // 请求文章资源
+                    const url = `${import.meta.env.BASE_URL}blog/post/${topicName}/${postName}.html`;
+                    const res = await fetch(url, { signal: controller.signal });
 
-            return res.ok ? await res.text() : Promise.reject(new Error('Not Found or Timeout'));
+                    return res.ok ? await res.text() : Promise.reject(new Error('Not Found or Timeout'));
+                })(),
+                (async (): Promise<{ text: string; uuid: string }[]> => {
+                    // 请求目录资源
+                    const url = `${import.meta.env.BASE_URL}blog/topic/${topicName}/${postName}.json`;
+                    const res = await fetch(url, { signal: controller.signal });
+
+                    return res.ok ? await res.json() : Promise.reject(new Error('Not Found or Timeout'));
+                })(),
+            ]);
+
+            return { htmlString, topicList };
         },
-        { initialValue: '' },
+        { initialValue: { htmlString: '', topicList: [] } },
     );
 
     createComputed(() => {
-        if (getHtml.state === 'ready' && getHtml() === '') {
+        if (getArticle.state === 'ready' && getArticle().htmlString === '') {
             setState('idle');
 
             clearTimeout(handleDelay);
             clearTimeout(handleTimeout);
-        } else if (getHtml.state === 'ready' && getHtml() !== '') {
+        } else if (getArticle.state === 'ready' && getArticle().htmlString !== '') {
             setState('resolved');
 
             clearTimeout(handleDelay);
             clearTimeout(handleTimeout);
-        } else if (getHtml.state === 'errored') {
+        } else if (getArticle.state === 'errored') {
             setState('rejected');
 
             clearTimeout(handleDelay);
@@ -64,7 +79,8 @@ function Post() {
     });
 
     return (
-        <div>
+        // FIXME Loader和其它组件是互斥的，我希望能够把它该进程Loader组件与其它组件是并存的，这样当加载新文章的时候，loading动画就可以覆盖旧页面，这样看起来似乎更酷
+        <div class={style.container}>
             <Switch>
                 <Match when={getState() === 'idle'}>
                     <Welcome />
@@ -76,8 +92,8 @@ function Post() {
                     <Missing />
                 </Match>
                 <Match when={getState() === 'resolved'}>
-                    <Content html={getHtml()} />
-                    <Topic />
+                    <Article data={getArticle().htmlString} />
+                    <Topic data={getArticle().topicList} />
                 </Match>
             </Switch>
         </div>
@@ -92,16 +108,38 @@ function Missing() {
     return <div class={style.missing}>xP</div>;
 }
 
-function Content(props: { html: string }) {
+function Article(props: { data: string }) {
     return (
-        <div class={style.content}>
-            <article class={style.article} innerHTML={props.html} />
+        <div class={style.article}>
+            <article innerHTML={props.data} />
         </div>
     );
 }
 
-function Topic() {
-    return <></>;
+function Topic(props: { data: { text: string; uuid: string }[] }) {
+    return (
+        <Portal mount={document.querySelector('body')!}>
+            <aside class={style.topic}>
+                <ul>
+                    <For each={props.data}>
+                        {topic => (
+                            <li onClick={[handleClick, topic.uuid]}>
+                                <span>{topic.text}</span>
+                            </li>
+                        )}
+                    </For>
+                </ul>
+            </aside>
+        </Portal>
+    );
+
+    function handleClick(uuid: string) {
+        document.querySelector('.' + style.article)!.scrollTo({
+            top: document.getElementById(uuid)!.offsetTop - 16,
+            left: 0,
+            behavior: 'smooth',
+        });
+    }
 }
 
 function Loader() {
