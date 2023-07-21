@@ -31,66 +31,67 @@ const MAST_SVG_CHECKBOX = svg2mast(SVG_STRING_CHECKBOX);
 /**
  * Catalog
  */
-const catalog = JSON.parse(
-    await readFile(path.resolve() + '/src/configs/baseCatalog.json', 'utf8'),
-);
+const catalog = JSON.parse(await readFile(path.resolve() + '/src/configs/baseCatalog.json', 'utf8'));
 
 /**
  * Markdown -> HTML
  */
 const highlighter = await shiki.getHighlighter({ theme: 'nord' });
 const codeMap = new Map(); // 收集codeblock的内容
+const codeStringMap = new Map();
 const h2Array = []; // 收集二级标题的内容
 let h1Count = 0; // 统计一级标题的数量
-
-try {
-    await access(path.resolve() + '/src/temps', constants.R_OK | constants.W_OK);
-} catch {
-    await mkdir(path.resolve() + '/src/temps');
-}
-
-try {
-    await access(path.resolve() + '/src/temps/blog', constants.R_OK | constants.W_OK);
-} catch {
-    await mkdir(path.resolve() + '/src/temps/blog');
-}
-
-try {
-    await access(path.resolve() + '/src/temps/blog/post', constants.R_OK | constants.W_OK);
-} catch {
-    await mkdir(path.resolve() + '/src/temps/blog/post');
-}
+let codeStringPath = ''; // TODO 这一堆写的太乱了！优化一下！
 
 for (const dir of catalog) {
     const files = await readdir(path.resolve() + '/blog/post/' + dir.name);
 
     try {
-        await access(path.resolve() + '/src/temps/blog/post/' + dir.name);
+        await access(path.resolve() + '/src/temps/blog/post/' + dir.name, constants.R_OK | constants.W_OK);
     } catch {
-        await mkdir(path.resolve() + '/src/temps/blog/post/' + dir.name);
+        await mkdir(path.resolve() + '/src/temps/blog/post/' + dir.name, { recursive: true });
+    }
+
+    try {
+        await access(path.resolve() + '/src/temps/blog/code/' + dir.name, constants.R_OK | constants.W_OK);
+    } catch {
+        await mkdir(path.resolve() + '/src/temps/blog/code/' + dir.name, { recursive: true });
+    }
+
+    try {
+        await access(path.resolve() + '/src/temps/blog/topic/' + dir.name, constants.R_OK | constants.W_OK);
+    } catch {
+        await mkdir(path.resolve() + '/src/temps/blog/topic/' + dir.name, { recursive: true });
     }
 
     for (const file of files) {
         // 还原
         codeMap.clear();
+        codeStringMap.clear();
         h2Array.length = 0;
         h1Count = 0;
+        codeStringPath = `/blog/code/${dir.name}/${file.slice(0, -3)}`;
 
         // 转译
-        const markdown = await readFile(
-            path.resolve() + '/blog/post/' + dir.name + '/' + file,
-            'utf8',
-        );
+        const markdown = await readFile(path.resolve() + '/blog/post/' + dir.name + '/' + file, 'utf8');
         const html = markdown2html(markdown);
 
         // 检查
         if (h1Count === 0) throw new Error('转译失败: 因为缺少一级标题');
 
         // 输出
-        writeFile(
-            path.resolve() + '/src/temps/blog/post/' + dir.name + '/' + file.slice(0, -3) + '.html',
-            html,
+        await writeFile(path.resolve() + '/src/temps/blog/post/' + dir.name + '/' + file.slice(0, -3) + '.html', html);
+        await writeFile(
+            path.resolve() + '/src/temps/blog/topic/' + dir.name + '/' + file.slice(0, -3) + '.json',
+            JSON.stringify(h2Array),
         );
+
+        for (const [uuid, string] of codeStringMap) {
+            await writeFile(
+                path.resolve() + '/src/temps/blog/code/' + dir.name + '/' + file.slice(0, -3) + '-' + uuid + '.txt',
+                string,
+            );
+        }
     }
 }
 
@@ -172,8 +173,7 @@ function processHeadingNode(node, parent) {
     if (node.children.length === 0) throw new Error('转译失败: 因为某个标题元素的内容为空');
     if (node.children.length > 1) throw new Error('转译失败: 因为某个标题元素使用了非普通的文本');
     if (node.depth >= 4) throw new Error('转译失败: 因为使用了大于或等于四级的标题元素');
-    if (node.depth === 1 && ++h1Count > 1)
-        throw new Error('转译失败: 因为使用了超过两个及以上的一级标题元素');
+    if (node.depth === 1 && ++h1Count > 1) throw new Error('转译失败: 因为使用了超过两个及以上的一级标题元素');
 
     // 处理&收集二级标题
     if (node.depth !== 2) return;
@@ -184,8 +184,10 @@ function processHeadingNode(node, parent) {
         return;
     }
 
-    h2Array.push(node.children[0].value); // TODO 请检查是否有转义字符，可通过查看react-handbook页面来检查
-    node.data = { hProperties: { id: nanoid() } };
+    const uuid = nanoid();
+
+    node.data = { hProperties: { id: uuid } };
+    h2Array.push({ text: node.children[0].value, uuid });
 }
 
 function processThematicBreakNode(node, parent) {
@@ -199,10 +201,7 @@ function processLinkNode(node) {
 
     node.data = {
         hProperties: { target: '_blank' },
-        hChildren: [
-            { type: 'text', value: node.children[0].value },
-            structuredClone(MAST_SVG_LINK),
-        ],
+        hChildren: [{ type: 'text', value: node.children[0].value }, structuredClone(MAST_SVG_LINK)],
     };
 }
 
@@ -257,7 +256,7 @@ function processCodeNode(node) {
     const codeString = preString.slice(from, to);
     const divString =
         '<div class="custom-pre">' +
-        `<jynx-pre>` +
+        `<jynx-pre data-url=${codeStringPath + '-' + uuid + '.txt'}>` +
         "<pre slot='panel'>" +
         '<code>' +
         codeString +
@@ -273,6 +272,7 @@ function processCodeNode(node) {
         '</div>';
 
     codeMap.set(uuid, divString);
+    codeStringMap.set(uuid, node.value);
     node.type = 'text';
     node.value = uuid;
 
