@@ -2,6 +2,7 @@ import shiki from 'shiki';
 import util from 'node:util';
 import path from 'node:path';
 import { writeFile, readFile, readdir, mkdir, access, constants } from 'node:fs/promises';
+import { copy, remove } from 'fs-extra';
 import { nanoid } from 'nanoid';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfm } from 'micromark-extension-gfm';
@@ -9,9 +10,6 @@ import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { toHast } from 'mdast-util-to-hast';
 import { toHtml } from 'hast-util-to-html';
 import { parseSync } from 'svgson';
-
-// TODO 收集并输出post的目录，同时检查目录是否存在转义字符的bug
-// TODO 收集并输出post的codeblock
 
 /**
  * SVG
@@ -94,6 +92,17 @@ for (const dir of catalog) {
         }
     }
 }
+
+/**
+ * Clone image folder
+ */
+await copy(path.resolve() + '/blog/image', path.resolve() + '/src/temps/blog/image');
+
+/**
+ * Move to public folder
+ */
+await remove(path.resolve() + '/public/blog');
+await copy(path.resolve() + '/src/temps/blog', path.resolve() + '/public/blog');
 
 function markdown2html(markdown) {
     const mast = fromMarkdown(markdown, {
@@ -206,7 +215,7 @@ function processLinkNode(node) {
 }
 
 function processImageNode(node) {
-    node.url = '/post/image' + node.url;
+    node.url = '/blog/image' + node.url;
 }
 
 function processListNode(node) {

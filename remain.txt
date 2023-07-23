@@ -3,6 +3,7 @@
 - 优化页面的tab导航行为，目前页面的超链接、代码复制按钮都接受聚焦，但是聚焦后的元素无任何样式变化，
   因此用户无法察觉到元素是否被聚焦了，你需要重新思考应该为哪些元素添加聚焦行为、添加啥样的聚焦样式。
   参考[tabindex元素聚焦属性](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/tabindex)
-- 使用<portal>来优化Search功能
 - 使用中文网字库来优化字体加载
 - 尝试使用remark来做事情，而不是用remark的底层库，astro不仅使用了gfm，还用了smartpats（https://docs.astro.build/en/guides/markdown-content/#configuring-markdown-and-mdx）
+- 修复 FIXME
+- 优化 createBlog.js
