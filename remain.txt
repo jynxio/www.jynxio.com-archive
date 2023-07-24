@@ -7,3 +7,5 @@
 - 尝试使用remark来做事情，而不是用remark的底层库，astro不仅使用了gfm，还用了smartpats（https://docs.astro.build/en/guides/markdown-content/#configuring-markdown-and-mdx）
 - 修复 FIXME
 - 优化 createBlog.js
+- 中文网字计划所生成的CSS文件中的@font-face的用法和你的用法不一样，你需要对比一下，然后决定用哪一种用法。
+- 优化中文网字的调用方法，比如使用: node.js来自行构建字体分包、发布至cdn、修改.css文件的内容等
