@@ -1,8 +1,21 @@
 {
-	"rewrites": [
-		{
-			"source": "/(.*)",
-			"destination": "/index.html"
-		}
-	]
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, s-maxage=2678400",
+                    "type": "include",
+                    "include": [".jpg", ".jpeg", ".png", ".gif", ".webp", ".woff", ".woff2", ".ttf", ".eot", "otf"]
+                }
+            ]
+        }
+    ]
 }
