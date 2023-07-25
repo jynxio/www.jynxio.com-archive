@@ -140,7 +140,7 @@
 .article h2,
 .article h3 {
     color: var(--heading-color);
-    font-weight: bold;
+    font-weight: 700;
     line-height: 1;
 }
 
@@ -212,7 +212,7 @@
         'Helvetica Neue',
         sans-serif;
     font-size: 90%;
-    font-weight: normal;
+    font-weight: 400;
     font-feature-settings: 'liga' 1;
     word-break: break-all;
 
@@ -423,7 +423,7 @@
  */
 .article b,
 .article strong {
-    font-weight: normal;
+    font-weight: 400;
 }
 
 /**
@@ -458,6 +458,6 @@
     }
 
     & th {
-        font-weight: normal;
+        font-weight: 400;
     }
 }

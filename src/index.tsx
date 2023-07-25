@@ -1,9 +1,9 @@
 import '@/reset.css';
 import '@/global.css';
-import '@/temps/fonts/lxgwwenkai-regular-400/lxgwwenkai-regular-400.css';
-import '@/temps/fonts/lxgwwenkai-bold-700/lxgwwenkai-bold-700.css';
-import '@/temps/fonts/lxgwwenkaimono-regular-400/lxgwwenkaimono-regular-400.css';
-import '@/temps/fonts/firacode-regular-400/firacode-regular-400.css';
+import '@/temps/fonts/process/firacode-regular-400/result.css';
+import '@/temps/fonts/process/lxgwwenkai-bold-700/result.css';
+import '@/temps/fonts/process/lxgwwenkai-regular-400/result.css';
+import '@/temps/fonts/process/lxgwwenkaimono-regular-400/result.css';
 import Blog from '@/pages/Blog';
 import { render } from 'solid-js/web';
 import { Route, Router, Routes } from '@solidjs/router';
