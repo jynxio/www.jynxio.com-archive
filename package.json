@@ -8,6 +8,7 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "build:catalog": "node --loader ts-node/esm ./src/utils/createCatalog.ts",
+        "build:font": "node --loader ts-node/esm ./src/utils/createFont.ts",
         "build:blog": "node ./src/utils/createBlog.js"
     },
     "dependencies": {
@@ -16,6 +17,7 @@
         "solid-js": "^1.7.8"
     },
     "devDependencies": {
+        "@konghayao/cn-font-split": "^4.5.0",
         "@types/node": "^20.4.2",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
