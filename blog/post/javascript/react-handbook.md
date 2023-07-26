@@ -8,13 +8,13 @@ typora-root-url: ./..\..\image
 
 在 JSX 中，行与行之间的空白符和换行符会被忽略，行内的空白符和换行符才会被保留，这叫做「not indent-meaning」。比如对于下述 JSX 而言，在由其生成的 HTML 中，a 与 b 之间没有空格或换行，c 和 d 之间则有一个空格。
 
-```jsx
+```html
 <section>
-	<span>a</span>
+    <span>a</span>
     <span>b</span>
 </section>
 <section>
-	<span>c</span> <span>d</span>
+    <span>c</span> <span>d</span>
 </section>
 ```
 
