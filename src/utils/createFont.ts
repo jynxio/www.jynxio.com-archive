@@ -40,5 +40,6 @@ async function split(inputPath: string, outputPath: string, cssProps: {}) {
         reporter: false,
         threads: {}, // 开启多线程
         css: cssProps,
+        cssFileName: 'index.css',
     });
 }
