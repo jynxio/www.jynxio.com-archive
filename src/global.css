@@ -16,14 +16,20 @@
 }
 
 :root.light {
-    --line-color: #e6e6e6;
-    --block-color: #dcdcdc;
+    --line-color: #ebebeb;
+    --block-color: #f2f3f3;
     --ground-color: #fff;
     --icon-color: #000;
     --link-color: #c52922;
     --heading-color: #000;
     --paragraph-color: #303030;
     --comment-color: #999;
+
+    & [class~='custom-pre'] {
+        &[class~='dark'] {
+            display: none;
+        }
+    }
 }
 
 :root.dark {
@@ -35,6 +41,12 @@
     --heading-color: #fff;
     --paragraph-color: #e7e7e7;
     --comment-color: #999;
+
+    & [class~='custom-pre'] {
+        &[class~='light'] {
+            display: none;
+        }
+    }
 }
 
 /**
