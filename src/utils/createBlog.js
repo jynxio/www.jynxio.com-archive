@@ -34,7 +34,10 @@ const catalog = JSON.parse(await readFile(path.resolve() + '/src/configs/baseCat
 /**
  * Markdown -> HTML
  */
-const highlighter = await shiki.getHighlighter({ theme: 'nord' });
+const darkTheme = JSON.parse(await readFile(path.resolve() + '/src/themes/vitesse-dark.json', 'utf8'));
+const lightTheme = JSON.parse(await readFile(path.resolve() + '/src/themes/vitesse-light.json', 'utf8'));
+const darkHighlighter = await shiki.getHighlighter({ theme: darkTheme });
+const lightHighlighter = await shiki.getHighlighter({ theme: lightTheme });
 const codeMap = new Map(); // 收集codeblock的内容
 const codeStringMap = new Map();
 const h2Array = []; // 收集二级标题的内容
@@ -151,7 +154,7 @@ function processMast(mast) {
                 break;
 
             case 'code':
-                processCodeNode(node);
+                processCodeNode(node, parent);
                 break;
 
             default:
@@ -257,36 +260,81 @@ function processListNode(node) {
     });
 }
 
-function processCodeNode(node) {
-    const uuid = nanoid();
-    const preString = highlighter.codeToHtml(node.value, { lang: node.lang });
-    const from = preString.indexOf('<code>') + 6;
-    const to = preString.lastIndexOf('</code>');
-    const codeString = preString.slice(from, to);
-    const divString =
-        '<div class="custom-pre">' +
-        `<jynx-pre data-url=${codeStringPath + '-' + uuid + '.txt'}>` +
-        "<pre slot='panel'>" +
-        '<code>' +
-        codeString +
-        '</code>' +
-        '</pre>' +
-        "<button slot='collapse-button'>" +
-        SVG_STRING_COLLAPSE +
-        '</button>' +
-        "<button slot='copy-button'>" +
-        SVG_STRING_COPY +
-        '</button>' +
-        '</jynx-pre>' +
-        '</div>';
+function processCodeNode(node, parent) {
+    const globalUuid = nanoid();
 
-    codeMap.set(uuid, divString);
-    codeStringMap.set(uuid, node.value);
-    node.type = 'text';
-    node.value = uuid;
+    /**
+     * Light theme
+     */
+    let lightCode = '';
+    const lightUuid = nanoid();
+    {
+        const preString = lightHighlighter.codeToHtml(node.value, { lang: node.lang });
+        const from = preString.indexOf('<code>') + 6;
+        const to = preString.lastIndexOf('</code>');
+        const codeString = preString.slice(from, to);
+        const divString =
+            '<div class="custom-pre light">' +
+            `<jynx-pre data-url=${codeStringPath + '-' + globalUuid + '.txt'}>` +
+            "<pre slot='panel'>" +
+            '<code>' +
+            codeString +
+            '</code>' +
+            '</pre>' +
+            "<button slot='collapse-button'>" +
+            SVG_STRING_COLLAPSE +
+            '</button>' +
+            "<button slot='copy-button'>" +
+            SVG_STRING_COPY +
+            '</button>' +
+            '</jynx-pre>' +
+            '</div>';
 
-    delete node.meta;
-    delete node.lang;
+        lightCode = divString;
+    }
+
+    /**
+     * Dark theme
+     */
+    let darkCode = '';
+    const darkUuid = nanoid();
+    {
+        const preString = darkHighlighter.codeToHtml(node.value, { lang: node.lang });
+        const from = preString.indexOf('<code>') + 6;
+        const to = preString.lastIndexOf('</code>');
+        const codeString = preString.slice(from, to);
+        const divString =
+            '<div class="custom-pre dark">' +
+            `<jynx-pre data-url=${codeStringPath + '-' + globalUuid + '.txt'}>` +
+            "<pre slot='panel'>" +
+            '<code>' +
+            codeString +
+            '</code>' +
+            '</pre>' +
+            "<button slot='collapse-button'>" +
+            SVG_STRING_COLLAPSE +
+            '</button>' +
+            "<button slot='copy-button'>" +
+            SVG_STRING_COPY +
+            '</button>' +
+            '</jynx-pre>' +
+            '</div>';
+
+        darkCode = divString;
+    }
+
+    /**
+     *
+     */
+    codeMap.set(lightUuid, lightCode);
+    codeMap.set(darkUuid, darkCode);
+    codeStringMap.set(globalUuid, node.value);
+
+    const index = parent.children.indexOf(node);
+
+    if (index === -1) throw new Error('未能在当前的node的parent的children中找到该node，这是不可能的情况');
+
+    parent.children.splice(index, 1, { type: 'text', value: lightUuid }, { type: 'text', value: darkUuid });
 }
 
 function svg2mast(svgString) {
