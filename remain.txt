@@ -6,11 +6,14 @@
 - 尝试使用remark来做事情，而不是用remark的底层库，astro不仅使用了gfm，还用了smartpats（https://docs.astro.build/en/guides/markdown-content/#configuring-markdown-and-mdx）
 - 修复 FIXME
 - 优化 createBlog.js
-- 中文网字计划的@konghayao/cn-font-split无法修改font-family，无法扩展src（需要补充format和local），无法自定义result.css的名字，你需要发起一个PR
-- 待PR接收后再返回来优化你的createFont.js
+- 中文网字计划的@konghayao/cn-font-split的src没有format函数
+- 我已提交PR（关于重命名font-family和增加local函数）待PR接收后再返回来优化你的createFont.js
 - Vercel 根据 GitHub 的推送来自动更新和部署
 - vercel dev命令似乎可以在你的本地模拟vercel的部署，你可以使用这个命令来检查对字体和图像资源的缓存是否如你所想
 - 减小.git的体积
+- 如果展开了代码块之后再切换主题色，那么就会出现bug
+- 将页面的滑动条隐藏掉，换成一条垂直的进度线
+- 二叉搜索树笔记的postorder-traverse.png节点和最后一个代码块都会被markdown解析器忽略掉，似乎整个最后一部分都会被忽略掉
 
 关于 Vercel:
 - Vercel 会将所有静态资源都缓存在边缘服务器（持续31天），但阻止任何静态资源缓存在客户端，详见https://vercel.com/docs/concepts/edge-network/caching#static-files-caching
