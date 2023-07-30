@@ -1,9 +1,12 @@
-import fs from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, statSync, createReadStream } from 'node:fs';
+import { emptyDir } from 'fs-extra';
 import path from 'node:path';
 
-const INPUT_PATH = '/src/configs/baseCatalog.json';
-const OUTPUT_PATH = '/src/temps/configs/detailCatalog.json';
-const BLOG_BASE_PATH = '/blog/post/';
+const INPUT_PATH = path.resolve() + '/src/configs/baseCatalog.json';
+const OUTPUT_PATH = path.resolve() + '/src/temps/configs/detailCatalog.json';
+const BLOG_BASE_PATH = path.resolve() + '/blog/post/';
+
+await emptyDir(path.resolve() + '/src/temps/configs');
 
 main();
 
@@ -12,13 +15,12 @@ async function main() {
      * 创建目录的JSON
      */
     const dirPromises = [];
-    const rootAddress = path.resolve();
-    const baseCatalog = JSON.parse(fs.readFileSync(rootAddress + INPUT_PATH, 'utf8'));
+    const baseCatalog = JSON.parse(readFileSync(INPUT_PATH, 'utf8'));
 
     for (const dir of baseCatalog) {
         const aliasPromises = [];
-        const dirAddress = rootAddress + BLOG_BASE_PATH + dir.name;
-        const dirents = fs.readdirSync(dirAddress, {
+        const dirAddress = BLOG_BASE_PATH + dir.name;
+        const dirents = readdirSync(dirAddress, {
             encoding: 'utf8',
             withFileTypes: true,
         });
@@ -48,9 +50,7 @@ async function main() {
     /**
      * 写入为一个JSON文件
      */
-    const jsonAddress = rootAddress + OUTPUT_PATH;
-
-    fs.writeFileSync(jsonAddress, JSON.stringify(baseCatalog), {
+    writeFileSync(OUTPUT_PATH, JSON.stringify(baseCatalog), {
         encoding: 'utf8',
     });
 }
@@ -64,7 +64,7 @@ function createHeading(path: string): Promise<string> {
     return new Promise((resolve, reject) => {
         let string = '';
 
-        const reader = fs.createReadStream(path, {
+        const reader = createReadStream(path, {
             encoding: 'utf8',
             highWaterMark: 1024,
         });
@@ -90,7 +90,7 @@ function createHeading(path: string): Promise<string> {
  * @returns { string } 最后修改时间的日期字符串
  */
 function createTime(path: string): string {
-    const iso = fs.statSync(path).mtime;
+    const iso = statSync(path).mtime;
     const date = new Date(iso);
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
