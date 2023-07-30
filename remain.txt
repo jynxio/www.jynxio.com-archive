@@ -12,9 +12,6 @@
 - vercel dev命令似乎可以在你的本地模拟vercel的部署，你可以使用这个命令来检查对字体和图像资源的缓存是否如你所想
 - 减小.git的体积
 - 将页面的滑动条隐藏掉，换成一条垂直的进度线
-- 二叉搜索树笔记的postorder-traverse.png节点和最后一个代码块都会被markdown解析器忽略掉，似乎整个最后一部分都会被忽略掉
-- 使用WebP来替换png
+- 标题增加点击定位
 
-关于 Vercel:
-- Vercel 会将所有静态资源都缓存在边缘服务器（持续31天），但阻止任何静态资源缓存在客户端，详见https://vercel.com/docs/concepts/edge-network/caching#static-files-caching
-- 我通过 vercel.json 来修改了缓存策略，使 Vercel 允许在客户端上缓存字体和图像资源（持续31天）。
+关于 Vercel 的静态资源: 所有静态资源都会缓存在边缘服务器（持续31天），但任何静态资源都不会缓存在客户端，这与 Vercel 的默认的 headers 设置有关，详见https://vercel.com/docs/concepts/edge-network/caching#static-files-caching

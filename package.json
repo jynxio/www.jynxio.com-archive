@@ -6,11 +6,13 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
+        "deploy": "vercel deploy --prod dist",
         "preview": "vite preview",
-        "build:catalog": "node --loader ts-node/esm ./src/utils/createCatalog.ts",
+        "build:all": "pnpm run build:catalog && pnpm run build:blog && pnpm run build:webp",
         "build:font": "node --loader ts-node/esm ./src/utils/createFont.ts",
         "build:blog": "node ./src/utils/createBlog.js",
-        "build:webp": "node --loader ts-node/esm ./src/utils/createWebp.ts"
+        "build:webp": "node --loader ts-node/esm ./src/utils/createWebp.ts",
+        "build:catalog": "node --loader ts-node/esm ./src/utils/createCatalog.ts"
     },
     "dependencies": {
         "@solidjs/router": "^0.8.2",
@@ -46,6 +48,7 @@
         "svgson": "^5.3.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.1.6",
+        "vercel": "^31.2.0",
         "vite": "^4.4.7",
         "vite-plugin-solid": "^2.7.0"
     }
