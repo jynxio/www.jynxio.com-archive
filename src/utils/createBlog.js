@@ -1,8 +1,9 @@
 import shiki from 'shiki';
 import util from 'node:util';
 import path from 'node:path';
+import sharp from 'sharp';
 import { writeFile, readFile, readdir, mkdir, access, constants } from 'node:fs/promises';
-import { copy, remove } from 'fs-extra';
+import { copy, remove, emptyDir } from 'fs-extra';
 import { nanoid } from 'nanoid';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfm } from 'micromark-extension-gfm';
@@ -53,23 +54,9 @@ let codeStringPath = ''; // TODO 这一堆写的太乱了！优化一下！
 for (const dir of catalog) {
     const files = await readdir(path.resolve() + '/blog/post/' + dir.name);
 
-    try {
-        await access(path.resolve() + '/src/temps/blog/post/' + dir.name, constants.R_OK | constants.W_OK);
-    } catch {
-        await mkdir(path.resolve() + '/src/temps/blog/post/' + dir.name, { recursive: true });
-    }
-
-    try {
-        await access(path.resolve() + '/src/temps/blog/code/' + dir.name, constants.R_OK | constants.W_OK);
-    } catch {
-        await mkdir(path.resolve() + '/src/temps/blog/code/' + dir.name, { recursive: true });
-    }
-
-    try {
-        await access(path.resolve() + '/src/temps/blog/topic/' + dir.name, constants.R_OK | constants.W_OK);
-    } catch {
-        await mkdir(path.resolve() + '/src/temps/blog/topic/' + dir.name, { recursive: true });
-    }
+    await emptyDir(path.resolve() + '/public/blog/post/' + dir.name);
+    await emptyDir(path.resolve() + '/public/blog/code/' + dir.name);
+    await emptyDir(path.resolve() + '/public/blog/topic/' + dir.name);
 
     for (const file of files) {
         // 还原
@@ -87,31 +74,20 @@ for (const dir of catalog) {
         if (h1Count === 0) throw new Error('转译失败: 因为缺少一级标题');
 
         // 输出
-        await writeFile(path.resolve() + '/src/temps/blog/post/' + dir.name + '/' + file.slice(0, -3) + '.html', html);
+        await writeFile(path.resolve() + '/public/blog/post/' + dir.name + '/' + file.slice(0, -3) + '.html', html);
         await writeFile(
-            path.resolve() + '/src/temps/blog/topic/' + dir.name + '/' + file.slice(0, -3) + '.json',
+            path.resolve() + '/public/blog/topic/' + dir.name + '/' + file.slice(0, -3) + '.json',
             JSON.stringify(h2Array),
         );
 
         for (const [uuid, string] of codeStringMap) {
             await writeFile(
-                path.resolve() + '/src/temps/blog/code/' + dir.name + '/' + file.slice(0, -3) + '-' + uuid + '.txt',
+                path.resolve() + '/public/blog/code/' + dir.name + '/' + file.slice(0, -3) + '-' + uuid + '.txt',
                 string,
             );
         }
     }
 }
-
-/**
- * Clone image folder
- */
-await copy(path.resolve() + '/blog/image', path.resolve() + '/src/temps/blog/image');
-
-/**
- * Move to public folder
- */
-await remove(path.resolve() + '/public/blog');
-await copy(path.resolve() + '/src/temps/blog', path.resolve() + '/public/blog');
 
 function markdown2html(markdown) {
     const mast = fromMarkdown(markdown, {
@@ -224,7 +200,7 @@ function processLinkNode(node) {
 }
 
 function processImageNode(node) {
-    node.url = '/blog/image' + node.url;
+    node.url = '/blog/image' + node.url.slice(0, -4) + '.webp';
 }
 
 function processListNode(node) {

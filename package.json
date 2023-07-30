@@ -9,7 +9,8 @@
         "preview": "vite preview",
         "build:catalog": "node --loader ts-node/esm ./src/utils/createCatalog.ts",
         "build:font": "node --loader ts-node/esm ./src/utils/createFont.ts",
-        "build:blog": "node ./src/utils/createBlog.js"
+        "build:blog": "node ./src/utils/createBlog.js",
+        "build:webp": "node --loader ts-node/esm ./src/utils/createWebp.ts"
     },
     "dependencies": {
         "@solidjs/router": "^0.8.2",
@@ -18,6 +19,7 @@
     },
     "devDependencies": {
         "@konghayao/cn-font-split": "^4.6.0",
+        "@types/fs-extra": "^11.0.1",
         "@types/node": "^20.4.5",
         "@typescript-eslint/eslint-plugin": "^6.2.0",
         "@typescript-eslint/parser": "^6.2.0",
@@ -37,6 +39,7 @@
         "postcss-preset-env": "^9.1.0",
         "postcss-sorting": "^8.0.2",
         "prettier": "^3.0.0",
+        "sharp": "^0.32.4",
         "shiki": "^0.14.3",
         "stylelint": "^15.10.2",
         "stylelint-config-standard": "^34.0.0",
