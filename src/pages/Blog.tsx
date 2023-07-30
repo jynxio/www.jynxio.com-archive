@@ -1,6 +1,6 @@
+import style from './Blog.module.css';
 import Nav from '@/components/blog/Nav';
 import Post from '@/components/blog/Post';
-import style from './Blog.module.css';
 import { lazy } from 'solid-js';
 
 const LazySearch = lazy(() => import('@/components/blog/Search'));
