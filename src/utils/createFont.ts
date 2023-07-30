@@ -14,20 +14,28 @@ const LXGWWENKAIMONO_REGULAR_400_INPUT_PATH = path.resolve() + '/src/temps/fonts
 const LXGWWENKAIMONO_REGULAR_400_OUTPUT_PATH = path.resolve() + '/src/temps/fonts/process/lxgwwenkaimono-regular-400';
 
 await split(FIRACODE_REGULAR_400_INPUT_PATH, FIRACODE_REGULAR_400_OUTPUT_PATH, {
-    fontWeight: 400,
     fontFamily: 'Fira Code',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontDisplay: 'swap',
 });
 await split(LXGWWENKAI_REGULAR_400_INPUT_PATH, LXGWWENKAI_REGULAR_400_OUTPUT_PATH, {
+    fontFamily: '霞鹜文楷',
+    fontStyle: 'normal',
     fontWeight: 400,
-    fontFamily: 'LXGW WenKai',
+    fontDisplay: 'swap',
 });
 await split(LXGWWENKAI_BOLD_700_INPUT_PATH, LXGWWENKAI_BOLD_700_OUTPUT_PATH, {
+    fontFamily: '霞鹜文楷',
+    fontStyle: 'normal',
     fontWeight: 700,
-    fontFamily: 'LXGW WenKai',
+    fontDisplay: 'swap',
 });
 await split(LXGWWENKAIMONO_REGULAR_400_INPUT_PATH, LXGWWENKAIMONO_REGULAR_400_OUTPUT_PATH, {
+    fontFamily: '霞鹜文楷等宽',
+    fontStyle: 'normal',
     fontWeight: 400,
-    fontFamily: 'LXGW WenKai Mono',
+    fontDisplay: 'swap',
 });
 
 async function split(inputPath: string, outputPath: string, cssProps: {}) {
@@ -35,7 +43,7 @@ async function split(inputPath: string, outputPath: string, cssProps: {}) {
         FontPath: inputPath,
         destFold: outputPath,
         targetType: 'woff2',
-        chunkSize: 75 * 1024, // 75kb
+        chunkSize: 70 * 1024, // 70kb
         testHTML: false,
         reporter: false,
         threads: {}, // 开启多线程
