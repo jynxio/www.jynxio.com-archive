@@ -1,13 +1,14 @@
 import style from './Post.module.css';
-import defineJynxPre from '@/web-components/createJyxPre';
+import registryJynxioCodeblock from '@/web-components/registryJynxioCodeblock';
 import { useParams } from '@solidjs/router';
 import { createComputed, createResource, createSignal, Switch, Match, For } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
-defineJynxPre();
+registryJynxioCodeblock();
 
-// 如果没有发起网路请求，那么就标记为idle状态；如果发起了网络请求，且发起后的200ms内还没有敲定，
-// 那么就标记为pending状态；如果发起后的3000ms内还没有敲定，那么就标记为rejected状态；如果网络
+// 网络请求的逻辑：
+// 如果没有发起网路请求，那么就标记为idle状态；如果发起了网络请求，且发起后的100ms内还没有敲定，
+// 那么就标记为pending状态；如果发起后的5000ms内还没有敲定，那么就标记为rejected状态；如果网络
 // 请求成功了，那么就标记为resolved状态；如果网络请求失败了，那么就标记为rejected状态；如果点击
 // 了新的文章，那么就会发起新的网络请求；
 

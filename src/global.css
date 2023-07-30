@@ -25,10 +25,8 @@
     --paragraph-color: #303030;
     --comment-color: #999;
 
-    & [class~='custom-pre'] {
-        &[class~='dark'] {
-            display: none;
-        }
+    & jynxio-codeblock code.dark {
+        display: none;
     }
 }
 
@@ -42,10 +40,8 @@
     --paragraph-color: #e7e7e7;
     --comment-color: #999;
 
-    & [class~='custom-pre'] {
-        &[class~='light'] {
-            display: none;
-        }
+    & jynxio-codeblock code.light {
+        display: none;
     }
 }
 

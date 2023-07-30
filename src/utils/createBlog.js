@@ -14,12 +14,18 @@ import { parseSync } from 'svgson';
 /**
  * SVG
  */
+const SVG_STRING_COPY_IDLE =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+const SVG_STRING_COPY_PENDING =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader"><line x1="12" x2="12" y1="2" y2="6"/><line x1="12" x2="12" y1="18" y2="22"/><line x1="4.93" x2="7.76" y1="4.93" y2="7.76"/><line x1="16.24" x2="19.07" y1="16.24" y2="19.07"/><line x1="2" x2="6" y1="12" y2="12"/><line x1="18" x2="22" y1="12" y2="12"/><line x1="4.93" x2="7.76" y1="19.07" y2="16.24"/><line x1="16.24" x2="19.07" y1="7.76" y2="4.93"/></svg>';
+const SVG_STRING_COPY_RESOLVED =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><polyline points="20 6 9 17 4 12"/></svg>';
+const SVG_STRING_COPY_REJECTED =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
 const SVG_STRING_LINK =
     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>';
 const SVG_STRING_CHECKBOX =
     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>';
-const SVG_STRING_COPY =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path><polyline points="20 6 9 17 4 12"></polyline><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>';
 const SVG_STRING_COLLAPSE =
     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>';
 
@@ -261,80 +267,41 @@ function processListNode(node) {
 }
 
 function processCodeNode(node, parent) {
-    const globalUuid = nanoid();
+    const uuid = nanoid();
+    const lightPreString = lightHighlighter.codeToHtml(node.value, { lang: node.lang });
+    const lightCodeString = lightPreString.slice(
+        lightPreString.indexOf('<code>') + 6,
+        lightPreString.lastIndexOf('</code>'),
+    );
+    const darkPreString = darkHighlighter.codeToHtml(node.value, { lang: node.lang });
+    const darkCodeString = darkPreString.slice(
+        darkPreString.indexOf('<code>') + 6,
+        darkPreString.lastIndexOf('</code>'),
+    );
 
-    /**
-     * Light theme
-     */
-    let lightCode = '';
-    const lightUuid = nanoid();
-    {
-        const preString = lightHighlighter.codeToHtml(node.value, { lang: node.lang });
-        const from = preString.indexOf('<code>') + 6;
-        const to = preString.lastIndexOf('</code>');
-        const codeString = preString.slice(from, to);
-        const divString =
-            '<div class="custom-pre light">' +
-            `<jynx-pre data-url=${codeStringPath + '-' + globalUuid + '.txt'}>` +
-            "<pre slot='panel'>" +
-            '<code>' +
-            codeString +
-            '</code>' +
-            '</pre>' +
-            "<button slot='collapse-button'>" +
-            SVG_STRING_COLLAPSE +
-            '</button>' +
-            "<button slot='copy-button'>" +
-            SVG_STRING_COPY +
-            '</button>' +
-            '</jynx-pre>' +
-            '</div>';
+    const divString =
+        `<jynxio-codeblock data-url=${codeStringPath + '-' + uuid + '.txt'}>` +
+        '<pre slot="codeblock">' +
+        `<code class="light">${lightCodeString}</code>` +
+        `<code class="dark">${darkCodeString}</code>` +
+        '</pre>' +
+        '<button slot="copy">' +
+        `<span class="idle">${SVG_STRING_COPY_IDLE}</span>` +
+        `<span class="pending">${SVG_STRING_COPY_PENDING}</span>` +
+        `<span class="resolved">${SVG_STRING_COPY_RESOLVED}</span>` +
+        `<span class="rejected">${SVG_STRING_COPY_REJECTED}</span>` +
+        '</button>' +
+        `<button slot="collapse">${SVG_STRING_COLLAPSE}</button>` +
+        '</jynxio-codeblock>';
 
-        lightCode = divString;
-    }
+    codeMap.set(uuid, divString);
+    codeStringMap.set(uuid, node.value);
 
-    /**
-     * Dark theme
-     */
-    let darkCode = '';
-    const darkUuid = nanoid();
-    {
-        const preString = darkHighlighter.codeToHtml(node.value, { lang: node.lang });
-        const from = preString.indexOf('<code>') + 6;
-        const to = preString.lastIndexOf('</code>');
-        const codeString = preString.slice(from, to);
-        const divString =
-            '<div class="custom-pre dark">' +
-            `<jynx-pre data-url=${codeStringPath + '-' + globalUuid + '.txt'}>` +
-            "<pre slot='panel'>" +
-            '<code>' +
-            codeString +
-            '</code>' +
-            '</pre>' +
-            "<button slot='collapse-button'>" +
-            SVG_STRING_COLLAPSE +
-            '</button>' +
-            "<button slot='copy-button'>" +
-            SVG_STRING_COPY +
-            '</button>' +
-            '</jynx-pre>' +
-            '</div>';
+    node.type = 'text';
+    node.value = uuid;
 
-        darkCode = divString;
-    }
-
-    /**
-     *
-     */
-    codeMap.set(lightUuid, lightCode);
-    codeMap.set(darkUuid, darkCode);
-    codeStringMap.set(globalUuid, node.value);
-
-    const index = parent.children.indexOf(node);
-
-    if (index === -1) throw new Error('未能在当前的node的parent的children中找到该node，这是不可能的情况');
-
-    parent.children.splice(index, 1, { type: 'text', value: lightUuid }, { type: 'text', value: darkUuid });
+    delete node.meta;
+    delete node.lang;
 }
 
 function svg2mast(svgString) {
