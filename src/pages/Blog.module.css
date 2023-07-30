@@ -1,0 +1,21 @@
+.container {
+    --nav-width: 18rem;
+    --post-width: calc(100% - var(--nav-width));
+
+    display: flex;
+    inline-size: 100vw;
+    inline-size: 100dvw;
+    block-size: 100vh;
+    block-size: 100dvh;
+}
+
+.nav {
+    flex: 0 0 var(--nav-width);
+    block-size: 100%;
+}
+
+.post {
+    overflow: hidden;
+    flex: 0 0 var(--post-width);
+    block-size: 100%;
+}

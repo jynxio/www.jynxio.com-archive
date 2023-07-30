@@ -1,26 +1,17 @@
-import.meta.glob( "../post/post/javascript/*.md", { eager: true, as: "raw" } );
-1.文件式路由更清爽，但要求使用中文来命名文件夹和文件。配置式路由更清晰，且对命名无要求。
-2.路由数据必须以某种形式传递给组件，我该怎么实现？
-3.开发环境下，路由文件要经过转译和语法高亮，然后把处理结果（字符串）传递给组件。
-4.生产环境下，路由文件要被经过转译、语法高亮、单独打包；
-5.用一个独立的脚本来定义转移、语法高亮的处理规则；
-
-vite.config.js
-assetsInclude: [ "**/*.md" ],
-
-1.生产环境下的静态的md转译和语法高亮；
-2.开发环境下的动态的md转译和语法高亮；
-3.文件/配置式路由：
-	1.自动生成所有文章的目录；
-	2.根据文章的地址来设置网页的路由；
-
 优化：
 - 未完成的checkbox应该只用方块svg就行了，而不需要里面的勾号；
 - 优化页面的tab导航行为，目前页面的超链接、代码复制按钮都接受聚焦，但是聚焦后的元素无任何样式变化，
   因此用户无法察觉到元素是否被聚焦了，你需要重新思考应该为哪些元素添加聚焦行为、添加啥样的聚焦样式。
   参考[tabindex元素聚焦属性](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes/tabindex)
-- 使用<portal>来优化Search功能
-- 使用中文网字库来优化字体加载
+- 尝试使用remark来做事情，而不是用remark的底层库，astro不仅使用了gfm，还用了smartpats（https://docs.astro.build/en/guides/markdown-content/#configuring-markdown-and-mdx）
+- 修复 FIXME
+- 优化 createBlog.js
+- 中文网字计划的@konghayao/cn-font-split的src没有format函数
+- 我已提交PR（关于重命名font-family和增加local函数）待PR接收后再返回来优化你的createFont.js
+- Vercel 根据 GitHub 的推送来自动更新和部署
+- vercel dev命令似乎可以在你的本地模拟vercel的部署，你可以使用这个命令来检查对字体和图像资源的缓存是否如你所想
+- 减小.git的体积
+- 将页面的滑动条隐藏掉，换成一条垂直的进度线
+- 标题增加点击定位
 
-markdown转译器：
-- 将data-pre从html中分离出去，修改jynx-pre，使其可以通过网络请求来获取code数据
+关于 Vercel 的静态资源: 所有静态资源都会缓存在边缘服务器（持续31天），但任何静态资源都不会缓存在客户端，这与 Vercel 的默认的 headers 设置有关，详见https://vercel.com/docs/concepts/edge-network/caching#static-files-caching

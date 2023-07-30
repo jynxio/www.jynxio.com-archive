@@ -1,0 +1,12 @@
+# Development
+**/.git
+**/node_modules
+
+# Production
+dist
+build
+
+# Asset
+post
+**/*.md
+**/*.mdx
