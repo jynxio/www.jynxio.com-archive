@@ -125,7 +125,7 @@ function Topic(props: { data: { text: string; uuid: string }[] }) {
                     <For each={props.data}>
                         {topic => (
                             <li onClick={[handleClick, topic.uuid]}>
-                                <span>{topic.text}</span>
+                                <span title={topic.text}>{topic.text}</span>
                             </li>
                         )}
                     </For>
