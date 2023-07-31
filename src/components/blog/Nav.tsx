@@ -190,21 +190,28 @@ function Control() {
                 </a>
             </span>
             <span class={style.icon}>
-                <a href="https://github.com/jynxio/www.jynxio.com" target="_blank">
+                <a href="https://github.com/jynxio/www.jynxio.com/issues/new" target="_blank">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
-                        viewBox="0 0 24 24"
+                        viewBox="0 0 22 22"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-edit"
+                        class="lucide lucide-bug"
                     >
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        <rect width="8" height="14" x="8" y="6" rx="4" />
+                        <path d="m19 7-3 2" />
+                        <path d="m5 7 3 2" />
+                        <path d="m19 19-3-2" />
+                        <path d="m5 19 3-2" />
+                        <path d="M20 13h-4" />
+                        <path d="M4 13h4" />
+                        <path d="m10 4 1 2" />
+                        <path d="m14 4-1 2" />
                     </svg>
                     <span class={style.identifier}>issue</span>
                 </a>
