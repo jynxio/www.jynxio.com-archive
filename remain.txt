@@ -13,5 +13,6 @@
 - 减小.git的体积
 - 将页面的滑动条隐藏掉，换成一条垂直的进度线
 - 标题增加点击定位
+- 使用figure元素来包裹img元素
 
 关于 Vercel 的静态资源: 所有静态资源都会缓存在边缘服务器（持续31天），但任何静态资源都不会缓存在客户端，这与 Vercel 的默认的 headers 设置有关，详见https://vercel.com/docs/concepts/edge-network/caching#static-files-caching
