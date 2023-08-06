@@ -56,3 +56,17 @@ typora-root-url: ./..\..\image
 - 如果一个外边距不大于零，另一个外边距不小于零，那么父元素的外边距就会等于两者的代数和，子元素的外边距总是会等于零；
 
 ![父子折叠](/css/margin/parent-child-collapsing.png)
+
+
+
+
+
+When margin-collapse was added to the CSS specification, the language designers made a curious choice: horizontal margins (`margin-left` and `margin-right`) shouldn't collapse.
+
+So that's our first rule: *only vertical margins collapse.*So our first rule is a bit of a misnomer; it would be more accurate to say that only *block-direction margins collapse*.
+
+## Margins only collapse in Flow layout
+
+## Nesting doesn't prevent collapsing
+
+Alright, here's where it starts to get weird. Consider the following code:
