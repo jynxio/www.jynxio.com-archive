@@ -70,3 +70,15 @@ So that's our first rule: *only vertical margins collapse.*So our first rule is 
 ## Nesting doesn't prevent collapsing
 
 Alright, here's where it starts to get weird. Consider the following code:
+
+margin 的作用不是为了增加父元素和子元素之间的间距（padding 才被用来做这件事情），而是为了增加兄弟元素之间的间隔，因此子元素的 margin 会被父元素吞掉，然后被父元素用来控制其与其兄弟元素之间的间隔。
+
+只有当外边距和外边距彼此接触的时候才会发生折叠，因此当外边距被元素、padding、边框挡住的时候，就不会折叠，甚至被空白挡住的时候也不会折叠（查看 Blocked by a gap）
+
+由 `overflow: hidden` 或 `overflow: auto` 所创建的滚动容器也会禁用折叠，滚动容器任意一侧都不会发生外边距折叠。
+
+> overflow 其他值会创建滚动容器吗？
+
+将所有示例及其图片都复现一遍，here it is, in code. Use the devtools to view each margin in isolation 里面的代码例子也要
+
+最后一个代码例子是说明了正负边距如何工作的大杂烩，这个也要
