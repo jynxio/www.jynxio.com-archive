@@ -136,6 +136,39 @@ TODO：插图
 
 ### 折叠的例子
 
+关于公式、同向折叠、非同向折叠、padding/border/元素/间隔阻止折叠、复杂折叠	
+
+```html
+<p class="a-1"></p>
+<p class="a-2"></p>
+
+<p class="b-1"></p>
+<p class="b-2"></p>
+
+<p class="c-1"></p>
+<p class="c-2"></p>
+
+<style>
+    .a-1 { margin-block-end: 40px }
+    .a-2 { margin-block-start: 20px }
+    
+    .b-1 { margin-block-end: -40px }
+    .b-2 { margin-block-start: -20px }
+    
+    .c-1 { margin-block-end: 40px }
+    .c-2 { margin-block-start: -20px }
+</style>
+```
+
+关于padding、border、元素、间隙、横向外边距都会阻止折叠的例子：
+
+```html
+<p class="a-1"></p>
+<p class="a-2"></p>
+```
+
+超级复杂的外边距折叠；
+
 padding、border、元素、间隙（看 blocked by a gap）、scroll container 都可以阻止外边距之间直接接触，多个元素之间可以一起发生折叠（看 more than two margins can collapse）
 
 ```
