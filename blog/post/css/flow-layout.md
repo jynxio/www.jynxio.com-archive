@@ -94,6 +94,19 @@ typora-root-url: ./..\..\image
 - 将可替换元素转换为块级元素；
 - 将容器元素的 `line-height` 设置为 `0`；
 
+```html
+<section><img width="100px" height="100px"/></section>
+<section><img width="100px" height="100px"/></section>
+<section><img width="100px" height="100px"/></section>
+
+<style>
+    p { background-color: gray }
+    img {  }
+</style>
+```
+
+> 如果你把 `<img />` 替换成 `<span style="display: inline-block"></span>`，那么也能获得这个「gap」。
+
 ![缝隙](/css/flow-layout/inline-block-element-gap.png)
 
 ## 百分比高度陷阱
@@ -144,18 +157,106 @@ html, body {
 
 关于「影响元素的行内尺寸」，在流式布局中，对于一个 `inline-size: auto` 的块级元素，`margin-inline` 可以控制其内容盒的行内尺寸。在 FLex 布局中，对于一个 `inline-size: 100%` 的块级元素，`margin-inline` 也可以控制其内容和的行内尺寸。
 
-TODO：插图
+```html
+<main>
+	<section></section>
+    <section></section>
+    <section></section>
+    <section></section>
+</main>
+
+<style>
+    main { background-color: pink }
+    section {
+        inline-size: auto;
+        background-color: orange;
+    }
+    
+    section:nth-child(1) { margin-inline: 0rem }
+    section:nth-child(2) { margin-inline: 8rem }
+    section:nth-child(3) { margin-inline: 8rem 0rem }
+    section:nth-child(4) { margin-inline: 0rem 8rem }
+</style>
+```
+
+![影响元素的行内尺寸](/css/flow-layout/adjust-inline-size.png)
 
 关于「影响元素的行内位置」，在流式布局中，对于一个 `inline-size` 为固定值的块级元素，`margin-inline: auto` 可以令其在行内方向上剧中。
 
-TODO：插图
+```html
+<main class="horizontal">
+	<section></section>
+</main>
 
-关于「影响元素之间的间距的」，在流式布局中，外边距可以调整元素与元素之间的间距，有时是通过移动元素自己来实现的，有时是通过移动相邻元素来实现的，具体来说：
+<main class="vertical">
+	<section></section>
+</main>
+
+<style>
+    .horizontal { writing-mode: horizontal-tb }
+    .vertical { writing-mode: vertical-lr }
+    
+    section {
+        inline-size: 50%;
+        block-size: 50%;
+        margin-inline: auto;
+    }
+</style>
+```
+
+![影响元素的行内位置](/css/flow-layout/adjust-inline-position.png)
+
+关于「影响元素之间的间距」，在流式布局中，外边距可以调整元素与元素之间的间距，有时是通过移动元素自己来实现的，有时是通过移动相邻元素来实现的，具体来说：
 
 - `margin-inline-start` 和 `margin-block-start` 会移动当前元素；
 - `margin-inline-end` 和 `margin-block-end` 会移动相邻元素；
 
-TODO：插图
+```html
+<section class="a"><div></div><div></div></section>
+<section class="b"><div></div><div></div></section>
+<section class="c"><div></div><div></div></section>
+
+<style>
+    div:nth-child(1) {
+        inline-size: 80%;
+        block-size: 20%;
+    }
+    .div:nth-child(2) {
+        inline-size: 40%;
+        block-size: 20%;
+    }
+    
+    .a > div:nth-child(1) { margin-block-start: 8rem }
+    .b > div:nth-child(1) { margin-block-end: 8rem }
+    .c > div:nth-child(1) { margin-block-end: -8rem }
+</style>
+```
+
+![影响元素之间的间距（block）](/css/flow-layout/adjust-space-block.png)
+
+```html
+<section class="a"><div></div><div></div></section>
+<section class="b"><div></div><div></div></section>
+<section class="c"><div></div><div></div></section>
+
+<style>
+    section { float: left }
+    div:nth-child(1) {
+        inline-size: 20%;
+        block-size: 80%;
+    }
+    div:nth-child(2) {
+        inline-size: 20%;
+        block-size: 40%;
+    }
+    
+    .a > div:nth-child(1) { margin-inline-start: 8rem }
+    .b > div:nth-child(1) { margin-inline-end: 8rem }
+    .c > div:nth-child(1) { margin-inline-end: -8rem }
+</style>
+```
+
+![影响元素之间的间距（inline）](/css/flow-layout/adjust-space-inline.png)
 
 ### 折叠的规则
 
