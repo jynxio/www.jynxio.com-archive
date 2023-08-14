@@ -22,11 +22,32 @@ typora-root-url: ./..\..\image
 
 > `fit-content` 是介于 `min-content` 和 `max-content` 之间的万金油。
 
+```html
+<p>block-level elements</p>
+<b>inline elements</b>
+
+<p>block-level elements (fit-content)</p>
+<b>inline elements</b>
+
+<style>
+    p,  b { background-color: orange }
+    * + p { inline-size: fit-content }
+</style>
+```
+
 ![块级元素](/css/flow-layout/block-element.png)
 
 ## 行内元素
 
 行内元素总是被包裹在块级元素的内部以充当块级元素的内容，作为内容，行内元素会从左到右依次排列，并在达到容器的水平尺寸极限时自动换行。
+
+```html
+<p>Inline elements will automatically wrap to the next line when they <span>reach the horizontal size limit of the</span> container.</p>
+
+<style>
+    span { background-color: orange }
+</style>
+```
 
 ![行内元素](/css/flow-layout/inline-element.png)
 
@@ -37,6 +58,20 @@ typora-root-url: ./..\..\image
 行内块元素是行内元素和块级元素的结合体，它既遵循行内元素的布局行为，又可以使用块级元素的所有 CSS 属性（此处想表达的是：“可以使用那些行内元素所无法使用的 CSS 属性“）。
 
 不过行内块元素的换行策略和行内元素的稍有不同，当需要换行的时候，行内元素会在内部直接换行，行内快元素则会整个另起一行，我认为行内元素的换行策略才是正确的。
+
+```html
+<p>When line breaking is necessary, inline elements will break within their content, <span class="a">while inline-block elements will start a new line as a whole.</span></p>
+
+<p>When line breaking is necessary, inline elements will break within their content, <span class="b">while inline-block elements will start a new line as a whole.</span></p>
+
+<style>
+    span { background-color: orange }
+    
+    .a { display: inline }
+    
+    .b { display: inline-block }
+</style>
+```
 
 ![行内块元素](/css/flow-layout/inline-block-element.png)
 
@@ -136,47 +171,29 @@ TODO：插图
 
 ### 折叠的例子
 
-关于公式、同向折叠、非同向折叠、padding/border/元素/间隔阻止折叠、复杂折叠	
-
 ```html
-<p class="a-1"></p>
-<p class="a-2"></p>
+<section class="pink">
+	<div class="orange"></div>
+    <hr />
+	<div class="orange"></div>
+</section>
 
-<p class="b-1"></p>
-<p class="b-2"></p>
-
-<p class="c-1"></p>
-<p class="c-2"></p>
+<section class="blue">
+	<div class="red"></div>
+    <div class="purple"></div>
+</section>
 
 <style>
-    .a-1 { margin-block-end: 40px }
-    .a-2 { margin-block-start: 20px }
+    .pink { margin-block: 8rem }
+    .orange { margin-block: 4rem }
+     hr { block-size: 0 }
     
-    .b-1 { margin-block-end: -40px }
-    .b-2 { margin-block-start: -20px }
-    
-    .c-1 { margin-block-end: 40px }
-    .c-2 { margin-block-start: -20px }
+    .blue { margin-block: -4rem }
+    .red { margin-block: -2rem }
+    .purple { margin-block: -4rem }
 </style>
 ```
 
-关于padding、border、元素、间隙、横向外边距都会阻止折叠的例子：
+> 下图中的 border 只是为了突显元素边界的视觉效果而不是真正的 border，上述元素均没有创建任何 border。
 
-```html
-<p class="a-1"></p>
-<p class="a-2"></p>
-```
-
-超级复杂的外边距折叠；
-
-padding、border、元素、间隙（看 blocked by a gap）、scroll container 都可以阻止外边距之间直接接触，多个元素之间可以一起发生折叠（看 more than two margins can collapse）
-
-```
-<div>
-  <p>Paragraph One</p>
-</div>
-<p>Paragraph Two</p>
-
-
-```
-
+![外边距折叠示例](/css/flow-layout/margin-collapse-example.png)
