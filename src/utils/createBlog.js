@@ -13,6 +13,11 @@ import { toHtml } from 'hast-util-to-html';
 import { parseSync } from 'svgson';
 
 /**
+ * 
+ */
+const ignoreFileNames = [".DS_Store"];
+
+/**
  * SVG
  */
 const SVG_STRING_COPY_IDLE =
@@ -59,6 +64,8 @@ for (const dir of catalog) {
     await emptyDir(path.resolve() + '/public/blog/topic/' + dir.name);
 
     for (const file of files) {
+        if (ignoreFileNames.includes(file)) continue;
+
         // 还原
         codeMap.clear();
         codeStringMap.clear();

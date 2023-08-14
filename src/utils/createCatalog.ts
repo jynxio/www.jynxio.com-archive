@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, writeFileSync, statSync, createReadStream } 
 import { emptyDir } from 'fs-extra';
 import path from 'node:path';
 
+const ignoreFileNames = ['.DS_Store'];
 const INPUT_PATH = path.resolve() + '/src/configs/baseCatalog.json';
 const OUTPUT_PATH = path.resolve() + '/src/temps/configs/detailCatalog.json';
 const BLOG_BASE_PATH = path.resolve() + '/blog/post/';
@@ -28,6 +29,8 @@ async function main() {
         dir.children = [];
 
         for (const dirent of dirents) {
+            if (ignoreFileNames.includes(dirent.name)) continue;
+
             const fileAddress = dirAddress + '/' + dirent.name;
             const name = dirent.name.trim().slice(0, -3);
             const time = createTime(fileAddress);
