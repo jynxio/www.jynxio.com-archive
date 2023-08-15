@@ -81,17 +81,14 @@ promise.then( onFulfilled, onRejected );
 >
 > ```html
 > <script>
+> "use strtci";
 > 
-> 	"use strtci";
-> 
->     console.log( this );                                  // Window对象
->     MyPromise.resolve().then( _ => console.log( this ) ); // Window对象
->     
-> 	Promise.resolve().then( _ => console.log( this ) );   // Window对象
-> 
-> </script>
+> console.log( this );                                  // Window对象
+>    MyPromise.resolve().then( _ => console.log( this ) ); // Window对象
+>    Promise.resolve().then( _ => console.log( this ) );   // Window对象
+>     </script>
 > ```
->
+> 
 > 我认为 Promises/A+ 并没有考虑到上述问题，因此在我的实现版本中，仅当 `onFulfilled` 或 `onRejected` 是由 `function` 关键字所声明的函数时，其行为才会遵循 2.2.5，如果 `onFulfilled` 或 `onRejected` 是箭头函数，那么其行为就会表现的和浏览器运行时的 Promise 一致。
 
 2.2.6 一个 `promise` 可以多次调用 `then` 方法：
@@ -188,9 +185,9 @@ const promise_2 = promise_1.then( onFulfilled, onRejected );
 
 ## 实现
 
-我实现了一个 100% 通过 [Promises/A+ 测试](https://github.com/promises-aplus/promises-tests) 的 Promise polyfill，并为其取名为 Yeensin，因为 Yeensin 是粤语 “应承” 的谐音，“应承” 在粤语中表示答应、承诺的意思。
+我实现了一个 100% 通过 [Promises/A+ 测试](https://github.com/promises-aplus/promises-tests) 的 Promise polyfill，并为其取名为 Inshin，因为 Inshin 是粤语 “应承” 的谐音，“应承” 在粤语中表示答应、承诺的意思。
 
-我建立了 [一个仓库](https://github.com/jynxio/yeensin) 来存储这个项目，你可以通过阅读其内的 [Yeensin.js](https://github.com/jynxio/yeensin/blob/main/Yeensin.js) 来了解我的实现细节，同时，我也将这份代码板书在了下方。
+我建立了 [一个仓库](https://github.com/jynxio/inshin) 来存储这个项目，你可以通过阅读其内的 [Inshin.js](https://github.com/jynxio/inshin/blob/main/Inshin.js) 来了解我的实现细节，同时，我也将这份代码板书在了下方。
 
 ```js
 const PENDING_STATE = "pending";
@@ -200,11 +197,11 @@ const REJECTED_STATE = "rejected";
 /**
  * 通过 Promises/A+ 测试的 Promise polyfill。
  * @param   { Function } execute - 该入参等同于原生Promise的入参。
- * @returns { Object } - Yeensin实例，等同于Promise实例。
+ * @returns { Object } - Inshin实例，等同于Promise实例。
  */
-function Yeensin ( execute ) {
+function Inshin ( execute ) {
 
-    /* Yeensin实例的内部数据。 */
+    /* Inshin实例的内部数据。 */
     const self = this;
 
     self._state = PENDING_STATE;
@@ -219,8 +216,8 @@ function Yeensin ( execute ) {
     execute( resolve, reject );
 
     /**
-     * resolve函数，用于敲定Yeensin实例。
-     * @param   { * } fulfilled_value Yeensin实例的fulfilled值，代表敲定后的值。
+     * resolve函数，用于敲定Inshin实例。
+     * @param   { * } fulfilled_value Inshin实例的fulfilled值，代表敲定后的值。
      * @returns { undefined } - undefined。
      */
     function resolve ( fulfilled_value ) {
@@ -240,8 +237,8 @@ function Yeensin ( execute ) {
     };
 
     /**
-     * rejecte函数，用于拒绝Yeensin实例。
-     * @param   { * } rejected_value - Yeensin实例的rejected值，代表被拒绝的原因。
+     * rejecte函数，用于拒绝Inshin实例。
+     * @param   { * } rejected_value - Inshin实例的rejected值，代表被拒绝的原因。
      * @returns { undefined } - undefined。
      */
     function reject ( rejected_value ) {
@@ -265,29 +262,29 @@ function Yeensin ( execute ) {
 
 /**
  * then方法。
- * @param { Function } handleFulfilled - Yeensin实例的fulfilled订阅函数。
- * @param { Function } handleRejected  - Yeensin实例的rejected订阅函数。
- * @returns { Object } - 一个新的Yeensin实例或一个新的thenable对象。
+ * @param { Function } handleFulfilled - Inshin实例的fulfilled订阅函数。
+ * @param { Function } handleRejected  - Inshin实例的rejected订阅函数。
+ * @returns { Object } - 一个新的Inshin实例或一个新的thenable对象。
  */
-Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
+Inshin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
     /*  */
-    let yeensinResolve;
-    let yeensinReject;
+    let inshinResolve;
+    let inshinReject;
 
-    const yeensin = new Yeensin( ( resolve, reject ) => {
+    const inshin = new Inshin( ( resolve, reject ) => {
 
-        yeensinResolve = resolve;
-        yeensinReject = reject;
+        inshinResolve = resolve;
+        inshinReject = reject;
 
     } );
 
     /*  */
-    this._fulfilled_events.push( handleFulfilledAndYeensin );
+    this._fulfilled_events.push( handleFulfilledAndInshin );
 
     if ( this._state === FULFILLED_STATE ) {
 
-        const microtask = _ => handleFulfilledAndYeensin( this._fulfilled_value );
+        const microtask = _ => handleFulfilledAndInshin( this._fulfilled_value );
 
         globalThis.queueMicrotask( microtask );
 
@@ -295,10 +292,10 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
     /**
      * handleFulfilled函数的代理者。
-     * @param { * } fulfilled_value - Yeensin实例的fulfilled值。
+     * @param { * } fulfilled_value - Inshin实例的fulfilled值。
      * @returns { undefined } - undefined。
      */
-    function handleFulfilledAndYeensin ( fulfilled_value ) {
+    function handleFulfilledAndInshin ( fulfilled_value ) {
 
         if ( typeof handleFulfilled === "function" ) {
 
@@ -310,26 +307,26 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
             } catch ( error ) {
 
-                yeensinReject( error );
+                inshinReject( error );
 
             }
 
-            yeensinResolutionProcedure( yeensin, x );
+            inshinResolutionProcedure( inshin, x );
 
         } else {
 
-            yeensinResolve( fulfilled_value );
+            inshinResolve( fulfilled_value );
 
         }
 
     }
 
     /* */
-    this._rejected_events.push( handleRejectedAndYeensin );
+    this._rejected_events.push( handleRejectedAndInshin );
 
     if ( this._state === REJECTED_STATE ) {
 
-        const microtask = _ => handleRejectedAndYeensin( this._rejected_value );
+        const microtask = _ => handleRejectedAndInshin( this._rejected_value );
 
         globalThis.queueMicrotask( microtask );
 
@@ -337,10 +334,10 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
     /**
      * handleRejected函数的代理者
-     * @param { * } rejected_value - Yeensin实例的rejected值。
+     * @param { * } rejected_value - Inshin实例的rejected值。
      * @returns { undefined } - undefined。
      */
-    function handleRejectedAndYeensin ( rejected_value ) {
+    function handleRejectedAndInshin ( rejected_value ) {
 
         if ( typeof handleRejected === "function" ) {
 
@@ -352,32 +349,32 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
             } catch ( error ) {
 
-                yeensinReject( error );
+                inshinReject( error );
 
             }
 
-            yeensinResolutionProcedure( yeensin, x );
+            inshinResolutionProcedure( inshin, x );
 
         } else {
 
-            yeensinReject( rejected_value );
+            inshinReject( rejected_value );
 
         }
 
     }
 
-    /* [[Resolve]]( yeensin, x ) */
+    /* [[Resolve]]( inshin, x ) */
     /**
      * The Promise Resolution Procedure，详见规范的2.3。
-     * @param { Object } yeensin - Yeensin实例或thenable对象。
+     * @param { Object } inshin - Inshin实例或thenable对象。
      * @param { * } x - handleFulfilled函数或handleRejected函数的返回值。
      * @returns { undefined } - undefine。
      */
-    function yeensinResolutionProcedure ( yeensin, x ) {
+    function inshinResolutionProcedure ( inshin, x ) {
 
         if ( x === null ) {
 
-            yeensinResolve( x );
+            inshinResolve( x );
 
             return;
 
@@ -385,15 +382,15 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
         if ( typeof x !== "object" && typeof x !== "function" ) {
 
-            yeensinResolve( x );
+            inshinResolve( x );
 
             return;
 
         }
 
-        if ( x === yeensin ) {
+        if ( x === inshin ) {
 
-            yeensinReject( new TypeError( "Chaining cycle detected for promise" ) );
+            inshinReject( new TypeError( "Chaining cycle detected for promise" ) );
 
             return;
 
@@ -409,7 +406,7 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
             } catch ( error ) {
 
-                yeensinReject( error );
+                inshinReject( error );
 
             }
 
@@ -423,7 +420,7 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
                     is_finish = true;
 
-                    yeensinResolutionProcedure( yeensin, y )
+                    inshinResolutionProcedure( inshin, y )
 
                 };
                 const reject = function reject ( r ) {
@@ -432,7 +429,7 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
                     is_finish = true;
 
-                    yeensinReject( r )
+                    inshinReject( r )
 
                 };
 
@@ -442,7 +439,7 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
                 } catch ( error ) {
 
-                    if ( ! is_finish ) yeensinReject( error );
+                    if ( ! is_finish ) inshinReject( error );
 
                 }
 
@@ -450,25 +447,25 @@ Yeensin.prototype.then = function then ( handleFulfilled, handleRejected ) {
 
             }
 
-            yeensinResolve( x );
+            inshinResolve( x );
 
         }
 
     }
 
     /*  */
-    return yeensin;
+    return inshin;
 
 }
 
-module.exports = Yeensin;
+module.exports = Inshin;
 ```
 
 ## 测试
 
-当你实现了自己的 Promise 后，你应该使用 Promises/A+ 的官方测试套件来对它进行测试，你可以通过阅读这份 [官方文档](https://github.com/promises-aplus/promises-tests) 来学习测试的流程。如果你看不懂官方文档，那么你可以参考我的 [Yeensin](https://github.com/jynxio/yeensin) 项目。
+当你实现了自己的 Promise 后，你应该使用 Promises/A+ 的官方测试套件来对它进行测试，你可以通过阅读这份 [官方文档](https://github.com/promises-aplus/promises-tests) 来学习测试的流程。如果你看不懂官方文档，那么你可以参考我的 [Inshin](https://github.com/jynxio/inshin) 项目。
 
-如果你想要验证我的 Yeensin 项目是否完全通过了 Promises/A+ 的测试，那么请执行下述步骤：
+如果你想要验证我的 Inshin 项目是否完全通过了 Promises/A+ 的测试，那么请执行下述步骤：
 
 1. 拉取仓库源代码
 2. `npm install`
@@ -476,7 +473,7 @@ module.exports = Yeensin;
 
 ## 使用
 
-如果你想要使用 Promise 的 polyfill，那么你应该使用 Babel，而不是 Yeensin 或其他第三方实现。
+如果你想要使用 Promise 的 polyfill，那么你应该使用 Babel，而不是 Inshin 或其他第三方实现。
 
 ## 参考
 
