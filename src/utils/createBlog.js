@@ -13,9 +13,9 @@ import { toHtml } from 'hast-util-to-html';
 import { parseSync } from 'svgson';
 
 /**
- * 
+ *
  */
-const ignoreFileNames = [".DS_Store"];
+const ignoreFileNames = ['.DS_Store'];
 
 /**
  * SVG
