@@ -1,7 +1,7 @@
 import style from './Post.module.css';
 import registryJynxioCodeblock from '@/web-components/registryJynxioCodeblock';
 import { useParams } from '@solidjs/router';
-import { createComputed, createResource, createSignal, Switch, Match, For } from 'solid-js';
+import { createComputed, createResource, createSignal, Switch, Match, For, createEffect } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 registryJynxioCodeblock();
@@ -110,8 +110,12 @@ function Missing() {
 }
 
 function Article(props: { data: string }) {
+    let ref: HTMLDivElement | undefined;
+
+    createEffect(() => props.data && ref?.scrollTo(0, 0));
+
     return (
-        <div class={style.article}>
+        <div class={style.article} ref={ref}>
             <article innerHTML={props.data} />
         </div>
     );
