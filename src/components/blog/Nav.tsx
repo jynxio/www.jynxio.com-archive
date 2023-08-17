@@ -37,24 +37,7 @@ function Search() {
                     <line x1="12" x2="20" y1="19" y2="19" />
                 </svg>
             </span>
-            <span class={style.text}>搜索</span>
-            <kbd class={style.shortcut + ' ' + style.icon}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-square-slash"
-                >
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <line x1="9" x2="15" y1="15" y2="9" />
-                </svg>
-            </kbd>
+            <span class={style.text}>按 / 搜索</span>
         </section>
     );
 
@@ -195,23 +178,16 @@ function Control() {
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
-                        viewBox="0 0 22 22"
+                        viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-bug"
+                        class="lucide lucide-circle-dot"
                     >
-                        <rect width="8" height="14" x="8" y="6" rx="4" />
-                        <path d="m19 7-3 2" />
-                        <path d="m5 7 3 2" />
-                        <path d="m19 19-3-2" />
-                        <path d="m5 19 3-2" />
-                        <path d="M20 13h-4" />
-                        <path d="M4 13h4" />
-                        <path d="m10 4 1 2" />
-                        <path d="m14 4-1 2" />
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="12" r="1" />
                     </svg>
                     <span class={style.identifier}>issue</span>
                 </a>

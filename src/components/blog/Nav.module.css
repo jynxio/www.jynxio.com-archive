@@ -53,10 +53,6 @@
         margin-inline-start: 0.5rem;
         color: var(--comment-color);
     }
-
-    > .shortcut {
-        margin-inline-start: auto;
-    }
 }
 
 /**
