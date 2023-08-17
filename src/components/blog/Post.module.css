@@ -446,9 +446,7 @@
  */
 .article img {
     display: block;
-    max-block-size: 40vh;
-    max-block-size: 40dvh;
-    margin-inline: auto;
+    inline-size: 100%;
     margin-block: var(--block-gap);
     border-radius: var(--border-radius);
 }
