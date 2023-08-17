@@ -182,7 +182,7 @@ div {
 如果 DIV 元素应用了 `overflow: auto`，那么整个页面将会有 3 个图层，分别是根元素图层、DIV 元素图层、水平滚动条图层。仔细查看你会发现 DIV 元素图层在垂直方向上少了 `17px`，这是因为水平滚动条图层占用了这 `17px`。
 
 ```css
-![multi-layer](/browser/page-rendering/multi-layer.png)div {
+div {
     overflow: auto;
     width: 200px;
     height: 200px;
@@ -190,7 +190,7 @@ div {
 }
 ```
 
-![多图层]()
+![多图层](/browser/page-rendering/multi-layer.png)
 
 另外，如果你激活了 Layers 选项卡中的 Show internel layers 特性，那么就能看到图层的内部图层，其中 DIV 元素图层有 2 个内部图层，其中一个内部图层的尺寸是 `200px*183px`，它代表了 DIV 元素的可见范围，另一个内部图层的尺寸是 `478px*187px`，它代表了 DIV 元素内容的实际尺寸。
 
