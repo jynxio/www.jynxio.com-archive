@@ -65,11 +65,46 @@
 
 ### 包围盒
 
+> 之所以写包围盒，是因为绝对定位元素们都是根据包围盒来定位的，然后我需要一个方法论来寻找真正的包围盒
+
 流式布局中的元素的包围盒的计算规则 + 图片；
 
-定位布局中的绝对定位元素的包围盒是（Russian-nesting-dolls-type collection 的图片例子很棒！）：Absolute elements can only be contained by \*other\* elements using Positioned layout. What if it doesn't find one? the element will be positioned according to the **“initial containing block”**. 初始包围块是一个视窗大小的盒子。
+MDN 对包围盒有一个很棒的解释，你要看看，似乎和你的理解是不一样的 https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
 
-另外，绝对定位元素会忽略包围盒的 padding，他们只会收到包围盒的 border 的影响，你可以认为 padding 只服务于流式布局，而绝对定位元素已经脱离了流式布局，因此 padding 并不适用于绝对定位元素。（把这件事也画进示例图片里面去！）
+每个元素都有一个包围盒（containing block），在流式布局中，包围盒就是父元素的内容盒（不包含 padding），在定位布局中，对于 relative 元素而言，包围盒也是父元素的内容盒，但是对于 absoluted 元素而言，包围盒是最近的使用了定位布局的祖先元素的内边距盒（不包含边框）。fixed 元素和 sticky 元素呢？
+
+> Jpsh 说，padding 是为了给流式布局用的，因为 relative 元素还会在流式布局中占据空间，所以它的包围盒会考虑 padding 的影响，而 absoluted 元素已经脱离了流式布局，它不会占用任何空间，因此它就不用考虑 padding 对它的影响了。这个说法还不错欸！那么对于 fixed 元素和 sticky 元素呢？
+
+Josh 说，如果 absoluted 元素的所有祖先元素都没有使用定位布局，那么 absoluted 元素就会根据 `initial containing block` 来定位，根据 [W3C](https://drafts.csswg.org/css-display-3/#initial-containing-block) 的定义，initial containing block 就是 `html` 元素的包围盒，但实际上 W3C 的定义和实践发现的结果根本不一致。
+
+Josh 说 initial containing block 是一个尺寸为视口大小的盒子，然后实践发现当 absoluted 元素真的根据 initial containing block 来定位的时候，确确实实是把它当成了一个视口大小的盒子，并且这个盒子并不是定死在屏幕上的，这个盒子就像是一个位于流动布局的最顶部的视口大小的盒子，如果页面可以滚动（横着滚或者竖着滚），那么随着滚动，盒子会滚走，absoluted 元素也会随之滚走。关于滚走这一点，Josh 根本没有提到。
+
+> MDN 顺嘴提到了一下 initial containing block，和我想的不是一样的吧？[Fixed positioning is similar to absolute positioning, with the exception that the element's [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block) is the initial containing block established by the *viewport*](https://developer.mozilla.org/en-US/docs/Web/CSS/position#fixed_positioning)
+
+如果 initial containing block 真是 `<html>` 元素的话，那这根本就不符合实践的结果，因为如果我无论把 `<html>` 设置的多大或者多小，absoluted 都不受 `<html>` 的影响。你可以看看这个代码👇
+
+```html
+<html>
+    <body>
+        <div></div>
+    </body>
+</html>
+
+<style>
+    html {
+        inline-size: 99999px;
+        block-size: 99999px;
+    }
+    
+    div {
+        position: absoluted;
+        inset: 0; 
+        margin: auto;
+        inline-size: 200px;
+        block-size: 200px;
+    }
+</style>
+```
 
 containing puzzle 游戏的第八关！也要抄下来！
 
@@ -268,3 +303,68 @@ If you're curious, you can see the [full list of how stacking contexts are creat
 尤其是在组件化的今天，如果你的组件内部使用了 `z-index`，可是你又不知道你的组件会被用在何处，如果你不给组件的外层套一个层叠上下文，那么这个 `z-index` 就会和外部环境种的同一个层叠上下文的其它 `z-index` 作比较，这很可怕...
 
 React 的 `createPortal` 是一个由此衍生出的解决方案，另外，你也应该关注一下原生的关于这类问题的解决方案 [dialog 元素](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dialog)，原生的解决方案似乎已经可以完全取代掉 `createPortal` 了（maybe）。
+
+## 固定定位
+
+固定定位就像是一种特别的绝对定位，特别的地方在，它的包围盒更特别，没了。
+
+> MDN 也把固定定位归类为绝对定位的一种 https://developer.mozilla.org/en-US/docs/Web/CSS/position#types_of_positioning，看第三点。
+>
+> 似乎你也需要学一下 BFC ：https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context
+
+如果你不设置 top、right、bottom、left，那么固定定位元素的位置就会留在它在流式布局中的位置在屏幕上的投影，具体的你可以看 [这里的 Fixed without anchor points?](https://courses.joshwcomeau.com/css-for-js/02-rendering-logic-2/13-fixed) 里面的例子。（你可以测试一下四个方向都不设置，或者只有 top 不设置，这时你会发现，left 的位置会继承流式布局的位置）
+
+如果固定定位元素有一个最近的祖先元素使用了 transform、perspective、filter 不为 none 时，那么这个祖先元素就为它提供包围盒，否则就由 initial containing block 来提供包围盒，这个 initial containing block 是由视口建立的，你可以把它完全当成视口。
+
+关于这种奇怪的现象，请看 http://meyerweb.com/eric/thoughts/2011/09/12/un-fixing-fixed-elements-with-css-transforms/
+
+> will-change: transform 也算！
+
+有时候我们的应用程序的 DOM 结构会很深，如果我们想找到某个 fixed 元素的包围盒是不是被某些 transform 元素拦截了怎么办？Josh 写了一个蛮有用的方法！直接在控制台跑它就可以了！
+
+```js
+// Replace “.the-fixed-child” for a CSS selector
+// that matches the fixed-position element:
+const selector = '.the-fixed-child';
+
+function findCulprits(elem) {
+  if (!elem) {
+    throw new Error(
+      'Could not find element with that selector'
+    );
+  }
+
+  let parent = elem.parentElement;
+
+  while (parent) {
+    const {
+      transform,
+      willChange,
+      filter,
+    } = getComputedStyle(parent);
+
+    if (
+      transform !== 'none' ||
+      willChange === 'transform' ||
+      filter !== 'none'
+    ) {
+      console.warn(
+        '🚨 Found a culprit! 🚨\n',
+        parent,
+        { transform, willChange, filter }
+      );
+    }
+    parent = parent.parentElement;
+  }
+}
+
+findCulprits(document.querySelector(selector));
+```
+
+> 如果你要抓的 DOM 元素在 iframe 里面，那么你首先要找到 iframe 的运行环境，怎么抓？看这里 [Beware of iframes!](https://courses.joshwcomeau.com/css-for-js/02-rendering-logic-2/13-fixed)。
+
+## 参考资料
+
+写笔记之前，下面的参考资料要看完：
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/position#types_of_positioning
