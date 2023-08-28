@@ -234,3 +234,37 @@ z-index 当然可以使用负数，不过 Josh 不推荐，因为他觉得这把
 If you're curious, you can see the [full list of how stacking contexts are created](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context) on MDN.
 
 无论你多么精通层叠上下文，你都会陷阱层叠上下文的陷阱（我明明这么这么做了，为什么这个家伙还是永远在最上层啊！巴拉巴拉），所以你需要一个工具来帮你可视化层叠上下文！这个工具就是 [Stacking Contexts Inspector](https://github.com/andreadev-it/stacking-contexts-inspector)，他是一个浏览器插件，你可以在 [这里](https://chrome.google.com/webstore/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) 找到它的 Chrome 版本，或者在他的 readme 页面找到 Firefox 版本。
+
+### isolation: isolate
+
+当我们高强度的使用 `z-index` 来控制元素的层叠顺序时，时常会遇到「z-index 混乱」难题，即元素的层叠顺序并不是我们所期望的顺序，为了解决这个问题，我们通常会立即疯狂的增大或减小元素的 `z-index` 值（比如使用诸如 9999 这样的大数值），有时候这会奏效，有时候又不会奏效，然后后面还会周而复始的遇到这个问题，最后 `z-index` 就会很混乱很难以维护/调试。
+
+造成这种问题的根本原因是：层叠上下文的结构混乱。我们需要像厘清 DOM 的层次结构一样，来厘清层叠上下文之间的层次结构，基于这个层叠上下文的结构，我们可以把每个定位元素的 `z-index` 变成类似于选择器优先级那样子的东西（比如 `1-2-0-3`）。
+
+而厘清层叠上下文之间的层次结构的重要手段就是善于主动创建局部层叠上下文，为此推荐使用 `isolation: isolate` 属性，它会创建局部层叠上下文，并且该元素会具有隐式的 `z-index: 0`。
+
+```html
+<section>中层</section>
+<section>下层</section>
+<section>上层</section>
+
+<style>
+    section:nth-child(1) {
+        position: relative;
+        z-index: 1;
+    }
+    
+    section:nth-child(2) {
+        isolation: isolate;
+    }
+    
+    section:nth-child(3) {
+        position: relative;
+        z-index: 2;
+    }
+</style>
+```
+
+尤其是在组件化的今天，如果你的组件内部使用了 `z-index`，可是你又不知道你的组件会被用在何处，如果你不给组件的外层套一个层叠上下文，那么这个 `z-index` 就会和外部环境种的同一个层叠上下文的其它 `z-index` 作比较，这很可怕...
+
+React 的 `createPortal` 是一个由此衍生出的解决方案，另外，你也应该关注一下原生的关于这类问题的解决方案 [dialog 元素](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dialog)，原生的解决方案似乎已经可以完全取代掉 `createPortal` 了（maybe）。
