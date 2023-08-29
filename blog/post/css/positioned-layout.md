@@ -363,6 +363,44 @@ findCulprits(document.querySelector(selector));
 
 > 如果你要抓的 DOM 元素在 iframe 里面，那么你首先要找到 iframe 的运行环境，怎么抓？看这里 [Beware of iframes!](https://courses.joshwcomeau.com/css-for-js/02-rendering-logic-2/13-fixed)。
 
+## Overflow
+
+对于 `overflow: visible`，对于一个固定宽高的元素，当元素的内容（文本或其它元素都行）超出了元素的边界时，内容就会直接超出边界，但是超出边界的内容不会影响外界的其它元素的布局。但是它有可能会导致更外层的容器产生滚动条。
+
+```html
+<section><div></div></section>
+<section></section>
+
+<style>
+  section {
+    inline-size: 200px;
+    block-size: 200px;
+  }
+
+  section:nth-child(1) {
+    background-color: hotpink;
+  }
+
+  section:nth-child(2) {
+    background-color: cornflowerblue;
+  }
+
+  div {
+    inline-size: 50%;
+    block-size: 300%;
+    border: 2px solid red;
+  }
+</style>
+```
+
+对于 `scroll`，在 Windows 和 Linux 系统上，盒子始终都会渲染出滚动条，对于 MacOS 则不是。如果 MacOS 使用的是触控板，那么仅仅在光标在盒子内滚动的时候，才会渲染出滚动条，否则就会隐藏滚动条，如果使用的是鼠标，那么就会一直显示滚动条。
+
+由于大多数用户都是 Windows，所以我们应该在设置中令 MacOS 的滚动条常显（Show scroll bars 设置），一点牺牲，来换取更好的用户体验。
+
+`overflow: auto` 其实就很万金油啦，只不过它也有一个小缺点，就是如果内容忽然溢出容器，那么容器就会立即创建出滚动条，这个滚动条又会挤占容器的空间，导致内容会闪烁一下。如果你知道某些元素一开始就需要滚动，那么干脆给他们 `scroll` 算了，以避免他们渲染出来之后闪烁一下。
+
+Josh 给了一个建议，当你使用 `hidden` 时，请写一个关于你为什么要用他的注释，因为你通常都是使用 hidden 来解决一些小众的样式 bug，但是当你重构的时候，你可能会觉得这一行没用，然后删掉，并在最后的某个时刻才遇到这个小众 bug。所以留一行注释，以帮助未来的自己。
+
 ## 参考资料
 
 写笔记之前，下面的参考资料要看完：
