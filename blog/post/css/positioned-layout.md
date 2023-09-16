@@ -1,68 +1,3 @@
-# 定位布局
-
-文字自动换行是流式布局的特性，定位布局没有这个特性，因此采用定位布局的元素不会换行，而是会直接溢出父盒子的边界。
-
-## 相对定位
-
-「Relative Positioning」小节中的「This blue box is interactive」的示例图片很棒的解释了相对定位的特性！
-
-```html
-<section>
-    <div></div>
-</section>
-
-<style>
-    div {
-        position: relative;
-        left: 40px;
-        inline-size: 100%;
-    }
-</style>
-```
-
-`<div>` 会直接溢出 `<section>`，而不是把 `<section>` 撑大，这是个被你忽略的细节，这似乎在暗示着采用了相对布局的元素所占据的空间永远是其在流式布局中的原始位置/空间，其的偏移是不会影响流式布局中的其它元素的。
-
-相对布局中的 `left: 10px` 和 `right: -10px` 的效果是一样的。
-
-相对布局可以让元素解锁一些其平时不能使用的 CSS 属性（主要是对于行内元素而言，对吗？
-
-## 绝对定位
-
-无论是行内元素、块级元素还是行内块元素，只要采用了绝对定位，那么元素的尺寸就会尽可能的小
-
-### 居中技巧
-
-```html
-<div class="auto-size"></div>
-<div class="fixed-size"></div>
-
-<style>
-    .auto-size {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        bottom: 20px;
-        left: 20px;
-        inline-size: auto; /* 弹性尺寸 */
-        block-size: auto;  /* 弹性尺寸 */
-    }
-    
-    .fixed-size {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        inline-size: 10rem;  /* 固定尺寸 */
-        block-size: 10rem;   /* 固定尺寸 */
-        margin-inline: auto; /* inline居中 */
-        margin-block: auto;  /* block居中 */
-    }
-</style>
-```
-
-> `inset` 属性可以一次性设置 `top`、`right`、`bottom`、`left`，需要注意的是 `inset` 的多值语法采用物理偏移，而不是逻辑偏移。
-
 ### 包围盒
 
 > 之所以写包围盒，是因为绝对定位元素们都是根据包围盒来定位的，然后我需要一个方法论来寻找真正的包围盒
@@ -320,6 +255,8 @@ React 的 `createPortal` 是一个由此衍生出的解决方案，另外，你�
 
 关于这种奇怪的现象，请看 http://meyerweb.com/eric/thoughts/2011/09/12/un-fixing-fixed-elements-with-css-transforms/
 
+> Josh: but *fixed* children are only ever contained by the “initial containing block”, a box that exists outside the DOM structure.
+
 > will-change: transform 也算！
 
 有时候我们的应用程序的 DOM 结构会很深，如果我们想找到某个 fixed 元素的包围盒是不是被某些 transform 元素拦截了怎么办？Josh 写了一个蛮有用的方法！直接在控制台跑它就可以了！
@@ -545,6 +482,10 @@ Josh 给了一个建议，当你使用 `hidden` 时，请写一个关于你为�
   <p>Hello world</p>
 </div>
 ```
+
+## Overflow 和固定布局
+
+scroll 容器不一定是固定布局元素的容器，当他们用 relative 时，absoluted 元素可以被圈起来，fixed 元素不可以。诸如此类的。
 
 ## 参考资料
 
