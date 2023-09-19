@@ -194,69 +194,6 @@ If you're curious, you can see the [full list of how stacking contexts are creat
 
 React 的 `createPortal` 是一个由此衍生出的解决方案，另外，你也应该关注一下原生的关于这类问题的解决方案 [dialog 元素](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dialog)，原生的解决方案似乎已经可以完全取代掉 `createPortal` 了（maybe）。
 
-## 固定定位
-
-> position 一旦被设置成 absolute 或fixed，那么元素的宽高就会自动的 fit-content。
-
-固定定位就像是一种特别的绝对定位，特别的地方在，它的包围盒更特别，没了。
-
-> MDN 也把固定定位归类为绝对定位的一种 https://developer.mozilla.org/en-US/docs/Web/CSS/position#types_of_positioning，看第三点。
->
-> 似乎你也需要学一下 BFC ：https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context
-
-如果你不设置 top、right、bottom、left，那么固定定位元素的位置就会留在它在流式布局中的位置在屏幕上的投影，具体的你可以看 [这里的 Fixed without anchor points?](https://courses.joshwcomeau.com/css-for-js/02-rendering-logic-2/13-fixed) 里面的例子。（你可以测试一下四个方向都不设置，或者只有 top 不设置，这时你会发现，left 的位置会继承流式布局的位置）
-
-如果固定定位元素有一个最近的祖先元素使用了 transform、perspective、filter 不为 none 时，那么这个祖先元素就为它提供包围盒，否则就由 initial containing block 来提供包围盒，这个 initial containing block 是由视口建立的，你可以把它完全当成视口。
-
-关于这种奇怪的现象，请看 http://meyerweb.com/eric/thoughts/2011/09/12/un-fixing-fixed-elements-with-css-transforms/
-
-> Josh: but *fixed* children are only ever contained by the “initial containing block”, a box that exists outside the DOM structure.
-
-> will-change: transform 也算！
-
-有时候我们的应用程序的 DOM 结构会很深，如果我们想找到某个 fixed 元素的包围盒是不是被某些 transform 元素拦截了怎么办？Josh 写了一个蛮有用的方法！直接在控制台跑它就可以了！
-
-```js
-// Replace “.the-fixed-child” for a CSS selector
-// that matches the fixed-position element:
-const selector = '.the-fixed-child';
-
-function findCulprits(elem) {
-  if (!elem) {
-    throw new Error(
-      'Could not find element with that selector'
-    );
-  }
-
-  let parent = elem.parentElement;
-
-  while (parent) {
-    const {
-      transform,
-      willChange,
-      filter,
-    } = getComputedStyle(parent);
-
-    if (
-      transform !== 'none' ||
-      willChange === 'transform' ||
-      filter !== 'none'
-    ) {
-      console.warn(
-        '🚨 Found a culprit! 🚨\n',
-        parent,
-        { transform, willChange, filter }
-      );
-    }
-    parent = parent.parentElement;
-  }
-}
-
-findCulprits(document.querySelector(selector));
-```
-
-> 如果你要抓的 DOM 元素在 iframe 里面，那么你首先要找到 iframe 的运行环境，怎么抓？看这里 [Beware of iframes!](https://courses.joshwcomeau.com/css-for-js/02-rendering-logic-2/13-fixed)。
-
 ## Overflow
 
 对于 `overflow: visible`，对于一个固定宽高的元素，当元素的内容（文本或其它元素都行）超出了元素的边界时，内容就会直接超出边界，但是超出边界的内容不会影响外界的其它元素的布局。但是它有可能会导致更外层的容器产生滚动条。

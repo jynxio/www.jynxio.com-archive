@@ -4,8 +4,6 @@
 
 如果将元素的 `position` 属性设置为非 `static` 属性，那么就视该元素启用定位布局。
 
-THINK ABOUT IT: 行内元素启用了定位布局之后可以启用一些平时不能用的 CSS 属性？所有元素启用了定位布局之后，其默认的尺寸似乎都是 `fit-content` 的？
-
 ## 包含块
 
 ### 是什么？
@@ -31,19 +29,19 @@ THINK ABOUT IT: 行内元素启用了定位布局之后可以启用一些平时�
 	- 该元素的 `contain` 值为 `layout`、`paint`、`strict`、`content`；
 	- 该元素的 `filter` 值为非 `none` 或 `will-change` 值为 `filter`（此条仅作用于 Firefox 浏览器）；
 
-> 虽然绝对定位元素也有可能会采用初始包含块来作为其包含块，但其仍然会因页面滚动而离开可视区域，然而固定定位元素却不会，这是其与固定定位元素的一大区别。
-
-### 初始包含块是什么？
-
-初始包含块（initial containing block）是一个由视口（viewport）派生的矩形区域，初始包含块的尺寸就等于视口的尺寸。
-
-初始包含块也是 `<html>` 元素的包含块。
+> 虽然绝对定位和固定定位都可能会采用初始包含块来作为其包含块，但是绝对定位元素会因页面滚动而离开可视区域，可固定定位元素却不会，更多信息请见下文示例。
 
 ### 块级容器是什么？
 
 块级容器（block container）是指那些作为容器的块级元素，其与块级元素的区别在于其必须包含内容（方可被称为容器）。
 
 另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
+
+### 初始包含块是什么？
+
+初始包含块（initial containing block）是一个由视口（viewport）派生的矩形区域，它的尺寸就等于视口的尺寸，它的位置就是视口的位置。
+
+另外，初始包含块也是 `<html>` 元素的包含块。
 
 ## 相对定位
 
@@ -70,7 +68,13 @@ THINK ABOUT IT: 行内元素启用了定位布局之后可以启用一些平时�
 
 一旦启用了绝对定位，那么元素的尺寸就会尽可能的小，就像是启用了 `fit-content` 那样。并且特别的是，启用了绝对定位的行内元素可以使用 `block-size`、`margin-block` 等其在流式布局中所无法使用 CSS 属性。
 
-[TODO: 示例代码 + 图片，参考「containing puzzle」章节的第八关]
+[TODO: 示例代码 + 图片，参考「containing puzzle」章节的第八关，这个示例还可以顺便表达出「相对定位元素没有 fit-content 而绝对定位元素有该特性，因此这便是为什么第二和第三个图标会排列在下一行而不是同一行」这件事]
+
+[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
+
+[TODO: 证明它哪怕以初始包含块来作为其包含块，可与固定定位不同的是，它会随着滚动而消失在可视区域，但固定定位则不会]
+
+[TODO: 证明它在包含块中不占据任何空间，且具有 fit-content 特性，且行内元素可以启用一些平时无法使用的 CSS 属性]
 
 ### 居中技巧
 
@@ -102,5 +106,41 @@ THINK ABOUT IT: 行内元素启用了定位布局之后可以启用一些平时�
 > [inset](https://developer.mozilla.org/en-US/docs/Web/CSS/inset) 可以一次性设置 `top`、`right`、`bottom`、`left` 属性，需要注意的是 `inset` 只遵循物理方向，不遵循逻辑方向。
 
 ## 固定定位
+
+如果将元素的 `position` 属性设置为 `fixed`，那么该元素就会启用固定定位。
+
+固定定位其实是一种特殊的绝对定位，它会继承绝对定位的所有特性。它和绝对定位有 2 个明显的区别：
+
+- 包含块的选取策略不同；
+- 哪怕都选择了初始包含块来作为自己的包含块，绝对定位元素会随着页面滚动而离开可视区域，但固定定位元素则不会；
+
+[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
+
+### 快速寻找包含块
+
+如果 DOM 结构很复杂，那么我们就很难找到固定定位元素的包含块，因为固定定位元素会采用符合特定条件的祖先元素的 padding box 来作为其包含块，而不会永远都采用初始包含块。
+
+我们需要一个可以快速寻找包含块的工具，而幸运的是，[Josh W. Comeau](https://twitter.com/joshwcomeau) 就编写了这样一个。
+
+```js
+function findCulprits(element) {
+    if (!element) throw new Error('Could not find element with that selector');
+
+    let parent = element.parentElement;
+
+    while (parent) {
+        const { transform, willChange, filter } = getComputedStyle(parent);
+
+        if (transform !== 'none' || willChange === 'transform' || filter !== 'none')
+            console.warn('🚨 Found a culprit! 🚨\n', parent, { transform, willChange, filter });
+
+        parent = parent.parentElement;
+    }
+}
+```
+
+> 如果你需要在 iframe 环境中执行这项任务，那么你需要这么做：1.打开浏览器控制台；2.打开「控制台」标签；3.打开「JavaScript 上下文」多选栏，其默认选项应为 `top`；4.选择目标 iframe 的 JavaScript 上下文；
+>
+> 补充，`top` 表示当前的 JavaScript 上下文是当前网页。
 
 ## 粘性定位
