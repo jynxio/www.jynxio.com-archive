@@ -144,3 +144,33 @@ function findCulprits(element) {
 > 补充，`top` 表示当前的 JavaScript 上下文是当前网页。
 
 ## 粘性定位
+
+An often-overlooked aspect of `position: sticky` is that the element will never follow the scroll outside of its parent container. Sticky elements only stick while their container is in view.
+
+In the following example, scroll all the way to the bottom, and note that the pink circle never leaves the black rectangle:
+
+还必须至少使用 top\left\right\bottom 其中某个属性，才能真沾墙壁上，不然位置永远都是流式布局得位置
+
+As we've seen, every `position` value changes the way `top`/`left`/`right`/`bottom` work:
+
+- 
+
+	With relative positioning, the element is shifted from its natural, in-flow position
+
+- 
+
+	With absolute positioning, the element is distanced from its containing block's edge
+
+- 
+
+	With fixed positioning, the element is adjusted based on the viewport
+
+With sticky positioning, the value controls the **minimum gap between the element and the edge of the viewport** while the container is in-frame.
+
+抄「Sticky Positioning」的 offset 中的示例
+
+sticky 元素在 containing block 中总是会占据空间，无论是否被滚动，这个行为和 relative 一模一样，就占据那个空间。然后sticky 的偏移发生在滚动阶段，当他偏移的时候，又不会影响到任何其它元素的布局。
+
+sticky 元素的开始滚动的边界是自己的 border box
+
+sticky 元素没有办法超出他的 containing block（是 content box），他会在抵达边界时，表现得和 relative 一模一样。写一个例子来证明这件事情，两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky，就酱。
