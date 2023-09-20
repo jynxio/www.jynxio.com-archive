@@ -174,3 +174,84 @@ sticky 元素在 containing block 中总是会占据空间，无论是否被滚�
 sticky 元素的开始滚动的边界是自己的 border box
 
 sticky 元素没有办法超出他的 containing block（是 content box），他会在抵达边界时，表现得和 relative 一模一样。写一个例子来证明这件事情，两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky，就酱。
+
+sticky 元素会粘在拥有滚动机制的最近的祖先元素身上（the closest scroll container），比如 `top: 0` 代表该元素距离祖先元素的顶部的距离必须不小于 0。但是这个拥有滚动机制的祖先元素不一定是 sticky 的直接父元素，也不一定是它的 containing block，sticky 元素的 containing block 会决定它的 percentage 该如何计算，以及 containing block 的边界会强制 sticky 元素打破沾的行为。（ A sticky element will only follow the viewport as long as it remains inside its parent container. 仅当元素的 containing block 存在于 viewport 时，它的 stick 行为才生效）。
+
+然后一个问题是，html 元素是默认就拥有滚动机制的吗？它会为所有 sticky 元素兜底？
+
+创建滚动机制的方式很简单，就是 `overflow` 的值为 hidden、scroll、auto、overlay（废弃）。
+
+```js
+// Replace “.the-sticky-child” for a CSS selector
+// that matches the sticky-position element:
+const selector = '.the-sticky-child';
+
+function findCulprits(elem) {
+  if (!elem) {
+    throw new Error(
+      'Could not find element with that selector'
+    );
+  }
+
+  let parent = elem.parentElement;
+
+  while (parent) {
+    const { overflow } = getComputedStyle(parent);
+
+    if (['auto', 'scroll', 'hidden'].includes(overflow)) {
+      console.log(overflow, parent);
+    }
+
+    parent = parent.parentElement;
+  }
+}
+
+findCulprits(document.querySelector(selector));
+```
+
+> 技巧：If the culprit uses `overflow: hidden`, we can switch to `overflow: clip`. Because `overflow: clip` doesn't create a scroll container, it doesn't have this problem!
+>
+> 如果你想用 hidden？那么不妨考虑 clip，因为 hidden 的副作用（创建为 scrolling container）可能会产生某些意料之外的影响。
+
+当你发现你的 `top: 0` 仍距离 viewport 顶部有 1px 的缝隙时，这往往是由「舍入」问题导致的，一个简洁好用的修复方法就是：
+
+```css
+div {
+    position: sticky;
+    top: -1px;
+}
+```
+
+## 如何在 CSS 中隐藏元素及各种方式的区别
+
+`display: none` 会完全不渲染一个元素，而且和媒体查询结合在一起比较爽，但缺点是 `transition`（那个解决方案！），以及稍微难用（因为 display 身上还有其它很多属性，你切换的时候，切换到谁呢？）
+
+```css
+.desktop-header {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktop-header {
+    display: block;
+  }
+
+  .mobile-header {
+    display: none;
+  }
+}
+```
+
+在 JSX 中直接用判断语句隐去元素，更加节省内存，但是性能肯定比 `display: none` 慢一点，不过不显著。
+
+```jsx
+function Widget({ showButton }) {
+  return (
+    <div>
+      {showButton && <Button>Hello</Button>}
+    </div>
+  )
+}
+```
+
+Visibility: hidden 只是一件隐形斗篷，东西还在那，只是看不到，可是也会占据位置。一个奇技淫巧是，父元素隐藏掉，然后可选择性的只渲染某一个子元素（可是这种技巧并不是一种易懂易维护的方案）。
