@@ -13,6 +13,8 @@
 - 如果元素的 `height`、`top`、`bottom` 属性采用了百分比值，那么其计算基准就是包含块的 `height`；
 - 如果元素的 `width`、`padding`、`margin`、`left`、`right` 属性采用了百分比值，那么其计算基准就是包含块的 `width`；
 
+> TODO: top、right、bottom、left 是基于包含块来偏移的吗？
+
 ### 怎么找？
 
 - 如果元素的 `position` 值为 `static`、`relative`、`sticky`，那么其包含块就是满足下述任意一个条件的最近的祖先元素的 content box，条件为：
