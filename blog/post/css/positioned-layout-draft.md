@@ -8,12 +8,11 @@
 
 ### 是什么？
 
-包含块（containing block）是元素的生活空间，每一个元素都生活在某一个包含块之中，如果元素的 CSS 属性采用了百分比值时，那么这些百分比值的计算基准取决于包含块。比如：
+在正式开始学习定位布局之前，我们需要先了解包含块（containing block）的概念。
 
-- 如果元素的 `height`、`top`、`bottom` 属性采用了百分比值，那么其计算基准就是包含块的 `height`；
-- 如果元素的 `width`、`padding`、`margin`、`left`、`right` 属性采用了百分比值，那么其计算基准就是包含块的 `width`；
+包含块是包含元素的一块空间，当元素的 `width`、`height`、`top`、`right`、`bottom`、`left` 属性采用了百分比值的时候，这些百分比值的计算基准就取决于包含块，具体来说：元素的 `height`、`top`、`bottom` 属性的百分比值的计算基准是其包含块的 `height`，对于 `width`、`left`、`right` 而言，则是其包含块的 `width`。
 
-> TODO: top、right、bottom、left 是基于包含块来偏移的吗？
+另外，采用了定位布局的元素的偏移也是根据包含块的边界来计算的。
 
 ### 怎么找？
 
@@ -31,15 +30,13 @@
 	- 该元素的 `contain` 值为 `layout`、`paint`、`strict`、`content`；
 	- 该元素的 `filter` 值为非 `none` 或 `will-change` 值为 `filter`（此条仅作用于 Firefox 浏览器）；
 
-> 虽然绝对定位和固定定位都可能会采用初始包含块来作为其包含块，但是绝对定位元素会因页面滚动而离开可视区域，可固定定位元素却不会，更多信息请见下文示例。
-
-### 块级容器是什么？
+## 块级容器
 
 块级容器（block container）是指那些作为容器的块级元素，其与块级元素的区别在于其必须包含内容（方可被称为容器）。
 
-另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
+另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（其实，我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
 
-### 初始包含块是什么？
+## 初始包含块
 
 初始包含块（initial containing block）是一个由视口（viewport）派生的矩形区域，它的尺寸就等于视口的尺寸，它的位置就是视口的位置。
 
@@ -47,11 +44,13 @@
 
 ## 相对定位
 
-如果将元素的 `position` 属性设置为 `relative`，那么该元素就会启用相对定位。
+`position: relative` 的元素将会启用相对定位。
 
-相对定位元素在其 containing block 中的初始位置就是其在流式布局下的位置，并且其在 containing block 中所占据的空间是恒定的（无论其是否发生偏移），其所占据的空间就是其在流式布局中所占据的空间。无论相对定位元素是否发生偏移，它都不会影响到其他元素的布局，也不会撑大 containing block，因此它可以覆盖其他元素和超出 containing block 的边界。
+如果 `inset` 为 `auto`，那么相对定位元素的位置就是其在直接父元素下的流式布局下的位置。如果 `inset` 非 `auto`，那么相对定位元素就会以其初始位置为其起点来偏移，比如 `left: 10px` 代表相对定位元素的左边界和其初始位置的左边界的距离为 `10px`。
 
-> 初始位置是指 `inset: auto` 时的位置，后文下同。
+> [inset](https://developer.mozilla.org/en-US/docs/Web/CSS/inset) 可以一次性设置 `top`、`right`、`bottom`、`left` 属性，需要注意的是 `inset` 只遵循物理方向，不遵循逻辑方向。
+
+相对定位元素在其直接父元素中所占据的空间就等于其在流式布局中所占据的空间，无论偏移与否，其所占据的空间都是恒定的。并且哪怕其发生了偏移，也不会影响到其它元素的布局或撑大直接父元素，不过它会遮盖其它元素或超出直接父元素的边界。
 
 [TODO: 示例代码 + 图片，参考「Relative Positioning」小节中的「This blue box is interactive」的互动示例]
 
@@ -64,11 +63,15 @@
 
 ## 绝对定位
 
-如果将元素的 `position` 属性设置为 `absolute`，那么该元素就会启用绝对定位。
+`position: absolute` 的元素将会启用绝对定位。
 
-绝对定位元素在其 containing block 中的初始位置就是其在流式布局下的位置，不过其在 containing block 中不占据任何空间。无论绝对定位元素是否发生偏移，它都不会影响到其他元素的布局，也不会撑大 containing block，因此它可以覆盖其他元素和超出 containing block 的边界。
+如果 `inset` 为 `auto`，那么绝对定位元素的位置就是其在直接父元素下的流式布局下的位置。如果 `inset` 非 `auto`，那么绝对定位元素就会以包含块的边界为其起点来偏移，比如 `left: 10px` 代表绝对定位元素的左边界和其包含块的左边界的距离为 `10px`，不过在垂直方向上，该元素会保持原来的位置，因为我们没有设置 `top` 或 `bottom`。
 
-一旦启用了绝对定位，那么元素的尺寸就会尽可能的小，就像是启用了 `fit-content` 那样。并且特别的是，启用了绝对定位的行内元素可以使用 `block-size`、`margin-block` 等其在流式布局中所无法使用 CSS 属性。
+[TODO: 示例]
+
+绝对定位元素不会在流式布局中占据任何空间。
+
+另外，绝对定位元素的尺寸会尽可能的小以刚好包容其内容，就像是启用了 `fit-content` 那样。另外，如果行内元素启用了绝对定位，那么行内元素就可以使用 `block-size` 等那些平常无法在流式布局中使用的 CSS 属性。
 
 [TODO: 示例代码 + 图片，参考「containing puzzle」章节的第八关，这个示例还可以顺便表达出「相对定位元素没有 fit-content 而绝对定位元素有该特性，因此这便是为什么第二和第三个图标会排列在下一行而不是同一行」这件事]
 
@@ -105,16 +108,19 @@
 </style>
 ```
 
-> [inset](https://developer.mozilla.org/en-US/docs/Web/CSS/inset) 可以一次性设置 `top`、`right`、`bottom`、`left` 属性，需要注意的是 `inset` 只遵循物理方向，不遵循逻辑方向。
-
 ## 固定定位
 
-如果将元素的 `position` 属性设置为 `fixed`，那么该元素就会启用固定定位。
+`position: fixed` 的元素将会启用固定定位。
 
-固定定位其实是一种特殊的绝对定位，它会继承绝对定位的所有特性。它和绝对定位有 2 个明显的区别：
+事实上，固定定位是绝对定位的一种，所以固定定位会继承绝对定位的所有特性，只不过在对待初始包含块时，两者的行为表现会有差异，详情如下。
 
-- 包含块的选取策略不同；
-- 哪怕都选择了初始包含块来作为自己的包含块，绝对定位元素会随着页面滚动而离开可视区域，但固定定位元素则不会；
+如果固定定位元素的包含块不是初始包含块，那么固定定位就会表现的和绝对定位一模一样。当固定/绝对定位元素的包含块是初始包含块时，在绝对定位眼中，初始包含块是一个视口大小且位于文档顶部的矩形，该初始包含块会随着页面的滚动而消失在屏幕的可视区域，因此基于初始包含块来定位的绝对定位元素也会消失在可视区。而在固定定位眼中，初始包含块就像是视口本身，所以固定定位元素会永远固定在屏幕上。
+
+[TODO: 示例]
+
+需要细说的是，当固定定位元素的包含块是初始包含块时，如果 `inset: auto`，那么固定定位元素的行为表现就会有些复杂，具体来说：想象一下，对于一个可以水平和垂直滚动的网页，视口正定位在水平滚动和垂直滚动的初始位置，此时，渲染引擎会根据流式布局的规则来在固定定位元素的直接父元素内为其寻找一个位置，然后固定定位元素投影在视口上的部分就是其最终的渲染结果，无论用户如何滚动网页，那个投影都会始终出现在视口上。
+
+[TODO: 示例]
 
 [TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
 
@@ -143,45 +149,27 @@ function findCulprits(element) {
 
 > 如果你需要在 iframe 环境中执行这项任务，那么你需要这么做：1.打开浏览器控制台；2.打开「控制台」标签；3.打开「JavaScript 上下文」多选栏，其默认选项应为 `top`；4.选择目标 iframe 的 JavaScript 上下文；
 >
-> 补充，`top` 表示当前的 JavaScript 上下文是当前网页。
+> 补充：`top` 表示当前的 JavaScript 上下文是当前网页。
 
 ## 粘性定位
 
-An often-overlooked aspect of `position: sticky` is that the element will never follow the scroll outside of its parent container. Sticky elements only stick while their container is in view.
+`position: sticky` 的元素将会启用粘性定位。
 
-In the following example, scroll all the way to the bottom, and note that the pink circle never leaves the black rectangle:
+如果 `inset` 为 `auto`，那么粘性定位元素就会表现的和相对定位元素一样。如果 `inset` 非 `auto`，那么粘性定位元素就会表现为相对定位和固定定位的结合体，比如 `top: 10px` 代表粘性定位元素的 border box 上边界会距离最近滚动容器的 content box 上边界至少 `10px`。
 
-还必须至少使用 top\left\right\bottom 其中某个属性，才能真沾墙壁上，不然位置永远都是流式布局得位置
+> 最近滚动容器（the closest scroll container）是指距离元素最近的拥有滚动机制的祖先容器。如果元素的 `overflow` 的值为 `hidden`、`scroll`、`auto`、`overlay`，那么就认为这个元素拥有滚动机制。
+>
+> 「最近滚动容器的 content box 上边界...」这种说法是不准确的，可我不知道如何用文字来表达我的意思😫，所以你需要从示例中去领悟，加油。
 
-As we've seen, every `position` value changes the way `top`/`left`/`right`/`bottom` work:
+[TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近粘性定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
 
-- 
+和相对定位元素一样，粘性定位元素也会在直接父元素中占据空间，并且无论其如何偏移，都不会影响其它元素的布局。
 
-	With relative positioning, the element is shifted from its natural, in-flow position
+粘性定位元素无法脱离其直接父元素的 content box，因此如果其直接父元素的 content box 在最近滚动容器中所残留的空间不足以容纳粘性定位元素的时候，粘性定位的粘性就会失效，它会随着直接父元素一起离开最近滚动容器。
 
-- 
+[TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
 
-	With absolute positioning, the element is distanced from its containing block's edge
-
-- 
-
-	With fixed positioning, the element is adjusted based on the viewport
-
-With sticky positioning, the value controls the **minimum gap between the element and the edge of the viewport** while the container is in-frame.
-
-抄「Sticky Positioning」的 offset 中的示例
-
-sticky 元素在 containing block 中总是会占据空间，无论是否被滚动，这个行为和 relative 一模一样，就占据那个空间。然后sticky 的偏移发生在滚动阶段，当他偏移的时候，又不会影响到任何其它元素的布局。
-
-sticky 元素的开始滚动的边界是自己的 border box
-
-sticky 元素没有办法超出他的 containing block（是 content box），他会在抵达边界时，表现得和 relative 一模一样。写一个例子来证明这件事情，两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky，就酱。
-
-sticky 元素会粘在拥有滚动机制的最近的祖先元素身上（the closest scroll container），比如 `top: 0` 代表该元素距离祖先元素的顶部的距离必须不小于 0。但是这个拥有滚动机制的祖先元素不一定是 sticky 的直接父元素，也不一定是它的 containing block，sticky 元素的 containing block 会决定它的 percentage 该如何计算，以及 containing block 的边界会强制 sticky 元素打破沾的行为。（ A sticky element will only follow the viewport as long as it remains inside its parent container. 仅当元素的 containing block 存在于 viewport 时，它的 stick 行为才生效）。
-
-然后一个问题是，html 元素是默认就拥有滚动机制的吗？它会为所有 sticky 元素兜底？
-
-创建滚动机制的方式很简单，就是 `overflow` 的值为 hidden、scroll、auto、overlay（废弃）。
+（closeet  scroll container）
 
 ```js
 // Replace “.the-sticky-child” for a CSS selector
@@ -223,37 +211,3 @@ div {
     top: -1px;
 }
 ```
-
-## 如何在 CSS 中隐藏元素及各种方式的区别
-
-`display: none` 会完全不渲染一个元素，而且和媒体查询结合在一起比较爽，但缺点是 `transition`（那个解决方案！），以及稍微难用（因为 display 身上还有其它很多属性，你切换的时候，切换到谁呢？）
-
-```css
-.desktop-header {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .desktop-header {
-    display: block;
-  }
-
-  .mobile-header {
-    display: none;
-  }
-}
-```
-
-在 JSX 中直接用判断语句隐去元素，更加节省内存，但是性能肯定比 `display: none` 慢一点，不过不显著。
-
-```jsx
-function Widget({ showButton }) {
-  return (
-    <div>
-      {showButton && <Button>Hello</Button>}
-    </div>
-  )
-}
-```
-
-Visibility: hidden 只是一件隐形斗篷，东西还在那，只是看不到，可是也会占据位置。一个奇技淫巧是，父元素隐藏掉，然后可选择性的只渲染某一个子元素（可是这种技巧并不是一种易懂易维护的方案）。
