@@ -298,3 +298,31 @@ html, body {
 > 下图中的 border 只是为了突显元素边界的视觉效果而不是真正的 border，上述元素均没有创建任何 border。
 
 ![外边距折叠示例](/css/flow-layout/margin-collapse-example.png)
+
+## 奇怪的层叠现象
+
+众所周知，在流式布局中，如果元素与元素之间发生了重叠，那么 DOM 顺序更晚的元素将会覆盖在上层，然而事情并不总是这样。
+
+在流式布局中，其实元素的背景、内容、轮廓是分开绘制的，渲染引擎首先绘制背景，然后绘制内容，最后绘制轮廓。于是，便会出现下面这种奇怪的现象。
+
+```html
+<div>O</div>
+<div>O</div>
+
+<style>
+  :first-child {
+    color: black;
+    outline-color: currentcolor;
+    background-color: silver;
+  }
+
+  :last-child {
+    color: crimson;
+    outline-color: currentcolor;
+    background-color: orange;
+  }
+</style>
+
+```
+
+![奇怪的层叠现象](/css/flow-layout/stack.png)
