@@ -30,17 +30,17 @@
 	- 该元素的 `contain` 值为 `layout`、`paint`、`strict`、`content`；
 	- 该元素的 `filter` 值为非 `none` 或 `will-change` 值为 `filter`（此条仅作用于 Firefox 浏览器）；
 
+### 初始包含块
+
+初始包含块（initial containing block）是一个由视口（viewport）派生的矩形区域，它的尺寸就等于视口的尺寸，它的位置就是视口的位置。
+
+另外，初始包含块也是 `<html>` 元素的包含块。
+
 ## 块级容器
 
 块级容器（block container）是指那些作为容器的块级元素，其与块级元素的区别在于其必须包含内容（方可被称为容器）。
 
 另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（其实，我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
-
-## 初始包含块
-
-初始包含块（initial containing block）是一个由视口（viewport）派生的矩形区域，它的尺寸就等于视口的尺寸，它的位置就是视口的位置。
-
-另外，初始包含块也是 `<html>` 元素的包含块。
 
 ## 相对定位
 
@@ -151,63 +151,170 @@ function findCulprits(element) {
 >
 > 补充：`top` 表示当前的 JavaScript 上下文是当前网页。
 
-## 粘性定位
+## 沾滞定位
 
-`position: sticky` 的元素将会启用粘性定位。
+`position: sticky` 的元素将会启用沾滞定位。
 
-如果 `inset` 为 `auto`，那么粘性定位元素就会表现的和相对定位元素一样。如果 `inset` 非 `auto`，那么粘性定位元素就会表现为相对定位和固定定位的结合体，比如 `top: 10px` 代表粘性定位元素的 border box 上边界会距离最近滚动容器的 content box 上边界至少 `10px`。
+如果 `inset` 为 `auto`，那么沾滞定位元素就会表现的和相对定位元素一样。如果 `inset` 非 `auto`，那么沾滞定位元素就会表现为相对定位和固定定位的结合体，比如 `top: 10px` 代表沾滞定位元素的 border box 上边界会距离最近滚动容器的 content box 上边界至少 `10px`。
 
 > 最近滚动容器（the closest scroll container）是指距离元素最近的拥有滚动机制的祖先容器。如果元素的 `overflow` 的值为 `hidden`、`scroll`、`auto`、`overlay`，那么就认为这个元素拥有滚动机制。
 >
 > 「最近滚动容器的 content box 上边界...」这种说法是不准确的，可我不知道如何用文字来表达我的意思😫，所以你需要从示例中去领悟，加油。
 
-[TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近粘性定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
+[TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近沾滞定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
 
-和相对定位元素一样，粘性定位元素也会在直接父元素中占据空间，并且无论其如何偏移，都不会影响其它元素的布局。
+和相对定位元素一样，沾滞定位元素也会在直接父元素中占据空间，并且无论其如何偏移，都不会影响其它元素的布局。
 
-粘性定位元素无法脱离其直接父元素的 content box，因此如果其直接父元素的 content box 在最近滚动容器中所残留的空间不足以容纳粘性定位元素的时候，粘性定位的粘性就会失效，它会随着直接父元素一起离开最近滚动容器。
+沾滞定位元素无法脱离其直接父元素的 content box，因此如果其直接父元素的 content box 在最近滚动容器中所残留的空间不足以容纳沾滞定位元素的时候，沾滞定位的粘性就会失效，它会随着直接父元素一起离开最近滚动容器。
 
 [TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
 
 （closeet  scroll container）
 
+### 快速寻找最近滚动容器
+
+同样的，[Josh W. Comeau](https://twitter.com/joshwcomeau) 也编写了一个可以寻找最近滚动容器的工具。
+
 ```js
-// Replace “.the-sticky-child” for a CSS selector
-// that matches the sticky-position element:
-const selector = '.the-sticky-child';
+function findCulprits(element) {
+  if (!element) throw new Error('Could not find element with that selector');
 
-function findCulprits(elem) {
-  if (!elem) {
-    throw new Error(
-      'Could not find element with that selector'
-    );
-  }
-
-  let parent = elem.parentElement;
+  let parent = element.parentElement;
 
   while (parent) {
     const { overflow } = getComputedStyle(parent);
 
-    if (['auto', 'scroll', 'hidden'].includes(overflow)) {
-      console.log(overflow, parent);
-    }
+    if (['auto', 'scroll', 'hidden'].includes(overflow)) console.log(overflow, parent);
 
     parent = parent.parentElement;
   }
 }
-
-findCulprits(document.querySelector(selector));
 ```
 
-> 技巧：If the culprit uses `overflow: hidden`, we can switch to `overflow: clip`. Because `overflow: clip` doesn't create a scroll container, it doesn't have this problem!
->
-> 如果你想用 hidden？那么不妨考虑 clip，因为 hidden 的副作用（创建为 scrolling container）可能会产生某些意料之外的影响。
+## 缝隙
 
-当你发现你的 `top: 0` 仍距离 viewport 顶部有 1px 的缝隙时，这往往是由「舍入」问题导致的，一个简洁好用的修复方法就是：
+在你使用绝对定位、固定定位、沾滞定位的时候，你偶尔会发现元素和目标位置之间存在 `1px` 的差距或缝隙，这是由浏览器的「舍入」机制所导致的，一个简单有效的解决方案是：
 
 ```css
-div {
-    position: sticky;
+.yourself {
     top: -1px;
 }
 ```
+
+## 层叠规则
+
+如果元素与元素之间发生了层叠，那么层叠等级更高者在上，如果层叠等级相同，那么 DOM 顺序更晚者在上。
+
+[TODO: 示例 | 层叠等级 | DOM 顺序]
+
+另外，定位布局元素的背景、内容、轮廓都位于同一层，因此它不会出现像流式布局元素那样犬牙交错的层叠现象。
+
+### 层叠等级
+
+我将「层叠等级」定义成一种类似于「选择器优先级」的东西，其计算方式如下：
+
+```html
+<html>                  <!-- 层叠等级: 0     -->
+    <body>              <!-- 层叠等级: 0-0   -->
+        <section>       <!-- 层叠等级: 0-1   -->
+        	<div></div> <!-- 层叠等级: 0-1-2 -->
+        </section>
+        <section>       <!-- 层叠等级: 0-0   -->
+        	<div></div> <!-- 层叠等级: 0-2   -->
+        </section>
+    </body>
+    
+    <style>
+        section:first-child {
+            z-index: 1;         /* 创建层叠上下文 */
+            position: relative;
+        }
+        div {
+            z-index: 2;         /* 创建层叠上下文 */
+            position: relative;
+        }
+    </style>
+</html>
+```
+
+> 如果元素的 `z-index` 为 `auto`，那么便认为其在直接父层叠上下文中的等级为 `0`。事实上，所有元素的 `z-index` 的默认值均为 `auto`。
+>
+> 另外，不仅是定位布局元素，Flex 子项和 Grid 子项也可以使用 `z-index`，而上例中并未演示关于 Flex 子项和 Grid 子项的层叠等级的计算过程。
+>
+> 最后，请勿为 `z-index` 使用负值，因为它只会徒增复杂。
+
+### 层叠上下文
+
+层叠上下文（stacking context）是一个抽象且虚拟的空间，每个元素都会生活在某个层叠上下文之内，然后这个层叠上下文又会内嵌在另一个层叠上下文之内，以此类推，层层嵌套... 最后便会形成一个类似于洋葱的结构。
+
+洋葱结构的好处是可以帮助我们快速的计算出元素的层叠等级，然后解决层叠矛盾，层叠等级的计算规则如上文所述。
+
+[TODO: 画一个层叠上下文的洋葱图]
+
+其中，层叠上下文的创建方法如下：
+
+1. `<html>`；
+2. `position` 为 `fixed | sticky` 的元素；
+3. `position` 为 `relative | absolute` 且 `z-index` 非 `auto` 的元素；
+4. `container-type` 为 `size | inline-size` 的元素；
+5. `z-index` 非 `auto` 的 Flex 子项元素或 Gird 子项元素；
+6. `opacity` 小于 `1` 的元素；
+7. `mix-blend-mode` 非 `normal` 的元素；
+8. `transform`、`filter`、`backdrop-filter`、`perspective`、`clip-path`、`mask`、`mask-image`、`mask-border` 中任意一个属性值非 `none` 的元素；
+9. `isolation: isolate` 的元素；
+10. `will-change` 属性值为「会在非默认值情况下创建层叠上下文的 CSS 属性」的元素；
+11. `contain` 值为 `layout | paint | strict | content` 的元素；
+12. 顶层元素及其 `::backdrop` 伪元素；
+
+> 对于老旧的桌面端浏览器，`position: sticky` 不会创建层叠上下文。
+>
+> 关于 `will-change` 属性，推荐阅读 [Everything You Need to Know About the CSS `will-change` Property](https://dev.opera.com/articles/css-will-change-property/) 和 [我的另一篇博客](https://www.jynxio.com/browser/page-rendering)；
+>
+> [顶层元素](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer) 大概是指进入全屏的元素、由 `HTMLDialogElement.showModal()` 唤醒的 `<dialog>`、由 `HTMLElement.showPopover()` 唤醒的 [Popover 元素](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)。
+
+### 小心！位于同一个层叠上下文的父子元素
+
+如果一个元素没有创建层叠上下文，那么这个元素和它的后代就会同处在一个层叠上下文之中，于是我们就可以制造出一些让人困惑的事情，比如让父元素遮蔽子元素！详见下例：
+
+```html
+<div>
+	<div></div>
+</div>
+
+<style>
+	div > div {
+		position: relative;
+		z-index: -1;
+	}
+</style>
+```
+
+另外，该例子中有一个容易被忽略掉的细节，那便是：如果一个元素创建了局部层叠上下文，那么它的子元素就会进入到这个局部层叠上下文中去，但是这个元素本身并不会，这个元素本身仍然留在原来的层叠上下文中。
+
+### 善用 isolation 来主动创建层叠上下文
+
+有时，我们会高强度的使用 `z-index` 来控制元素的层叠顺序并快速的速陷入到混乱中去，然后试图使用超级大或超级小的值（比如 9999 和 -9999）来搏出期望的效果，有时这会奏效，有时则不会，可是无论如何，这都会让事情变的更加难以维护并在未来的某一天再次遭遇这类麻烦，不过那时，麻烦已经更加麻烦了。
+
+混乱的解决之道是厘清这颗“洋葱”的结构，并且适时的主动创建局部层叠上下文，因为「在同一个层叠上下文中，如果元素 A 的层叠等级比元素 B 的更大，那么我们只要为元素 A 创建局部层叠上下文，元素 A 的所有后代元素的层叠等级便都会比 B 的更大」。
+
+于是，我们就可以主动的将某些可能会发生层叠矛盾的元素限定在相同或不同的层叠上下文中去，以此使事物更加有序，最终消解混乱。
+
+我推荐使用 `isolation: isolate` 来主动创建层叠上下文，因为它简洁且无副作用。
+
+```css
+.yourself {
+    isolation: isolate;
+}
+```
+
+> 如果你开发的样式组件的内部使用了 `z-index`，那么你应该考虑为组件创建局部层叠上下文，以避免这些使用了 `z-index` 的元素会进入到组件外部的层叠上下文中去。
+
+### 是工具！可视化层叠上下文树
+
+无论你多么熟悉层叠上下文，你都无法避免陷入到关于层叠上下文的混乱中去（我明明已经这了做了，可是这个家伙为什么还没有出现在顶层啊喂！）。
+
+[Stacking Contexts Inspector](https://github.com/andreadev-it/stacking-contexts-inspector) 是一个用于可视化层叠上下文树的浏览器插件，它可以帮助我们 debug。
+
+## Overflow
+
+如果你想用 hidden？那么不妨考虑 clip，因为 hidden 的副作用（创建为 scrolling container）可能会产生某些意料之外的影响。
