@@ -1,8 +1,167 @@
 # 定位布局
 
-定位布局是一种布局策略，启用了定位布局的元素将可以根据其 containing block 来进行偏移，其中我们使用 `top`、`right`、`bottom`、`left` 属性来操纵其偏移。
+定位布局是一种布局策略，它允许我们通过 `top`、`right`、`bottom`、`left` 属性来操纵元素的偏移，以使其锚定在我们期望的位置上。
 
-如果将元素的 `position` 属性设置为非 `static` 属性，那么就视该元素启用定位布局。
+只要将元素的 `position` 属性设置为非 `static` 属性，那么便可以对元素启用定位布局，定位布局一共有 4 种类型，分别是：
+
+- 相对定位；
+- 绝对定位；
+- 固定定位；
+- 沾滞定位；
+
+本文旨在指导如何使用定位布局，并澄清那些隐晦的概念。
+
+## 相对定位
+
+「相对定位」是一种通过让元素相对其原始位置来偏移以达到定位目的技术。如果 `position: relative`，那么元素便会启用相对定位布局。
+
+```css
+.jynxio { position: relative }
+```
+
+如果 `inset: auto`，那么元素就会留在原始位置，这个原始位置就是其在流式布局下的位置。如果 `inset` 非 `auto`，那么元素就会以原始位置为参考系来偏移，比如 `left: 10px` 代表元素的左边界和其原始位置的左边界的距离为 `10px`。
+
+> [inset](https://developer.mozilla.org/en-US/docs/Web/CSS/inset) 可以一次性设置 `top`、`right`、`bottom`、`left` 属性，需要注意的是 `inset` 只遵循物理方向，不遵循逻辑方向。
+
+无论元素偏移与否，它都会在父元素中占据恒定的空间，这份空间就是其在流式布局下所占据的空间。自然的，当它偏移时，它也不会影响其它元素的布局，不过它会遮盖其它元素或超出父元素的边界。
+
+[TODO: 示例代码 + 图片，参考「Relative Positioning」小节中的「This blue box is interactive」的互动示例]
+
+```css
+.blue-box {
+    position: reltaive;
+    top: 20px;
+}
+```
+
+## 绝对定位
+
+「绝对定位」是一种通过让元素相对其包含块来偏移以达到定位目的的技术。如果 `position: absolute`，那么元素便会启用绝对定位布局。
+
+```css
+.jynxio { position: absolute }
+```
+
+如果 `inset: auto`，那么元素就会留在原始位置，这个原始位置就是其在流式布局下的位置。如果 `inset` 非 `auto`，那么元素就会以包含块为参考系来偏移，比如 `left: 10px` 代表元素的左边界和其包含块的左边界的距离为 `10px`，需要注意的是，由于没有设置垂直偏移，所以元素会在垂直方向上保持原位。
+
+元素不会在流式布局中占据任何空间，并且元素的尺寸会尽可能地小以刚好包含其内容（就像使用了 `fit-content`）。另外，启用了绝对定位布局的行内元素可以使用 `block-size`、`margin-block` 等那些平常无法在流式布局中使用的 CSS 属性。
+
+[TODO: 基于上述描述的示例]
+
+[TODO: 示例代码 + 图片，参考「containing puzzle」章节的第八关，这个示例还可以顺便表达出「相对定位元素没有 fit-content 而绝对定位元素有该特性，因此这便是为什么第二和第三个图标会排列在下一行而不是同一行」这件事]
+
+[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
+
+无论是绝对定位元素，还是固定定位元素，它们都可以选择初始包含块作为其包含块，但效果却是不一样的，具体来说，对于绝对定位元素而言，初始包含块仿佛就像是一个视口大小的、位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。
+
+[TODO: 证明它哪怕以初始包含块来作为其包含块，可与固定定位不同的是，它会随着滚动而消失在可视区域，但固定定位则不会]
+
+## 固定定位
+
+「固定定位」是一种特殊的绝对定位，它会继承绝对定位的所有特性。如果 `position: fixed`，那么元素便会启用固定定位布局。
+
+```css
+.jynxio { position: fixed }
+```
+
+相较于绝对定位，固定定位有 2 个不同：
+
+- 对待原始位置的方式；
+- 对待初始包含块的方式；
+
+### 对待原始位置的方式
+
+和绝对定位不同的是，固定定位元素的原始位置不是「元素在流式布局下的位置」，而是「元素在流式布局下的位置在首屏上的投影」。
+
+具体来说，想象一下：对于一个可以水平和垂直滚动的网页，视口正定位在首屏位置（水平滚动和垂直滚动的初始位置），渲染引擎像对待绝对定位元素一样，来找到固定定位元素在流式布局下的位置，然后绘制它，绘制的结果会投影到首屏的视口上，而这份投影的内容就是最终的渲染结果，无论用户如何滚动网页，这份投影都会始终渲染在视口上。
+
+[TODO: 示例]
+
+[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
+
+### 对待初始包含块的方式
+
+如果固定定位元素没有选择初始包含块作为其包含块，那么固定定位元素就会表现得和绝对定位元素一模一样，否则...
+
+当绝对定位元素和绝对定位元素都选择了初始包含块来作为其包含块时：
+
+- 在绝对定位眼中，初始包含块仿佛就像是一块视口大小且位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。
+- 在固定定位眼中，初始包含块仿佛就像是视口本身，参考着视口来锚定的固定定位元素的位置不会随着页面的滚动而发生变化；
+
+[TODO: 示例]
+
+## 沾滞定位
+
+## 技巧：居中
+
+我们可以使用绝对定位来居中元素，具体来说有 2 种方案，分别是「弹性居中」和「固定居中」。
+
+- 弹性尺寸居中：元素相对于其包含块来居中，且元素尺寸是弹性的；
+- 固定尺寸居中：元素相对于其包含块来居中，且元素尺寸是固定的；
+
+```css
+.auto-size-center {
+    position: absolute;
+    inset: 20px;
+    block-size: auto;    /* 令垂直居中 */
+    inline-size: auto;   /* 令水平居中 */
+}
+
+.fixed-size-center {
+    position: absolute;
+    inset: 0;
+    block-size: 100px;
+    inline-size: 100px;
+    margin-block: auto;  /* 令垂直居中 */
+    margin-inline: auto; /* 令水平居中 */
+}
+```
+
+## 工具：搜寻包含块或最近滚动容器
+
+[Josh W. Comeau](https://twitter.com/joshwcomeau) 就编写了一个自动搜寻固定定位元素的包含块的脚本，它在 debug 时非常有用。
+
+```js
+function findCulprits(element) {
+    if (!element) throw new Error('Could not find element with that selector');
+
+    let parent = element.parentElement;
+
+    while (parent) {
+        const { transform, willChange, filter } = getComputedStyle(parent);
+
+        if (transform !== 'none' || willChange === 'transform' || filter !== 'none')
+            console.warn('🚨 Found a culprit! 🚨\n', parent, { transform, willChange, filter });
+
+        parent = parent.parentElement;
+    }
+}
+```
+
+以及一个自动搜寻最近滚动容器的脚本：
+
+```js
+function findCulprits(element) {
+  if (!element) throw new Error('Could not find element with that selector');
+
+  let parent = element.parentElement;
+
+  while (parent) {
+    const { overflow } = getComputedStyle(parent);
+
+    if (['auto', 'scroll', 'hidden'].includes(overflow)) console.log(overflow, parent);
+
+    parent = parent.parentElement;
+  }
+}
+```
+
+另外，如何在 iframe 环境中工作？解决方案如下：
+
+1. 打开浏览器控制台；
+2. 打开「控制台」标签页；
+3. 打开「JavaScript 上下文」多选栏（其默认选项应为 `top`，代表控制台的 JavaScript 上下文就是当前网页）；
+4. 选择目标 iframe 的 JavaScript 上下文；
 
 ## 包含块
 
@@ -42,115 +201,6 @@
 
 另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（其实，我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
 
-## 相对定位
-
-`position: relative` 的元素将会启用相对定位。
-
-如果 `inset` 为 `auto`，那么相对定位元素的位置就是其在直接父元素下的流式布局下的位置。如果 `inset` 非 `auto`，那么相对定位元素就会以其初始位置为其起点来偏移，比如 `left: 10px` 代表相对定位元素的左边界和其初始位置的左边界的距离为 `10px`。
-
-> [inset](https://developer.mozilla.org/en-US/docs/Web/CSS/inset) 可以一次性设置 `top`、`right`、`bottom`、`left` 属性，需要注意的是 `inset` 只遵循物理方向，不遵循逻辑方向。
-
-相对定位元素在其直接父元素中所占据的空间就等于其在流式布局中所占据的空间，无论偏移与否，其所占据的空间都是恒定的。并且哪怕其发生了偏移，也不会影响到其它元素的布局或撑大直接父元素，不过它会遮盖其它元素或超出直接父元素的边界。
-
-[TODO: 示例代码 + 图片，参考「Relative Positioning」小节中的「This blue box is interactive」的互动示例]
-
-```css
-.blue-box {
-    position: reltaive;
-    top: 20px;
-}
-```
-
-## 绝对定位
-
-`position: absolute` 的元素将会启用绝对定位。
-
-如果 `inset` 为 `auto`，那么绝对定位元素的位置就是其在直接父元素下的流式布局下的位置。如果 `inset` 非 `auto`，那么绝对定位元素就会以包含块的边界为其起点来偏移，比如 `left: 10px` 代表绝对定位元素的左边界和其包含块的左边界的距离为 `10px`，不过在垂直方向上，该元素会保持原来的位置，因为我们没有设置 `top` 或 `bottom`。
-
-[TODO: 示例]
-
-绝对定位元素不会在流式布局中占据任何空间。
-
-另外，绝对定位元素的尺寸会尽可能的小以刚好包容其内容，就像是启用了 `fit-content` 那样。另外，如果行内元素启用了绝对定位，那么行内元素就可以使用 `block-size` 等那些平常无法在流式布局中使用的 CSS 属性。
-
-[TODO: 示例代码 + 图片，参考「containing puzzle」章节的第八关，这个示例还可以顺便表达出「相对定位元素没有 fit-content 而绝对定位元素有该特性，因此这便是为什么第二和第三个图标会排列在下一行而不是同一行」这件事]
-
-[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
-
-[TODO: 证明它哪怕以初始包含块来作为其包含块，可与固定定位不同的是，它会随着滚动而消失在可视区域，但固定定位则不会]
-
-[TODO: 证明它在包含块中不占据任何空间，且具有 fit-content 特性，且行内元素可以启用一些平时无法使用的 CSS 属性]
-
-### 居中技巧
-
-绝对定位可以被用来居中元素，具体有 2 种居中方案，分别是「弹性尺寸型居中」和「固定尺寸型居中」，详见下例。
-
-```html
-<div class="auto-size"></div>
-<div class="fixed-size"></div>
-
-<style>
-    .auto-size {
-        position: absolute;
-        inset: 20px;
-        inline-size: auto; /* 弹性尺寸 */
-        block-size: auto;  /* 弹性尺寸 */
-    }
-    
-    .fixed-size {
-        position: absolute;
-		inset: 0;
-        inline-size: 10rem;  /* 固定尺寸 */
-        block-size: 10rem;   /* 固定尺寸 */
-        margin-inline: auto; /* inline居中 */
-        margin-block: auto;  /* block居中 */
-    }
-</style>
-```
-
-## 固定定位
-
-`position: fixed` 的元素将会启用固定定位。
-
-事实上，固定定位是绝对定位的一种，所以固定定位会继承绝对定位的所有特性，只不过在对待初始包含块时，两者的行为表现会有差异，详情如下。
-
-如果固定定位元素的包含块不是初始包含块，那么固定定位就会表现的和绝对定位一模一样。当固定/绝对定位元素的包含块是初始包含块时，在绝对定位眼中，初始包含块是一个视口大小且位于文档顶部的矩形，该初始包含块会随着页面的滚动而消失在屏幕的可视区域，因此基于初始包含块来定位的绝对定位元素也会消失在可视区。而在固定定位眼中，初始包含块就像是视口本身，所以固定定位元素会永远固定在屏幕上。
-
-[TODO: 示例]
-
-需要细说的是，当固定定位元素的包含块是初始包含块时，如果 `inset: auto`，那么固定定位元素的行为表现就会有些复杂，具体来说：想象一下，对于一个可以水平和垂直滚动的网页，视口正定位在水平滚动和垂直滚动的初始位置，此时，渲染引擎会根据流式布局的规则来在固定定位元素的直接父元素内为其寻找一个位置，然后固定定位元素投影在视口上的部分就是其最终的渲染结果，无论用户如何滚动网页，那个投影都会始终出现在视口上。
-
-[TODO: 示例]
-
-[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
-
-### 快速寻找包含块
-
-如果 DOM 结构很复杂，那么我们就很难找到固定定位元素的包含块，因为固定定位元素会采用符合特定条件的祖先元素的 padding box 来作为其包含块，而不会永远都采用初始包含块。
-
-我们需要一个可以快速寻找包含块的工具，而幸运的是，[Josh W. Comeau](https://twitter.com/joshwcomeau) 就编写了这样一个。
-
-```js
-function findCulprits(element) {
-    if (!element) throw new Error('Could not find element with that selector');
-
-    let parent = element.parentElement;
-
-    while (parent) {
-        const { transform, willChange, filter } = getComputedStyle(parent);
-
-        if (transform !== 'none' || willChange === 'transform' || filter !== 'none')
-            console.warn('🚨 Found a culprit! 🚨\n', parent, { transform, willChange, filter });
-
-        parent = parent.parentElement;
-    }
-}
-```
-
-> 如果你需要在 iframe 环境中执行这项任务，那么你需要这么做：1.打开浏览器控制台；2.打开「控制台」标签；3.打开「JavaScript 上下文」多选栏，其默认选项应为 `top`；4.选择目标 iframe 的 JavaScript 上下文；
->
-> 补充：`top` 表示当前的 JavaScript 上下文是当前网页。
-
 ## 沾滞定位
 
 `position: sticky` 的元素将会启用沾滞定位。
@@ -170,26 +220,6 @@ function findCulprits(element) {
 [TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
 
 （closeet  scroll container）
-
-### 快速寻找最近滚动容器
-
-同样的，[Josh W. Comeau](https://twitter.com/joshwcomeau) 也编写了一个可以寻找最近滚动容器的工具。
-
-```js
-function findCulprits(element) {
-  if (!element) throw new Error('Could not find element with that selector');
-
-  let parent = element.parentElement;
-
-  while (parent) {
-    const { overflow } = getComputedStyle(parent);
-
-    if (['auto', 'scroll', 'hidden'].includes(overflow)) console.log(overflow, parent);
-
-    parent = parent.parentElement;
-  }
-}
-```
 
 ## 缝隙
 
