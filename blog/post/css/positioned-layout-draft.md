@@ -1,8 +1,6 @@
 # 定位布局
 
-定位布局是一种布局策略，它允许我们通过 `top`、`right`、`bottom`、`left` 属性来操纵元素的偏移，以使其锚定在我们期望的位置上。
-
-只要将元素的 `position` 属性设置为非 `static` 属性，那么便可以对元素启用定位布局，定位布局一共有 4 种类型，分别是：
+定位布局是一种布局策略，它允许我们通过 `top`、`right`、`bottom`、`left` 属性来操纵元素的偏移，以使其锚定在我们期望的位置上。只要将元素的 `position` 属性设置为非 `static` 属性，那么便可以对元素启用定位布局，定位布局一共有 4 种类型，分别是：
 
 - 相对定位；
 - 绝对定位；
@@ -10,36 +8,6 @@
 - 沾滞定位；
 
 本文旨在指导如何使用定位布局，并澄清那些隐晦的概念。
-
-## 包含块
-
-在正式开始了解定位布局之前，我们需要先了解一些前置知识。
-
-包含块（containing block）是一块用于包含元素的空间，比如元素的 content box 或 padding box 都能成为包含块。
-
-当元素的 `width`、`height`、`top`、`right`、`bottom`、`left` 属性采用了百分比值的时候，这些百分比值的计算基准就取自于包含块。具体来说：元素的 `height`、`top`、`bottom` 属性的百分比值的计算基准是其包含块的 `height`，对于 `width`、`left`、`right` 而言，则是其包含块的 `width`。
-
-### 定位布局元素的包含块
-
-- 如果元素的 `position` 值为 `static`、`relative`、`sticky`，那么其包含块就是满足下述任意一个条件的最近的祖先元素的 content box，条件为：
-	- 该元素是一个块级容器；
-	- 该元素会创建格式化上下文；
-- 如果元素的 `position` 值为 `absolute`，那么其包含块就是 `position` 值为非 `static` 的最近的祖先元素的 padding box。如果没有任何一个祖先元素满足条件，那么就会采用初始包含块来作为其包含块；
-- 如果元素的 `position` 值为 `fixed`，那么其包含块就是初始包含块（initial containing block）
-- 如果元素的 `position` 值为 `absolute` 或 `fixed`，那么满足下述任意一个条件的最近的祖先元素的 padding box 就会成为其包含块，条件为：
-	- 该元素的 `transform` 值为非 `none`；
-	- 该元素的 `perspective` 值为非 `none`；
-	- 该元素的 `container-type` 值为非 `normal`；
-	- 该元素的 `backdrop=filter` 值为非 `none`；
-	- 该元素的 `will-change` 值为 `transform` 或 `perspective`；
-	- 该元素的 `contain` 值为 `layout`、`paint`、`strict`、`content`；
-	- 该元素的 `filter` 值为非 `none` 或 `will-change` 值为 `filter`（此条仅作用于 Firefox 浏览器）；
-
-> 初始包含块（initial containing block）是一个由视口（viewport）衍生的矩形区域，它的尺寸就等于视口的尺寸，它的位置就是视口的位置。另外，初始包含块也是 `<html>` 元素的包含块。
->
-> 块级容器（block container）是指那些作为容器的块级元素，其与块级元素的区别在于其必须包含内容（方可被称为容器）。
->
-> 另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（其实，我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
 
 ## 相对定位
 
@@ -86,67 +54,11 @@
 
 [TODO: 证明它哪怕以初始包含块来作为其包含块，可与固定定位不同的是，它会随着滚动而消失在可视区域，但固定定位则不会]
 
-## 固定定位
+### 居中技巧
 
-「固定定位」是一种特殊的绝对定位，它会继承绝对定位的所有特性。如果 `position: fixed`，那么元素便会启用固定定位布局。
+绝对定位布局有一个特别的技巧，那就是：如果元素的 `top` 和 `bottom` 为非 `auto`，且 `height: auto`，那么元素就会自动填充满包含块的垂直高度，对于水平方向，也同样如此。
 
-```css
-.jynxio { position: fixed }
-```
-
-相较于绝对定位，固定定位有 2 个不同：
-
-- 对待原始位置的方式；
-- 对待初始包含块的方式；
-
-### 对待原始位置的方式
-
-和绝对定位不同的是，固定定位元素的原始位置不是「元素在流式布局下的位置」，而是「元素在流式布局下的位置在首屏上的投影」。
-
-具体来说，想象一下：对于一个可以水平和垂直滚动的网页，视口正定位在首屏位置（水平滚动和垂直滚动的初始位置），渲染引擎像对待绝对定位元素一样，来找到固定定位元素在流式布局下的位置，然后绘制它，绘制的结果会投影到首屏的视口上，而这份投影的内容就是最终的渲染结果，无论用户如何滚动网页，这份投影都会始终渲染在视口上。
-
-[TODO: 示例]
-
-[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
-
-### 对待初始包含块的方式
-
-如果固定定位元素没有选择初始包含块作为其包含块，那么固定定位元素就会表现得和绝对定位元素一模一样，否则...
-
-当绝对定位元素和绝对定位元素都选择了初始包含块来作为其包含块时：
-
-- 在绝对定位眼中，初始包含块仿佛就像是一块视口大小且位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。
-- 在固定定位眼中，初始包含块仿佛就像是视口本身，参考着视口来锚定的固定定位元素的位置不会随着页面的滚动而发生变化；
-
-[TODO: 示例]
-
-## 沾滞定位
-
-「沾滞定位」用于将元素沾滞在「最近滚动容器」的边界上，它通过设定元素与最近滚动容器边界的最小距离来实现。如果 `position: sticky`，那么元素便会启用沾滞定位布局。
-
-```css
-.jynxio { position: sticky }
-```
-
-如果 `inset: auto`，那么元素就完全等价于相对定位元素。如果 `inset` 非 `auto`，那么当元素的 border box 与最近滚动容器的 content box 之间的距离达到预设极限时，元素就会沾滞在极限位置处，否则元素就会表现的像是一个相对定位元素。
-
-> “最近滚动容器的 content box ...”这种说法是不准确的，可是我不知道如何用文字来表达我真正的意思，所以你需要从示例中去领悟。
-
-最近滚动容器（closest scroll container）是指距离元素最近的激活了「滚动机制」的祖先元素。如何激活滚动机制？令 `overflow: hidden | scroll | auto | overlay` 即可。
-
-[TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近沾滞定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
-
-无论元素沾滞与否，它都会在父元素中占据很定的空间，这份空间就是其在流式布局下所占据的空间。
-
-> 为避免混淆，我需阐明一个事情：沾滞定位元素会根据包含块来计算百分比宽度和偏移量，然后在父元素中占据空间，最后沾滞在最近滚动容器上。
-
-一个易被忽略的知识是：沾滞定位元素仍然收到父元素的限制，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。不过，如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
-
-[TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
-
-## 技巧 - 居中
-
-我们可以使用绝对定位来居中元素，具体来说有 2 种方案，分别是「弹性居中」和「固定居中」。
+利用这个技巧，我们可以实现元素居中，并且还可以实现 2 种不同的效果，分别是「弹性居中」和「固定居中」。
 
 - 弹性尺寸居中：元素相对于其包含块来居中，且元素尺寸是弹性的；
 - 固定尺寸居中：元素相对于其包含块来居中，且元素尺寸是固定的；
@@ -169,7 +81,41 @@
 }
 ```
 
-## 工具 - 搜寻包含块或最近滚动容器
+## 固定定位
+
+「固定定位」是一种特殊的绝对定位，它会继承绝对定位的所有特性。如果 `position: fixed`，那么元素便会启用固定定位布局。
+
+```css
+.jynxio { position: fixed }
+```
+
+相较于绝对定位，固定定位有 2 个不同：
+
+- 对待原始位置的方式不同；
+- 对待初始包含块的方式不同；
+
+### 对待原始位置的方式
+
+和绝对定位不同的是，固定定位元素的原始位置不是「元素在流式布局下的位置」，而是「元素在流式布局下的位置在首屏上的投影」。
+
+具体来说，想象一下：对于一个可以水平和垂直滚动的网页，视口正定位在首屏位置（水平滚动和垂直滚动的初始位置），渲染引擎像对待绝对定位元素一样，来找到固定定位元素在流式布局下的位置，然后绘制它，绘制的结果会投影到首屏的视口上，而这份投影的内容就是最终的渲染结果，无论用户如何滚动网页，这份投影都会始终渲染在视口上。
+
+[TODO: 示例]
+
+[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
+
+### 对待初始包含块的方式
+
+如果固定定位元素没有选择初始包含块作为其包含块，那么固定定位元素就会表现得和绝对定位元素一模一样，否则...
+
+当绝对定位元素和绝对定位元素都选择了初始包含块来作为其包含块时：
+
+- 在绝对定位眼中，初始包含块仿佛就像是一块视口大小且位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。
+- 在固定定位眼中，初始包含块仿佛就像是视口本身，参考着视口来锚定的固定定位元素的位置不会随着页面的滚动而发生变化；
+
+[TODO: 示例]
+
+### 自动搜寻包含块的函数
 
 [Josh W. Comeau](https://twitter.com/joshwcomeau) 就编写了一个自动搜寻固定定位元素的包含块的脚本，它在 debug 时非常有用。
 
@@ -190,7 +136,50 @@ function findCulprits(element) {
 }
 ```
 
-以及一个自动搜寻最近滚动容器的脚本：
+如果你想在 iframe 环境中运行该脚本，那么：
+
+1. 打开浏览器控制台；
+2. 打开「控制台」标签页；
+3. 打开「JavaScript 上下文」多选栏（其默认选项应为 `top`，代表控制台的 JavaScript 上下文就是当前网页）；
+4. 选择目标 iframe 的 JavaScript 上下文；
+
+### 缝隙
+
+在使用固定定位布局时，或许你偶尔会发现元素和目标位置之间存在 `1px` 的差距或缝隙，这是由浏览器的「舍入」机制所导致的，一个简单有效的解决方案是：
+
+```css
+.yourself {
+    top: -1px;
+}
+```
+
+> 其实其他的定位布局也会遇到此类问题，只不过该问题最常发生于固定定位布局。
+
+## 沾滞定位
+
+「沾滞定位」用于将元素沾滞在「最近滚动容器」的边界上，它通过设定元素与最近滚动容器边界的最小距离来实现。如果 `position: sticky`，那么元素便会启用沾滞定位布局。
+
+```css
+.jynxio { position: sticky }
+```
+
+如果 `inset: auto`，那么元素就完全等价于相对定位元素。如果 `inset` 非 `auto`，那么当元素的 border box 与最近滚动容器的 content box 之间的距离达到预设极限时，元素就会沾滞在极限位置处，否则元素就会表现的像是一个相对定位元素。
+
+> 最近滚动容器是指距离元素最近的滚动容器。另外，上文中的“最近滚动容器的 content box ...”这种说法是不准确的，可是我不知道如何用文字来表达我真正的意思，所以你需要从示例中去领悟。
+
+[TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近沾滞定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
+
+无论元素沾滞与否，它都会在父元素中占据很定的空间，这份空间就是其在流式布局下所占据的空间。
+
+> 为避免混淆，我需阐明一个事情：沾滞定位元素会根据包含块来计算百分比宽度和偏移量，然后在父元素中占据空间，最后沾滞在最近滚动容器上。
+
+一个易被忽略的知识是：沾滞定位元素仍然收到父元素的限制，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。不过，如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
+
+[TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
+
+### 自动搜寻最近滚动容器
+
+[Josh W. Comeau](https://twitter.com/joshwcomeau) 还编写了一个自动搜寻最近滚动容器的脚本：
 
 ```js
 function findCulprits(element) {
@@ -208,24 +197,103 @@ function findCulprits(element) {
 }
 ```
 
-另外，如何在 iframe 环境中工作？解决方案如下：
+## 包含块
 
-1. 打开浏览器控制台；
-2. 打开「控制台」标签页；
-3. 打开「JavaScript 上下文」多选栏（其默认选项应为 `top`，代表控制台的 JavaScript 上下文就是当前网页）；
-4. 选择目标 iframe 的 JavaScript 上下文；
+包含块（containing block）是一块用于包含元素的空间，比如元素的 content box 或 padding box 都能成为包含块。
 
-## 陷阱 - 缝隙
+当元素的 `width`、`height`、`top`、`right`、`bottom`、`left` 属性采用了百分比值的时候，这些百分比值的计算基准就取自于包含块。具体来说：元素的 `height`、`top`、`bottom` 属性的百分比值的计算基准是其包含块的 `height`，对于 `width`、`left`、`right` 而言，则是其包含块的 `width`。
 
-在使用定位布局时，或许你偶尔会发现元素和目标位置之间存在 `1px` 的差距或缝隙，这是由浏览器的「舍入」机制所导致的，一个简单有效的解决方案是：
+### 定位布局元素的包含块
+
+- 如果元素的 `position` 值为 `static`、`relative`、`sticky`，那么其包含块就是满足下述任意一个条件的最近的祖先元素的 content box，条件为：
+	- 该元素是一个块级容器；
+	- 该元素会创建格式化上下文；
+- 如果元素的 `position` 值为 `absolute`，那么其包含块就是 `position` 值为非 `static` 的最近的祖先元素的 padding box。如果没有任何一个祖先元素满足条件，那么就会采用初始包含块来作为其包含块；
+- 如果元素的 `position` 值为 `fixed`，那么其包含块就是初始包含块（initial containing block）
+- 如果元素的 `position` 值为 `absolute` 或 `fixed`，那么满足下述任意一个条件的最近的祖先元素的 padding box 就会成为其包含块，条件为：
+	- 该元素的 `transform` 值为非 `none`；
+	- 该元素的 `perspective` 值为非 `none`；
+	- 该元素的 `container-type` 值为非 `normal`；
+	- 该元素的 `backdrop=filter` 值为非 `none`；
+	- 该元素的 `will-change` 值为 `transform` 或 `perspective`；
+	- 该元素的 `contain` 值为 `layout`、`paint`、`strict`、`content`；
+	- 该元素的 `filter` 值为非 `none` 或 `will-change` 值为 `filter`（此条仅作用于 Firefox 浏览器）；
+
+> 初始包含块（initial containing block）是一个由视口（viewport）衍生的矩形区域，它的尺寸就等于视口的尺寸，它的位置就是视口的位置。另外，初始包含块也是 `<html>` 元素的包含块。
+>
+> 块级容器（block container）是指那些作为容器的块级元素，其与块级元素的区别在于其必须包含内容（方可被称为容器）。
+>
+> 另外，块级容器要么只包含参与了行内格式化上下文（inline formatting context）的行内元素，要么只包含参与了块级格式化上下文（block formatting context）的块级元素（其实，我对该描述感到困惑，其摘自于 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#calculating_percentage_values_from_the_containing_block)）。
+
+## 滚动容器
+
+> 滚动容器就像是一扇通往异次元的大门，在外界看来，它永远都只有那么大，可它里面却可以装下无限多的内容。
+
+滚动容器（scroll container）是指激活了滚动机制的元素，只要把 `overflow-x` 或 `overflow-y` 设置为 `auto | hidden | scroll | overlay` ，那么就可以激活元素的滚动机制。
+
+注意，只要激活了一条轴的滚动机制，那么整个元素都会变成滚动元素，另一条轴的滚动机制也会被自动激活，即 `overflow-*` 自动变为 `auto`。
+
+```html
+<section>
+  <div></div>
+</section>
+
+<style>
+  section {
+    overflow-y: hidden;
+    inline-size: 200px;
+    block-size: 200px;
+    background-color: hotpink;
+  }
+
+  div {
+    inline-size: 100px;
+    block-size: 100px;
+    margin-inline-end: 200px;
+    margin-block-end: 200px;
+    border-radius: 999rem;
+    background-color: cornflowerblue;
+  }
+</style>
+```
+
+### 关于 Hidden
+
+`overflow: hidden` 会隐藏超出了 padding box 之外的内容
+
+，但是这部分内容其实并没有被真正的隐藏掉。虽然用户无法通过滚动条或滚轮等机制来查看被隐藏的内容，但只要借助编程和一些骇客手段，我们就可以看到那些被隐藏的内容。
+
+我们可以通过借助编程和一些稍微骇客的手段来达到
+
+用户无法通过滚动条或鼠标滚轮等方式来查看被隐藏的内容，但却可以通过编程或一些更骇客的方式
+
+ `scrollLeft` 属性和 `scrollTo()` 方法来
+
+一个冷知识是，我们其实可以做到令一条轴是 `visible` 的同时，另一条轴是 `clip` 的。
+
+overlay 会被自动替换为 auto
+
+### 关于滚动条的样式
+
+对于 Windows 和 Linux，元素要么始终渲染滚动条，要么始终不渲染，滚动条会占用元素的 padding box 的空间。
+
+对于 MacOS，当用户使用触控板时，元素只会在发生滚动时才渲染滚动条，滚动条不会占用元素的任何空间，当用户使用鼠标时，则会表现得和 Windows 和 Linux 系统一致。
+
+其实大多数的 Web 用户所使用的操作系统都是 Windows，为了更加贴近用户，建议将 MacOS 设置为总是常显滚动条。
+
+## 偏移冲突
+
+如果 `top` 和 `bottom` 发生了冲突，那么取 `top`。如果 `left` 和 `right` 发生了冲突，那么取 `left`（当 `direction: ltr`）或 `right`（当 `direction: rtl`）。
 
 ```css
-.yourself {
-    top: -1px;
+.jynxio {
+    position: relative;
+    top:  10px; /*👑*/ bottom: 30px; /*💀*/
+    left: 40px; /*👑*/ right:  20px; /*💀*/
 }
 ```
 
-## 层叠的规则
+## 层叠规则
 
 当元素与元素之间发生层叠时，层叠等级更高者在更上层，如果层叠等级也相同，那么 DOM 顺序更晚者在更上层。
 
@@ -271,6 +339,8 @@ function findCulprits(element) {
 
 [TODO: 层叠上下文洋葱图]
 
+### 创建方法
+
 层叠上下文的创建方法如下：
 
 1. `<html>`；
@@ -286,15 +356,15 @@ function findCulprits(element) {
 11. `contain` 值为 `layout | paint | strict | content` 的元素；
 12. 顶层元素及其 `::backdrop` 伪元素；
 
-> 对于老旧的桌面端浏览器，`position: sticky` 不会创建层叠上下文。
->
-> 关于 `will-change` 属性，推荐阅读 [Everything You Need to Know About the CSS will-change Property](https://dev.opera.com/articles/css-will-change-property/) 和 [我的另一篇博客](https://www.jynxio.com/browser/page-rendering)；
->
-> [顶层元素](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer) 大概是指进入全屏的元素、由 `HTMLDialogElement.showModal()` 唤醒的 `<dialog>`、由 `HTMLElement.showPopover()` 唤醒的 [Popover 元素](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)。
+对于老旧的桌面端浏览器，`position: sticky` 不会创建层叠上下文。
 
-### 陷阱 - 父子元素可以同处在同一个层叠上下文
+关于 `will-change` 属性，推荐阅读 [Everything You Need to Know About the CSS will-change Property](https://dev.opera.com/articles/css-will-change-property/) 和 [我的另一篇博客](https://www.jynxio.com/browser/page-rendering)；
 
-层叠上下文树结构和 DOM 树结构不是对应的，因此如果父元素没有创建层叠上下文，那么父元素和子元素就会同处在一个层叠上下文之中，于是我们就可以制造出一些让人困惑的事情。比如在下例中，父元素会遮蔽子元素。
+[顶层元素](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer) 大概是指进入全屏的元素、由 `HTMLDialogElement.showModal()` 唤醒的 `<dialog>`、由 `HTMLElement.showPopover()` 唤醒的 [Popover 元素](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)。
+
+### 共处于同一个层叠上下文的父子元素
+
+层叠上下文树的结构和 DOM 树的结构不是对应的，因此如果父元素没有创建层叠上下文，那么父元素和子元素就会同处在一个层叠上下文之中，于是我们就可以制造出一些让人困惑的事情。比如在下例中，父元素会遮蔽子元素。
 
 ```html
 <div>
@@ -313,7 +383,7 @@ function findCulprits(element) {
 
 另外，如果父元素创建了层叠上下文，那么子元素就会进入到这个新的层叠上下文中去，但是父元素仍然会留在原来的层叠上下文中。
 
-### 技巧 - 使用 isolation 来主动创建层叠上下文
+### 善用 isolation 来主动创建层叠上下文
 
 有时，我们会高强度的使用 `z-index` 来控制元素的层叠顺序并快速的速陷入到混乱中去，然后试图使用超级大或超级小的值（比如 9999 和 -9999）来搏出期望的效果，有时这会奏效，有时则不会，可是无论如何，这都会让事情变的更加难以维护并在未来的某一天再次遭遇这类麻烦，不过那时，麻烦已经更加麻烦了。
 
@@ -331,12 +401,30 @@ function findCulprits(element) {
 
 > 如果你开发的样式组件的内部使用了 `z-index`，那么你应该考虑为组件创建局部层叠上下文，以避免这些使用了 `z-index` 的元素会进入到组件外部的层叠上下文中去。
 
-### 工具 - 可视化层叠上下文树
+### 可视化层叠上下文树的工具
 
 无论你多么熟悉层叠上下文，你都无法避免陷入到关于层叠上下文的混乱中去（我明明已经这了做了，可是这个家伙为什么还没有出现在顶层啊喂！）。
 
 [Stacking Contexts Inspector](https://github.com/andreadev-it/stacking-contexts-inspector) 是一个用于可视化层叠上下文树的浏览器插件，它可以帮助我们 debug。
 
 ## Overflow
+
+visible:  outside the element's padding box. 
+
+hidden： Overflow content is clipped at the element's padding box. and the clipped content is not visible, but the content still exists.User agents do not add scroll bars and also do not allow users to view the content outside the clipped region by actions such as dragging on a touch screen or using the scroll wheel on a mouse. The content *can* be scrolled programmatically (for example, by setting the value of the [`scrollLeft`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft) property or the [`scrollTo()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTo) method)
+
+clip: Overflow content outside the clipped region is not visible, user agents do not add a scroll bar, and programmatic scrolling is also not supported.
+
+scroll: Overflow content is clipped at the element's padding box
+
+> `overlay` 已经过时了，他是 `auto` 的旧名，但他有一点不一样，他的滚动条不占据空间，而是直接回旨在内容之上。但是在使用中，几乎感觉不到这两种差异的区别
+
+注意：
+
+For an `overflow` setting to create the desired effect, the block-level element must have either a set height (`height` or `max-height`) or `white-space` set to `nowrap`.
+
+The JavaScript [`Element.scrollTop`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop) property may be used to scroll through content in a scroll container, including when `overflow` is set to `hidden`.
+
+`overflow-clip-margin` 对 `clip` 的影响
 
 如果你想用 hidden？那么不妨考虑 clip，因为 hidden 的副作用（创建为 scrolling container）可能会产生某些意料之外的影响。
