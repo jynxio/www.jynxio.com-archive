@@ -28,7 +28,7 @@
 ```css
 .blue-box {
     position: reltaive;
-    top: 20px;
+    inset: auto auto 30px 30px; /* top right bottom left */
 }
 ```
 
@@ -43,6 +43,29 @@
 如果 `inset: auto`，那么元素就会留在原始位置，这个原始位置就是其在流式布局下的位置。如果 `inset` 非 `auto`，那么元素就会以包含块为参考系来偏移，比如 `left: 10px` 代表元素的左边界和其包含块的左边界的距离为 `10px`，需要注意的是，由于没有设置垂直偏移，所以元素会在垂直方向上保持原位。
 
 元素不会在流式布局中占据任何空间，并且元素的尺寸会尽可能地小以刚好包含其内容（就像使用了 `fit-content`）。另外，启用了绝对定位布局的行内元素可以使用 `block-size`、`margin-block` 等那些平常无法在流式布局中使用的 CSS 属性。
+
+```html
+<section>
+	<div></div>
+    <span>span element</span>
+    <div></div>
+</section>
+
+<style>
+    section {
+        position: relative;
+    }
+    
+    span {
+        position: absolute;
+        top: auto; /* 该元素会在垂直方向上保持原位 */
+        left: 30px;
+        block-size: 5rem;
+    }
+</style>
+```
+
+
 
 [TODO: 基于上述描述的示例]
 
