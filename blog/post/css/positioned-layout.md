@@ -1,3 +1,7 @@
+---
+typora-root-url: ./..\..\image
+---
+
 # 定位布局
 
 定位布局是一种布局策略，它允许我们通过 `top`、`right`、`bottom`、`left` 属性来操纵元素的偏移，以使其锚定在我们期望的位置上。只要将元素的 `position` 属性设置为非 `static` 属性，那么便可以对元素启用定位布局，定位布局一共有 4 种类型，分别是：
@@ -23,14 +27,14 @@
 
 无论元素偏移与否，它都会在父元素中占据恒定的空间，这份空间就是其在流式布局下所占据的空间。自然的，当它偏移时，它也不会影响其它元素的布局，不过它会遮盖其它元素或超出父元素的边界。
 
-[TODO: 示例代码 + 图片，参考「Relative Positioning」小节中的「This blue box is interactive」的互动示例]
-
 ```css
 .blue-box {
     position: reltaive;
     inset: auto auto 30px 30px; /* top right bottom left */
 }
 ```
+
+![相对定位](/css/positioned-layout/relative-positioning.png)
 
 ## 绝对定位
 
@@ -46,9 +50,9 @@
 
 ```html
 <section>
-	<div></div>
-    <span>span element</span>
-    <div></div>
+	<div>前继元素</div>
+    <div>行内元素</div>
+    <div>后继元素</div>
 </section>
 
 <style>
@@ -56,26 +60,19 @@
         position: relative;
     }
     
-    span {
+    div:nth-child(2) {
+        display: inline;
         position: absolute;
-        top: auto; /* 该元素会在垂直方向上保持原位 */
-        left: 30px;
+        left: 3rem;
         block-size: 5rem;
+        margin-block-start: 1rem;
     }
 </style>
 ```
 
+![绝对定位](/css/positioned-layout/absolute-positioning.png)
 
-
-[TODO: 基于上述描述的示例]
-
-[TODO: 示例代码 + 图片，参考「containing puzzle」章节的第八关，这个示例还可以顺便表达出「相对定位元素没有 fit-content 而绝对定位元素有该特性，因此这便是为什么第二和第三个图标会排列在下一行而不是同一行」这件事]
-
-[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
-
-无论是绝对定位元素，还是固定定位元素，它们都可以选择初始包含块作为其包含块，但效果却是不一样的，具体来说，对于绝对定位元素而言，初始包含块仿佛就像是一个视口大小的、位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。
-
-[TODO: 证明它哪怕以初始包含块来作为其包含块，可与固定定位不同的是，它会随着滚动而消失在可视区域，但固定定位则不会]
+无论是绝对定位元素，还是固定定位元素，它们都可以选择初始包含块作为其包含块，但效果却是不一样的，具体来说，对于绝对定位元素而言，初始包含块仿佛就像是一个视口大小的、位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。详见「固定定位」小节的「对待初始包含块的方式」部分。
 
 ### 居中技巧
 
@@ -122,6 +119,22 @@
 和绝对定位不同的是，固定定位元素的原始位置不是「元素在流式布局下的位置」，而是「元素在流式布局下的位置在首屏上的投影」。
 
 具体来说，想象一下：对于一个可以水平和垂直滚动的网页，视口正定位在首屏位置（水平滚动和垂直滚动的初始位置），渲染引擎像对待绝对定位元素一样，来找到固定定位元素在流式布局下的位置，然后绘制它，绘制的结果会投影到首屏的视口上，而这份投影的内容就是最终的渲染结果，无论用户如何滚动网页，这份投影都会始终渲染在视口上。
+
+```html
+<section>
+	<div>流式布局元素（蓝色）</div>
+    <div>固定定位元素</div>
+    <div>流式布局元素（橙色）</div>
+    <div>流式布局元素（粉色）</div>
+</section>
+
+<style>
+    div:nth-child(2) {
+        position: fixed;
+        right: 3rem;
+    }
+</style>
+```
 
 [TODO: 示例]
 
