@@ -136,9 +136,7 @@ typora-root-url: ./..\..\image
 </style>
 ```
 
-[TODO: 示例]
-
-[TODO: 采用「Fixed Positioning」章节中的「Fixed without anchor points」中的例子来证明：它的初始位置就是其在流式布局下的位置，而该位置可能会很不可思议]
+![对待原始位置的方式](/css/positioned-layout/fixed-positioning-initial-position.png)
 
 ### 对待初始包含块的方式
 
@@ -149,7 +147,7 @@ typora-root-url: ./..\..\image
 - 在绝对定位眼中，初始包含块仿佛就像是一块视口大小且位于页面首屏位置的矩形空间，这块空间会随着页面的滚动而消失在可视区域，于是参考这块空间来锚定的绝对定位元素也会随之一并消失。
 - 在固定定位眼中，初始包含块仿佛就像是视口本身，参考着视口来锚定的固定定位元素的位置不会随着页面的滚动而发生变化；
 
-[TODO: 示例]
+![对待初始包含块的方式](/css/positioned-layout/fixed-positioning-initial-containing-block.png)
 
 ### 自动搜寻包含块的函数
 
@@ -199,9 +197,35 @@ function findCulprits(element) {
 .jynxio { position: sticky }
 ```
 
-如果 `inset: auto`，那么元素就完全等价于相对定位元素。如果 `inset` 非 `auto`，那么当元素的 border box 与最近滚动容器的 content box 之间的距离达到预设极限时，元素就会沾滞在极限位置处，否则元素就会表现的像是一个相对定位元素。
+如果 `inset: auto`，那么元素就完全等价于相对定位元素。如果 `inset` 非 `auto`，那么当元素的 border box 与最近滚动容器的 content box 之间的距离达到预设极限时，元素就会沾滞在极限位置处（哪怕借助 `margin` 也无法突破预设极限），否则元素就会表现的像是一个相对定位元素。
 
 > 最近滚动容器是指距离元素最近的滚动容器。另外，上文中的“最近滚动容器的 content box ...”这种说法是不准确的，可是我不知道如何用文字来表达我真正的意思，所以你需要从示例中去领悟。
+
+```html
+<section>
+	<div>流式布局元素（蓝色）</div>
+    <div>沾滞定位元素</div>
+    <div>流式布局元素（橙色）</div>
+</section>
+
+<style>
+    section {
+        overflow-y: scroll;
+        block-size: 20rem;
+        padding: 1rem;
+        border: 1rem dashed grey;
+        background-color: grey;
+        background-clip: content-box;
+    }
+    
+    div:nth-child(2) {
+        position: sticky;
+        top: 2rem;
+        margin-block-start: -999px;  /* margin也无法帮其突破预设极限 */
+        border: 5px dashed crimson;
+    }
+</style>
+```
 
 [TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近沾滞定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
 
@@ -209,7 +233,7 @@ function findCulprits(element) {
 
 > 为避免混淆，我需阐明一个事情：沾滞定位元素会根据包含块来计算百分比宽度和偏移量，然后在父元素中占据空间，最后沾滞在最近滚动容器上。
 
-一个易被忽略的知识是：沾滞定位元素仍然收到父元素的限制，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。不过，如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
+一个易被忽略的知识是：沾滞定位元素仍然受到父元素的限制，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。不过，如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
 
 [TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
 
@@ -269,31 +293,12 @@ function findCulprits(element) {
 
 注意，只要激活了一条轴的滚动机制，那么整个元素都会变成滚动元素，另一条轴的滚动机制也会被自动激活，即 `overflow-*` 自动变为 `auto`。
 
-```html
-<section>
-  <div></div>
-</section>
-
-<style>
-  section {
+```css
+.jynxio {
+    overflow-x: auto;   /* ⚠️ 其计算值将自动变为auto */
     overflow-y: hidden;
-    inline-size: 200px;
-    block-size: 200px;
-    background-color: hotpink;
-  }
-
-  div {
-    inline-size: 100px;
-    block-size: 100px;
-    margin-inline-end: 200px;
-    margin-block-end: 200px;
-    border-radius: 999rem;
-    background-color: cornflowerblue;
-  }
-</style>
+}
 ```
-
-[TODO: 示例]
 
 ### 关于 Overflow
 
@@ -303,9 +308,7 @@ function findCulprits(element) {
 
 ### 关于 Overlay
 
-`overlay` 是废弃值，它已经被 `auto` 替代了，如果你尝试使用 `overflow: overlay`，那么现代的浏览器会将其转译为 `overflow: auto`。
-
-`overflow` 和 `auto` 的区别是，前者的滚动条是不占空间并直接绘制在内容之上的，后者的滚动条是会挤占 padding box 空间的。
+`overlay` 是废弃值，它已经被 `auto` 替代了，如果你尝试使用 `overflow: overlay`，那么现代的浏览器会将其转译为 `overflow: auto`。`overflow` 和 `auto` 的区别是，前者的滚动条是不占空间并直接绘制在内容之上的，后者的滚动条是会挤占 padding box 空间的。
 
 ### 关于 Hidden
 
@@ -313,26 +316,29 @@ function findCulprits(element) {
 
 我们有很多种手段可以办到这件事情，比如 `scrollLeft` 属性和 `scrollTo()` 方法。如果隐藏内容里有超链接元素，那么 Tab 键就可以直接达到目的，因为滚动容器会滚动到超链接元素。
 
+因此，请不要使用 `hidden` 来裁剪溢出内容，而是使用 `clip`（原因见下文）。在现代，人们一般只用 `hidden` 来实现一些罕见的需求，因此请总是在使用 `hidden` 时注释你的使用原因，因为未来的维护者非常需要知道“你为什么会在此处使用它”。
+
 ```html
 <ol>
-	<li><a href="/">♥️</a></li>
-	<li><a href="/">💀</a></li>
-	<li><a href="/">🤖️</a></li>
-	<li><a href="/">👑</a></li>
-	<li><a href="/">🧊</a></li>
+	<li><a href="/"> one   </a></li>
+	<li><a href="/"> two   </a></li>
+	<li><a href="/"> three </a></li>
+	<li><a href="/"> four  </a></li>
+	<li><a href="/"> five  </a></li>
+	<li><a href="/"> six   </a></li>
+	<li><a href="/"> seven </a></li>
+	<li><a href="/"> eight </a></li>
 </ol>
 
 <style>
     ol {
         overflow-y: hidden;
-        blick-size: 3rem;
+        blick-size: 5rem;
     }
 </style>
 ```
 
-[TODO: 示例｜Tab 键｜超链接]
-
-基于上述案例，请不要使用 `hidden` 来裁剪溢出内容，而是使用 `clip`（原因见下文）。在现代，人们一般只用 `hidden` 来实现一些罕见的需求，因此请总是在使用 `hidden` 时注释你的使用原因，因为未来的维护者非常需要知道“你为什么会在此处使用它”。
+![关于 Hidden](/css/positioned-layout/overflow-hidden-tab.png)
 
 ### 关于 Clip
 
@@ -409,8 +415,6 @@ overflow-clip-margin: border-box <length>;
 
 当元素与元素之间发生层叠时，层叠等级更高者在更上层，如果层叠等级也相同，那么 DOM 顺序更晚者在更上层。
 
-[TODO: 示例 | 层叠等级 | DOM 顺序]
-
 > 在流式布局中，由于元素的背景、内容、轮廓是分开绘制的，于是便会在层叠时产生犬牙交错的现象。而在定位布局中，则不会产生这类现象。
 
 我个人将「层叠等级」定义成一种类似于「选择器优先级」的东西，其计算方式大致如下：
@@ -448,6 +452,19 @@ overflow-clip-margin: border-box <length>;
 ## 层叠上下文
 
 层叠上下文（stacking context）是一个虚拟空间，每个元素都会生活在某个层叠上下文之内，然后这个层叠上下文又会内嵌在另一个更大的层叠上下文之内，以此类推，层层嵌套... 最后便会形成一个类似于洋葱的结构。
+
+```html
+<html>
+    <body>
+        <section style="position: relative; z-index">
+        	<div></div>
+        </section>
+        <section>
+        	<div></div>
+        </section>
+    </body>
+</html>
+```
 
 [TODO: 层叠上下文洋葱图]
 
