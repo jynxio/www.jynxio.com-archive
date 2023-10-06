@@ -235,6 +235,25 @@ function findCulprits(element) {
 
 一个易被忽略的知识是：沾滞定位元素仍然受到父元素的限制，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。不过，如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
 
+```html
+<section class="scroll-container">
+	<div class="parent">
+		<div class="child"></div>
+	</div>
+</section>
+
+<style>
+	.scroll-container {
+		overflow-y: scroll;
+	}
+
+	.child {
+		position: sticky;
+		top: 0;
+	}
+</style>
+```
+
 [TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
 
 ### 自动搜寻最近滚动容器
@@ -453,20 +472,7 @@ overflow-clip-margin: border-box <length>;
 
 层叠上下文（stacking context）是一个虚拟空间，每个元素都会生活在某个层叠上下文之内，然后这个层叠上下文又会内嵌在另一个更大的层叠上下文之内，以此类推，层层嵌套... 最后便会形成一个类似于洋葱的结构。
 
-```html
-<html>
-    <body>
-        <section style="position: relative; z-index">
-        	<div></div>
-        </section>
-        <section>
-        	<div></div>
-        </section>
-    </body>
-</html>
-```
-
-[TODO: 层叠上下文洋葱图]
+![层叠上下文洋葱](/css/positioned-layout/stacking-context-onion.png)
 
 ### 创建方法
 
@@ -493,7 +499,7 @@ overflow-clip-margin: border-box <length>;
 
 ### 共处于同一个层叠上下文的父子元素
 
-层叠上下文树的结构和 DOM 树的结构不是对应的，因此如果父元素没有创建层叠上下文，那么父元素和子元素就会同处在一个层叠上下文之中，于是我们就可以制造出一些让人困惑的事情。比如在下例中，父元素会遮蔽子元素。
+层叠上下文树的结构和 DOM 树的结构不是对应的，因此如果父元素没有创建层叠上下文，那么父元素和子元素就会同处在一个层叠上下文之中，于是我们就可以制造出一些让人困惑的事情。比如在下例中，父元素会遮蔽子元素，而在流式布局中，通常是子元素遮蔽父元素。
 
 ```html
 <div>
@@ -507,8 +513,6 @@ overflow-clip-margin: border-box <length>;
 	}
 </style>
 ```
-
-[TODO: 示例]
 
 另外，如果父元素创建了层叠上下文，那么子元素就会进入到这个新的层叠上下文中去，但是父元素仍然会留在原来的层叠上下文中。
 
