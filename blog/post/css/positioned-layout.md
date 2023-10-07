@@ -4,6 +4,8 @@ typora-root-url: ./..\..\image
 
 # 定位布局
 
+## 概述
+
 定位布局是一种布局策略，它允许我们通过 `top`、`right`、`bottom`、`left` 属性来操纵元素的偏移，以使其锚定在我们期望的位置上。只要将元素的 `position` 属性设置为非 `static` 属性，那么便可以对元素启用定位布局，定位布局一共有 4 种类型，分别是：
 
 - 相对定位；
@@ -201,34 +203,6 @@ function findCulprits(element) {
 
 > 最近滚动容器是指距离元素最近的滚动容器。另外，上文中的“最近滚动容器的 content box ...”这种说法是不准确的，可是我不知道如何用文字来表达我真正的意思，所以你需要从示例中去领悟。
 
-```html
-<section>
-	<div>流式布局元素（蓝色）</div>
-    <div>沾滞定位元素</div>
-    <div>流式布局元素（橙色）</div>
-</section>
-
-<style>
-    section {
-        overflow-y: scroll;
-        block-size: 20rem;
-        padding: 1rem;
-        border: 1rem dashed grey;
-        background-color: grey;
-        background-clip: content-box;
-    }
-    
-    div:nth-child(2) {
-        position: sticky;
-        top: 2rem;
-        margin-block-start: -999px;  /* margin也无法帮其突破预设极限 */
-        border: 5px dashed crimson;
-    }
-</style>
-```
-
-[TODO: 示例 + 滚动时粘住 + 不滚动时粘住 + 前置元素尝试通过 margin 来拉近沾滞定位元素，可也没法使其突破最小间隙 + 「Sticky Positioning」的 offset 中的示例 + border box + content box]
-
 无论元素沾滞与否，它都会在父元素中占据很定的空间，这份空间就是其在流式布局下所占据的空间。
 
 > 为避免混淆，我需阐明一个事情：沾滞定位元素会根据包含块来计算百分比宽度和偏移量，然后在父元素中占据空间，最后沾滞在最近滚动容器上。
@@ -237,9 +211,8 @@ function findCulprits(element) {
 
 ```html
 <section class="scroll-container">
-	<div class="parent">
-		<div class="child"></div>
-	</div>
+	<div class="clamp"><div class="sticky"></div></div>
+    <div class="sticky"></div>
 </section>
 
 <style>
@@ -247,14 +220,14 @@ function findCulprits(element) {
 		overflow-y: scroll;
 	}
 
-	.child {
+	.sticky {
 		position: sticky;
 		top: 0;
 	}
 </style>
 ```
 
-[TODO: 示例｜两个 sticky，一个刚好被 content box 刚好框住，另一个则有余量，然后一起向下滚动，发现一个没办法 sticky，一个在 sticky]
+![沾滞定位元素受限于父元素](/css/positioned-layout/sticky-element-clamp.png)
 
 ### 自动搜寻最近滚动容器
 
