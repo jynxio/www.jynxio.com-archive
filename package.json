@@ -25,7 +25,7 @@
         "three.js": "^0.77.1"
     },
     "devDependencies": {
-        "@konghayao/cn-font-split": "^4.8.5",
+        "@konghayao/cn-font-split": "^4.9.0",
         "@types/fs-extra": "^11.0.2",
         "@types/node": "^20.8.3",
         "@types/react": "^18.2.25",
@@ -55,7 +55,7 @@
         "svgson": "^5.3.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2",
-        "vercel": "^31.4.0",
+        "vercel": "^32.4.1",
         "vite": "^4.4.11",
         "vite-plugin-solid": "^2.7.0"
     }
