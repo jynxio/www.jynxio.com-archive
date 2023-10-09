@@ -17,3 +17,38 @@ When we apply `display: flex` to an element, we toggle the "Flexbox" layout algo
 
 ## align-items: baseline
 
+> 疑问：如果子项们的 baseline 是不一样的，那么 `align-items: baseline` 时，应该选用谁的 baseline 来锚定呢？
+>
+
+`align-items: baseline` 具有穿透性，下例中，虽然 3 个 `Sph` 的字号不同，但是它们的文字基线都会对齐（关于文字基线，请看 [这里](https://en.wikipedia.org/wiki/Baseline_(typography))）。
+
+```html
+<section>
+	<p>Sph<span>Sph</span></p>
+    <p>Sph</p>
+</section>
+
+<style>
+    section {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+    }
+    
+    span {
+        font-size: 2rem;
+    }
+    
+    p:first-child {
+        font-size: 3rem;
+    }
+</style>
+```
+
+
+
+## align-self
+
+flex 容器通过 `align-items` 来控制所有子项在副轴方向上的位置，子项则可以通过 `align-slef` 来控制自己在副轴方向上的位置。
+
+> 不存在 `justify-self` 属性（这是合理的设计），如果你想要控制子项在主轴方向上的位置，那么需要借助 `flex-grow`、`flex-shrink`、`flex-basis`、`order`。
