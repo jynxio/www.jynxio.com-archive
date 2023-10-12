@@ -75,3 +75,24 @@ flex-grow 只接受非负整数，当所有 flex 子项的主尺寸之和小于 
 > 当 box-sizing: content-box 时，flex 子项主持寸是 content box 的主尺寸，box-sizeing: border-box 时，则是 border box 的主尺寸。
 
 flex-shink 只接受非负整数，当所有 flex 子项的主尺寸之和大于 flex 容器的 content box 的主尺寸时，flex 子项的主尺寸就会根据该属性来收缩自身的主尺寸，收缩的基数是超出的长度。默认值是 1。flex-shink 无法将子项收缩到最小尺寸以下（但是 width 可以）。最小尺寸是什么？是 min-content 吗？
+
+> `flex` 缩写陷阱，下例中，width会无效，因为它会被 flex-basis 遮盖，而这个遮蔽挺隐晦的。
+>
+> ```css
+> div {
+>     flex: 1;
+>     width: 100px; /* width会被flex-basis覆盖掉 */
+> }
+> ```
+
+## flex-wrap
+
+「Wrapping」的第一个交互示例很棒！
+
+这节课的练习作业说明了一件事情：如果换行了，那么就会有多条主轴！
+
+> flex-wrap 被用于双维度布局，但事实上，此时我们应该使用 Grid 布局，后者更棒。
+
+## 其它
+
+「Groups and Gaps」中的第一个交互示例里，`margin-right: auto` 可以模拟 float 效果，可是却没有解释为什么可以。
