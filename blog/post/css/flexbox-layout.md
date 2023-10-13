@@ -15,6 +15,8 @@ When we apply `display: flex` to an element, we toggle the "Flexbox" layout algo
 
 「Directions and Alignment」中的关于 Flexbox layout 的各种值的「可互动例子」真是太棒了！这让我开始考虑“我要不要切换到 MDX ？”。
 
+注意：flex 子项会自动充满副轴，除非用 block-size 来覆写。
+
 ## align-items: baseline
 
 > 疑问：如果子项们的 baseline 是不一样的，那么 `align-items: baseline` 时，应该选用谁的 baseline 来锚定呢？
@@ -52,6 +54,12 @@ When we apply `display: flex` to an element, we toggle the "Flexbox" layout algo
 flex 容器通过 `align-items` 来控制所有子项在副轴方向上的位置，子项则可以通过 `align-slef` 来控制自己在副轴方向上的位置。
 
 > 不存在 `justify-self` 属性（这是合理的设计），如果你想要控制子项在主轴方向上的位置，那么需要借助 `flex-grow`、`flex-shrink`、`flex-basis`、`order`。
+
+陷阱：If a flexbox item's cross-axis margin is `auto`, then `align-self` is ignored.
+
+陷阱：align-self: flex-start 似乎有 fit-content 的效果
+
+陷阱：似乎只要设置 align-*，相应的元素就会自动 fit-content！快验证一下！
 
 ## flex-basis & flex-grow & flex-shink
 
@@ -96,3 +104,54 @@ flex-shink 只接受非负整数，当所有 flex 子项的主尺寸之和大于
 ## 其它
 
 「Groups and Gaps」中的第一个交互示例里，`margin-right: auto` 可以模拟 float 效果，可是却没有解释为什么可以。
+
+我们可以用 flex-direction、flex-wrap、order 属性来操纵 flex 布局为双维度布局，可是 Grid 提供了更加简单的方案，所以我们不要再去研究这种奇技淫巧了吧！
+
+## flex-direction
+
+「Interactive Review」中的首图也太漂亮了吧！很美观的展示了方向的定义欸！
+
+row、row-reverse、column、column-reverse 是和 writing-mode 有关的，在英语中（ltr 语种），row 是从左到右，row-reverse 是从右到左，column 是从上到下，column-reverse 是从下到上。比如在 MDN 中，row 代表主轴方向遵循文本方向。
+
+利用 `flex-direction: row-reverse; justify-content: flex-end` 可以轻松的反转 flex 子项的排序，但这种反转只是视觉上的，当用户使用键盘来聚焦项目的时候，其顺序仍然会遵循 dom 顺序，于是这就有可能会成为无障碍访问的障碍（因为这会让视觉与 DOM 相反）。
+
+## flex-wrap
+
+nowrap：禁止换行（将会导致溢出），行头行尾方向遵循 flex-direction 的方向
+
+wrap、wrap-reverse 则是可以换行。然而换行的方向是怎么确定的呢？？？
+
+## order
+
+flex 容器会按照 order 的升序和自己的方向来排序子项，如果 order 相同，则按照 dom顺序来排序，默认情况下，大家的 order 都是 0。
+
+order 只是改变了子项在视觉上的布局顺序，但是没有改变子项在 dom 中的顺序，因此对于 tab 聚焦这种事情来说，它可能会造成可访问性的障碍。
+
+## z-index
+
+flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin 来实现重叠），z-index 大者获胜。
+
+## 布局冲突
+
+> 事实上，一个元素只能参与一种布局，如果有应用多种布局，那么最后也只有一种布局会被采用。
+
+如果一个元素同时被赋予了定位布局和其它布局策略，那么定位布局就总是会被采用，另一种布局则会被忽略。比如下例中的 div 会采用定位布局而不是弹性布局，section 会忽略掉这个 div，就好像 section 内部只有一个 p 一样。
+
+```html
+<section>
+	<div></div>
+    <p></p>
+</section>
+
+<style>
+    section {
+        display: flex;
+    }
+    
+    div:first-child {
+        position: fixed;
+    }
+</style>
+```
+
+relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 sticky 布局，那么弹性布局和相对定位布局/沾滞定位布局功存，对于相对定位布局而言，他就是表现的和一个正常的 flex 子项一模一样，不过我们还可以额外的使用 top/right/bottom/left 来偏移它。对于沾滞定位布局，虽然也能工作，但是有很多额外的陷阱...
