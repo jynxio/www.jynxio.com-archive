@@ -105,7 +105,7 @@ flex-shink 只接受非负整数，当所有 flex 子项的主尺寸之和大于
 
 「Groups and Gaps」中的第一个交互示例里，`margin-right: auto` 可以模拟 float 效果，可是却没有解释为什么可以。
 
-我们可以用 flex-direction、flex-wrap、order 属性来操纵 flex 布局为双维度布局，可是 Grid 提供了更加简单的方案，所以我们不要再去研究这种奇技淫巧了吧！
+我们可以用 flex-direction、flex-wrap、order 属性来操纵 flex 布局为双维度布局，可是 Grid 提供了更加简单的方案，所以我们不要再去研究这种奇技淫巧了吧！比如，flex-wrap 可以实现换行，然后实现双维布局，但是他是有限制的，比如你做终极练习的时候，最后一个商品的尺寸很难和前面的商品的尺寸完全一致，这就是 flexbox 的限制。因为有这些情况，所以才推荐你使用 grid 来做双维度布局。
 
 ## flex-direction
 
@@ -130,6 +130,10 @@ order 只是改变了子项在视觉上的布局顺序，但是没有改变子�
 ## z-index
 
 flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin 来实现重叠），z-index 大者获胜。
+
+## flex
+
+flex 缩写是有陷阱的，比如 `flex: 1` 时的 `flex-basis` 为 `0`，而不是默认值 `auto`。你要继续看看有没有别的陷阱！
 
 ## 布局冲突
 
