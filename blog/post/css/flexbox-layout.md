@@ -2,6 +2,10 @@
 typora-root-url: ./..\..\image
 ---
 
+# 弹性布局
+
+## 概述
+
 **Flexbox is still relevant,** even with CSS Grid reaching wide browser support. It's a different tool for a different job: CSS Grid works best for two-dimensional layouts, while Flexbox offers more flexibility for working with a single dimension.
 
 Grid 是 Flexbox 的完全替代品，目前仍旧使用 Flexbox 的原因有 2：

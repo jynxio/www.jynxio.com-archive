@@ -16,8 +16,10 @@
     },
     "dependencies": {
         "@solidjs/router": "^0.8.3",
+        "@types/three": "^0.157.2",
         "fuse.js": "^6.6.2",
-        "solid-js": "^1.8.3"
+        "solid-js": "^1.8.3",
+        "three": "^0.157.0"
     },
     "devDependencies": {
         "@konghayao/cn-font-split": "^4.9.0",
