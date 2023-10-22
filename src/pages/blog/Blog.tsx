@@ -1,9 +1,9 @@
 import style from './Blog.module.css';
-import Nav from '@/components/blog/Nav';
-import Post from '@/components/blog/Post';
+import Nav from '@/components/blog/nav';
+import Post from '@/components/blog/post';
 import { lazy } from 'solid-js';
 
-const LazySearch = lazy(() => import('@/components/blog/Search'));
+const LazySearch = lazy(() => import('@/components/blog/search'));
 
 function Blog() {
     return (

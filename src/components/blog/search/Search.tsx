@@ -1,5 +1,5 @@
 import style from './Search.module.css';
-import checkOs from '@/helpers/checkOs';
+import checkOs from '@/utils/checkOs';
 import data from '@/temps/configs/detailCatalog.json';
 import Fuse from 'fuse.js';
 import * as store from '@/stores/search';
@@ -82,7 +82,7 @@ function Search() {
                             <For each={getList()}>
                                 {(item, getIndex) => (
                                     <A
-                                        href={`/${item.topicName}/${item.postName}`}
+                                        href={`/blog/${item.topicName}/${item.postName}`}
                                         class={style.link}
                                         innerHTML={item.html}
                                         classList={{ [style.selected]: isSelected(getIndex()) }}

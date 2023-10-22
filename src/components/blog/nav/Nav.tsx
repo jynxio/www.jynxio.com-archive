@@ -1,5 +1,5 @@
 import style from './Nav.module.css';
-import Theme from '@/components/blog/Theme';
+import Theme from '@/components/blog/theme';
 import catalogData from '@/temps/configs/detailCatalog.json';
 import * as searchStore from '@/stores/search';
 import { useNavigate, useParams } from '@solidjs/router';
@@ -107,11 +107,11 @@ function Catalog() {
     );
 
     function handleTopicClick([topicName]: [string]) {
-        navigate(isTargetTopic(topicName) ? '/' : `/${topicName}`);
+        navigate(isTargetTopic(topicName) ? '/blog/' : `/blog/${topicName}`);
     }
 
     function handlePostClick([topicName, postName]: [string, string]) {
-        navigate(`/${topicName}/${postName}`);
+        navigate(`/blog/${topicName}/${postName}`);
     }
 }
 

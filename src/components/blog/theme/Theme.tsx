@@ -3,10 +3,7 @@ import style from './Theme.module.css';
 function Theme(props: { mode: 'light' | 'dark' }) {
     return (
         <span class={style.theme}>
-            <span
-                class={`${style.icon} ${style.sun}`}
-                classList={{ [style.selected]: props.mode === 'light' }}
-            >
+            <span class={`${style.icon} ${style.sun}`} classList={{ [style.selected]: props.mode === 'light' }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -30,10 +27,7 @@ function Theme(props: { mode: 'light' | 'dark' }) {
                     <path d="m19.07 4.93-1.41 1.41" />
                 </svg>
             </span>
-            <span
-                class={`${style.icon} ${style.moon}`}
-                classList={{ [style.selected]: props.mode === 'dark' }}
-            >
+            <span class={`${style.icon} ${style.moon}`} classList={{ [style.selected]: props.mode === 'dark' }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
