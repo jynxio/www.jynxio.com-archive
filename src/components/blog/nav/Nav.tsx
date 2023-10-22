@@ -116,6 +116,7 @@ function Catalog() {
 }
 
 function Control() {
+    const navigate = useNavigate();
     const themeKey = 'www.jynxio.com-theme';
     const themeValue = ((): 'light' | 'dark' => {
         const storage = localStorage.getItem(themeKey);
@@ -133,6 +134,29 @@ function Control() {
 
     return (
         <section class={style.control}>
+            <span class={style.icon}>
+                <a onClick={event => (event.preventDefault(), navigate('/home'))}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-door-open"
+                    >
+                        <path d="M13 4h3a2 2 0 0 1 2 2v14" />
+                        <path d="M2 20h3" />
+                        <path d="M13 20h9" />
+                        <path d="M10 12v.01" />
+                        <path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z" />
+                    </svg>
+                    <span class={style.identifier}>homepage</span>
+                </a>
+            </span>
             <span class={style.icon}>
                 <a href="https://github.com/jynxio" target="_blank">
                     <svg
@@ -184,10 +208,19 @@ function Control() {
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-circle-dot"
+                        class="lucide lucide-bug"
                     >
-                        <circle cx="12" cy="12" r="10" />
-                        <circle cx="12" cy="12" r="1" />
+                        <path d="m8 2 1.88 1.88" />
+                        <path d="M14.12 3.88 16 2" />
+                        <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" />
+                        <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" />
+                        <path d="M12 20v-9" />
+                        <path d="M6.53 9C4.6 8.8 3 7.1 3 5" />
+                        <path d="M6 13H2" />
+                        <path d="M3 21c0-2.1 1.7-3.9 3.8-4" />
+                        <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" />
+                        <path d="M22 13h-4" />
+                        <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" />
                     </svg>
                     <span class={style.identifier}>issue</span>
                 </a>
