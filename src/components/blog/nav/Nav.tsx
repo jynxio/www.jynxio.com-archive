@@ -135,7 +135,10 @@ function Control() {
     return (
         <section class={style.control}>
             <span class={style.icon}>
-                <a onClick={event => (event.preventDefault(), navigate('/home'))}>
+                <a
+                    href="/home" /* 请保留href属性，以便于浏览器在光标悬停时预报目的地址 */
+                    onClick={event => (event.preventDefault(), navigate('/home'))}
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
