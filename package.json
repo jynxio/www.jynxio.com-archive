@@ -9,10 +9,10 @@
         "deploy": "vercel deploy --prod dist",
         "preview": "vite preview",
         "build:all": "pnpm run build:catalog && pnpm run build:blog && pnpm run build:webp",
-        "build:font": "node --loader ts-node/esm ./src/utils/createFont.ts",
-        "build:blog": "node ./src/utils/createBlog.js",
-        "build:webp": "node --loader ts-node/esm ./src/utils/createWebp.ts",
-        "build:catalog": "node --loader ts-node/esm ./src/utils/createCatalog.ts"
+        "build:font": "node --loader ts-node/esm ./src/generators/createFont.ts",
+        "build:blog": "node ./src/generators/createBlog.js",
+        "build:webp": "node --loader ts-node/esm ./src/generators/createWebp.ts",
+        "build:catalog": "node --loader ts-node/esm ./src/generators/createCatalog.ts"
     },
     "dependencies": {
         "@solidjs/router": "^0.8.3",
