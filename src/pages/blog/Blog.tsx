@@ -3,7 +3,7 @@ import Nav from '@/components/blog/nav';
 import Post from '@/components/blog/post';
 import { lazy } from 'solid-js';
 
-const LazySearch = lazy(() => import('@/components/blog/search'));
+const Search = lazy(() => import('@/components/blog/search'));
 
 function Blog() {
     return (
@@ -14,7 +14,7 @@ function Blog() {
             <section class={style.post}>
                 <Post />
             </section>
-            <LazySearch />
+            <Search />
         </main>
     );
 }
