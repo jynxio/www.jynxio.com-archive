@@ -47,9 +47,10 @@ vec4 warp( vec2 uv, float time ) {
     vec3 blackColor  = vec3( 0.067, 0.078, 0.098 );
     vec3 greenColor  = vec3( 0.000, 0.502, 0.502 );
     vec3 purpleColor = vec3( 0.220, 0.259, 0.514 );
+    vec3 darkBlueColor = vec3( 0.204, 0.306, 0.475 );
     vec3 mixedColor = blackColor;
 
-    mixedColor = mix( mixedColor, purpleColor, ratio * 6.0 );
+    mixedColor = mix( mixedColor, darkBlueColor, ratio * 6.0 );
 
     return vec4( mixedColor * strength, 1.0 );
 
