@@ -30,6 +30,10 @@ class Shine {
         this.getEntity().position.set(x, y, z);
     }
 
+    getVisible() {
+        return this.getEntity().visible;
+    }
+
     setVisible(visible: boolean) {
         this.getEntity().visible = visible;
     }

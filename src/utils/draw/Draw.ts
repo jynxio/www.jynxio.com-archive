@@ -52,7 +52,6 @@ class Draw {
         scene.add(shine.getEntity());
 
         const handleMouseleave = () => shine.setVisible(false);
-        const handleMouseenter = () => shine.setVisible(true);
         // const handleMousedown = () => shine.blink();
         const handleMousemove = (event: MouseEvent) => {
             /**
@@ -68,15 +67,14 @@ class Draw {
              *  x = event.offsetX - size.x / 2;
              *  y = size.y / 2 - event.offsetY;
              */
-
             const x = event.offsetX - size.x / 2;
             const y = size.y / 2 - event.offsetY;
 
             shine.setPosition(x, y, -1);
+            shine.getVisible() || shine.setVisible(true);
         };
 
-        canvas.addEventListener('mouseleave', handleMouseleave); // 请销毁
-        canvas.addEventListener('mouseenter', handleMouseenter);
+        canvas.addEventListener('mouseleave', handleMouseleave);
         // canvas.addEventListener('mousedown', handleMousedown);
         canvas.addEventListener('mousemove', handleMousemove);
 
@@ -97,7 +95,6 @@ class Draw {
          */
         this.internalDispose = () => {
             canvas.removeEventListener('mouseleave', handleMouseleave);
-            canvas.removeEventListener('mouseenter', handleMouseenter);
             // canvas.removeEventListener('mousedown', handleMousedown);
             canvas.removeEventListener('mousemove', handleMousemove);
 
