@@ -163,3 +163,11 @@ flex 缩写是有陷阱的，比如 `flex: 1` 时的 `flex-basis` 为 `0`，而�
 ```
 
 relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 sticky 布局，那么弹性布局和相对定位布局/沾滞定位布局功存，对于相对定位布局而言，他就是表现的和一个正常的 flex 子项一模一样，不过我们还可以额外的使用 top/right/bottom/left 来偏移它。对于沾滞定位布局，虽然也能工作，但是有很多额外的陷阱...
+
+## 关于阮一峰的 Flex 教程的笔记
+
+行内元素也可以使用 Flex 布局：`span { display: inline-flex }`。
+
+设为 Flex 布局以后，子元素的`float`、`clear`和`vertical-align`属性将失效。
+
+容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis）。主轴的开始位置（与边框的交叉点）叫做`main start`，结束位置叫做`main end`；交叉轴的开始位置叫做`cross start`，结束位置叫做`cross end`。
