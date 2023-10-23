@@ -171,3 +171,8 @@ relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 s
 设为 Flex 布局以后，子元素的`float`、`clear`和`vertical-align`属性将失效。
 
 容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis）。主轴的开始位置（与边框的交叉点）叫做`main start`，结束位置叫做`main end`；交叉轴的开始位置叫做`cross start`，结束位置叫做`cross end`。
+
+## 关于 Josh 的文章
+When we flip display to flex, we create a “flex formatting context”.
+
+默认情况下，子项将聚集在主轴（primary axis）的开头，并且会通过拉伸自己来填满整个交叉轴（cross axis）。
