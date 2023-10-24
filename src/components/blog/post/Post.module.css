@@ -106,31 +106,44 @@
     --block-gap: 1rem;
     --content-inline-size: 52rem;
 
-    overflow: auto;
+    overflow-y: auto;
+    position: relative;
     block-size: 100%;
-    scrollbar-width: thin;
-    scrollbar-color: #444 transparent;
+    scrollbar-width: 0;
 
     &::-webkit-scrollbar {
-        display: initial;
-        inline-size: 8px;
-        background-color: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #444;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
+        inline-size: 0;
     }
 
     > article {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        right: 0;
         max-inline-size: var(--content-inline-size);
         border-inline: var(--block-gap) solid transparent;
         border-block: var(--block-gap) solid transparent;
         margin-inline: auto;
         color: var(--paragraph-color);
+    }
+
+    > .background {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: sticky;
+        z-index: 0;
+        top: 0;
+        inline-size: 100%;
+        block-size: 100%;
+
+        > div {
+            flex: 1 0 auto;
+            max-inline-size: calc(var(--content-inline-size) * 0.68);
+            color: var(--scroll-tip-color);
+            opacity: 0.3;
+        }
     }
 }
 

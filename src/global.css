@@ -24,6 +24,7 @@
     --heading-color: #000;
     --paragraph-color: #303030;
     --comment-color: #999;
+    --scroll-tip-color: #e6e6e6;
 
     & jynxio-codeblock code.dark {
         display: none;
@@ -39,6 +40,7 @@
     --heading-color: #fff;
     --paragraph-color: #e7e7e7;
     --comment-color: #999;
+    --scroll-tip-color: #1c1c1c;
 
     & jynxio-codeblock code.light {
         display: none;
