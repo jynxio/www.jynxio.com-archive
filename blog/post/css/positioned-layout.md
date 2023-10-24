@@ -207,7 +207,14 @@ function findCulprits(element) {
 
 > 为避免混淆，我需阐明一个事情：沾滞定位元素会根据包含块来计算百分比宽度和偏移量，然后在父元素中占据空间，最后沾滞在最近滚动容器上。
 
-一个易被忽略的知识是：沾滞定位元素仍然受到父元素的限制，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。不过，如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
+### 突破预设极限
+
+沾滞定位元素并非永远无法突破预设极限，已知的方案有两种：
+
+- 借助父元素；
+- 借助滚动容器；
+
+关于「借助父元素」，具体来说，沾滞定位元素总是会被父元素束缚住，当父元素的 content box 逐渐离开最近滚动容器的可视区域时，沾滞定位元素也会一并离开。如果你想让沾滞定位元素更晚一些离开，那么可以尝试为其设置 `margin` 来使其超出父元素的 content box 以达到你的目的。
 
 ```html
 <section class="scroll-container">
@@ -227,7 +234,30 @@ function findCulprits(element) {
 </style>
 ```
 
-![沾滞定位元素受限于父元素](/css/positioned-layout/sticky-element-clamp.png)
+![突破预设极限 - 借助父元素](/css/positioned-layout/breakthrough-by-parent.png)
+
+关于「借助滚动容器」，具体来说，哪怕沾滞定位元素超出（甚至完全离开）了可视区域，但是只要拉到滚动容器的底部，那么沾滞定位元素就会重现在可视区域，这是因为沾滞定位元素也会被滚动容器的 content box 所束缚。
+
+> 我没有完全弄明白此事的规律。
+
+```html
+<section class="scroll-container">
+    <div class="sticky"></div>
+</section>
+
+<style>
+	.scroll-container {
+		overflow-y: scroll;
+	}
+
+	.sticky {
+		position: sticky;
+		top: 100%;
+	}
+</style>
+```
+
+![突破预设极限 - 借助滚动容器](/css/positioned-layout/breakthrough-by-container.png)
 
 ### 自动搜寻最近滚动容器
 
@@ -253,7 +283,9 @@ function findCulprits(element) {
 
 包含块（containing block）是一块用于包含元素的空间，比如元素的 content box 或 padding box 都能成为包含块。
 
-当元素的 `width`、`height`、`top`、`right`、`bottom`、`left` 属性采用了百分比值的时候，这些百分比值的计算基准就取自于包含块。具体来说：元素的 `height`、`top`、`bottom` 属性的百分比值的计算基准是其包含块的 `height`，对于 `width`、`left`、`right` 而言，则是其包含块的 `width`。
+当元素的 `width`、`height`、`padding`、`margin`、`top`、`right`、`bottom`、`left` 属性采用了百分比值的时候，这些百分比值的计算基准就取自于包含块。具体来说：元素的 `height`、`top`、`bottom` 属性的百分比值的计算基准是其包含块的 `height`，对于 `width`、`padding`、`margin`、`left`、`right` 而言，则是其包含块的 `width`。
+
+> 注意，`border-width` 不接受 `<percentage>`。
 
 ### 定位布局元素的包含块
 
