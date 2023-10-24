@@ -11,11 +11,13 @@
 
 .nav {
     flex: 0 0 var(--nav-width);
+    order: 1;
     block-size: 100%;
 }
 
 .post {
-    overflow: hidden;
     flex: 0 0 var(--post-width);
+    order: 2;
     block-size: 100%;
+    overflow: hidden;
 }
