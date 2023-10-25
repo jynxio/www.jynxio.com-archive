@@ -184,3 +184,49 @@ When we flip display to flex, we create a “flex formatting context”.
 justify 代表在主轴上的布局，align 代表在交叉轴上的布局。子项在主轴方向上，只能成群的行动，因此要用 justify-content，因为 content 代表一堆东西。子项在交叉轴方向上可以单独行动，因此可以用 items 或 self，因为这就代表着单个东西。
 
 > 那有没有 align-content 呢？其实 align-items 就对应 align-content，对不对？（content 对应 items 嘛）
+
+一个不太容易理解的事情，看下面的代码，这说明一件事情，在弹性盒布局中，width 只能代表一个假设宽度，而不是一个硬性宽度，规范对此给了一个名字“hypothetical size”。Josh：`flex-basis` and `width` set the elements' *hypothetical size*. 
+
+```html
+<main>
+  <div></div>
+  <hr />
+  <section>
+    <div></div>
+  </section>
+</main>
+
+<style>
+  main {
+    inline-size: 9rem;
+    padding: 1rem;
+    border: 2px dashed black;
+  }
+  
+  section {
+    display: flex;
+  }
+  
+  div {
+    /* flex-shrink: 0; */
+    block-size: 3rem;
+    inline-size: 100rem;
+    border: 2px solid black;
+    background-color: hotpink;
+  }
+</style>
+```
+
+`flex-basis` 和 `width / height` 的区别在于，前者更加灵活，在 Flex row 模式中，它代表 `width`，在 Flex column 中，它代表 `height`。而 width 永远都代表 width，height 永远都代表 height。`flex-basis` 的好处就是，它的方向永远跟着主轴走。
+
+但是 width 也会有一些区别，比如在可替换元素（比如 img 元素）中，width 的作用和 flex-basis 是不同的，另外，width 可以突破元素的最小宽度，但是 flex-basis 不可以。
+
+对于 `flex-grow` 的计算机制，文章中的「I think it'll be easier to explain visually. Try incrementing/decrementing each child:」部分的例子非常棒！
+
+对于 `flex-shrink` 的计算机制，抄这个例子！「**Let's test it.** Try shrinking the container to see what happens:」🧠 原来 flex-shrink 的收缩会收到 flex-basis 的影响！（width 也和 flex-basis 一样会影响 flex-shrink）。flex-shrink 之所以会收到 flex-basis 的影响，是因为这样可以在收缩之后，item 之间的尺寸的比例关系也可以继续维持下去。
+
+TODO：从「Take a couple of minutes and poke at this demo. **See if you can figure out what's going on here.** We'll explore below.」这里开始看！我还没搞懂 flex-shrink 的规律呢。
+
+## 参考资料
+
+https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/
