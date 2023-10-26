@@ -225,7 +225,39 @@ justify 代表在主轴上的布局，align 代表在交叉轴上的布局。子
 
 对于 `flex-shrink` 的计算机制，抄这个例子！「**Let's test it.** Try shrinking the container to see what happens:」🧠 原来 flex-shrink 的收缩会收到 flex-basis 的影响！（width 也和 flex-basis 一样会影响 flex-shrink）。flex-shrink 之所以会收到 flex-basis 的影响，是因为这样可以在收缩之后，item 之间的尺寸的比例关系也可以继续维持下去。
 
-TODO：从「Take a couple of minutes and poke at this demo. **See if you can figure out what's going on here.** We'll explore below.」这里开始看！我还没搞懂 flex-shrink 的规律呢。
+“Alright, so: we have two children, each with a hypothetical size of 250px. The container needs to be at least 500px wide to contain these children at their hypothetical size.” 从这句话可以看出，当容器尺寸小于子项的假设尺寸之和时，才开始考虑 shrink，同理可得，当容器尺寸大于子项的假设尺寸之和时，此开始考虑 grow。这也意味着，shrink 和 grow 不可能同时发挥作用。
+
+这个例子在说「Take a couple of minutes and poke at this demo. **See if you can figure out what's going on here.** We'll explore below.」shrink 的原理。
+
+关于 shrink 的原理，见：
+
+```html
+<section>
+  <div></div>
+  <div></div>
+</section>
+
+<style>
+  section {
+    display: flex;
+    block-size: 300px;
+    inline-size: 400px;
+    border: 2px dashed black;
+  }
+
+  div:first-child {
+    flex: 1 5 250px; /* 5 */
+    background-color: hotpink;
+  }
+
+  div:last-child {
+    flex: 1 2 500px; /* 4 */
+    background-color: cornflowerblue;
+  }
+</style>
+```
+
+
 
 ## 参考资料
 
