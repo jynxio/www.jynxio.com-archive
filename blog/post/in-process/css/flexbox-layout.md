@@ -259,6 +259,31 @@ justify 代表在主轴上的布局，align 代表在交叉轴上的布局。子
 
 原来 min-inline-size 和 max-inline-size 会限制收缩和拉伸的极限。当 `flex-shrink: 0` 之后，便意味着不再会收缩，便意味着 `width` 或 `flex-basis` 就是最小宽度。
 
+### 最小宽度陷阱
+
+flex 布局无法将子项缩小至最小尺寸以下，哪怕你设置了 `flex-shrink`，而有两种情况下，元素是会有隐形的最小尺寸的，这会导致设置了 `flex-shrink` 的元素无法收缩至 0 尺寸：
+
+- text input 元素有内建的最小尺寸，170px-200px 不等（取决于浏览器），这个最小尺寸似乎是无法在浏览器开发者面板所检查到的；
+- 元素的文字内容，最长的不可换行的字符串将会成为元素的最小尺寸；
+
+如何解决这个问题？就是 `mini-width: 0`，可是这样做其实也会引发糟糕的事情，比如虽然元素尺寸收缩为 0，但是内容却会溢出元素的范围。
+
+### auto margin 技巧
+
+将 margin-?-? 设置为 auto，那么就可以将页面的多余空间全部转化为该元素的该方向上的 margin，使其与其它元素隔离开来，这个技巧有利于做某些布局。详见「Auto margins are much more interesting in Flexbox:」的例子。
+
+### flex-wrap
+
+`flex-wrap: wrap` 之后，子项就不会被缩小，而是当空间不足时就直接换行。当然，如果独占一行时空间还不够假设空间的话，那么就会缩小。
+
+当换行之后，容器内就有多个主轴了，而不是一条主轴。
+
+当有了多条主轴之后，有意思的事情便发生了。`justify-content` 会一次性的控制所有主轴上的对齐方式（空间分布，distribution of space），而如果我们想把交叉轴上的所有项目的空间分布，那么就要使用 `align-content`（content 和 items 的命名的区别证明就来了）。并且，我们还可以用 `align-self` 来控制交叉轴上的特定子项的对齐方式！
+
+align-content 控制所有项目在交叉轴上的空间分布，align-items 控制一条主轴上的所有项目在交叉轴方向上的空间分布。
+
+> 理所当然的，`align-content` 只对多行的 flex 容器有影响。
+
 ## 参考资料
 
 https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/
