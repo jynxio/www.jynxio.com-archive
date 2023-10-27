@@ -257,7 +257,7 @@ justify 代表在主轴上的布局，align 代表在交叉轴上的布局。子
 </style>
 ```
 
-
+原来 min-inline-size 和 max-inline-size 会限制收缩和拉伸的极限。当 `flex-shrink: 0` 之后，便意味着不再会收缩，便意味着 `width` 或 `flex-basis` 就是最小宽度。
 
 ## 参考资料
 
