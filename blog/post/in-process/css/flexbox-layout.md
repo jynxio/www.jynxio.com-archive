@@ -2,22 +2,28 @@
 typora-root-url: ./..\..\image
 ---
 
-# 弹性布局
+# Flex 布局
 
 ## 概述
 
-**Flexbox is still relevant,** even with CSS Grid reaching wide browser support. It's a different tool for a different job: CSS Grid works best for two-dimensional layouts, while Flexbox offers more flexibility for working with a single dimension.
+flex 布局的全称为「flexible box layout」，它是一种一维的弹性的布局。如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 元素（flex item）。flex 容器会处于原来的布局，flex 元素会处于 flex 布局。
 
-Grid 是 Flexbox 的完全替代品，目前仍旧使用 Flexbox 的原因有 2：
+`display: flex` 和 `display: inline-flex` 的区别在于，前者会使 flex 容器成为块级元素（block-level element），后者会使 flex 容器成为行内块元素（inline-block element），除此之外，便再无其他区别了。
 
-- Flexbox 的兼容性更好；
-- Flexbox 在单轴控制上更方便；
+> 为什么不用 Grid 布局来替代 Flex 布局？因为在一维情况下，Flex 布局要更简单，尽管 Grid 布局已经可以完全替代 Flex 布局了。
 
-When we apply `display: flex` to an element, we toggle the "Flexbox" layout algorithm for the element's *children*. The parent element will still use Flow layout.
+## 语法
 
-如果 `display: flex`，那么元素的子元素就会启用 Flexbox 布局，而元素本身仍然会处于其原来的布局系统之中，元素本身会变成 flex container。
+| 用于 flex 容器    | 用于 flex 元素 |
+| ----------------- | -------------- |
+| `justify-content` | `flex-basis`   |
+| `align-content`   | `flex-grow`    |
+| `align-items`     | `flex-shrink`  |
+| `gap`             | `align-self`   |
 
-「Directions and Alignment」中的关于 Flexbox layout 的各种值的「可互动例子」真是太棒了！这让我开始考虑“我要不要切换到 MDX ？”。
+
+
+## 概述
 
 注意：flex 子项会自动充满副轴，除非用 block-size 来覆写。
 
