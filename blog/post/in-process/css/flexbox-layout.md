@@ -16,21 +16,72 @@ flex 布局的全称为「flexible box layout」，它是一种一维的弹性�
 
 | 用于 flex 容器    | 用于 flex 元素 |
 | ----------------- | -------------- |
-| `justify-content` | `flex-basis`   |
-| `align-content`   | `flex-grow`    |
-| `align-items`     | `flex-shrink`  |
-| `gap`             | `align-self`   |
+| `flex-direction`  | `flex-basis`   |
+| `justify-content` | `flex-grow`    |
+| `align-content`   | `flex-shrink`  |
+| `align-items`     | `align-self`   |
+| `gap`             |                |
 
+## 布局冲突
 
+通常，元素只能采用一种布局模式，如果我们尝试为元素赋予多种布局模式，那么元素最后也只会采用其中的一种。
 
-## 概述
+具体来说，如果一个元素被同时赋予了定位布局和其他布局，那么元素就总是会采用定位布局，然后忽略另一种布局。比如下例中的 `<div>` 会采用定位布局而不是 flex 布局，`<section>` 会忽略掉 `<div>`，`<div>` 会忽略掉其余的 flex 元素（这对计算固定布局元素的初始位置会有影响）。
 
-注意：flex 子项会自动充满副轴，除非用 block-size 来覆写。
+```html
+<section style="display: flex">
+    <div style="flex-grow: 1"></div>
+    <div style="position: fixed; flex-grow: 1"></div>
+    <div style="flex-grow: 1"></div>
+</section>
+// TODO
+<style>
+    section {
+        display: flex;
+    }
+    
+    div {
+        flex-grow: 1;
+    }
+    
+    div:nth-child(2) {
+        position: fixed;
+    }
+</style>
+```
 
-## align-items: baseline
+```html
+<section>
+	<div></div>
+    <p></p>
+</section>
+
+<style>
+    section {
+        display: flex;
+    }
+    
+    div:first-child {
+        position: fixed;
+    }
+</style>
+```
+
+relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 sticky 布局，那么弹性布局和相对定位布局/沾滞定位布局功存，对于相对定位布局而言，他就是表现的和一个正常的 flex 子项一模一样，不过我们还可以额外的使用 top/right/bottom/left 来偏移它。对于沾滞定位布局，虽然也能工作，但是有很多额外的陷阱...
+
+## 
+
+## 轴
+
+## flex-direction
+
+## justify-content
+
+## align-content
+
+## align-items
 
 > 疑问：如果子项们的 baseline 是不一样的，那么 `align-items: baseline` 时，应该选用谁的 baseline 来锚定呢？
->
 
 `align-items: baseline` 具有穿透性，下例中，虽然 3 个 `Sph` 的字号不同，但是它们的文字基线都会对齐（关于文字基线，请看 [这里](https://en.wikipedia.org/wiki/Baseline_(typography))）。
 
@@ -57,7 +108,13 @@ flex 布局的全称为「flexible box layout」，它是一种一维的弹性�
 </style>
 ```
 
+## gap
 
+## flex-basis
+
+## flex-grow
+
+## flex-shrink
 
 ## align-self
 
@@ -111,6 +168,8 @@ flex-shink 只接受非负整数，当所有 flex 子项的主尺寸之和大于
 
 > flex-wrap 被用于双维度布局，但事实上，此时我们应该使用 Grid 布局，后者更棒。
 
+
+
 ## 其它
 
 「Groups and Gaps」中的第一个交互示例里，`margin-right: auto` 可以模拟 float 效果，可是却没有解释为什么可以。
@@ -144,31 +203,6 @@ flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin �
 ## flex
 
 flex 缩写是有陷阱的，比如 `flex: 1` 时的 `flex-basis` 为 `0`，而不是默认值 `auto`。你要继续看看有没有别的陷阱！
-
-## 布局冲突
-
-> 事实上，一个元素只能参与一种布局，如果有应用多种布局，那么最后也只有一种布局会被采用。
-
-如果一个元素同时被赋予了定位布局和其它布局策略，那么定位布局就总是会被采用，另一种布局则会被忽略。比如下例中的 div 会采用定位布局而不是弹性布局，section 会忽略掉这个 div，就好像 section 内部只有一个 p 一样。
-
-```html
-<section>
-	<div></div>
-    <p></p>
-</section>
-
-<style>
-    section {
-        display: flex;
-    }
-    
-    div:first-child {
-        position: fixed;
-    }
-</style>
-```
-
-relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 sticky 布局，那么弹性布局和相对定位布局/沾滞定位布局功存，对于相对定位布局而言，他就是表现的和一个正常的 flex 子项一模一样，不过我们还可以额外的使用 top/right/bottom/left 来偏移它。对于沾滞定位布局，虽然也能工作，但是有很多额外的陷阱...
 
 ## 关于阮一峰的 Flex 教程的笔记
 
