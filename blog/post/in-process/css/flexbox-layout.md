@@ -24,48 +24,31 @@ flex 布局的全称为「flexible box layout」，它是一种一维的弹性�
 
 ## 布局冲突
 
-通常，元素只能采用一种布局模式，如果我们尝试为元素赋予多种布局模式，那么元素最后也只会采用其中的一种。
+通常，元素只能采用一种布局模式，如果我们尝试为元素赋予多种布局模式，那么元素最后也只会采用其中的一种。具体来说，如果一个元素被同时赋予了定位布局和其他布局，那么元素就总是会采用定位布局，然后忽略另一种布局。
 
-具体来说，如果一个元素被同时赋予了定位布局和其他布局，那么元素就总是会采用定位布局，然后忽略另一种布局。比如下例中的 `<div>` 会采用定位布局而不是 flex 布局，`<section>` 会忽略掉 `<div>`，`<div>` 会忽略掉其余的 flex 元素（这对计算固定布局元素的初始位置会有影响）。
+比如，下例中的 `<div>` 会采用定位布局而不是 flex 布局，`<section>` 会忽略掉 `<div>`，`<div>` 会忽略掉其余的 flex 元素（这对计算固定布局元素的初始位置会有影响）。
 
 ```html
+<!-- 原始代码 -->
 <section style="display: flex">
-    <div style="flex-grow: 1"></div>
-    <div style="position: fixed; flex-grow: 1"></div>
-    <div style="flex-grow: 1"></div>
-</section>
-// TODO
-<style>
-    section {
-        display: flex;
-    }
-    
-    div {
-        flex-grow: 1;
-    }
-    
-    div:nth-child(2) {
-        position: fixed;
-    }
-</style>
-```
-
-```html
-<section>
-	<div></div>
-    <p></p>
+	<aside></aside>
+    <div style="position: fixed"></div>
+	<aside></aside>
 </section>
 
-<style>
-    section {
-        display: flex;
-    }
-    
-    div:first-child {
-        position: fixed;
-    }
-</style>
+<!-- section视角 -->
+<section style="display: flex">
+	<aside></aside>
+    <aside></aside>
+</section>
+
+<!-- div视角 -->
+<section style="display: flex">
+    <div style="position: fixed"></div>
+</section>
 ```
+
+
 
 relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 sticky 布局，那么弹性布局和相对定位布局/沾滞定位布局功存，对于相对定位布局而言，他就是表现的和一个正常的 flex 子项一模一样，不过我们还可以额外的使用 top/right/bottom/left 来偏移它。对于沾滞定位布局，虽然也能工作，但是有很多额外的陷阱...
 
