@@ -6,27 +6,47 @@ typora-root-url: ./..\..\image
 
 ## 概述
 
-flex 布局的全称为「flexible box layout」，它是一种一维的弹性的布局。如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 元素（flex item）。flex 容器会处于原来的布局，flex 元素会处于 flex 布局。
+flex 布局的全称为「flexible box layout」，它是一维的弹性的布局。
+
+如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 项（flex item），然后 flex 容器的内部将会激活 flex 布局，flex 项们都会参加进这个 flex 布局，不过 flex 容器还会留在原来的布局模式之中。需要注意的是，flex 项的 `float`、`clear`、`vertical-align` 属性将会失效。
 
 `display: flex` 和 `display: inline-flex` 的区别在于，前者会使 flex 容器成为块级元素（block-level element），后者会使 flex 容器成为行内块元素（inline-block element），除此之外，便再无其他区别了。
 
 > 为什么不用 Grid 布局来替代 Flex 布局？因为在一维情况下，Flex 布局要更简单，尽管 Grid 布局已经可以完全替代 Flex 布局了。
 
-## 语法
+## 布局的轴
 
-| 用于 flex 容器    | 用于 flex 元素 |
-| ----------------- | -------------- |
-| `flex-direction`  | `flex-basis`   |
-| `justify-content` | `flex-grow`    |
-| `align-content`   | `flex-shrink`  |
-| `align-items`     | `align-self`   |
-| `gap`             |                |
+flex 布局中有 2 种轴，分别是主轴（main axis）和交叉轴（cross axis），flex 项会沿着主轴的方向来堆叠与换行。
+
+[TODO: 主轴与交叉轴 + 多主轴]
+
+## 语法手册
+
+| 用于 flex 容器    | 用于 flex 项  |
+| ----------------- | ------------- |
+| `flex-direction`  | `flex-basis`  |
+| `justify-content` | `flex-grow`   |
+| `align-content`   | `flex-shrink` |
+| `align-items`     | `align-self`  |
+| `gap`             |               |
+
+### flex-direction
+
+`flex-drection` 用于设置主轴的方向，其值为 TODO
+
+TODO
+
+TODO
+
+TODO
+
+TODO
 
 ## 布局冲突
 
 通常，元素只能采用一种布局模式，如果我们尝试为元素赋予多种布局模式，那么元素最后也只会采用其中的一种。具体来说，如果一个元素被同时赋予了定位布局和其他布局，那么元素就总是会采用定位布局，然后忽略另一种布局。
 
-比如，下例中的 `<div>` 会采用定位布局而不是 flex 布局，`<section>` 会忽略掉 `<div>`，`<div>` 会忽略掉其余的 flex 元素（这对计算固定布局元素的初始位置会有影响）。
+比如，下例中的 `<div>` 会采用定位布局而不是 flex 布局。最后，对于 `<section>` 而言，它会忽略掉 `<div`，对于 `<div>` 而言，它会忽略掉其他的 flex 项（此行为对 `<div>` 的初始位置的计算会有影响）。
 
 ```html
 <!-- 原始代码 -->
@@ -48,19 +68,15 @@ flex 布局的全称为「flexible box layout」，它是一种一维的弹性�
 </section>
 ```
 
+例外的是，flex 布局可以和相对定位布局稳定的共存，也可以和沾滞定位布局不稳定的共存。比如只要为 flex 项激活相对定位布局，那么就可以直接使用相对定位布局的所有特性了，比如使用 `inset` 来偏移元素的位置，就像下例那样。不过，请不要为 flex 项激活沾滞定位布局，因为这两种布局不能稳定的共存，它们结合之后会触发一些难以理解的行为。
 
-
-relative 和 sticky 是例外，如果你给 flex 子项赋予了 relative 或 sticky 布局，那么弹性布局和相对定位布局/沾滞定位布局功存，对于相对定位布局而言，他就是表现的和一个正常的 flex 子项一模一样，不过我们还可以额外的使用 top/right/bottom/left 来偏移它。对于沾滞定位布局，虽然也能工作，但是有很多额外的陷阱...
-
-## 
-
-## 轴
-
-## flex-direction
-
-## justify-content
-
-## align-content
+```html
+<section style="display: flex">
+	<aside></aside>
+    <div style="position: relative; top: 1rem; left: 1rem"></div>
+    <aside></aside>
+</section>
+```
 
 ## align-items
 
@@ -189,9 +205,7 @@ flex 缩写是有陷阱的，比如 `flex: 1` 时的 `flex-basis` 为 `0`，而�
 
 ## 关于阮一峰的 Flex 教程的笔记
 
-行内元素也可以使用 Flex 布局：`span { display: inline-flex }`。
 
-设为 Flex 布局以后，子元素的`float`、`clear`和`vertical-align`属性将失效。
 
 容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis）。主轴的开始位置（与边框的交叉点）叫做`main start`，结束位置叫做`main end`；交叉轴的开始位置叫做`cross start`，结束位置叫做`cross end`。
 
