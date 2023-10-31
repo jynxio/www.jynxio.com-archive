@@ -34,6 +34,12 @@ flex 布局中有 2 种轴，分别是主轴（main axis）和交叉轴（cross 
 
 `flex-drection` 用于设置主轴的方向，其值为 TODO
 
+`dir: ltr | rtl | auto` 决定文本的书写方向（从左到右书写或从右到左书写），`writing-mode: horizontal-tb | vertical-rl | vertical-lr` 决定了文本块的堆叠方向，比如 `horizontal-tb` 表示文本块的堆叠方向是「自上而下」，而在一个本文块之内，本文的书写方向则取决于 `dir` 属性，`vertical-rl` 表示文本块的堆叠方向是「从右到左（对于 `dir: ltr` 而言）」或「从左到右（对于 `dir: rtl` 而言）」，`vertical-lr` 则与 `vertical-rl` 相反，而文本块内的的书写方向则取决于 `dir` 属性，具体来说 `ltr` 表示从上往下写，`rtl` 表示从下往上写。
+
+`flex-direction` 会受到 `dir` 和 `vertical-lr` 的共同影响。
+
+使用 `*-reverse` 的时候会影响到无障碍性访问，比如屏幕阅读器。
+
 TODO
 
 TODO
