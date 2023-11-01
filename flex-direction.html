@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title></title>
+        <style>
+            p {
+                inline-size: 20rem;
+                block-size: 20rem;
+                border: 3px dashed black;
+            }
+
+            .htb {
+                writing-mode: horizontal-tb;
+            }
+
+            .vlr {
+                writing-mode: vertical-lr;
+            }
+
+            .vrl {
+                writing-mode: vertical-rl;
+            }
+        </style>
+    </head>
+    <body>
+        <section dir="ltr">
+            <p class="htb"
+                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
+            >
+            <p class="vlr"
+                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
+            >
+            <p class="vrl"
+                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
+            >
+        </section>
+        <section dir="rtl">
+            <p class="htb"
+                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
+            >
+            <p class="vlr"
+                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
+            >
+            <p class="vrl"
+                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
+            >
+        </section>
+    </body>
+</html>

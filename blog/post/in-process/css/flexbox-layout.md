@@ -32,11 +32,37 @@ flex 布局中有 2 种轴，分别是主轴（main axis）和交叉轴（cross 
 
 ### flex-direction
 
-`flex-drection` 用于设置主轴的方向，其值为 TODO
+`flex-drection` 用于设置主轴的方向。事实上，主轴和交叉轴的方向是由 `dir`、`writing-mode`、`flex-direction` 3 个属性共同决定的，它们一共可以组合出 24 种情况。
 
-`dir: ltr | rtl | auto` 决定文本的书写方向（从左到右书写或从右到左书写），`writing-mode: horizontal-tb | vertical-rl | vertical-lr` 决定了文本块的堆叠方向，比如 `horizontal-tb` 表示文本块的堆叠方向是「自上而下」，而在一个本文块之内，本文的书写方向则取决于 `dir` 属性，`vertical-rl` 表示文本块的堆叠方向是「从右到左（对于 `dir: ltr` 而言）」或「从左到右（对于 `dir: rtl` 而言）」，`vertical-lr` 则与 `vertical-rl` 相反，而文本块内的的书写方向则取决于 `dir` 属性，具体来说 `ltr` 表示从上往下写，`rtl` 表示从下往上写。
+```
+flex-direction: row | row-reverse | column | column-reverse
+```
 
-`flex-direction` 会受到 `dir` 和 `vertical-lr` 的共同影响。
+TODO: 24 种情况的代码示例或图片
+
+`writing-mode` 用于控制文本的「横竖模式」和「换行方向」，`dir` 用于控制文本的「书写方向」。「横竖模式」只规定了文本沿着水平或垂直方向书写，「横竖模式」和「书写方向」共同决定了文本沿着从左到右、从右到左、从上到下、从下到上的方向书写。
+
+> [dir（HTML 属性）](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir) 和 [direction（CSS 属性）](https://developer.mozilla.org/en-US/docs/Web/CSS/direction) 都可以设置元素的书写方向，请尽可能的只使用前者，原因见 [此](https://developer.mozilla.org/en-US/docs/Web/CSS/direction)。
+
+| writing-mode    | 作用                                                       |
+| --------------- | ---------------------------------------------------------- |
+| `horizontal-tb` | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行 |
+| `vertical-lr`   | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行 |
+| `vertical-rl`   | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行 |
+
+| dir    | 作用                                                         |
+| ------ | ------------------------------------------------------------ |
+| `ltr`  | 对于 `writing-mode: horizontal-tb`，文本从左到右书写；对于 `wrting-mode: vertical-*`，文本从上到下书写 |
+| `rtl`  | 与 `ltr` 相反                                                |
+| `auto` | 浏览器自动的根据文本的内容来决定采用 `ltr` 或 `rtl`          |
+
+> 其实，`ltr` 和 `rtl` 分别是「left to right」和「right to left」的缩写。
+>
+> 我个人喜欢把 `ltr` 当成「start to end」，把 `rtl` 当成「end to start」。然后，`writing-mode: horizontal-tb` 的 start 是 left，end 是 right；`writing-mode: vertical-*` 的 start 是 top，end 是 bottom。
+
+TODO: dir 和 writing-mode 的 6 种情况的图
+
+
 
 使用 `*-reverse` 的时候会影响到无障碍性访问，比如屏幕阅读器。
 
