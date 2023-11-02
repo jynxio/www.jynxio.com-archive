@@ -6,19 +6,23 @@ typora-root-url: ./..\..\image
 
 ## 概述
 
-flex 布局的全称为「flexible box layout」，它是一维的弹性的布局。
+flex 布局（flexible box layout）是一种弹性布局。
+
+相较于 grid 布局，flex 布局在处理一维布局的时候更加简单，因此哪怕 grid 布局可以完全替代 flex 布局，我也仍然钟爱使用 flex 布局。
+
+## 启用
 
 如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 项（flex item），然后 flex 容器的内部将会激活 flex 布局，flex 项们都会参加进这个 flex 布局，不过 flex 容器还会留在原来的布局模式之中。需要注意的是，flex 项的 `float`、`clear`、`vertical-align` 属性将会失效。
 
 `display: flex` 和 `display: inline-flex` 的区别在于，前者会使 flex 容器成为块级元素（block-level element），后者会使 flex 容器成为行内块元素（inline-block element），除此之外，便再无其他区别了。
 
-> 为什么不用 Grid 布局来替代 Flex 布局？因为在一维情况下，Flex 布局要更简单，尽管 Grid 布局已经可以完全替代 Flex 布局了。
-
 ## 布局的轴
 
-flex 布局中有 2 种轴，分别是主轴（main axis）和交叉轴（cross axis），flex 项会沿着主轴的方向来堆叠与换行。
+flex 布局中有一至多条主轴（main axis）和一条交叉轴（cross axis），flex 项会沿着主轴来堆叠，沿着交叉轴来换行，主轴和交叉轴总是相互垂直。
 
-[TODO: 主轴与交叉轴 + 多主轴]
+主轴和交叉轴的方向会受到 `flex-direction`、`writing-mode` 和 `dir` 的影响，一共有 8 种不同的情况。
+
+[TODO: 8 种情况 + 多条主轴]
 
 ## 语法手册
 
@@ -32,17 +36,17 @@ flex 布局中有 2 种轴，分别是主轴（main axis）和交叉轴（cross 
 
 ### flex-direction
 
-`flex-drection` 用于设置主轴的方向。事实上，主轴和交叉轴的方向是由 `dir`、`writing-mode`、`flex-direction` 3 个属性共同决定的，它们一共可以组合出 24 种情况。
+`flex-direction` 可以影响主轴和交叉轴的方向，但它不能决定主轴和交叉轴的方向。事实上，主轴和交叉轴的方向要由 `flex-direction`、`writing-mode` 和 `dir` 3 个属性一起决定，这 3 个属性可以搭配出 24 种不同的组合（指属性值的组合），不过最后只有 8 种不同的情况（指主轴和交叉轴的情况）。
 
 ```
 flex-direction: row | row-reverse | column | column-reverse
 ```
 
-TODO: 24 种情况的代码示例或图片
-
 `writing-mode` 用于控制文本的「横竖模式」和「换行方向」，`dir` 用于控制文本的「书写方向」。「横竖模式」只规定了文本沿着水平或垂直方向书写，「横竖模式」和「书写方向」共同决定了文本沿着从左到右、从右到左、从上到下、从下到上的方向书写。
 
-> [dir（HTML 属性）](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir) 和 [direction（CSS 属性）](https://developer.mozilla.org/en-US/docs/Web/CSS/direction) 都可以设置元素的书写方向，请尽可能的只使用前者，原因见 [此](https://developer.mozilla.org/en-US/docs/Web/CSS/direction)。
+> 除了 `dir` 属性，`direction` 属性也可以设置元素的书写方向，它们的作用几乎相同，其中前者是 HTML 属性，后者是 CSS 属性。
+>
+> 因为“如无必要，勿增实体”，所以我只使用其中的一个家伙，我倾向于 `dir`，因为它似乎更简单，且 [MDN 也是如此推荐的](https://developer.mozilla.org/en-US/docs/Web/CSS/direction)。
 
 | writing-mode    | 作用                                                       |
 | --------------- | ---------------------------------------------------------- |
@@ -56,23 +60,33 @@ TODO: 24 种情况的代码示例或图片
 | `rtl`  | 与 `ltr` 相反                                                |
 | `auto` | 浏览器自动的根据文本的内容来决定采用 `ltr` 或 `rtl`          |
 
-> 其实，`ltr` 和 `rtl` 分别是「left to right」和「right to left」的缩写。
->
-> 我个人喜欢把 `ltr` 当成「start to end」，把 `rtl` 当成「end to start」。然后，`writing-mode: horizontal-tb` 的 start 是 left，end 是 right；`writing-mode: vertical-*` 的 start 是 top，end 是 bottom。
+其实，`ltr` 和 `rtl` 分别是「left to right」和「right to left」的缩写。我个人喜欢把 `ltr` 当作「start to end」，把 `rtl` 当作「end to start」，然后想象 `writing-mode: horizontal-tb` 的 start 是 left，end 是 right；`writing-mode: vertical-*` 的 start 是 top，end 是 bottom。
 
 TODO: dir 和 writing-mode 的 6 种情况的图
 
+### justify-content
 
+它可以控制所有 flex 项在主轴上的分布，仅当主轴上有多余的空间时，它才有效。
 
-使用 `*-reverse` 的时候会影响到无障碍性访问，比如屏幕阅读器。
+它是在 flex 项的尺寸和外边距计算完成之后才运行的，这意味着如果 flex 项通过膨胀或外边距扩张（比如 auto margin）来消耗完了主轴上的多余空间，那么该属性就会失效。
 
-TODO
+对齐主体是外边距盒子！见 [此](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_box_alignment#%E5%AF%B9%E9%BD%90%E4%B8%BB%E4%BD%93)。怪不得要考虑 auto margin？对齐主体指的是 flex 项的外边距盒子，对齐容器指的是 flex 容器。
 
-TODO
+基线自对齐通过在盒子外部增加外边距，从而移动盒子，实现对齐。那么 center 这些对齐也是需要移动 margin 的吗？
 
-TODO
+start 在意书写方向、left 在意物理方向、flex-start 在意 flex-direction 的 start 方向，是这样的，对吗？
 
-TODO
+我可以直接内嵌 codepen 到网页？！这是比 MDX 更好的方法吗！？
+
+```
+`flex-start` takes into account the presence of the `-reverse` values of the flex direction, while `start` does not.
+
+For example, in a left-to-right writing mode with a flex container set to `flex-direction:row-reverse`, `justify-content:start` would cause all items to be justified to the left, while `justify-content:flex-start` would cause all items to be justified to the right.
+```
+
+[这篇文章在说好几个值之间的区别](https://csslayout.news/whats-the-difference-between-the-alignment-values-of-start-flex-start-and-self-start/)
+
+[stackoverflow 的第二个回答很简单直白地说明了他们的区别](https://stackoverflow.com/questions/50919447/flexbox-flex-start-flex-end-self-start-self-end-and-start-end-whats-the-dif)
 
 ## 布局冲突
 
@@ -109,6 +123,10 @@ TODO
     <aside></aside>
 </section>
 ```
+
+## 可用性障碍
+
+屏幕阅读器和键盘等辅助设备是根据 DOM 顺序的先后来访问元素的，它们会先访问 DOM 顺序较前的元素，然后才是 DOM 顺序较后的元素。我们可能会使用 `flex-drection: row-reverse | column-reverse` 和 `order` 来大幅改变元素的布局，这经常会制造出元素的视觉位置和 DOM 顺序不一致的效果。此时，我们就需要留意屏幕阅读器等辅助设备是否还会按照我们的期望来工作，如若不慎，就会损害网页的可用性。
 
 ## align-items
 
