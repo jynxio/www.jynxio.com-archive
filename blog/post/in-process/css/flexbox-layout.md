@@ -12,9 +12,11 @@ flex 布局（flexible box layout）是一种弹性布局。
 
 ## 启用
 
-如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 项（flex item），然后 flex 容器的内部将会激活 flex 布局，flex 项们都会参加进这个 flex 布局，不过 flex 容器还会留在原来的布局模式之中。需要注意的是，flex 项的 `float`、`clear`、`vertical-align` 属性将会失效。
+如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 项（flex item），然后 flex 容器的内部将会激活 flex 布局，flex 项们都会参加进这个 flex 布局，不过 flex 容器还会留在原来的布局模式之中。
 
 `display: flex` 和 `display: inline-flex` 的区别在于，前者会使 flex 容器成为块级元素（block-level element），后者会使 flex 容器成为行内块元素（inline-block element），除此之外，便再无其他区别了。
+
+另外，flex 项的 `float`、`clear`、`vertical-align` 属性会失效。
 
 ## 布局的轴
 
@@ -44,15 +46,15 @@ flex-direction: row | row-reverse | column | column-reverse
 
 `writing-mode` 用于控制文本的「横竖模式」和「换行方向」，`dir` 用于控制文本的「书写方向」。「横竖模式」只规定了文本沿着水平或垂直方向书写，「横竖模式」和「书写方向」共同决定了文本沿着从左到右、从右到左、从上到下、从下到上的方向书写。
 
-> 除了 `dir` 属性，`direction` 属性也可以设置元素的书写方向，它们的作用几乎相同，其中前者是 HTML 属性，后者是 CSS 属性。
->
-> 因为“如无必要，勿增实体”，所以我只使用其中的一个家伙，我倾向于 `dir`，因为它似乎更简单，且 [MDN 也是如此推荐的](https://developer.mozilla.org/en-US/docs/Web/CSS/direction)。
+> `direction` 属性（CSS 属性）和 `dir` 属性（HTML 属性）都可以设置元素的书写方向，但请忘掉 `direction` 属性吧！因为一种推荐的做法是：如果我们想要设置网页的书写方向，那么我们就应该在 `<html>` 元素上设置 `dir` 和 `lang` 属性，如此一来，哪怕 CSS 还未加载，网页也能正确的处理书写方向。
 
 | writing-mode    | 作用                                                       |
 | --------------- | ---------------------------------------------------------- |
 | `horizontal-tb` | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行 |
 | `vertical-lr`   | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行 |
 | `vertical-rl`   | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行 |
+| `sideways-lr`   | ?                                                          |
+| `sideways-rl`   | ?                                                          |
 
 | dir    | 作用                                                         |
 | ------ | ------------------------------------------------------------ |
@@ -87,6 +89,36 @@ For example, in a left-to-right writing mode with a flex container set to `flex-
 [这篇文章在说好几个值之间的区别](https://csslayout.news/whats-the-difference-between-the-alignment-values-of-start-flex-start-and-self-start/)
 
 [stackoverflow 的第二个回答很简单直白地说明了他们的区别](https://stackoverflow.com/questions/50919447/flexbox-flex-start-flex-end-self-start-self-end-and-start-end-whats-the-dif)
+
+如果 `flex-direction: column | column-reverse` 时 `left` 和 `right` 就表现为 `start`，真的吗？
+
+`space-between` 的每个相邻项的距离是相同的，然后两侧贴边。
+
+`space-around` 的每个相邻项的距离是相同的，然后开头空白空间和结尾空白空间是中间空白空间的一半。
+
+`space-evenly` 的两侧空白，然后所有空白的空间都是平均的。
+
+`safe` 似乎总是等同于 `start`？？？ `safe` 和 `unsafe` 都不是有效值？？？？是真的吗？
+
+box aligment 是一个对齐方案，flexbox 的对齐属性也被收纳成为了它的一部分，这个规范详细说明了在所有布局中（不仅仅是 flexbox）对齐属性是如何起作用的。这样的意义之一是，使用 box aligment 里面的对齐属性，并同时开启 flex 布局和 grid 布局，然后 grid 布局不兼容的时候，也能会退到 flex 布局。
+
+flex 布局是一维布局，一旦换行之后，那么每一行都相当于一个新的 flex 容器，行与行之间的 flex 项不会彼此影响，grid 项则不然。比如，它没有办法让下一行的项和上一行的项对齐，所以它是单维布局。
+
+要使 `align-content` 生效，那么容器的高度也要高于所有项目的总高度。
+
+flex 布局中没有定义 `justify-content & align-content: space-evenly`，`evenly` 是 box alignment 定义的。
+
+`gap` 是 `row-gap` 和 `column-gap` 的缩写，当 `flex-wrap: wrap | wrap-reverse` 时，`column-gap` 就会有效。
+
+`flex-basis` 应该被当作是起始尺寸，而不是假设尺寸。`min-content` 会尽可能的让元素变得小，对于一段文本来讲，这就相当于是字符串中的最长的单词的尺寸。规范把多余的空间翻译成“正可用空间”，另一个则是“负可用空间”。在正可用空间情况下，才有拉伸和分布（即对齐），在负可用空间下，才会讲收缩。
+
+flex-basis 的优先级比 width 更高，只有当 flex-basis 为 auto 时，为了确定基础尺寸，才会去检查 width，并用作为 flex-basis。如果您希望 Flexbox 在进行空间分配时完全忽略项目的大小，请将 `flex-basis` 设置为 `0` ，但是 `flex-basis` 可以突破最小尺寸吗？
+
+在本例中， `flex-basis` 值为 `auto` ，并且项目没有设置宽度，因此会自动调整大小。这意味着 Flexbox 正在查看项目的 `max-content` 大小。为什么是 `max-content` 而不是 `content`，它们的区别是什么？
+
+`visibility: collapse` 的作用：https://developer.mozilla.org/zh-CN/docs/Web/CSS/visibility
+
+但是该属性在 Chrome Safari 中的表现似乎是不正确的，见 https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Mastering_wrapping_of_flex_items#collapsed_items 的「**Note:** Use Firefox for the below two examples as Chrome and Safari treat collapse as hidden.」
 
 ## 布局冲突
 
@@ -126,7 +158,24 @@ For example, in a left-to-right writing mode with a flex container set to `flex-
 
 ## 可用性障碍
 
-屏幕阅读器和键盘等辅助设备是根据 DOM 顺序的先后来访问元素的，它们会先访问 DOM 顺序较前的元素，然后才是 DOM 顺序较后的元素。我们可能会使用 `flex-drection: row-reverse | column-reverse` 和 `order` 来大幅改变元素的布局，这经常会制造出元素的视觉位置和 DOM 顺序不一致的效果。此时，我们就需要留意屏幕阅读器等辅助设备是否还会按照我们的期望来工作，如若不慎，就会损害网页的可用性。
+`flex-direction: row-reverse | column-reverse` 和 `order` 可以在视觉上改变元素的渲染顺序，有时候这会造成一些可用性上的障碍，因为屏幕阅读器和 Tab 键等辅助设备仍然会遵循 DOM 顺序来聚焦元素。
+
+如下例所示，Tab 键会从右向左聚焦元素，屏幕阅读器会从右向左阅读内容，这会让人感得困惑。
+
+```html
+<ul>
+    <li>Josh</li>
+    <li>John</li>
+    <li>Sam</li>
+</ul>
+
+<style>
+    ul {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+</style>
+```
 
 ## align-items
 
@@ -163,7 +212,15 @@ For example, in a left-to-right writing mode with a flex container set to `flex-
 
 ## flex-grow
 
+举一个这样的例子：有 3 个 flex 项，flex-basis 不一样，flex-grow 一样，然后分配的空间都是一样的，但是最后的大小却不是一样的，这样子就说明了最终尺寸等于 flex-basis + 相等的多余尺寸，然后多余尺寸用多重斜线在盒子模型中标记出来！
+
+如果我们真的想要让所有的 flex 项的大小都完全相等，那么就应该设置 `flex: 1 1 0`，因为 `flex-basis: 0` 意味着每个 flex 项的基础尺寸都是 0，那么就意味着 flex container 中的所有空间都会成为正可用空间，并因为 `flex-grow: 1` 而平均分配给每一个项。
+
 ## flex-shrink
+
+分配负空间时，伸缩收缩系数乘以伸缩基本尺寸。这会根据项目能够收缩的程度按比例分配负空间，这样，例如，一个小项目不会在较大的项目之前收缩到零。项目明显减少
+
+“flex 项的收缩极限是 min-content”，仔细研究一下这个规律。
 
 ## align-self
 
