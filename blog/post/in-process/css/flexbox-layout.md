@@ -18,15 +18,7 @@ flex 布局（flexible box layout）是一种弹性布局。
 
 另外，flex 项的 `float`、`clear`、`vertical-align` 属性会失效。
 
-## 布局的轴
-
-flex 布局中有一至多条主轴（main axis）和一条交叉轴（cross axis），flex 项会沿着主轴来堆叠，沿着交叉轴来换行，主轴和交叉轴总是相互垂直。
-
-主轴和交叉轴的方向会受到 `flex-direction`、`writing-mode` 和 `dir` 的影响，一共有 8 种不同的情况。
-
-[TODO: 8 种情况 + 多条主轴]
-
-## 语法手册
+## 语法
 
 | 用于 flex 容器    | 用于 flex 项  |
 | ----------------- | ------------- |
@@ -36,7 +28,45 @@ flex 布局中有一至多条主轴（main axis）和一条交叉轴（cross axi
 | `align-items`     | `align-self`  |
 | `gap`             |               |
 
+## 方向
+
+flex 布局中有一至多条主轴（main axis）和一条交叉轴（cross axis），flex 项会沿着主轴来堆叠，沿着交叉轴来换行，主轴和交叉轴总是相互垂直的。
+
+主轴和交叉轴的方向是由 `flex-direction`、`writing-mode`、`dir`、`direction` 共同决定的，我个人不使用 `direction` 属性，所以我不会介绍它。
+
+> 为什么不使用 `direction`？这是因为 `direction` 和 `dir` 的作用都是相同的（其实有一些微妙的差别），即设置书写方向的「始与终」。如果我们想要设置书写方向的「始与终」，那么我们应该直接设置 `<html>` 的 `dir` 和 `lang`，而不是 `direction`，这样做的好处是，哪怕 CSS 还未加载，网页也能正确处理书写方向的「始与终」。
+
+[TODO: 所有组合情况 + 多条主轴]
+
+### dir 与 writing-mode
+
+`dir`  设置书写的「始与终」，`writing-mode` 设置书写的「横与纵」。其中，「横与纵」是指文本沿着水平或垂直方向书写，「始与终」是指文本在横行或纵列中书写时的起点与终点。
+
+| writing-mode 属性 | 描述                                                       |
+| ----------------- | ---------------------------------------------------------- |
+| `horizontal-tb`   | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行 |
+| `vertical-lr`     | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行 |
+| `vertical-rl`     | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行 |
+| `sideways-lr`     | 除了 Firefox 之外，没有任何浏览器实现该特性，故忽略        |
+| `sideways-rl`     | 除了 Firefox 之外，没有任何浏览器实现该特性，故忽略        |
+
+| dir 属性 | 描述                                                         |
+| -------- | ------------------------------------------------------------ |
+| `ltr`    | 对于横行模式（`writing-mode: horizontal-*`），文本沿着从左（始）到右（终）的方向书写；对于纵列模式（`writing-mode: vertocal-*`），文本沿着从上（始）到下（终）的方向书写； |
+| `rtl`    | 与 `ltr` 相反                                                |
+| `auto`   | 浏览器自动的根据文本的语种来决定采用 `ltr` 或 `rtl`          |
+
 ### flex-direction
+
+TODO
+
+TODO
+
+TODO
+
+TODO
+
+TODO
 
 `flex-direction` 可以影响主轴和交叉轴的方向，但它不能决定主轴和交叉轴的方向。事实上，主轴和交叉轴的方向要由 `flex-direction`、`writing-mode` 和 `dir` 3 个属性一起决定，这 3 个属性可以搭配出 24 种不同的组合（指属性值的组合），不过最后只有 8 种不同的情况（指主轴和交叉轴的情况）。
 
@@ -44,27 +74,19 @@ flex 布局中有一至多条主轴（main axis）和一条交叉轴（cross axi
 flex-direction: row | row-reverse | column | column-reverse
 ```
 
-`writing-mode` 用于控制文本的「横竖模式」和「换行方向」，`dir` 用于控制文本的「书写方向」。「横竖模式」只规定了文本沿着水平或垂直方向书写，「横竖模式」和「书写方向」共同决定了文本沿着从左到右、从右到左、从上到下、从下到上的方向书写。
 
-> `direction` 属性（CSS 属性）和 `dir` 属性（HTML 属性）都可以设置元素的书写方向，但请忘掉 `direction` 属性吧！因为一种推荐的做法是：如果我们想要设置网页的书写方向，那么我们就应该在 `<html>` 元素上设置 `dir` 和 `lang` 属性，如此一来，哪怕 CSS 还未加载，网页也能正确的处理书写方向。
-
-| writing-mode    | 作用                                                       |
-| --------------- | ---------------------------------------------------------- |
-| `horizontal-tb` | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行 |
-| `vertical-lr`   | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行 |
-| `vertical-rl`   | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行 |
-| `sideways-lr`   | ?                                                          |
-| `sideways-rl`   | ?                                                          |
-
-| dir    | 作用                                                         |
-| ------ | ------------------------------------------------------------ |
-| `ltr`  | 对于 `writing-mode: horizontal-tb`，文本从左到右书写；对于 `wrting-mode: vertical-*`，文本从上到下书写 |
-| `rtl`  | 与 `ltr` 相反                                                |
-| `auto` | 浏览器自动的根据文本的内容来决定采用 `ltr` 或 `rtl`          |
 
 其实，`ltr` 和 `rtl` 分别是「left to right」和「right to left」的缩写。我个人喜欢把 `ltr` 当作「start to end」，把 `rtl` 当作「end to start」，然后想象 `writing-mode: horizontal-tb` 的 start 是 left，end 是 right；`writing-mode: vertical-*` 的 start 是 top，end 是 bottom。
 
 TODO: dir 和 writing-mode 的 6 种情况的图
+
+## 尺寸
+
+## 对齐
+
+## 间隙
+
+
 
 ### justify-content
 
