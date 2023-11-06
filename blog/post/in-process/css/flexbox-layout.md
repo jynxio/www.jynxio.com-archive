@@ -42,13 +42,13 @@ flex 布局中有一至多条主轴（main axis）和一条交叉轴（cross axi
 
 `dir`  设置书写的「始与终」，`writing-mode` 设置书写的「横与纵」。其中，「横与纵」是指文本沿着水平或垂直方向书写，「始与终」是指文本在横行或纵列中书写时的起点与终点。
 
-| writing-mode 属性 | 描述                                                       |
-| ----------------- | ---------------------------------------------------------- |
-| `horizontal-tb`   | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行 |
-| `vertical-lr`     | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行 |
-| `vertical-rl`     | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行 |
-| `sideways-lr`     | 除了 Firefox 之外，没有任何浏览器实现该特性，故忽略        |
-| `sideways-rl`     | 除了 Firefox 之外，没有任何浏览器实现该特性，故忽略        |
+| writing-mode 属性 | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `horizontal-tb`   | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行   |
+| `vertical-lr`     | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行   |
+| `vertical-rl`     | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行   |
+| `sideways-lr`     | [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values)，故忽略 |
+| `sideways-rl`     | [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values)，故忽略 |
 
 | dir 属性 | 描述                                                         |
 | -------- | ------------------------------------------------------------ |
