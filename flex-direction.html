@@ -3,49 +3,39 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title></title>
+        <title>Document</title>
         <style>
-            p {
-                inline-size: 20rem;
-                block-size: 20rem;
-                border: 3px dashed black;
-            }
-
-            .htb {
-                writing-mode: horizontal-tb;
-            }
-
-            .vlr {
-                writing-mode: vertical-lr;
-            }
-
-            .vrl {
+            section {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                align-content: flex-start;
+                inline-size: 400px;
+                block-size: 400px;
+                padding: 10px;
+                border: 4px dashed black;
+                /* writing-mode: horizontal-tb; */
+                /* writing-mode: vertical-lr; */
                 writing-mode: vertical-rl;
+            }
+
+            div {
+                flex: 0 0 20%;
+                block-size: 10%;
+                background-color: hotpink;
+                border: 3px solid black;
             }
         </style>
     </head>
     <body>
         <section dir="ltr">
-            <p class="htb"
-                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
-            >
-            <p class="vlr"
-                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
-            >
-            <p class="vrl"
-                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
-            >
-        </section>
-        <section dir="rtl">
-            <p class="htb"
-                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
-            >
-            <p class="vlr"
-                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
-            >
-            <p class="vrl"
-                >"flex-direction" is influenced by the global attribute "dir" and the CSS property "writing-mode."</p
-            >
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </section>
     </body>
 </html>
