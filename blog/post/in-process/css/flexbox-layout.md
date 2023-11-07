@@ -70,49 +70,78 @@ TODO：补图或代码，参考「Interactive Review」中的首图
 
 ## 尺寸
 
-flex 项在主轴方向和交叉轴方向上分别有 2 个尺寸，其中主轴尺寸是由 `flex-basis`、`flex-grow`、`flex-shrink` 共同决定，交叉轴尺寸是由 `inline-size`、`block-size`、`align-items: stretch` 共同决定的。
+flex 项在主轴方向和交叉轴方向上分别有 2 个尺寸，分别是主尺寸（main size）和交叉尺寸（cross size）。
 
-### 主轴尺寸
+主尺寸的计算方式相对曲折，具体来说：首先设置主轴方向上的假设尺寸（hypothetical size），然后如果 flex 项会溢出包含块，那么就削减自身的假设尺寸来抵消溢出，反之就瓜分多余的空间来填满空余，最后才得到主尺寸。
 
-`flex-basis` 用于设置 flex 项在主轴方向上的假设尺寸（hypothetical size）。当一条主轴上的所有 flex 项的假设尺寸之和小于 flex 容器的主轴容积时，flex 项们就会根据 `flex-grow` 来瓜分多余的空间，反之就会根据 `flex-shrink` 来削减自身的假设尺寸以抵消溢出，多余的空间被称为「正可用空间」（positive free space），溢出的空间被称为「负可用空间」（negative free space）。
+CSS 规范把多余的空间被称为「positive free space」(正可用空间)，把溢出的空间被称为「negative free space」（负可用空间），计算公式为：
+
+```
+正/负可用空间 = 包含块主尺寸 - ( 项的假设尺寸之和 + 项的外边距之和 + 项的间隙之和 )
+```
+
+> 其中，flex 项的包含块是 flex 容器的 content box。
+
+交叉尺寸的计算方式相对直白，具体来说：直接通过 `inline-size` 或 `block-size` 来设置，或被 `align-items: stretch` 拉伸至填满交叉轴空间，如果两种方式发生冲突时，那么取前者。
 
 ### 假设尺寸
 
-### 拉伸规律
+```
+flex-basis: auto | fill | max-content | min-content | fit-content | content | <width>
+```
 
-拉伸规律如下图所示：
+| 值            | 描述                                             |
+| ------------- | ------------------------------------------------ |
+| `auto`        | 参考 `inline-size` 或 `block-size`               |
+| `fill`        | ?                                                |
+| `content`     | 基于 flex 项的内容自动调整大小                   |
+| `max-content` | ?                                                |
+| `min-content` | 令 flex 项尽可能小，比如一段英文的最长单词的尺寸 |
+| `fit-content` | ?                                                |
+| `<width>`     | `auto | <length> | <percentage>`                 |
 
-注意，flex 容器的 gap 和 flex 项的 margin（因为 flex 项的计算范围是外边距盒子）都会消耗正可用空间，当正可用空间为零时，便不会发生拉伸。
+如果 `box-sizing: content-box`，那么 `flex-basis` 设置 content box 的主尺寸；如果 `box-sizing: border-box`，那么 `flex-basis` 设置 border box 的主尺寸。
 
-另外，如果想让 flex 项的主轴尺寸完全相等，那么请设置 `flex-basis: 0; flex-grow: 1` ，这意味着所有的主轴空间都会变成正可用空间，并被 flex 项均分。
+TODO
 
-### 收缩规律
+TODO
 
-### 交叉轴尺寸
+TODO
 
-我们需要通过 `inline-size` 或 `block-size` 来直接设置 flex 项的交叉轴尺寸，或者通过 `align-items: stretch` 来让 flex 项填充满交叉轴空间。
+TODO
 
-### -----
+TODO
 
-
-
-`flex-basis` 应该被当作是起始尺寸，而不是假设尺寸。`min-content` 会尽可能的让元素变得小，对于一段文本来讲，这就相当于是字符串中的最长的单词的尺寸。规范把多余的空间翻译成“正可用空间”，另一个则是“负可用空间”。在正可用空间情况下，才有拉伸和分布（即对齐），在负可用空间下，才会讲收缩。
+TODO
 
 flex-basis 的优先级比 width 更高，只有当 flex-basis 为 auto 时，为了确定基础尺寸，才会去检查 width，并用作为 flex-basis。如果您希望 Flexbox 在进行空间分配时完全忽略项目的大小，请将 `flex-basis` 设置为 `0` ，但是 `flex-basis` 可以突破最小尺寸吗？
 
 在本例中， `flex-basis` 值为 `auto` ，并且项目没有设置宽度，因此会自动调整大小。这意味着 Flexbox 正在查看项目的 `max-content` 大小。为什么是 `max-content` 而不是 `content`，它们的区别是什么？
 
-flex-grow ⬇️
+### 拉伸规律
 
-举一个这样的例子：有 3 个 flex 项，flex-basis 不一样，flex-grow 一样，然后分配的空间都是一样的，但是最后的大小却不是一样的，这样子就说明了最终尺寸等于 flex-basis + 相等的多余尺寸，然后多余尺寸用多重斜线在盒子模型中标记出来！
+```
+flex-grow: <number>
+```
 
-如果我们真的想要让所有的 flex 项的大小都完全相等，那么就应该设置 `flex: 1 1 0`，因为 `flex-basis: 0` 意味着每个 flex 项的基础尺寸都是 0，那么就意味着 flex container 中的所有空间都会成为正可用空间，并因为 `flex-grow: 1` 而平均分配给每一个项。
+TODO: 斜线标记 grow 空间 | 图中写明“拉伸规律” | 含有 margin | 含有 gap
 
-flex-shrink ⬇️
+注意：
 
-分配负空间时，伸缩收缩系数乘以伸缩基本尺寸。这会根据项目能够收缩的程度按比例分配负空间，这样，例如，一个小项目不会在较大的项目之前收缩到零。项目明显减少
+- flex 项的自动外边距会吞掉所有的正可用空间，导致正可用空间归零，于是便不会再发生拉伸了（自动外边距也被用作为对齐技巧，详见下文的「对齐」小节）；
+- 如果想让 flex 项的主轴尺寸完全相等，那么请设置 `flex-basis: 0; flex-grow: 1` ，这意味着所有的主轴空间都会变成正可用空间，并被 flex 项均分；
 
-“flex 项的收缩极限是 min-content”，仔细研究一下这个规律。
+### 收缩规律
+
+```
+flex-shrink: <number>
+```
+
+TODO: 斜线标记 shrink 空间 | flex-shrink 会以 flex-basis 为系数来尺寸 | 图中写明“收缩规律” | 含有 margin | 含有 gap
+
+TODO：疑问 - flex 项的收缩极限时 `min-content`
+
+> 之所以会考虑 `flex-basis`，是为了尽可能的维持 flex 项之间的（假设）尺寸比例。
 
 ------
 
@@ -236,6 +265,8 @@ flex 布局无法将子项缩小至最小尺寸以下，哪怕你设置了 `flex
 如何解决这个问题？就是 `mini-width: 0`，可是这样做其实也会引发糟糕的事情，比如虽然元素尺寸收缩为 0，但是内容却会溢出元素的范围。
 
 ## 对齐
+
+### 自动外边距技巧
 
 ## 间隙
 
