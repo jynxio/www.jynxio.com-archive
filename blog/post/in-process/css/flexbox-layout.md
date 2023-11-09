@@ -30,7 +30,7 @@ flex 布局（flexible box layout）是一种弹性布局。
 
 ## 方向
 
-flex 布局有至少一条主轴（main axis）和一条交叉轴（cross axis），主轴和交叉轴总是互相垂直。flex 项沿着主起点（main start）到主终点（main end）的方向来排队，flex 项沿着交叉起点（cross start）到交叉终点（cross end）的方向来换行。
+flex 布局有至少一条主轴（main axis）和一条交叉轴（cross axis），主轴和交叉轴总是互相垂直。flex 项沿着主起点（main start）到主终点（main end）的方向来排列，flex 项沿着交叉起点（cross start）到交叉终点（cross end）的方向来换行。
 
 实际上，主轴和交叉轴的方向是由 `writing-mode`、`direction`、`flex-direction` 共 3 个属性一起决定的。
 
@@ -246,25 +246,27 @@ TODO：疑问 - flex 项的收缩极限时 `min-content`
 
 ## 对齐
 
-如果主轴或交叉轴上有正可用空间，那么就可以设置 flex 项在主轴或交叉轴上的对齐方式。
+我们可以设置 flex 项在主轴和交叉轴上的对齐方式，不过仅当轴上有正可用空间时，才有视觉效果。
 
 ### 主轴对齐
 
-| justify-content 属性 | 描述 |
-| -------------------- | ---- |
-| `start`              |      |
-| `end`                |      |
-| `left`               |      |
-| `right`              |      |
-| `center`             |      |
-| `flex-start`         |      |
-| `flex-end`           |      |
-| `stretch`            |      |
-| `space-between`      |      |
-| `space-around`       |      |
-| `space-evenly`       |      |
-| `safe *`             |      |
-| `unsafe *`           |      |
+`justify-content` 用于控制主轴方向上的对齐方式，如果 flex 容器内部换行了，那么就会产生多条平行的主轴，每条 TODO
+
+| justify-content 属性 | 描述                    |
+| -------------------- | ----------------------- |
+| `start`              |                         |
+| `end`                |                         |
+| `left`               |                         |
+| `right`              |                         |
+| `center`             |                         |
+| `flex-start`         | flex 项从主起点开始排队 |
+| `flex-end`           |                         |
+| `stretch`            |                         |
+| `space-between`      |                         |
+| `space-around`       |                         |
+| `space-evenly`       |                         |
+| `safe *`             |                         |
+| `unsafe *`           |                         |
 
 
 
@@ -279,14 +281,6 @@ TODO：疑问 - flex 项的收缩极限时 `min-content`
 
 
 ### justify-content
-
-它可以控制所有 flex 项在主轴上的分布，仅当主轴上有多余的空间时，它才有效。
-
-它是在 flex 项的尺寸和外边距计算完成之后才运行的，这意味着如果 flex 项通过膨胀或外边距扩张（比如 auto margin）来消耗完了主轴上的多余空间，那么该属性就会失效。
-
-对齐主体是外边距盒子！见 [此](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_box_alignment#%E5%AF%B9%E9%BD%90%E4%B8%BB%E4%BD%93)。怪不得要考虑 auto margin？对齐主体指的是 flex 项的外边距盒子，对齐容器指的是 flex 容器。
-
-基线自对齐通过在盒子外部增加外边距，从而移动盒子，实现对齐。那么 center 这些对齐也是需要移动 margin 的吗？
 
 start 在意书写方向、left 在意物理方向、flex-start 在意 flex-direction 的 start 方向，是这样的，对吗？
 
