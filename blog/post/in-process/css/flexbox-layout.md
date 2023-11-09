@@ -6,9 +6,7 @@ typora-root-url: ./..\..\image
 
 ## 概述
 
-flex 布局（flexible box layout）是一种弹性布局。
-
-相较于 grid 布局，flex 布局在处理一维布局的时候更加简单，因此哪怕 grid 布局可以完全替代 flex 布局，我也仍然钟爱使用 flex 布局。
+flex 布局（flexible box layout）是一种弹性布局。相较于 grid 布局，flex 布局在处理一维布局的时候更加简单。
 
 ## 启用
 
@@ -30,7 +28,7 @@ flex 布局（flexible box layout）是一种弹性布局。
 
 ## 方向
 
-flex 布局有至少一条主轴（main axis）和一条交叉轴（cross axis），主轴和交叉轴总是互相垂直。flex 项沿着主起点（main start）到主终点（main end）的方向来排列，flex 项沿着交叉起点（cross start）到交叉终点（cross end）的方向来换行。
+flex 布局有一条主轴（main axis）和一条交叉轴（cross axis），主轴和交叉轴总是互相垂直。flex 项沿着主起点（main start）到主终点（main end）的方向来排列，flex 项沿着交叉起点（cross start）到交叉终点（cross end）的方向来换行。
 
 实际上，主轴和交叉轴的方向是由 `writing-mode`、`direction`、`flex-direction` 共 3 个属性一起决定的。
 
@@ -61,37 +59,6 @@ flex 布局有至少一条主轴（main axis）和一条交叉轴（cross axis�
 
 TODO: direction 和 writing-mode 的 6 种情况的图
 
-练习代码：
-
-```html
-<p>The CSS justify-content property defines how the browser distributes space between and around content items along the main-axis of a flex container, and the inline axis of a grid container.</p>
-
-<p>CSS justify-content 属性定义浏览器如何沿着弹性容器的主轴和网格容器的行向轴分配内容元素之间和周围的空间。</p>
-```
-
-```css
-* {
-  padding: 0;
-  margin: 0;
-  border: none;
-  outline: none;
-}
-
-body {
-  padding: 10rem;
-  direction: ltr;
-  /* direction: rtl; */
-  writing-mode: hotizontal-tb;
-  /* writing-mode: vertical-lr; */
-  /* writing-mode: vertical-rl; */
-}
-
-p {
-  border: 3px dashed;
-  margin: 3rem;
-}
-```
-
 ### flex-direction
 
 | flex-direction 属性 | 描述                                             |
@@ -102,60 +69,6 @@ p {
 | `column-reverse`    | 主轴方向与换行方向相反，交叉轴方向与书写方向相同 |
 
 TODO：补图或代码，参考「Interactive Review」中的首图
-
-练习代码：
-
-```html
-<section>
-  <div>1 a b c</div>
-  <div>2 a b c</div>
-  <div>3 a b c</div>
-  <div>4 a b c</div>
-  <div>5 a b c</div>
-  <div>6 a b c</div>
-</section>
-```
-
-```css
-* {
-  padding: 0;
-  margin: 0;
-  border: none;
-  outline: none;
-}
-
-body {
-  padding: 10rem;
-}
-
-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  direction: ltr;
-  /* direction: rtl; */
-  /* writing-mode: horizontal-tb; */
-  /* writing-mode: vertical-lr; */
-  writing-mode: vertical-rl;
-  /* flex-direction: row; */
-  /* flex-direction: row-reverse; */
-  /* flex-direction: column; */
-  flex-direction: column-reverse;
-  /* justify-content: start; */
-  inline-size: 500px;
-  block-size: 500px;
-  border: 4px dashed black;
-}
-
-div {
-  block-size: 100px;
-  inline-size: 100px;
-  background-color: hotpink;
-  border: 1px solid black;
-  line-height: 100px;
-  text-align: center;
-}
-```
 
 ## 尺寸
 
@@ -246,29 +159,28 @@ TODO：疑问 - flex 项的收缩极限时 `min-content`
 
 ## 对齐
 
-我们可以设置 flex 项在主轴和交叉轴上的对齐方式，不过仅当轴上有正可用空间时，才有视觉效果。
+flex 项在主轴和交叉轴方向上的对齐方式是可设置的，不过仅当轴上有正可用空间时，设置才会有视觉效果。
 
 ### 主轴对齐
 
-`justify-content` 用于控制主轴方向上的对齐方式，如果 flex 容器内部换行了，那么就会产生多条平行的主轴，每条 TODO
+`justify-content` 用于设置主轴上的对齐方式。
 
-| justify-content 属性 | 描述                    |
-| -------------------- | ----------------------- |
-| `start`              |                         |
-| `end`                |                         |
-| `left`               |                         |
-| `right`              |                         |
-| `center`             |                         |
-| `flex-start`         | flex 项从主起点开始排队 |
-| `flex-end`           |                         |
-| `stretch`            |                         |
-| `space-between`      |                         |
-| `space-around`       |                         |
-| `space-evenly`       |                         |
-| `safe *`             |                         |
-| `unsafe *`           |                         |
-
-
+| justify-content 属性 | 描述                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| `normal`             | 等价于 `flex-start`                                          |
+| `start`              | 如果 `flex-direction: row | row-reverse`，那么项排列于 `flex-direction: row` 时的主起点；如果 `flex-direction: column | column-reverse`，那么项排列于 `flex-direction: column` 时的主起点 |
+| `end`                | 如果 `flex-direction: row |row-reverse`，那么项排列于 `flex-direction: row` 时的主终点；如果 `flex-direction: column |column-reverse`，那么项排列于 `flex-direction: column` 时的主终点 |
+| `left`               | （仅当项水平排列时才有效）项排列于左侧                       |
+| `right`              | （仅当项水平排列时才有效）项排列于右侧                       |
+| `center`             | 项居中排列                                                   |
+| `flex-start`         | 项排列于主起点                                               |
+| `flex-end`           | 项排列于主终点                                               |
+| `stretch`            | 等价于 `flex-start`                                          |
+| `space-between`      | 两端的项贴合边缘，项之间间隔相等                             |
+| `space-around`       | 两端的项距离边缘 1 个单位，项之间间隔 2 个单位               |
+| `space-evenly`       | 项与边缘的间隔和项之间的间隔皆相等                           |
+| `safe *`             | ？                                                           |
+| `unsafe *`           | ？                                                           |
 
 ### 交叉轴对齐
 
@@ -278,41 +190,15 @@ TODO：疑问 - flex 项的收缩极限时 `min-content`
 
 ## 换行
 
+“flex 布局是一维布局，一旦换行之后，那么每一行都相当于一个新的 flex 容器，行与行之间的 flex 项不会彼此影响，grid 项则不然。比如，它没有办法让下一行的项和上一行的项对齐，所以它是单维布局。”
+
+---
+
 
 
 ### justify-content
 
-start 在意书写方向、left 在意物理方向、flex-start 在意 flex-direction 的 start 方向，是这样的，对吗？
-
-我可以直接内嵌 codepen 到网页？！这是比 MDX 更好的方法吗！？
-
-```
-`flex-start` takes into account the presence of the `-reverse` values of the flex direction, while `start` does not.
-
-For example, in a left-to-right writing mode with a flex container set to `flex-direction:row-reverse`, `justify-content:start` would cause all items to be justified to the left, while `justify-content:flex-start` would cause all items to be justified to the right.
-```
-
-[这篇文章在说好几个值之间的区别](https://csslayout.news/whats-the-difference-between-the-alignment-values-of-start-flex-start-and-self-start/)
-
-[stackoverflow 的第二个回答很简单直白地说明了他们的区别](https://stackoverflow.com/questions/50919447/flexbox-flex-start-flex-end-self-start-self-end-and-start-end-whats-the-dif)
-
-如果 `flex-direction: column | column-reverse` 时 `left` 和 `right` 就表现为 `start`，真的吗？
-
-`space-between` 的每个相邻项的距离是相同的，然后两侧贴边。
-
-`space-around` 的每个相邻项的距离是相同的，然后开头空白空间和结尾空白空间是中间空白空间的一半。
-
-`space-evenly` 的两侧空白，然后所有空白的空间都是平均的。
-
-`safe` 似乎总是等同于 `start`？？？ `safe` 和 `unsafe` 都不是有效值？？？？是真的吗？
-
-box aligment 是一个对齐方案，flexbox 的对齐属性也被收纳成为了它的一部分，这个规范详细说明了在所有布局中（不仅仅是 flexbox）对齐属性是如何起作用的。这样的意义之一是，使用 box aligment 里面的对齐属性，并同时开启 flex 布局和 grid 布局，然后 grid 布局不兼容的时候，也能会退到 flex 布局。
-
-flex 布局是一维布局，一旦换行之后，那么每一行都相当于一个新的 flex 容器，行与行之间的 flex 项不会彼此影响，grid 项则不然。比如，它没有办法让下一行的项和上一行的项对齐，所以它是单维布局。
-
 要使 `align-content` 生效，那么容器的高度也要高于所有项目的总高度。
-
-flex 布局中没有定义 `justify-content & align-content: space-evenly`，`evenly` 是 box alignment 定义的。
 
 `gap` 是 `row-gap` 和 `column-gap` 的缩写，当 `flex-wrap: wrap | wrap-reverse` 时，`column-gap` 就会有效。
 
