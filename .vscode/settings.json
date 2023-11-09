@@ -3,7 +3,7 @@
     "eslint.format.enable": true,
     "editor.formatOnSave": true,
     "workbench.editor.highlightModifiedTabs": true,
-    "workbench.editor.showTabs": true,
+    "workbench.editor.showTabs": "multiple",
     "workbench.editor.tabSizing": "shrink",
 
     // 如果你正在使用stylelint，那么请禁用VSCode内置的CSS、Less、SCSS的linter，因为他们会对同一个错误发出重复的警告。
