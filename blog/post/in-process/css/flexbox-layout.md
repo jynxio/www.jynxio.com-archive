@@ -184,6 +184,16 @@ flex 项在主轴和交叉轴方向上的对齐方式是可设置的，不过仅
 
 ### 交叉轴对齐
 
+`align-items`、`align-content`、`align-self` 都可以设置交叉轴上的对齐方式，区别在于
+
+flex-start -> 交叉起点
+
+start -> 弹性容器的书写模式和方向的起点
+
+self-start -> 弹性项目自身的书写模式和方向的起点
+
+### content 和 items 的术语之差
+
 ### 自动外边距技巧
 
 ## 间隙
