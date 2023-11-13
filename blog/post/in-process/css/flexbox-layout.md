@@ -38,18 +38,18 @@ flex 布局有一条主轴（main axis）和一条交叉轴（cross axis），�
 
 `direction`  设置书写方向的「始与终」，`writing-mode` 设置书写方向的「横与纵」以及换行方向，「横与纵」是指文本沿着水平或垂直方向来书写，「始与终」是指文本在横行或纵列中的书写起点与终点。
 
-| writing-mode 属性 | 描述                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `horizontal-tb`   | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行   |
-| `vertical-lr`     | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行   |
-| `vertical-rl`     | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行   |
-| `sideways-lr`     | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
-| `sideways-rl`     | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
+| writing-mode    | 描述                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `horizontal-tb` | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行   |
+| `vertical-lr`   | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行   |
+| `vertical-rl`   | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行   |
+| `sideways-lr`   | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
+| `sideways-rl`   | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
 
-| direction 属性 | 描述                                                         |
-| -------------- | ------------------------------------------------------------ |
-| `ltr`          | 对于横行模式，文本沿着从左（始）到右（终）的方向书写；对于纵列模式，文本沿着从上（始）到下（终）的方向书写； |
-| `rtl`          | 与 `ltr` 相反                                                |
+| direction | 描述                                                         |
+| --------- | ------------------------------------------------------------ |
+| `ltr`     | 对于横行模式，文本沿着从左（始）到右（终）的方向书写；对于纵列模式，文本沿着从上（始）到下（终）的方向书写； |
+| `rtl`     | 与 `ltr` 相反                                                |
 
 > direction 和 dir 的区别：
 >
@@ -61,12 +61,12 @@ TODO: direction 和 writing-mode 的 6 种情况的图
 
 ### flex-direction
 
-| flex-direction 属性 | 描述                                             |
-| ------------------- | ------------------------------------------------ |
-| `row`               | 主轴方向与书写方向相同，交叉轴方向与换行方向相同 |
-| `row-reverse`       | 主轴方向与书写方向相反，交叉轴方向与换行方向相同 |
-| `column`            | 主轴方向与换行方向相同，交叉轴方向与书写方向相同 |
-| `column-reverse`    | 主轴方向与换行方向相反，交叉轴方向与书写方向相同 |
+| flex-direction   | 描述                                             |
+| ---------------- | ------------------------------------------------ |
+| `row`            | 主轴方向与书写方向相同，交叉轴方向与换行方向相同 |
+| `row-reverse`    | 主轴方向与书写方向相反，交叉轴方向与换行方向相同 |
+| `column`         | 主轴方向与换行方向相同，交叉轴方向与书写方向相同 |
+| `column-reverse` | 主轴方向与换行方向相反，交叉轴方向与书写方向相同 |
 
 TODO：补图或代码，参考「Interactive Review」中的首图
 
@@ -105,15 +105,15 @@ CSS 规范把多余的空间被称为「positive free space」(正可用空间)�
 - 如果 `flex-basis: auto`，那么取 `inline-size | block-size` 的值；
 - 如果 `flex-basis: auto` 且 `inline-size | block-size: auto`，那么取 `flex-basis: content`；
 
-| flex-basis 属性 | 描述                                                         |
-| --------------- | ------------------------------------------------------------ |
-| `auto`          | 等价于 `inline-size` 或 `block-size` 的值                    |
-| `content`       | 等价于 `max-content`                                         |
-| `max-content`   | 表示元素内容的最大宽度，对于文本内容而言，最终宽度就等于文本不换行时的宽度，比如对于“A title for an awesome”而言，最终宽度就等于“A title for an awesome”的宽度 |
-| `min-content`   | 表示元素内容的最小宽度，对于文本内容而言，将会通过换行来缩减宽度，最终宽度将会等于最长单词的宽度。比如对于“A title for an awesome”而言，最终宽度将会等于“awesome”的宽度 |
-| `fit-content`   | 如果当前的可用空间大于 `max-content`，那么就等价于 `max-content`；如果当前空间小于 `min-content`，那么就等价于 `min-content`；否则就等于可用空间 |
-| `<length>`      | 绝对值，如 `10em`                                            |
-| `<percentage>`  | 百分比值，如 `10%`（flex 项的包含块是 flex 容器的 content box） |
+| flex-basis     | 描述                                                         |
+| -------------- | ------------------------------------------------------------ |
+| `auto`         | 等价于 `inline-size` 或 `block-size` 的值                    |
+| `content`      | 等价于 `max-content`                                         |
+| `max-content`  | 表示元素内容的最大宽度，对于文本内容而言，最终宽度就等于文本不换行时的宽度，比如对于“A title for an awesome”而言，最终宽度就等于“A title for an awesome”的宽度 |
+| `min-content`  | 表示元素内容的最小宽度，对于文本内容而言，将会通过换行来缩减宽度，最终宽度将会等于最长单词的宽度。比如对于“A title for an awesome”而言，最终宽度将会等于“awesome”的宽度 |
+| `fit-content`  | 如果当前的可用空间大于 `max-content`，那么就等价于 `max-content`；如果当前空间小于 `min-content`，那么就等价于 `min-content`；否则就等于可用空间 |
+| `<length>`     | 绝对值，如 `10em`                                            |
+| `<percentage>` | 百分比值，如 `10%`（flex 项的包含块是 flex 容器的 content box） |
 
 ### 极限尺寸
 
@@ -165,56 +165,127 @@ flex 项在主轴和交叉轴方向上的对齐方式是可设置的，不过仅
 
 `justify-content` 用于设置主轴上的对齐方式。
 
-| justify-content 属性 | 描述                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| `normal`             | 等价于 `flex-start`                                          |
-| `start`              | 如果 `flex-direction: row | row-reverse`，那么项排列于 `flex-direction: row` 时的主起点；如果 `flex-direction: column | column-reverse`，那么项排列于 `flex-direction: column` 时的主起点 |
-| `end`                | 如果 `flex-direction: row |row-reverse`，那么项排列于 `flex-direction: row` 时的主终点；如果 `flex-direction: column |column-reverse`，那么项排列于 `flex-direction: column` 时的主终点 |
-| `left`               | （仅当项水平排列时才有效）项排列于左侧                       |
-| `right`              | （仅当项水平排列时才有效）项排列于右侧                       |
-| `center`             | 项居中排列                                                   |
-| `flex-start`         | 项排列于主起点                                               |
-| `flex-end`           | 项排列于主终点                                               |
-| `stretch`            | 等价于 `flex-start`                                          |
-| `space-between`      | 两端的项贴合边缘，项之间间隔相等                             |
-| `space-around`       | 两端的项距离边缘 1 个单位，项之间间隔 2 个单位               |
-| `space-evenly`       | 项与边缘的间隔和项之间的间隔皆相等                           |
-| `safe *`             | ？                                                           |
-| `unsafe *`           | ？                                                           |
+| justify-content | 描述                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `normal`        | 等价于 `flex-start`                                          |
+| `start`         | 如果 `flex-direction: row | row-reverse`，则紧贴 `flex-direction: row` 时的主起点；如果 `flex-direction: column | column-reverse`，则紧贴 `flex-direction: column` 时的主起点 |
+| `end`           | 如果 `flex-direction: row |row-reverse`，则紧贴 `flex-direction: row` 时的主终点；如果 `flex-direction: column |column-reverse`，则紧贴 `flex-direction: column` 时的主终点 |
+| `left`          | 如果主轴水平，则紧贴物理左侧                                 |
+| `right`         | 如果主轴水平，则紧贴物理右侧                                 |
+| `center`        | 居中                                                         |
+| `flex-start`    | 紧贴主起点                                                   |
+| `flex-end`      | 紧贴主终点                                                   |
+| `stretch`       | 等价于 `flex-start`                                          |
+| `space-between` | 两端的项紧贴边缘，项之间间隔相等                             |
+| `space-around`  | 两端的项距离边缘 1 个单位，项之间间隔 2 个单位               |
+| `space-evenly`  | 项与边缘的间隔和项之间的间隔皆相等                           |
+| `safe *`        | ？                                                           |
+| `unsafe *`      | ？                                                           |
 
 ### 交叉轴对齐
 
-`align-items`、`align-content`、`align-self` 都可以设置交叉轴上的对齐方式，区别在于
+`align-items`、`align-content`、`align-self` 都可以设置交叉轴上的对齐方式，区别在于：
 
-flex-start -> 交叉起点
+| 名称            | 作用域 | 作用                                   |
+| --------------- | ------ | -------------------------------------- |
+| `align-items`   | 容器   | 设置所有项在自己的交叉空间上的对齐方式 |
+| `align-content` | 容器   | 设置所有项在整个交叉空间上的对齐方式   |
+| `align-self`    | 项     | 设置一个项在自己的交叉空间上的对齐方式 |
 
-start -> 弹性容器的书写模式和方向的起点
+TODO: 区别图
 
-self-start -> 弹性项目自身的书写模式和方向的起点
+关于文字基线，请看 [这里](https://en.wikipedia.org/wiki/Baseline_(typography))。
+
+`baseline` 值具有穿透性，具体来说，flex 项内的元素也会参与基线对齐。
+
+| align-items      | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `normal`         | 等价于 `stretch`                                             |
+| `stretch`        | 如果交叉尺寸为 `auto`，则自动填满交叉空间，否则采用交叉尺寸  |
+| `flex-start`     | 紧贴交叉起点                                                 |
+| `flex-end`       | 紧贴交叉终点                                                 |
+| `center`         | 居中                                                         |
+| `baseline`       | 等价于 `first baseline`                                      |
+| `first baseline` | 令所有项的首行文本的基线互相对齐                             |
+| `last baseline`  | 令所有项的末行文本的基线互相对齐                             |
+| `start`          | 等价于 `flex-start`                                          |
+| `end`            | 等价于 `flex-end`                                            |
+| `self-start`     | 其受项自身的 `writing-mode` 与 `direction` 的影响，具体影响不确定 |
+| `self-end`       | 其受项自身的 `writing-mode` 与 `direction` 的影响，具体影响不确定 |
+| `safe *`         | ？                                                           |
+| `unsafe *`       | ？                                                           |
+
+`align-content` 的作用类似于 `justify-content`，并且仅当 `flex-wrap: wrap | wrap-reverse`时，`align-content` 才会生效。如果 `align-content: normal`，那么 `align-items` 生效，否则 `align-items` 将会被 `align-content` 遮蔽（TODO：baseline 不会被遮蔽）。
+
+要使 `align-content` 生效，那么容器的高度也要高于所有项目的总高度。
+
+| align-content    | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `normal`         | `align-content` 不生效，`align-items` 生效                   |
+| `stretch`        | 等价于 `align-items` 的 `stretch`                            |
+| `flex-start`     | 等价于 `justify-content` 的 `flex-start`                     |
+| `flex-end`       | 等价于 `justify-content` 的 `flex-end`                       |
+| `center`         | 等价于 `justify-content` 的 `center`                         |
+| `baseline`       | 等价于 `justify-content` 的 `flex-start` 和 `align-items` 的 `baseline` 的结合 |
+| `first baseline` | 等价于 `baseline`                                            |
+| `last baseline`  | 无效属性值                                                   |
+| `start`          | 等价于 `flex-start`                                          |
+| `end`            | 等价于 `flex-end`                                            |
+| `space-between`  | 等价于 `justify-content` 的 `space-between`                  |
+| `space-around`   | 等价于 `justify-content` 的 `space-around`                   |
+| `space-evenly`   | 等价于 `justify-content` 的 `space-evenly`                   |
+| `safe *`         | ？                                                           |
+| `unsafe *`       | ？                                                           |
+
+`align-self` 是属于 flex 项的 CSS 属性，它会覆盖 `align-items` 为其指定的对齐方式，它的取值及值的作用和 `align-items` 的值一模一样，区别在于它还有一个额外的 `auto` 值，该值的作用是令其采纳 `align-items` 为其指定的对齐方式。
+
+陷阱：If a flexbox item's cross-axis margin is `auto`, then `align-self` is ignored.
+
+陷阱：align-self: flex-start 似乎有 fit-content 的效果
+
+陷阱：似乎只要设置 align-*，相应的元素就会自动 fit-content！快验证一下！
 
 ### content 和 items 的术语之差
 
+items 的控制粒度是一个 flex 项，它用于设置每一个 flex 项在自己的独立空间中的对齐方式，相邻的项与项之间是互不影响的。content 的控制粒度是一群 flex 项，它用于设置一群 flex 项和一群 flex 项之间在整个空间中的对齐方式，一群项和一群项之间的对齐是互相影响的。
+
 ### 自动外边距技巧
 
+`margin: auto` 可以帮助 flex 项吃掉主轴方向上的多余空间，但是没法吃掉交叉轴方向上的多余空间，这个可以用来做一些特别的布局。
+
+TODO: logo 和导航分居两侧的对齐案例
+
 ## 间隙
+
+`gap` 是 `row-gap` 和 `column-gap` 的缩写，当 `flex-wrap: wrap | wrap-reverse` 时，`column-gap` 就会有效。
 
 ## 换行
 
 “flex 布局是一维布局，一旦换行之后，那么每一行都相当于一个新的 flex 容器，行与行之间的 flex 项不会彼此影响，grid 项则不然。比如，它没有办法让下一行的项和上一行的项对齐，所以它是单维布局。”
 
----
+「Wrapping」的第一个交互示例很棒！
 
+这节课的练习作业说明了一件事情：如果换行了，那么就会有多条主轴！
 
+> flex-wrap 被用于双维度布局，但事实上，此时我们应该使用 Grid 布局，后者更棒。
 
-### justify-content
+换行的方向是怎么确定的呢？
 
-要使 `align-content` 生效，那么容器的高度也要高于所有项目的总高度。
+`flex-wrap: wrap` 之后，子项就不会被缩小，而是当空间不足时就直接换行。当然，如果独占一行时空间还不够假设空间的话，那么就会缩小。
 
-`gap` 是 `row-gap` 和 `column-gap` 的缩写，当 `flex-wrap: wrap | wrap-reverse` 时，`column-gap` 就会有效。
+## 顺序
 
-`visibility: collapse` 的作用：https://developer.mozilla.org/zh-CN/docs/Web/CSS/visibility
+flex 容器会按照 order 的升序和自己的方向来排序子项，如果 order 相同，则按照 dom顺序来排序，默认情况下，大家的 order 都是 0。
 
-但是该属性在 Chrome Safari 中的表现似乎是不正确的，见 https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Mastering_wrapping_of_flex_items#collapsed_items 的「**Note:** Use Firefox for the below two examples as Chrome and Safari treat collapse as hidden.」
+order 只是改变了子项在视觉上的布局顺序，但是没有改变子项在 dom 中的顺序，因此对于 tab 聚焦这种事情来说，它可能会造成可访问性的障碍。
+
+## 重叠
+
+flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin 来实现重叠），z-index 大者获胜。
+
+## visibility 属性
+
+在 flex 项上应用 `visibility: collapse` 等价于为该项应用 `display: none`，不过 Chrome 和 Safari 仍有 [bug](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Mastering_wrapping_of_flex_items#collapsed_items)，该 bug 导致它们将 `visibility: collapse` 解析为 `visibility: hidden`，Firefox 则可以正确解析 `visibility: collapse` 的行为。
 
 ## 布局冲突
 
@@ -272,114 +343,6 @@ self-start -> 弹性项目自身的书写模式和方向的起点
     }
 </style>
 ```
-
-## align-items
-
-> 疑问：如果子项们的 baseline 是不一样的，那么 `align-items: baseline` 时，应该选用谁的 baseline 来锚定呢？
-
-`align-items: baseline` 具有穿透性，下例中，虽然 3 个 `Sph` 的字号不同，但是它们的文字基线都会对齐（关于文字基线，请看 [这里](https://en.wikipedia.org/wiki/Baseline_(typography))）。
-
-```html
-<section>
-	<p>Sph<span>Sph</span></p>
-    <p>Sph</p>
-</section>
-
-<style>
-    section {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-    }
-    
-    span {
-        font-size: 2rem;
-    }
-    
-    p:first-child {
-        font-size: 3rem;
-    }
-</style>
-```
-
-## align-self
-
-flex 容器通过 `align-items` 来控制所有子项在副轴方向上的位置，子项则可以通过 `align-slef` 来控制自己在副轴方向上的位置。
-
-> 不存在 `justify-self` 属性（这是合理的设计），如果你想要控制子项在主轴方向上的位置，那么需要借助 `flex-grow`、`flex-shrink`、`flex-basis`、`order`。
-
-陷阱：If a flexbox item's cross-axis margin is `auto`, then `align-self` is ignored.
-
-陷阱：align-self: flex-start 似乎有 fit-content 的效果
-
-陷阱：似乎只要设置 align-*，相应的元素就会自动 fit-content！快验证一下！
-
-## flex-wrap
-
-「Wrapping」的第一个交互示例很棒！
-
-这节课的练习作业说明了一件事情：如果换行了，那么就会有多条主轴！
-
-> flex-wrap 被用于双维度布局，但事实上，此时我们应该使用 Grid 布局，后者更棒。
-
-
-
-## 其它
-
-「Groups and Gaps」中的第一个交互示例里，`margin-right: auto` 可以模拟 float 效果，可是却没有解释为什么可以。
-
-我们可以用 flex-direction、flex-wrap、order 属性来操纵 flex 布局为双维度布局，可是 Grid 提供了更加简单的方案，所以我们不要再去研究这种奇技淫巧了吧！比如，flex-wrap 可以实现换行，然后实现双维布局，但是他是有限制的，比如你做终极练习的时候，最后一个商品的尺寸很难和前面的商品的尺寸完全一致，这就是 flexbox 的限制。因为有这些情况，所以才推荐你使用 grid 来做双维度布局。
-
-## flex-wrap
-
-nowrap：禁止换行（将会导致溢出），行头行尾方向遵循 flex-direction 的方向
-
-wrap、wrap-reverse 则是可以换行。然而换行的方向是怎么确定的呢？？？
-
-## order
-
-flex 容器会按照 order 的升序和自己的方向来排序子项，如果 order 相同，则按照 dom顺序来排序，默认情况下，大家的 order 都是 0。
-
-order 只是改变了子项在视觉上的布局顺序，但是没有改变子项在 dom 中的顺序，因此对于 tab 聚焦这种事情来说，它可能会造成可访问性的障碍。
-
-## z-index
-
-flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin 来实现重叠），z-index 大者获胜。
-
-## 关于阮一峰的 Flex 教程的笔记
-
-
-
-容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis）。主轴的开始位置（与边框的交叉点）叫做`main start`，结束位置叫做`main end`；交叉轴的开始位置叫做`cross start`，结束位置叫做`cross end`。
-
-## 关于 Josh 的文章
-When we flip display to flex, we create a “flex formatting context”.
-
-默认情况下，子项将聚集在主轴（primary axis）的开头，并且会通过拉伸自己来填满整个交叉轴（cross axis）。
-
-### 为什么没有 justify-items，并且为什么用 content 和 items
-
-因为子项（item）可以在不影响其它子项的前提下，在交叉轴方向上自由移动，因此会有 align-self/align-items 属性。然而，子项没有办法在不影响其它子项的前提下，在主轴上自由移动，因此不会有 justify-items 属性。
-
-justify 代表在主轴上的布局，align 代表在交叉轴上的布局。子项在主轴方向上，只能成群的行动，因此要用 justify-content，因为 content 代表一堆东西。子项在交叉轴方向上可以单独行动，因此可以用 items 或 self，因为这就代表着单个东西。
-
-> 那有没有 align-content 呢？其实 align-items 就对应 align-content，对不对？（content 对应 items 嘛）
-
-### auto margin 技巧
-
-将 margin-?-? 设置为 auto，那么就可以将页面的多余空间全部转化为该元素的该方向上的 margin，使其与其它元素隔离开来，这个技巧有利于做某些布局。详见「Auto margins are much more interesting in Flexbox:」的例子。
-
-### flex-wrap
-
-`flex-wrap: wrap` 之后，子项就不会被缩小，而是当空间不足时就直接换行。当然，如果独占一行时空间还不够假设空间的话，那么就会缩小。
-
-当换行之后，容器内就有多个主轴了，而不是一条主轴。
-
-当有了多条主轴之后，有意思的事情便发生了。`justify-content` 会一次性的控制所有主轴上的对齐方式（空间分布，distribution of space），而如果我们想把交叉轴上的所有项目的空间分布，那么就要使用 `align-content`（content 和 items 的命名的区别证明就来了）。并且，我们还可以用 `align-self` 来控制交叉轴上的特定子项的对齐方式！
-
-align-content 控制所有项目在交叉轴上的空间分布，align-items 控制一条主轴上的所有项目在交叉轴方向上的空间分布。
-
-> 理所当然的，`align-content` 只对多行的 flex 容器有影响。
 
 ## 参考资料
 
