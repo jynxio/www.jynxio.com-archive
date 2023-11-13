@@ -6,114 +6,111 @@ typora-root-url: ./..\..\image
 
 ## 概述
 
-flex 布局（flexible box layout）是一种弹性布局。相较于 grid 布局，flex 布局在处理一维布局的时候更加简单。
+Flex 布局的全称为弹性盒布局（FLexible box layout），相较于 Grid 布局，它在处理一维情况时更加简单。
 
 ## 启用
 
-如果元素为 `display: flex | inline-flex`，那么元素就会变成 flex 容器（flex container），子元素就会变成 flex 项（flex item），然后 flex 容器的内部将会激活 flex 布局，flex 项们都会参加进这个 flex 布局，不过 flex 容器还会留在原来的布局模式之中。
+令 `display: flex ｜ inline-flex` ，即可激活 Flex 布局。
 
-`display: flex` 和 `display: inline-flex` 的区别在于，前者会使 flex 容器成为块级元素（block-level element），后者会使 flex 容器成为行内块元素（inline-block element），除此之外，便再无其他区别了。
+> `flex` 令容器变成块级元素，`inline-flex` 使容器变成行内块元素。
 
-另外，flex 项的 `float`、`clear`、`vertical-align` 属性会失效。
-
-## 语法
-
-| 用于 flex 容器    | 用于 flex 项  |
-| ----------------- | ------------- |
-| `flex-direction`  | `flex-basis`  |
-| `justify-content` | `flex-grow`   |
-| `align-content`   | `flex-shrink` |
-| `align-items`     | `align-self`  |
-| `gap`             |               |
+激活 Flex 布局的元素会变成 Flex 容器（Flex container，即容器），容器的子元素会变成 Flex 项（Flex item，即项），项会参与 Flex 布局，容器还会留在原来的布局模式。另外。项的 `float`、`clear`、`vertical-align` 属性会失效。
 
 ## 方向
 
-flex 布局有一条主轴（main axis）和一条交叉轴（cross axis），主轴和交叉轴总是互相垂直。flex 项沿着主起点（main start）到主终点（main end）的方向来排列，flex 项沿着交叉起点（cross start）到交叉终点（cross end）的方向来换行。
+容器的内部有 2 个方向，分别是主方向和交叉方向，项会沿着主起点到主终点的方向来依次排列，沿着交叉起点到交叉终点的方向来换行，而且我们还可以控制项在主方向和交叉方向上的尺寸和对齐行为。
 
-实际上，主轴和交叉轴的方向是由 `writing-mode`、`direction`、`flex-direction` 共 3 个属性一起决定的。
-
-[TODO: 所有组合情况 + 多条主轴]
-
-### direction 与 writing-mode
-
-`direction`  设置书写方向的「始与终」，`writing-mode` 设置书写方向的「横与纵」以及换行方向，「横与纵」是指文本沿着水平或垂直方向来书写，「始与终」是指文本在横行或纵列中的书写起点与终点。
-
-| writing-mode    | 描述                                                         |
-| --------------- | ------------------------------------------------------------ |
-| `horizontal-tb` | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行   |
-| `vertical-lr`   | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行   |
-| `vertical-rl`   | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行   |
-| `sideways-lr`   | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
-| `sideways-rl`   | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
-
-| direction | 描述                                                         |
-| --------- | ------------------------------------------------------------ |
-| `ltr`     | 对于横行模式，文本沿着从左（始）到右（终）的方向书写；对于纵列模式，文本沿着从上（始）到下（终）的方向书写； |
-| `rtl`     | 与 `ltr` 相反                                                |
-
-> direction 和 dir 的区别：
+> 之所以称为交叉方向，是因为交叉方向总是垂直于主方向，即交叉。
 >
-> `direction` 是 CSS 属性，`dir` 是 HTML 属性，它们的作用是几乎相同的，为了便于演示，本文故意忽略了 `dir` 属性。
+
+CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主方向和交叉方向，这是一个具有误导性的命名，因为主轴和交叉轴的真正含义应该是「方向」而不是「轴线」，方向上是可以有无数条轴线的。因此，接下来我会使用主方向和交叉方向这 2 个名次来代替主轴和交叉轴。
+
+主方向和交叉方向是由 `flex-direction`、`writing-mode`、`direction` 共同决定的，`writing-mode & direction` 用于设置书写方向和换行方向，`flex-direction` 用于设置如何根据书写方向和换行方向来推导出主方向和交叉方向。
+
+[TODO: 所有组合情况 + 换行 + 在线示例 + 参考 Interactive Review 的首图]
+
+### 主方向和交叉方向
+
+主方向和交叉方向推导自书写方向和换行方向，`flex-direction` 用于设置推导的具体方式，详见「语法小册」的「flex-direction」部分。
+
+### 书写方向和换行方向
+
+`writing-mode` 用于设置书写方向的「横与纵」，即令文本沿着水平或垂直方向来书写，`direction` 用于设置书写方向的「始与终」，即文本在横行或纵列中的书写起点与终点。
+
+[TODO: 6 种组合的示意图]
+
+> `direction` VS `dir`：
 >
-> 实际上，如果我们想要设置整个网页的书写方向，那么我们应该在 `<html>` 上直接应用 `dir` 和 `lang` 属性，如此做的好处便是“网页在加载之初就确定好了书写方向而不需要等待 CSS 文件”。
-
-TODO: direction 和 writing-mode 的 6 种情况的图
-
-### flex-direction
-
-| flex-direction   | 描述                                             |
-| ---------------- | ------------------------------------------------ |
-| `row`            | 主轴方向与书写方向相同，交叉轴方向与换行方向相同 |
-| `row-reverse`    | 主轴方向与书写方向相反，交叉轴方向与换行方向相同 |
-| `column`         | 主轴方向与换行方向相同，交叉轴方向与书写方向相同 |
-| `column-reverse` | 主轴方向与换行方向相反，交叉轴方向与书写方向相同 |
-
-TODO：补图或代码，参考「Interactive Review」中的首图
+> 它们两者的作用是几乎相同的，只是前者是 CSS 属性，后者是 HTML 属性，本文为了便于演示，故意忽略掉了 `dir`。实际上，如果我们想要设置整个网页的书写方向，那么我们应该在 `<html>` 上直接应用 `dir` 和 `lang` 属性，，如此做的好处便是“网页在加载之初就确定好了书写方向而不需要等待 CSS 文件”。
 
 ## 尺寸
 
-flex 项在主轴方向和交叉轴方向上分别有 2 个尺寸，分别是主尺寸（main size）和交叉尺寸（cross size）。
+项的尺寸有 2 个维度，分别是主方向上的主尺寸（Main size）和交叉方向上的交叉尺寸（Cross size）。
 
-主尺寸的计算方式相对曲折，具体来说：首先设置主轴方向上的假设尺寸（hypothetical size），然后如果 flex 项会溢出包含块，那么就削减自身的假设尺寸来抵消溢出，反之就瓜分多余的空间来填满空余，最后才得到主尺寸。
+### 主尺寸的计算
+
+主尺寸的计算是复杂的，下面是其计算步骤：
+
+1. 敲定每个项在主方向上的假设尺寸和间隙大小；
+2. 计算所有项在主方向上的总占用大小；
+3. 如果项会溢出包含块：
+	1. 如果禁止换行：
+		1. 如果禁止收缩，那么就直接溢出；
+		2. 如果允许收缩，那么就通过缩减假设尺寸来抵消溢出，未能抵消的部分仍会继续溢出；
+	2. 如果允许换行：
+		1. 换行，如果换行后仍会溢出，则回到 3.1；
+		2. 换行，如果换行后未能占满，则回到 4；
+4. 如果项未占满包含块：
+	1. 如果禁止拉伸，那么就保持假设尺寸；
+	2. 如果允许拉伸，那么就通过增加假设尺寸来瓜分冗余空间；
+
+> 包含块是容器的内容盒（Content box）。
+
+### 交叉尺寸的计算
+
+交叉尺寸的计算是简单的，规律如下：
+
+- 如果 `cross-size` 为 `auto`：
+	- 如果为 `stretch`，则项将拉伸以填满交叉空间；
+	- 如果非 `stretch`，则项的交叉尺寸就等于内容尺寸；
+- 如果 `cross-size` 非 `auto`，则项的交叉尺寸就等于 `cross-size`；
+
+> `cross-size` 是我对 `inline-size`、`block-size`、`width`、`height` 的简称。
+
+### 最佳实践
+
+请总是使用 `flex` 的三值语法，而不要使用缩写语法，原因是：缩写语法可能会隐晦的修改 `flex-basis` 的值。
+
+请总是使用 `flex-basis`，而不要使用 `main-size`，原因如下：
+
+| 结果 | 项目                       | 分析                                                         |
+| ---- | -------------------------- | ------------------------------------------------------------ |
+| ✅    | `flex-basis`               | 总是指向主方向                                               |
+| ❌    | `inline-size | block-size` | 不总是指向主方向，因为遵循逻辑方向，而逻辑方向因受书写方向和换行方向影响而复杂多变 |
+| ❌    | `width | height`           | 不总是指向主方向，因为遵循物理方向，物理方向是不灵活的       |
+
+> 其实还有一个原因，`main-size` 可以诡异的突破项内建的最小主尺寸，我想避免诡异的事情。
+
+### 假设尺寸
+
+假设尺寸（Hypothetical size）特指项在主方向上的假设尺寸，它由 `flex-basis` 或 `main-size` 设置，它会受到 `box-sizeing` 的影响，即如果 `box-sizeing: content-box`，则假设尺寸作用于内容盒，如果 `box-sizeing: border-box`，则假设尺寸作用于边框盒。
+
+`flex-basis` 和 `main-size` 是互相冲突的，其关系如下：
+
+- 如果 `flex-basis` 为 `auto`：
+	- 如果 `main-size` 为 `auto`，则取 `flex-basis: content`；
+	- 如果 `main-size` 非 `auto`，则取 `main-size`；
+- 如果 `flex-basis` 非 `auto`，则取 `flex-basis`；
+
+> `main-size` 是我对 `inline-size`、`block-size`、`width`、`height` 的简称。
+
+### TODO
 
 CSS 规范把多余的空间被称为「positive free space」(正可用空间)，把溢出的空间被称为「negative free space」（负可用空间），计算公式为：
 
 ```
 正/负可用空间 = 包含块主尺寸 - ( 项的假设尺寸之和 + 项的外边距之和 + 项的间隙之和 )
 ```
-
-> 其中，flex 项的包含块是 flex 容器的 content box。
-
-交叉尺寸的计算方式相对直白，具体来说：直接通过 `inline-size` 或 `block-size` 来设置，或被 `align-items: stretch` 拉伸至填满交叉轴空间，如果两种方式发生冲突时，那么取前者。
-
-### 最佳实践
-
-1. 总是使用 `flex` 的三值语法；
-2. 总是使用 `flex-basis`，不要使用 `inline-size | block-size` 或 `width | height`；
-
-关于第一点：`flex` 的单值或双值语法会暗地里篡改 `flex-basis` 的默认值。
-
-关于第二点：`flex-basis` 的方向总是等于主轴方向，这很简洁。相比之下，逻辑方向会在 `dir`、`writing-mode`、`flex-direction` 多变时变得非常烧脑，而且物理方向又过于死板。另外，逻辑方向尺寸和物理方向尺寸都可以诡异的突破内建的最小主尺寸（详见「极限尺寸」小节），我想避免这些诡异的事情。
-
-### 假设尺寸
-
-`flex-basis`、`inline-size | block-size` 都可以设置假设尺寸。
-
-> 如果 `box-sizing: content-box`，那么 `flex-basis` 设置 content box 的主尺寸；如果 `box-sizing: border-box`，那么 `flex-basis` 设置 border box 的主尺寸。
-
-- 如果同时设置了两者，那么取 `flex-basis` 的值；
-- 如果 `flex-basis: auto`，那么取 `inline-size | block-size` 的值；
-- 如果 `flex-basis: auto` 且 `inline-size | block-size: auto`，那么取 `flex-basis: content`；
-
-| flex-basis     | 描述                                                         |
-| -------------- | ------------------------------------------------------------ |
-| `auto`         | 等价于 `inline-size` 或 `block-size` 的值                    |
-| `content`      | 等价于 `max-content`                                         |
-| `max-content`  | 表示元素内容的最大宽度，对于文本内容而言，最终宽度就等于文本不换行时的宽度，比如对于“A title for an awesome”而言，最终宽度就等于“A title for an awesome”的宽度 |
-| `min-content`  | 表示元素内容的最小宽度，对于文本内容而言，将会通过换行来缩减宽度，最终宽度将会等于最长单词的宽度。比如对于“A title for an awesome”而言，最终宽度将会等于“awesome”的宽度 |
-| `fit-content`  | 如果当前的可用空间大于 `max-content`，那么就等价于 `max-content`；如果当前空间小于 `min-content`，那么就等价于 `min-content`；否则就等于可用空间 |
-| `<length>`     | 绝对值，如 `10em`                                            |
-| `<percentage>` | 百分比值，如 `10%`（flex 项的包含块是 flex 容器的 content box） |
 
 ### 极限尺寸
 
@@ -134,9 +131,19 @@ TODO：一个以“Awesome”为内容的 flex 项的例子
 
 ### 拉伸规律
 
-```
-flex-grow: <number>
-```
+TODO
+
+TODO
+
+TODO
+
+TODO
+
+TODO
+
+TODO
+
+TODO
 
 TODO: 斜线标记 grow 空间 | 图中写明“拉伸规律” | 含有 margin | 含有 gap | 「I think it'll be easier to explain visually. Try incrementing/decremen」的例子
 
@@ -343,6 +350,62 @@ flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin �
     }
 </style>
 ```
+
+## 语法小册
+
+| 容器属性          | 项属性        |
+| ----------------- | ------------- |
+| `flex-direction`  | `flex-basis`  |
+| `justify-content` | `flex-grow`   |
+| `align-content`   | `flex-shrink` |
+| `align-items`     | `align-self`  |
+| `gap`             |               |
+
+### writing-mode
+
+| 值              | 描述                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `horizontal-tb` | 文本沿着水平方向书写，沿着从上（`t`）到下（`b`）的方向换行   |
+| `vertical-lr`   | 文本沿着垂直方向书写，沿着从左（`l`）到右（`r`）的方向换行   |
+| `vertical-rl`   | 文本沿着垂直方向书写，沿着从右（`r`）到左（`l`）的方向换行   |
+| `sideways-lr`   | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
+| `sideways-rl`   | 略，因为 [除了 Firefox 之外，没有任何浏览器实现该特性](https://caniuse.com/mdn-css_properties_writing-mode_sideways_values) |
+
+### direction
+
+| 值    | 描述                                                         |
+| ----- | ------------------------------------------------------------ |
+| `ltr` | 对于横行模式，文本沿着从左（始）到右（终）的方向书写；对于纵列模式，文本沿着从上（始）到下（终）的方向书写； |
+| `rtl` | 与 `ltr` 相反                                                |
+
+### flex-direction
+
+| 值               | 描述                                             |
+| ---------------- | ------------------------------------------------ |
+| `row`            | 主轴方向与书写方向相同，交叉轴方向与换行方向相同 |
+| `column`         | 主轴方向与换行方向相同，交叉轴方向与书写方向相同 |
+| `row-reverse`    | 主轴方向与书写方向相反，交叉轴方向与换行方向相同 |
+| `column-reverse` | 主轴方向与换行方向相反，交叉轴方向与书写方向相同 |
+
+### flex-basis
+
+| 值             | 描述                                                         |
+| -------------- | ------------------------------------------------------------ |
+| `auto`         | 若 `main-size` 非 `auto`，则采用 `main-size`，否则采用 `flex-basis: content` |
+| `content`      | 等价于 `max-content`                                         |
+| `min-content`  | 采用元素的最小尺寸。对于文本而言，将会通过换行来缩减宽度，最终宽度即是最长单词的宽度，比如假设元素内容为“A title for an awesome”，元素宽度即是“awesome”的宽度 |
+| `max-content`  | 采用元素的最大尺寸。对于文本而言，最终宽度即是文本不换行时的宽度，比如假设元素内容为“A title for an awesome”，元素宽度即是“A title for an awesome”的宽度 |
+| `fit-content`  | 如果可用空间大于 `max-content`，则采用 `max-content`；如果可用空间小于 `min-content`，则采用 `min-content`；否则就采用可用空间的尺寸 |
+| `<length>`     | 绝对值，如 `10em`                                            |
+| `<percentage>` | 百分比值，如 `10%`（flex 项的包含块是 flex 容器的 content box） |
+
+### flex-grow
+
+| 值         | 描述   |
+| ---------- | ------ |
+| `<number>` | 正数值 |
+
+
 
 ## 参考资料
 
