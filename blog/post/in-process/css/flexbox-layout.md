@@ -106,7 +106,7 @@ CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主
 主方向上的可用空间的计算公式是：
 
 ```
-可用空间 = 包含块内容盒尺寸 - 外边距盒假设尺寸 * 项数 - 间隙尺寸 * ( 项数 - 1 )
+可用空间 = 包含块内容盒尺寸 - 外边距盒假设尺寸 * 项数 - 空隙尺寸 * ( 项数 - 1 )
 ```
 
 其中，包含块是指容器的内容盒，外边距盒假设尺寸是指含有假设尺寸的外边距盒尺寸。
@@ -147,128 +147,57 @@ TODO：一个以“Awesome”为内容的 flex 项的例子
 
 ## 对齐
 
-对齐是指项在某个空间中的分布策略，我个人把这个空间称为「对齐空间」。
+对齐是指对齐单元在对齐空间中的分布行为，对齐单元是指受控对象，对齐空间是指受控对象的活动范围。我们可以分别设置项在主方向和交叉方向上的对齐，不过仅当可用空间为正时，设置才会产生视觉效果。
 
-我们可以分别设置项在主方向和交叉方向上的分布策略，不过仅当可用空间为正时，设置才会有视觉效果。
+| 属性              | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `justify-content` | 控制行（或列）内的项在主方向上的对齐                         |
+| `align-items`     | 控制行（或列）内的项在交叉方向上的对齐                       |
+| `align-self`      | 控制一个行（或列）内的项在交叉方向上的对齐，可以覆盖 `align-items` 属性 |
+| `align-content`   | 控制容器内的行（或列）在交叉方向上的对齐，它仅在容器有多行（或列）时才有效 |
 
-### 主方向的对齐
+> content 和 items 的概念之差：`*-content` 属性的对齐单元在对齐时会互相影响，`*-items` 属性的对齐单元则不会。
 
-TODO TODO TODO TODO TODO
+### 自动外边距
 
-`justify-content` 用于设置主方向上的对齐，它控制的对象是主方向上的处于同一行的所有项，它控制的粒度是一个项，它的对齐空间是包含块的主方向上的容量。
+如果 `margin: auto`，那么项会吞噬掉主方向或交叉方向上的正可用空间。有时，这会成为一种布局技巧，比如：
 
-### 交叉方向的对齐
+```html
+<header style="display: flex">
+	<i style="margin-inline-end: auto">Logo</i>
+    <i>Option</i>
+    <i>Option</i>
+    <i>Option</i>
+</header>
+```
 
+有时，这会变成一种陷阱，比如：
 
+- 如果吞噬掉了主方向的正可用空间，那么就会导致 `justify-content` 失效；
+- 如果吞噬掉了交叉方向的正可用空间，那么就会导致 `align-items` 和 `align-self` 失效；
 
-`align-items`、`align-content`、`align-self` 都可以设置交叉轴上的对齐方式，区别在于：
+## 空隙
 
-| 名称            | 作用域 | 作用                                   |
-| --------------- | ------ | -------------------------------------- |
-| `align-items`   | 容器   | 设置所有项在自己的交叉空间上的对齐方式 |
-| `align-content` | 容器   | 设置所有项在整个交叉空间上的对齐方式   |
-| `align-self`    | 项     | 设置一个项在自己的交叉空间上的对齐方式 |
+`gap` 是 `row-gap` 和 `column-gap` 的简写属性，其中 `column-gap` 控制行（或列）内的项在主方向上的空隙，`row-gap` 控制容器内的行（或列）在交叉方向上的空隙，`row-gap` 仅在容器有多行（或列）时才有效。
 
-TODO: 区别图
+## 排序
 
-关于文字基线，请看 [这里](https://en.wikipedia.org/wiki/Baseline_(typography))。
+容器会根据项的 `order` 值和 DOM 顺序来进行排序：
 
-`baseline` 值具有穿透性，具体来说，flex 项内的元素也会参与基线对齐。
+- 如果 `order` 不同，那么值越小的项越靠近首行（或列）的主起点；
+- 如果 `order` 相同，那么 DOM 顺序越早的项越靠近首行（或列）的主起点；
 
-| align-items      | 描述                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| `normal`         | 等价于 `stretch`                                             |
-| `stretch`        | 如果交叉尺寸为 `auto`，则自动填满交叉空间，否则采用交叉尺寸  |
-| `flex-start`     | 紧贴交叉起点                                                 |
-| `flex-end`       | 紧贴交叉终点                                                 |
-| `center`         | 居中                                                         |
-| `baseline`       | 等价于 `first baseline`                                      |
-| `first baseline` | 令所有项的首行文本的基线互相对齐                             |
-| `last baseline`  | 令所有项的末行文本的基线互相对齐                             |
-| `start`          | 等价于 `flex-start`                                          |
-| `end`            | 等价于 `flex-end`                                            |
-| `self-start`     | 其受项自身的 `writing-mode` 与 `direction` 的影响，具体影响不确定 |
-| `self-end`       | 其受项自身的 `writing-mode` 与 `direction` 的影响，具体影响不确定 |
-| `safe *`         | ？                                                           |
-| `unsafe *`       | ？                                                           |
-
-`align-content` 的作用类似于 `justify-content`，并且仅当 `flex-wrap: wrap | wrap-reverse`时，`align-content` 才会生效。如果 `align-content: normal`，那么 `align-items` 生效，否则 `align-items` 将会被 `align-content` 遮蔽（TODO：baseline 不会被遮蔽）。
-
-要使 `align-content` 生效，那么容器的高度也要高于所有项目的总高度。
-
-| align-content    | 描述                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| `normal`         | `align-content` 不生效，`align-items` 生效                   |
-| `stretch`        | 等价于 `align-items` 的 `stretch`                            |
-| `flex-start`     | 等价于 `justify-content` 的 `flex-start`                     |
-| `flex-end`       | 等价于 `justify-content` 的 `flex-end`                       |
-| `center`         | 等价于 `justify-content` 的 `center`                         |
-| `baseline`       | 等价于 `justify-content` 的 `flex-start` 和 `align-items` 的 `baseline` 的结合 |
-| `first baseline` | 等价于 `baseline`                                            |
-| `last baseline`  | 无效属性值                                                   |
-| `start`          | 等价于 `flex-start`                                          |
-| `end`            | 等价于 `flex-end`                                            |
-| `space-between`  | 等价于 `justify-content` 的 `space-between`                  |
-| `space-around`   | 等价于 `justify-content` 的 `space-around`                   |
-| `space-evenly`   | 等价于 `justify-content` 的 `space-evenly`                   |
-| `safe *`         | ？                                                           |
-| `unsafe *`       | ？                                                           |
-
-`align-self` 是属于 flex 项的 CSS 属性，它会覆盖 `align-items` 为其指定的对齐方式，它的取值及值的作用和 `align-items` 的值一模一样，区别在于它还有一个额外的 `auto` 值，该值的作用是令其采纳 `align-items` 为其指定的对齐方式。
-
-陷阱：If a flexbox item's cross-axis margin is `auto`, then `align-self` is ignored.
-
-陷阱：align-self: flex-start 似乎有 fit-content 的效果
-
-陷阱：似乎只要设置 align-*，相应的元素就会自动 fit-content！快验证一下！
-
-### content 和 items 的术语之差
-
-items 的控制粒度是一个 flex 项，它用于设置每一个 flex 项在自己的独立空间中的对齐方式，相邻的项与项之间是互不影响的。content 的控制粒度是一群 flex 项，它用于设置一群 flex 项和一群 flex 项之间在整个空间中的对齐方式，一群项和一群项之间的对齐是互相影响的。
-
-### 自动外边距技巧
-
-`margin: auto` 可以帮助 flex 项吃掉主轴方向上的多余空间，但是没法吃掉交叉轴方向上的多余空间，这个可以用来做一些特别的布局。
-
-TODO: logo 和导航分居两侧的对齐案例
-
-## 间隙
-
-`gap` 是 `row-gap` 和 `column-gap` 的缩写，当 `flex-wrap: wrap | wrap-reverse` 时，`column-gap` 就会有效。
-
-## 换行
-
-“flex 布局是一维布局，一旦换行之后，那么每一行都相当于一个新的 flex 容器，行与行之间的 flex 项不会彼此影响，grid 项则不然。比如，它没有办法让下一行的项和上一行的项对齐，所以它是单维布局。”
-
-「Wrapping」的第一个交互示例很棒！
-
-这节课的练习作业说明了一件事情：如果换行了，那么就会有多条主轴！
-
-> flex-wrap 被用于双维度布局，但事实上，此时我们应该使用 Grid 布局，后者更棒。
-
-换行的方向是怎么确定的呢？
-
-`flex-wrap: wrap` 之后，子项就不会被缩小，而是当空间不足时就直接换行。当然，如果独占一行时空间还不够假设空间的话，那么就会缩小。
-
-## 顺序
-
-flex 容器会按照 order 的升序和自己的方向来排序子项，如果 order 相同，则按照 dom顺序来排序，默认情况下，大家的 order 都是 0。
-
-order 只是改变了子项在视觉上的布局顺序，但是没有改变子项在 dom 中的顺序，因此对于 tab 聚焦这种事情来说，它可能会造成可访问性的障碍。
+默认情况下，所有项的 `order` 都是 `0`。
 
 ## 重叠
 
-flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin 来实现重叠），z-index 大者获胜。
-
-## visibility 属性
-
-在 flex 项上应用 `visibility: collapse` 等价于为该项应用 `display: none`，不过 Chrome 和 Safari 仍有 [bug](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Mastering_wrapping_of_flex_items#collapsed_items)，该 bug 导致它们将 `visibility: collapse` 解析为 `visibility: hidden`，Firefox 则可以正确解析 `visibility: collapse` 的行为。
+项支持 `z-index` 属性，它会遵循层叠规则来处理层叠矛盾。关于层叠规则，请见另一篇博客《定位布局》的「层叠规则」小节。
 
 ## 布局冲突
 
-通常，元素只能采用一种布局模式，如果我们尝试为元素赋予多种布局模式，那么元素最后也只会采用其中的一种。具体来说，如果一个元素被同时赋予了定位布局和其他布局，那么元素就总是会采用定位布局，然后忽略另一种布局。
+元素通常只能采用一种布局模式，哪怕为元素赋予了多种布局模式，元素最后也只会采用其中的一种。
 
-比如，下例中的 `<div>` 会采用定位布局而不是 flex 布局。最后，对于 `<section>` 而言，它会忽略掉 `<div`，对于 `<div>` 而言，它会忽略掉其他的 flex 项（此行为对 `<div>` 的初始位置的计算会有影响）。
+如果元素被同时赋予了定位布局和其他布局，那么元素总是会采用定位布局，比如：下例中的 `<div>` 会采用定位布局而不是 flex 布局。最后，对于 `<section>` 而言，它会忽略掉 `<div`，对于 `<div>` 而言，它会忽略掉其他的 flex 项（此行为对 `<div>` 的初始位置的计算会有影响）。
 
 ```html
 <!-- 原始代码 -->
@@ -290,21 +219,23 @@ flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin �
 </section>
 ```
 
-例外的是，flex 布局可以和相对定位布局稳定的共存，也可以和沾滞定位布局不稳定的共存。比如只要为 flex 项激活相对定位布局，那么就可以直接使用相对定位布局的所有特性了，比如使用 `inset` 来偏移元素的位置，就像下例那样。不过，请不要为 flex 项激活沾滞定位布局，因为这两种布局不能稳定的共存，它们结合之后会触发一些难以理解的行为。
+例外的是，Flex 布局可以和相对定位布局稳定的共存，只要为项激活相对定位布局，项就可以使用相对定位布局的特性了，比如使用 `inset` 来偏移元素。
 
 ```html
 <section style="display: flex">
 	<aside></aside>
-    <div style="position: relative; top: 1rem; left: 1rem"></div>
+    <div style="position: relative; inset: 1rem auto auto 1rem;"></div>
     <aside></aside>
 </section>
 ```
 
-## 可用性障碍
+其实，Flex 布局也可以和沾滞定位布局共存，只是并不稳定，因此不做讨论。
 
-`flex-direction: row-reverse | column-reverse` 和 `order` 可以在视觉上改变元素的渲染顺序，有时候这会造成一些可用性上的障碍，因为屏幕阅读器和 Tab 键等辅助设备仍然会遵循 DOM 顺序来聚焦元素。
+## 交互障碍
 
-如下例所示，Tab 键会从右向左聚焦元素，屏幕阅读器会从右向左阅读内容，这会让人感得困惑。
+`flex-direction: row-reverse | column-reverse` 和 `order` 可以在视觉上改变项的渲染顺序，有时候这会造成一些可用性上的障碍，因为屏幕阅读器和 Tab 键等辅助设备仍然会遵循 DOM 顺序来聚焦项。
+
+如下例所示，Tab 键会从右向左聚焦项，屏幕阅读器会从右向左阅读内容，这会让人感得困惑。
 
 ```html
 <ul>
@@ -400,6 +331,64 @@ flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin �
 | `safe *`        | ？                                                           |
 | `unsafe *`      | ？                                                           |
 
+### align-items
+
+| 值               | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `normal`         | 等价于 `stretch`                                             |
+| `stretch`        | 如果交叉尺寸为 `auto`，则自动填满交叉空间，否则采用交叉尺寸  |
+| `flex-start`     | 紧贴交叉起点                                                 |
+| `flex-end`       | 紧贴交叉终点                                                 |
+| `center`         | 居中                                                         |
+| `baseline`       | 等价于 `first baseline`                                      |
+| `first baseline` | 令所有项的首行文本的 [基线](https://en.wikipedia.org/wiki/Baseline_(typography)) 互相对齐 |
+| `last baseline`  | 令所有项的末行文本的 [基线](https://en.wikipedia.org/wiki/Baseline_(typography)) 互相对齐 |
+| `start`          | 等价于 `flex-start`                                          |
+| `end`            | 等价于 `flex-end`                                            |
+| `self-start`     | 其受项自身的 `writing-mode` 与 `direction` 的影响，具体影响不确定 |
+| `self-end`       | 其受项自身的 `writing-mode` 与 `direction` 的影响，具体影响不确定 |
+| `safe *`         | ？                                                           |
+| `unsafe *`       | ？                                                           |
+
+> `baseline` 值具有穿透性，即项内的子元素也会参与基线对齐。
+
+### align-self
+
+它拥有 `align-items` 属性的所有值，并且还有一个额外的 `auto` 值。如果 `align-self: auto`，则取 `align-items`。
+
+### align-content
+
+| 值               | 描述                                         |
+| ---------------- | -------------------------------------------- |
+| `normal`         | 正可用空间被均分至每一行（或列）的交叉终点端 |
+| `stretch`        | 等价于 `normal`                              |
+| `flex-start`     | 等价于 `justify-content` 的 `flex-start`     |
+| `flex-end`       | 等价于 `justify-content` 的 `flex-end`       |
+| `center`         | 等价于 `justify-content` 的 `center`         |
+| `baseline`       | 等价于 `flex-start`                          |
+| `first baseline` | 无效值                                       |
+| `last baseline`  | 无效值                                       |
+| `start`          | 等价于 `flex-start`                          |
+| `end`            | 等价于 `flex-end`                            |
+| `space-between`  | 等价于 `justify-content` 的 `space-between`  |
+| `space-around`   | 等价于 `justify-content` 的 `space-around`   |
+| `space-evenly`   | 等价于 `justify-content` 的 `space-evenly`   |
+| `safe *`         | ？                                           |
+| `unsafe *`       | ？                                           |
+
+### order
+
+| 值          | 描述   |
+| ----------- | ------ |
+| `<integer>` | 整数值 |
+
+### z-index
+
+| 值          | 描述                                 |
+| ----------- | ------------------------------------ |
+| `auto`      | 层叠等级为 `0`，且不会创建层叠上下文 |
+| `<integer>` | 整数值，且会创建层叠上下文           |
+
 ## 参考资料
 
-https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/
+- [An Interactive Guide to Flexbox](https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/)
