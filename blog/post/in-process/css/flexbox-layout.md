@@ -45,43 +45,40 @@ CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主
 
 ## 尺寸
 
-项的尺寸有 2 个维度，分别是主方向上的主尺寸（Main size）和交叉方向上的交叉尺寸（Cross size）。
+项有主尺寸（Main size）和交叉尺寸（Cross size）。注意，此尺寸不等于项的外边距盒尺寸，而取决于 `box-sizing` 属性。
 
-### 主尺寸的计算
+### 主尺寸
 
-主尺寸的计算是复杂的，下面是其计算步骤：
+主尺寸的计算规则如下：
 
-1. 敲定每个项在主方向上的假设尺寸和间隙大小；
-2. 计算所有项在主方向上的总占用大小；
-3. 如果项会溢出包含块：
+1. 如果主方向上的可用空间为负：
 	1. 如果禁止换行：
 		1. 如果禁止收缩，那么就直接溢出；
-		2. 如果允许收缩，那么就通过缩减假设尺寸来抵消溢出，未能抵消的部分仍会继续溢出；
+		2. 如果允许收缩，那么就通过缩减假设尺寸来尽量抵消溢出，未能抵消的部分仍会继续溢出；
 	2. 如果允许换行：
-		1. 换行，如果换行后仍会溢出，则回到 3.1；
-		2. 换行，如果换行后未能占满，则回到 4；
-4. 如果项未占满包含块：
-	1. 如果禁止拉伸，那么就保持假设尺寸；
-	2. 如果允许拉伸，那么就通过增加假设尺寸来瓜分冗余空间；
+		1. 执行换行，如果主方向上的可用空间仍为负，则跳转至 1.1；
+		2. 执行换行，如果主方向上的可用空间变为正，则跳转至 2；
+2. 如果主方向上的可用空间为正：
+	1. 如果禁止拉伸，那么就采用假设尺寸来作为主尺寸；
+	2. 如果允许拉伸，那么就瓜分正可用空间，然后采用拉伸后的假设尺寸来作为主尺寸；
 
-> 包含块是容器的内容盒（Content box）。
+> 技巧：如果想让所有项的主尺寸均相等，那么就把所有项都设置为 `flex: 1 0 0`，这会将所有的空间都变成正可用空间并让每个项均分，最后就能令所有项的主尺寸均相等。
 
-### 交叉尺寸的计算
+### 交叉尺寸
 
-交叉尺寸的计算是简单的，规律如下：
+交叉尺寸的计算规则如下：
 
-- 如果 `cross-size` 为 `auto`：
+- 如果传统尺寸属性为 `auto`：
 	- 如果为 `stretch`，则项将拉伸以填满交叉空间；
 	- 如果非 `stretch`，则项的交叉尺寸就等于内容尺寸；
-- 如果 `cross-size` 非 `auto`，则项的交叉尺寸就等于 `cross-size`；
-
-> `cross-size` 是我对 `inline-size`、`block-size`、`width`、`height` 的简称。
+- 如果传统尺寸属性非 `auto`，则项的交叉尺寸就等于传统尺寸属性；
 
 ### 最佳实践
 
-请总是使用 `flex` 的三值语法，而不要使用缩写语法，原因是：缩写语法可能会隐晦的修改 `flex-basis` 的值。
-
-请总是使用 `flex-basis`，而不要使用 `main-size`，原因如下：
+1. 请总是使用 `flex` 的三值语法，而不要使用缩写语法，因为：缩写语法可能会隐晦的修改 `flex-basis` 的值；
+2. 请总是使用 `flex-basis`，而不要使用传统尺寸属性，因为：
+	1. `flex-basis` 更简单；
+	2. 传统尺寸属性可以诡异的突破项内建的最小主尺寸，我想避免诡异的事情；
 
 | 结果 | 项目                       | 分析                                                         |
 | ---- | -------------------------- | ------------------------------------------------------------ |
@@ -89,107 +86,80 @@ CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主
 | ❌    | `inline-size | block-size` | 不总是指向主方向，因为遵循逻辑方向，而逻辑方向因受书写方向和换行方向影响而复杂多变 |
 | ❌    | `width | height`           | 不总是指向主方向，因为遵循物理方向，物理方向是不灵活的       |
 
-> 其实还有一个原因，`main-size` 可以诡异的突破项内建的最小主尺寸，我想避免诡异的事情。
+> 传统尺寸属性是我对 `inline-size`、`block-size`、`width`、`height` 的简称。
 
 ### 假设尺寸
 
-假设尺寸（Hypothetical size）特指项在主方向上的假设尺寸，它由 `flex-basis` 或 `main-size` 设置，它会受到 `box-sizeing` 的影响，即如果 `box-sizeing: content-box`，则假设尺寸作用于内容盒，如果 `box-sizeing: border-box`，则假设尺寸作用于边框盒。
+> 只有主方向才有假设尺寸，交叉方向没有假设尺寸。
 
-`flex-basis` 和 `main-size` 是互相冲突的，其关系如下：
+假设尺寸（Hypothetical size）是由 `flex-basis` 或传统尺寸属性设置，假设尺寸的生效范围取决于 `box-sizing` 属性，假设尺寸的设置规则如下：
 
 - 如果 `flex-basis` 为 `auto`：
-	- 如果 `main-size` 为 `auto`，则取 `flex-basis: content`；
-	- 如果 `main-size` 非 `auto`，则取 `main-size`；
+	- 如果传统尺寸属性为 `auto`，则取 `flex-basis: content`；
+	- 如果传统尺寸属性非 `auto`，则取传统尺寸属性；
 - 如果 `flex-basis` 非 `auto`，则取 `flex-basis`；
 
-> `main-size` 是我对 `inline-size`、`block-size`、`width`、`height` 的简称。
+### 可用空间
 
-### TODO
+如果项无法填满容器，那么就会产生冗余空间，如果项溢出了容器，那么就会产生溢出空间。CSS 规范把冗余空间称为正可用空间（Positive free space），把溢出空间称为负可用空间（Negative free space）。
 
-CSS 规范把多余的空间被称为「positive free space」(正可用空间)，把溢出的空间被称为「negative free space」（负可用空间），计算公式为：
+主方向上的可用空间的计算公式是：
 
 ```
-正/负可用空间 = 包含块主尺寸 - ( 项的假设尺寸之和 + 项的外边距之和 + 项的间隙之和 )
+可用空间 = 包含块内容盒尺寸 - 外边距盒假设尺寸 * 项数 - 间隙尺寸 * ( 项数 - 1 )
 ```
 
-### 极限尺寸
+其中，包含块是指容器的内容盒，外边距盒假设尺寸是指含有假设尺寸的外边距盒尺寸。
 
-`min-inline-size | min-block-size` 和 `max-inline-size | max-block-size` 可以设置 flex 项的极限尺寸。
+### 拉伸公式
 
-在流式布局中，元素的 `min-inline-size | min-block-size` 的默认值是 `0`。可是在 flex 布局中，flex 项的 `min-inline-size | min-block-size` 的默认值是 `auto`，这导致了以下两种 flex 项将会具有内建的最小主尺寸：
-
-- 如果为 `<input type="text" />`，那么最小主尺寸约为 `170 ~ 200px`，具体值取决于浏览器的实现，且该值无法被控制台发现；
-- 如果含有文本，那么最小主尺寸是 `min-content`；
-
-这导致了 `flex-basis` 和 `flex-shrink` 无法突破 `min-content`，除非为其指定一个新的最小主尺寸，比如 `min-inline-size: 0`。
-
-TODO：一个以“Awesome”为内容的 flex 项的例子
-
-诡异的是，`inline-size | block-size` 可以直接突破内建的最小主尺寸。更诡异的是，如果 `inline-size | block-size` 小于内建的最小主尺寸，那么该属性就能够覆盖 `flex-basis` 🤯，所以请不要使用 `inline-size | block-size`。
-
-TODO：一个以“Awesome”为内容的 flex 项的例子
-
-### 拉伸规律
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
-
-TODO
+```
+某项的主尺寸 = 该项的假设尺寸 + ( 该项的flex-basis / 所有项的flex-basis总和 ) * 正可用空间
+```
 
 TODO: 斜线标记 grow 空间 | 图中写明“拉伸规律” | 含有 margin | 含有 gap | 「I think it'll be easier to explain visually. Try incrementing/decremen」的例子
 
-注意：
+> 陷阱：项的自动外边距会吞噬掉所有的正可用空间，导致正可用空间归零，进而取消掉拉伸行为。
+>
 
-- flex 项的自动外边距会吞掉所有的正可用空间，导致正可用空间归零，于是便不会再发生拉伸了（自动外边距也被用作为对齐技巧，详见下文的「对齐」小节）；
-- 如果想让 flex 项的主轴尺寸完全相等，那么请设置 `flex-basis: 0; flex-grow: 1` ，这意味着所有的主轴空间都会变成正可用空间，并被 flex 项均分；
-
-### 收缩规律
+### 收缩公式
 
 ```
-flex-shrink: <number>
+某项的主尺寸 = 该项的假设尺寸 + ( 该项的假设尺寸和flex-shrink的乘积 / 所有项的假设尺寸和flex-shrink的乘积的累加和 ) * 负可用空间
 ```
 
 TODO: 斜线标记 shrink 空间 | flex-shrink 会以 flex-basis 为系数来尺寸 | 图中写明“收缩规律” | 含有 margin | 含有 gap | 「**Let's test it.** Try shrinking the container to see wha」的例子
 
-TODO：疑问 - flex 项的收缩极限时 `min-content`
+### 极限范围
 
-> 之所以会考虑 `flex-basis`，是为了尽可能的维持 flex 项之间的（假设）尺寸比例。
+传统尺寸属性的 `min-*` 和 `max-*` 可以设置项的最大主尺寸和最小主尺寸。
+
+有 2 种类型的项会具有内建的最小主尺寸，这是导致 `flex-basis` 和 `flex-shrink` 失灵的元凶，如果你想修复这个漏洞，那么就必须重新手动指定一个新的最小主尺寸，比如 `min-inline-size: 0`：
+
+- 含有文本的项，其最小主尺寸为 `min-content`；
+- `<input type="text" />` 项，其最小主尺寸为 `170~200px`（取决于浏览器）；
+
+> 在流式布局种，元素的极限尺寸的默认值是 `0`，在 Flex 布局中，项的极限尺寸的默认值是 `auto`。
+
+TODO：一个以“Awesome”为内容的 flex 项的例子
+
+> 陷阱：传统尺寸属性可以直接突破上述的内建最小主尺寸，并且如果传统尺寸属性小于了内建主尺寸，那么传统尺寸属性就能覆盖 `flex-basis`。
 
 ## 对齐
 
-flex 项在主轴和交叉轴方向上的对齐方式是可设置的，不过仅当轴上有正可用空间时，设置才会有视觉效果。
+对齐是指项在某个空间中的分布策略，我个人把这个空间称为「对齐空间」。
 
-### 主轴对齐
+我们可以分别设置项在主方向和交叉方向上的分布策略，不过仅当可用空间为正时，设置才会有视觉效果。
 
-`justify-content` 用于设置主轴上的对齐方式。
+### 主方向的对齐
 
-| justify-content | 描述                                                         |
-| --------------- | ------------------------------------------------------------ |
-| `normal`        | 等价于 `flex-start`                                          |
-| `start`         | 如果 `flex-direction: row | row-reverse`，则紧贴 `flex-direction: row` 时的主起点；如果 `flex-direction: column | column-reverse`，则紧贴 `flex-direction: column` 时的主起点 |
-| `end`           | 如果 `flex-direction: row |row-reverse`，则紧贴 `flex-direction: row` 时的主终点；如果 `flex-direction: column |column-reverse`，则紧贴 `flex-direction: column` 时的主终点 |
-| `left`          | 如果主轴水平，则紧贴物理左侧                                 |
-| `right`         | 如果主轴水平，则紧贴物理右侧                                 |
-| `center`        | 居中                                                         |
-| `flex-start`    | 紧贴主起点                                                   |
-| `flex-end`      | 紧贴主终点                                                   |
-| `stretch`       | 等价于 `flex-start`                                          |
-| `space-between` | 两端的项紧贴边缘，项之间间隔相等                             |
-| `space-around`  | 两端的项距离边缘 1 个单位，项之间间隔 2 个单位               |
-| `space-evenly`  | 项与边缘的间隔和项之间的间隔皆相等                           |
-| `safe *`        | ？                                                           |
-| `unsafe *`      | ？                                                           |
+TODO TODO TODO TODO TODO
 
-### 交叉轴对齐
+`justify-content` 用于设置主方向上的对齐，它控制的对象是主方向上的处于同一行的所有项，它控制的粒度是一个项，它的对齐空间是包含块的主方向上的容量。
+
+### 交叉方向的对齐
+
+
 
 `align-items`、`align-content`、`align-self` 都可以设置交叉轴上的对齐方式，区别在于：
 
@@ -391,7 +361,7 @@ flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin �
 
 | 值             | 描述                                                         |
 | -------------- | ------------------------------------------------------------ |
-| `auto`         | 若 `main-size` 非 `auto`，则采用 `main-size`，否则采用 `flex-basis: content` |
+| `auto`         | 若传统尺寸属性非 `auto`，则采用传统尺寸属性，否则采用 `flex-basis: content` |
 | `content`      | 等价于 `max-content`                                         |
 | `min-content`  | 采用元素的最小尺寸。对于文本而言，将会通过换行来缩减宽度，最终宽度即是最长单词的宽度，比如假设元素内容为“A title for an awesome”，元素宽度即是“awesome”的宽度 |
 | `max-content`  | 采用元素的最大尺寸。对于文本而言，最终宽度即是文本不换行时的宽度，比如假设元素内容为“A title for an awesome”，元素宽度即是“A title for an awesome”的宽度 |
@@ -405,7 +375,30 @@ flex 和 grid 布局都支持 z-index，当子项发生重叠时（用 margin �
 | ---------- | ------ |
 | `<number>` | 正数值 |
 
+### flex-shrink
 
+| 值         | 描述   |
+| ---------- | ------ |
+| `<number>` | 正数值 |
+
+### justify-content
+
+| 值              | 描述                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `normal`        | 等价于 `flex-start`                                          |
+| `start`         | 如果 `flex-direction: row | row-reverse`，则紧贴 `flex-direction: row` 时的主起点；如果 `flex-direction: column | column-reverse`，则紧贴 `flex-direction: column` 时的主起点 |
+| `end`           | 如果 `flex-direction: row |row-reverse`，则紧贴 `flex-direction: row` 时的主终点；如果 `flex-direction: column |column-reverse`，则紧贴 `flex-direction: column` 时的主终点 |
+| `left`          | 如果主轴水平，则紧贴物理左侧                                 |
+| `right`         | 如果主轴水平，则紧贴物理右侧                                 |
+| `center`        | 居中                                                         |
+| `flex-start`    | 紧贴主起点                                                   |
+| `flex-end`      | 紧贴主终点                                                   |
+| `stretch`       | 等价于 `flex-start`                                          |
+| `space-between` | 两端的项紧贴边缘，项之间间隔相等                             |
+| `space-around`  | 两端的项距离边缘 1 个单位，项之间间隔 2 个单位               |
+| `space-evenly`  | 项与边缘的间隔和项之间的间隔皆相等                           |
+| `safe *`        | ？                                                           |
+| `unsafe *`      | ？                                                           |
 
 ## 参考资料
 
