@@ -176,6 +176,10 @@ TODO：一个以“Awesome”为内容的 flex 项的例子
 - 如果吞噬掉了主方向的正可用空间，那么就会导致 `justify-content` 失效；
 - 如果吞噬掉了交叉方向的正可用空间，那么就会导致 `align-items` 和 `align-self` 失效；
 
+## 换行
+
+TODO:
+
 ## 空隙
 
 `gap` 是 `row-gap` 和 `column-gap` 的简写属性，其中 `column-gap` 控制行（或列）内的项在主方向上的空隙，`row-gap` 控制容器内的行（或列）在交叉方向上的空隙，`row-gap` 仅在容器有多行（或列）时才有效。
