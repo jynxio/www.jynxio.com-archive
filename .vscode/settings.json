@@ -1,13 +1,31 @@
 {
-    "editor.fontLigatures": true,
-    "eslint.format.enable": true,
-    "editor.formatOnSave": true,
-    "workbench.editor.highlightModifiedTabs": true,
-    "workbench.editor.showTabs": "multiple",
-    "workbench.editor.tabSizing": "shrink",
-
-    // 如果你正在使用stylelint，那么请禁用VSCode内置的CSS、Less、SCSS的linter，因为他们会对同一个错误发出重复的警告。
-    "css.validate": false,
-    "less.validate": false,
-    "scss.validate": false
+	"files.eol": "\n",
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.fontLigatures": true,
+	"eslint.format.enable": true,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"workbench.editor.highlightModifiedTabs": true,
+	"workbench.editor.tabSizing": "shrink",
+	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"css.validate": false,
+	"less.validate": false,
+	"scss.validate": false,
+	"stylelint.validate": ["css", "scss", "sass", "less", "postcss"]
 }

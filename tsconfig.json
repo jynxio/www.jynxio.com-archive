@@ -5,16 +5,13 @@
         "module": "ESNext",
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "skipLibCheck": true,
-
         "moduleResolution": "node",
         "esModuleInterop": true,
-        "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "preserve",
         "jsxImportSource": "solid-js",
-
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
@@ -24,6 +21,6 @@
             "$/*": ["./*"]
         }
     },
-    "include": ["src"],
+    "include": ["src/**/*.ts", "src/**/*.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
