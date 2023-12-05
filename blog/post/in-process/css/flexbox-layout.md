@@ -4,6 +4,10 @@ typora-root-url: ./..\..\image
 
 # Flex 布局
 
+## 示例
+
+我创建了一个用于探索 Flex 布局的可交互网页，点 [此](https://jynxio.github.io/interactive-flexbox/) 访问。
+
 ## 概述
 
 Flex 布局的全称为弹性盒布局（FLexible box layout），相较于 Grid 布局，它在处理一维情况时更加简单。
@@ -26,8 +30,6 @@ Flex 布局的全称为弹性盒布局（FLexible box layout），相较于 Grid
 CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主方向和交叉方向，这是一个具有误导性的命名，因为主轴和交叉轴的真正含义应该是「方向」而不是「轴线」，方向上是可以有无数条轴线的。因此，接下来我会使用主方向和交叉方向这 2 个名次来代替主轴和交叉轴。
 
 主方向和交叉方向是由 `flex-direction`、`writing-mode`、`direction` 共同决定的，`writing-mode & direction` 用于设置书写方向和换行方向，`flex-direction` 用于设置如何根据书写方向和换行方向来推导出主方向和交叉方向。
-
-[TODO: 所有组合情况 + 换行 + 在线示例 + 参考 Interactive Review 的首图]
 
 ### 主方向和交叉方向
 
@@ -106,7 +108,7 @@ CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主
 主方向上的可用空间的计算公式是：
 
 ```
-可用空间 = 包含块内容盒尺寸 - 外边距盒假设尺寸 * 项数 - 空隙尺寸 * ( 项数 - 1 )
+可用空间 = 包含块内容盒尺寸 - 项的外边距盒假设尺寸 * 项数 - 空隙尺寸 * ( 项数 - 1 )
 ```
 
 其中，包含块是指容器的内容盒，外边距盒假设尺寸是指含有假设尺寸的外边距盒尺寸。
@@ -178,7 +180,9 @@ TODO：一个以“Awesome”为内容的 flex 项的例子
 
 ## 换行
 
-TODO:
+当可用空间为负时，如果 `flex-wrap: nowrap`，那么项们就会收缩乃至溢出，如果 `flex-wrap: wrap | wrap-reverse`，那么项们就会执行换行，且不会执行收缩，因为换行可以避免溢出。
+
+如果新行的可用空间为负，那么新行的项就会收缩（`flex-shrink != 0` ）或溢出（`flex-shrink: 0`）。如果新行的可用空间为正，那么新行的项就会拉伸（`flex-grow != 0`）或保持原样（`flex-grow: 0`）即假设尺寸。
 
 ## 空隙
 
@@ -379,6 +383,14 @@ TODO:
 | `space-evenly`   | 等价于 `justify-content` 的 `space-evenly`   |
 | `safe *`         | ？                                           |
 | `unsafe *`       | ？                                           |
+
+### flex-wrap
+
+| 值             | 描述                                                 |
+| -------------- | ---------------------------------------------------- |
+| `nowrap`       | 禁止换行                                             |
+| `wrap`         | 允许换行，换行方向与交叉轴方向相同，首行贴合交叉起点 |
+| `wrap-reverse` | 允许换行，换行方向与交叉轴方向相反，首行贴合交叉终点 |
 
 ### order
 
