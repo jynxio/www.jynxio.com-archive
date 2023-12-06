@@ -1,5 +1,6 @@
 ---
 typora-root-url: ./..\..\image
+
 ---
 
 # Flex 布局
@@ -119,7 +120,7 @@ CSS 规范用主轴（Main axis）和交叉轴（Cross axis）来分别标识主
 某项的主尺寸 = 该项的假设尺寸 + ( 该项的flex-basis / 所有项的flex-basis总和 ) * 正可用空间
 ```
 
-TODO: 斜线标记 grow 空间 | 图中写明“拉伸规律” | 含有 margin | 含有 gap | 「I think it'll be easier to explain visually. Try incrementing/decremen」的例子
+![拉伸公式](/css/flexbox-layout/grow-formula.png)
 
 > 陷阱：项的自动外边距会吞噬掉所有的正可用空间，导致正可用空间归零，进而取消掉拉伸行为。
 >
@@ -130,7 +131,7 @@ TODO: 斜线标记 grow 空间 | 图中写明“拉伸规律” | 含有 margin 
 某项的主尺寸 = 该项的假设尺寸 + ( 该项的假设尺寸和flex-shrink的乘积 / 所有项的假设尺寸和flex-shrink的乘积的累加和 ) * 负可用空间
 ```
 
-TODO: 斜线标记 shrink 空间 | flex-shrink 会以 flex-basis 为系数来尺寸 | 图中写明“收缩规律” | 含有 margin | 含有 gap | 「**Let's test it.** Try shrinking the container to see wha」的例子
+![收缩公式](/css/flexbox-layout/shrink-formula.png)
 
 ### 极限范围
 
