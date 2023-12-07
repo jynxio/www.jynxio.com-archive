@@ -4,7 +4,6 @@ import solid from 'vite-plugin-solid';
 
 export default defineConfig({
 	plugins: [solid()],
-	base: './',
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, './src'),
@@ -15,7 +14,6 @@ export default defineConfig({
 		host: true,
 		port: 3000,
 		open: false,
-		https: false,
 		strictPort: true,
 		cors: true,
 	},
