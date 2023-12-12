@@ -179,8 +179,8 @@ function Search() {
 			key === '/' && !store.getEnabled()
 				? true
 				: key === 'escape' && store.getEnabled()
-					? false
-					: store.getEnabled();
+				  ? false
+				  : store.getEnabled();
 
 		if (enabled === store.getEnabled()) return;
 
