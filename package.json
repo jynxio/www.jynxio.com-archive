@@ -29,8 +29,8 @@
 		"@konghayao/cn-font-split": "^4.10.6",
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^20.10.4",
-		"@typescript-eslint/eslint-plugin": "^6.13.2",
-		"@typescript-eslint/parser": "^6.13.2",
+		"@typescript-eslint/eslint-plugin": "^6.14.0",
+		"@typescript-eslint/parser": "^6.14.0",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.55.0",
 		"eslint-config-prettier": "^8.10.0",
@@ -49,14 +49,14 @@
 		"prettier": "^3.1.1",
 		"sharp": "^0.32.6",
 		"shiki": "^0.14.6",
-		"stylelint": "^16.0.1",
+		"stylelint": "^16.0.2",
 		"stylelint-config-prettier": "^9.0.5",
 		"stylelint-config-standard": "^35.0.0",
 		"svgson": "^5.3.1",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.3.3",
-		"vercel": "^32.6.1",
-		"vite": "^5.0.7",
+		"vercel": "^32.7.0",
+		"vite": "^5.0.8",
 		"vite-plugin-solid": "^2.8.0"
 	}
 }
