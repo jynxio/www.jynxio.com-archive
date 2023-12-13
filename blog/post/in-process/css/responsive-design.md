@@ -119,3 +119,93 @@ signupButtonStyles.fontSize = '1rem';
   }
 ```
 
+我们还可以用 `orientation` 来选定窗口比例，
+
+```
+@media (orientation: portrait) {
+  /* 窗口的高大于宽 */
+}
+
+@media (orientation: landscape) {
+  /* 窗口的宽大于高 */
+}
+```
+
+不过 Josh 说它其实不好用，因为没 `min-width`、`max-width` 灵活，混用的时候又会很麻烦。真的吗 🤔️
+
+## 新型的媒体查询
+
+在 iOS 和 Android 的浏览器上，点击一个可交互元素就会使它进入悬停状态，直到点击其他地方为止。查看这个 [示例](https://loud-magnetic-afrovenator.glitch.me/)，上面的元素在桌面端是悬停触发特效，移动端是点击触发特效，下面的元素在桌面端是悬停触发特效，移动端是点击不会出发特效（似乎是因为那个媒体查询识别出了设备，并且让悬停只在正确的设备上存在，因为移动端没有指针，就自然不应该有悬停行为）。如果做到这件事情？⬇️
+
+```
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    border: 2px solid green;
+  }
+}
+```
+
+这是一种新型的媒体查询，被称为 [Interaction Media Features](https://drafts.csswg.org/mediaqueries-4/#mf-interaction)。
+
+这有一个表格，描述了不同的设备在 hover 和 pointer 方面上的差异
+
+> pointer: coarse 是指手指在屏幕上的坐标是粗糙的（毕竟指头很粗），不像光标那样是精确的，pointer: fine 就代表精确的。
+
+|                                  | hover | pointer |
+| -------------------------------- | ----- | ------- |
+| Mouse / Trackpad                 | none  | coarse  |
+| Touchscreen (smartphone, tablet) | none  | none    |
+| Keyboard (focus navigation)      | none  | fine    |
+| Eye-tracking                     | none  | fine    |
+| Basic stylus digitizers          | none  | fine    |
+| Sip-and-puff switches            | none  | none    |
+| Microsoft Kinect / Wii remote    | hover | coarse  |
+
+1. Mouse / Trackpad: 这指的是传统的鼠标或触摸板，通常用于个人电脑或笔记本电脑。用户通过移动鼠标或触摸板上的指针来与界面交互。
+2. Touchscreen (smartphone, tablet): 触摸屏设备，如智能手机和平板电脑。用户通过触摸屏幕的方式与设备交互，支持如轻触、滑动等手势。
+3. Keyboard (focus navigation): 键盘用于导航和数据输入。通过键盘的方向键、Tab键等实现对界面元素的聚焦和导航，常见于无法使用鼠标或触摸屏的情况。
+4. Eye-tracking: 眼动追踪技术，可以追踪用户的眼睛动作，从而理解用户在屏幕上的注视点。这种技术在辅助技术和用户体验研究中非常有用。
+5. Basic stylus digitizers: 基础的手写笔数字化设备，用于在触摸屏或专门的绘图板上进行精确的绘图或书写。
+6. Sip-and-puff switches: 这是一种辅助技术，主要用于帮助行动不便的人士操作计算机。用户通过吸气或吹气来控制设备。
+7. Microsoft Kinect / Wii remote: 这些是游戏控制器，用于体感游戏。Kinect 通过捕捉身体动作来控制游戏，而Wii遥控器则结合了运动传感器和按键来实现交互。
+
+浏览器会自动的识别出你在用哪一种设备来使用浏览器，哪怕你从光标切换到了键盘（指导航，而不是打字），它也能识别出来，并且更新 hover 和 pointer 媒体查询。
+
+## 逻辑判断
+
+`and` 就相当于 JavaScript 里的 `&&`，`or` 相当于 `||`。
+
+```
+@media (max-width: 600px) and (min-width: 800px) {}
+@media (max-width: 600px) or (min-width: 800px) {}
+```
+
+其实 `or` 有一个平替，那就是 `,`，因为 `,` 意味着创建两个独立的但内容都一样的媒体查询，最终大家的效果都是一样的。
+
+```
+@media (max-width: 600px), (min-width: 800px) {
+  /* styles */
+}
+
+/* 等价于 */
+@media (max-width: 600px) {
+  /* styles */
+}
+
+@media (min-width: 800px) {
+  /* Repeated styles */
+}
+```
+
+## 偏好查询
+
+```
+@media (prefers-color-scheme: dark) {
+  /* Dark-mode styles here */
+}
+
+@media (prefers-reduced-motion: no-preference) { /* 希望不要视觉运动效果 */
+  /* Animations here */
+}
+```
+
