@@ -409,3 +409,102 @@ clamp(min-width, ideal-width, max-width)
 ```
 
 另外，还有 `min(v1, v2)` 和 `max(v1, v2)`
+
+## 工具
+
+Discord 的 SSHari 分享了一个用于识别比视口更宽的元素的脚本：
+
+```
+function checkElemWidth(elem) {
+  if (elem.clientWidth > window.innerWidth) {
+    console.info(
+      "The following element has a larger width than " +
+      "the window’s outer width"
+    );
+    console.info(elem);
+    console.info("\n\n");
+  }
+
+  // Recursively check all the children
+  // of the element to find the culprit.
+  [...elem.children].forEach(checkElemWidth);
+}
+
+checkElemWidth(document.body);
+```
+
+# 文本
+
+所有浏览器（所有品牌、所有平台）的默认字体大小都是 16px，这是前辈们为你设定好的最佳的选择了，不要改动它，让文章主体的字就保持 16px 吧。如果你想增大或缩小字体，那么要用百分比，比如 `font-size: 125%`，但是千万不要使用 px 这种绝对尺寸，比如 `font-size: 18px`。
+
+因为浏览器的设置里可以设置字号，这是通过改变所有字体的默认大小来实现的，特小时为 12px，特大时为 24px，如果你设置了 30px，那么无论你怎么设置浏览器，这个元素的字号就永远都是 30px，如果你设置 `125%`，那么字号就是字体的原尺寸乘以 1.25 倍，所以用后者。
+
+rem 代表 html 元素的字号，如果你要改变 1rem 的大小，亦或者想要改变 html 元素的字号，也要用百分比值。
+
+## 表单
+
+表单的元素的默认字体大小都更小，比如 input 元素的字号是 13.3333px，这在移动设备上会很难阅读，所以请总是放大他们为正常字号是一个好主意：
+
+```
+input, select, textarea {
+  font-size: 1rem;
+}
+```
+
+## 标题
+
+桌面端最大的标题为 2.5rem 是合理的，但是在移动端上就不合理了，因为移动端的屏幕很小，这样做的话标题会占据很多屏幕空间，我们应该使用媒体查询来限制标题的尺寸（或者让字号随着移动端的宽度变化而变化也是可以的，不一定非得 1.75rem）：
+
+```
+h1 {
+  font-size: 2.5rem;
+}
+
+@media (max-width: 550px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+}
+```
+
+# 排版
+
+流体排版的想法是，我们的排版不是在特定的断点处创建离散的字体大小，而是随着视口平滑地缩放。这是通过 `vw` 单元完成的：
+
+```
+  h1 {         
+    font-size: clamp(1.5rem, 4vw + 1rem, 3rem);
+
+    /* HACK: Add this declaration if you're using Safari to see the text scale when resizing: */
+    /* min-height: 0vh; /*
+  }
+```
+
+为什么使用 clamp？因为要避免字号在小屏幕上过小，在大屏幕上过大。
+
+为什么要使用 `4vw + 1rem` 而不是 `5vw`，因为要保证字号会随着浏览器缩放而缩放，放大字体这个功能对阅读障碍人士而言非常重要，如果只用 `5vw`，那么字号就无法随着浏览器的缩放而缩放。其实这种缩放能力还不够强，因为他缩放的变化速度很慢，而 WCAG 指南规定文本至少可以缩放到原来的 2 倍（对障碍人士来说，这只是最低放大倍数）。
+
+为什么 clamp 里可以直接用 `4vw + 1rem`，因为它会自动解析计算，而避免 calc 嵌套。
+
+看下面这个有趣的公式：
+
+|                                   | 400px          | 800px          | 1600px          |
+| --------------------------------- | -------------- | -------------- | --------------- |
+| `6vw`                             | 24px           | 48px           | 96px            |
+| `calc(4vw + 1rem)`                | 16 + 16 = 32px | 32 + 16 = 48px | 64 + 16 = 80px  |
+| `calc(5vw + 2rem)`                | 20 + 32 = 52px | 40 + 32 = 72px | 80 + 32 = 112px |
+| `clamp(2.5rem, 4vw + 1rem, 4rem)` | 40px (clamped) | 32 + 16 = 48px | 64px (clamped)  |
+
+最后，这种流体排版（Fluid typography）只适用于标题，不适用于正文，正文就应该用 16px，给正文用流体排版会在移动设备上变得很小。
+
+流体排版的公式会影响流体排版缩放时的变化速率，Josh 给了一个工具让我们可视化这个过程，以方便我们做一些定制化：
+
+https://courses.joshwcomeau.com/css-for-js/05-responsive-css/16-fluid-calculator
+
+
+
+流体排版不仅适用于用来做标题字体，还适用于一切“会跟随页面尺寸变化而变化”的东西，比如导航栏的间隔随着页面变宽而变宽。
+
+## 流体设计
+
+媒体查询和流体排版都可以用来做流体设计，前者是在断点出瞬变，后者则是渐变。我们可以同时使用两者，也可以单独使用其中一种，渐变并不是一定比瞬变好，用哪一种取决于需求，比如更喜欢渐变还是瞬变，比如哪一种实现更容易理解。
