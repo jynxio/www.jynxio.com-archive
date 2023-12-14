@@ -1,3 +1,5 @@
+# 媒体查询
+
 如今，几乎每部手机都配备了“高 DPI”显示屏。 DPI 代表“Dots Per Inch”，指的是像素密度。苹果将其称为“视网膜显示屏”，但 Android 手机也使用了相同的技术。
 
 ```
@@ -171,6 +173,37 @@ signupButtonStyles.fontSize = '1rem';
 
 浏览器会自动的识别出你在用哪一种设备来使用浏览器，哪怕你从光标切换到了键盘（指导航，而不是打字），它也能识别出来，并且更新 hover 和 pointer 媒体查询。
 
+`pointer: coarse` 意味着这是一个位置粗糙的指针，我们会因此而遭遇手指怎么点都选不中的情况，Apple 建议最小点击尺寸应该是 44*44px，因此我们要这么写：
+
+```
+@media (pointer: coarse) {
+	button {
+		min-height: 44px;
+	}
+}
+```
+
+如果有很多不一样的按钮，怎么批量设置？用 CSS 变量！
+
+```
+/* 仅当媒体查询生效的时候，才会应用此按钮尺寸，否则css变量就会失效，然后按钮会回退至32px */
+@media (pointer: coarse) {
+	:root {
+		--min-height: 44px;
+	}
+}
+
+.someone {
+	min-height: var(--min-height, 32px);
+}
+
+.anotherone {
+	min-height: var(--min-height, 32px);
+}
+```
+
+
+
 ## 逻辑判断
 
 `and` 就相当于 JavaScript 里的 `&&`，`or` 相当于 `||`。
@@ -209,3 +242,170 @@ signupButtonStyles.fontSize = '1rem';
 }
 ```
 
+## 断点
+
+我们通过设置尺寸断点来为不同的设备应用不同的布局，我们可以通过 [这里的数据](https://gs.statcounter.com/screen-resolution-stats) 来查看各种分辨率的屏幕的使用频率（软件分辨率），一个适用于现在的结论是：
+
+- 0-550px — Mobile
+- 550-1100px — Tablet
+- 1100-1500px — Laptop
+- 1500+px — Desktop
+
+> 如果用户使用了小窗口的浏览器，嗯...
+
+然后，如果我们采用桌面端优先的写法，应该这样写：
+
+```
+/* Default: Desktop monitors, 1501px and up */
+
+@media (max-width: 1500px) {
+  /* Laptop */
+}
+
+@media (max-width: 1100px) {
+  /* Tablets */
+}
+
+@media (max-width: 550px) {
+  /* Phones */
+}
+```
+
+或移动端优先的写法，向这样：
+
+```
+/* Default: Phones from 0px to 549px */
+
+@media (min-width: 550px) {
+  /* Tablets */
+}
+
+@media (min-width: 1100px) {
+  /* Laptop */
+}
+
+@media (min-width: 1500px) {
+  /* Desktop */
+}
+```
+
+# CSS 变量
+
+CSS 变量是创建一个自定义属性，该属性总以 `--` 开头，通过 `var()` 来访问，它仅适用于当前元素和子元素，CSS 变量的值会自动被继承。
+
+[`@property`](https://developer.mozilla.org/en-US/docs/Web/CSS/@property) 和[`registerProperty`](https://developer.mozilla.org/en-US/docs/Web/API/CSS/registerProperty_static) 都可以创建自定义属性，前者是 CSS 调用，后者是 JS 调用，后者更强大，因为后者可以真的当成一个 CSS 属性来使用，写进 transition 里面去，两者的兼容性都一样的差（主要是在 FireFox 上，最新版才支持）。
+
+CSS 变量的好处在于我们可以用 JavaScript 来改变它的值：
+
+```
+dom.style.setProperty('--font-size', '1rem');
+```
+
+css 变量是可以组合的！
+
+```
+  body {     
+    --pink-hue: 340deg;
+    --blue-hue: 275deg;
+    --intense: 100% 50%;
+    
+    --color-primary: hsl(
+      var(--pink-hue)
+      var(--intense)
+    );
+    --color-secondary: hsl(
+      var(--blue-hue)
+      var(--intense)
+    );
+  }
+  
+    strong { 
+    color: var(--color-primary); 
+  }
+  a {  
+    color: var(--color-secondary);
+  }
+```
+
+
+
+## var
+
+```
+var(自定义属性的名字, 默认值)
+```
+
+如果自定义属性的值无效，那么就会采用默认值。
+
+```
+:root {
+  --backup-bg-color: teal;
+}
+
+body {
+  /* main-bg-color 没有被设置，将使用回退值 backup-bg-color。如果 backup-bg-color 没有被设置，将使用回退值 white。 */
+  color: var(--main-bg-color, var(--backup-bg-color, white));
+}
+```
+
+## calc
+
+四个运算符 `+ - * /`
+
+# 单位
+
+`vw`、`vh`
+
+手机浏览器上的底栏是动态存在的，`vh` 总是代表最大高度，因为 `100vh` 有时候会超出设备的高，一种解决方案是：使用百分比值 `100%`，另一种是：使用 `svh`、`lvh`、`dvh`，分别代表最小视口高度、最大视口高度、动态视口高度。`100dvh` 可以完全替代 `100%`，只不过 `dvh` 的兼容性只有八成以上，所以不妨这么写：
+
+```
+.some-element {
+  height: 100vh; /* 回退 */
+  height: 100dvh;
+}
+```
+
+另外，桌面端的滚动条是会占据元素的空间的（移动端的则不占据，滚动条总是悬浮在内容之上），无论 box-sizeing 是什么，滚动条都会消耗元素的内容盒的空间，滚动条会被夹在padding box 和border box之间。然后这会导致 section 放不下 div 从而发生滚动：
+
+```html
+<section>
+	<div></div>
+</section>
+
+<style>
+    * {
+        padding: 0;
+    }
+    
+    section {
+        overflow: scroll;
+        width: 100vw;
+        height: 100vw;
+    }
+    
+    div {
+        width: 100vw;
+        height: 100vh;
+    }
+</style>
+```
+
+如果你想计算出纵向滚动条的宽度？那么：
+
+```
+const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+```
+
+`window.innerWidth` 指视口宽度；它不关心滚动条，然而， `documentElement.clientWidth` 指的是文档中的可用空间。
+
+`vmin` 和 `vmax` 代表总是取 `vw` 和 `vh` 之间的最小值和最大值，和 `dvh`、`dvw` 等单位没关系。
+
+## clamp
+
+`clamp()` 是 `width`、`min-width`、`max-width` 的语法糖：
+
+```
+clamp(min-width, ideal-width, max-width)
+```
+
+另外，还有 `min(v1, v2)` 和 `max(v1, v2)`
