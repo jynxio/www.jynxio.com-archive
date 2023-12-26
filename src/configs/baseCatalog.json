@@ -1,26 +1,26 @@
 [
-    {
-        "name": "introduction",
-        "alias": "介绍"
-    },
-    {
-        "name": "javascript",
-        "alias": "JavaScript"
-    },
-    {
-        "name": "css",
-        "alias": "CSS"
-    },
-    {
-        "name": "browser",
-        "alias": "浏览器"
-    },
-    {
-        "name": "algorithm-and-data-structure",
-        "alias": "算法与数据结构"
-    },
-    {
-        "name": "orther",
-        "alias": "其他"
-    }
+	{
+		"name": "introduction",
+		"alias": "介绍"
+	},
+	{
+		"name": "javascript",
+		"alias": "JavaScript"
+	},
+	{
+		"name": "css",
+		"alias": "CSS"
+	},
+	{
+		"name": "browser",
+		"alias": "浏览器"
+	},
+	{
+		"name": "algorithm-and-data-structure",
+		"alias": "算法与数据结构"
+	},
+	{
+		"name": "orther",
+		"alias": "其他"
+	}
 ]

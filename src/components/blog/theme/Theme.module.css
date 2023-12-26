@@ -1,63 +1,63 @@
 .theme {
-    --line-thickness: 7%;
+	--line-thickness: 7%;
 
-    display: inline-block;
-    position: relative;
-    inline-size: 100%;
-    block-size: 100%;
-    color: inherit;
+	display: inline-block;
+	position: relative;
+	inline-size: 100%;
+	block-size: 100%;
+	color: inherit;
 }
 
 .theme > * {
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: inherit;
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: inherit;
 }
 
 .icon {
-    --block-size: calc(100% - var(--line-thickness) * 5.5);
+	--block-size: calc(100% - var(--line-thickness) * 5.5);
 
-    overflow: hidden;
-    inline-size: 100%;
-    block-size: var(--block-size);
+	overflow: hidden;
+	inline-size: 100%;
+	block-size: var(--block-size);
 }
 
 .icon > svg {
-    position: absolute;
-    inline-size: 100%;
-    block-size: calc(100% / var(--block-size));
-    transition:
-        all cubic-bezier(0.34, 1.56, 0.64, 1) 500ms,
-        color cubic-bezier(0.34, 1.56, 0.64, 1) 0ms;
+	position: absolute;
+	inline-size: 100%;
+	block-size: calc(100% / var(--block-size));
+	transition:
+		all cubic-bezier(0.34, 1.56, 0.64, 1) 500ms,
+		color cubic-bezier(0.34, 1.56, 0.64, 1) 0ms;
 }
 
 .icon:not(.selected) > svg {
-    top: 100%;
-    visibility: hidden;
+	top: 100%;
+	visibility: hidden;
 }
 
 .icon.selected > svg {
-    top: 0%;
-    visibility: visible;
+	top: 0%;
+	visibility: visible;
 }
 
 .line {
-    block-size: var(--line-thickness);
-    border-radius: 9999px;
-    background-color: currentcolor;
+	block-size: var(--line-thickness);
+	border-radius: 9999px;
+	background-color: currentcolor;
 }
 
 .line.long {
-    top: calc(100% - var(--line-thickness) * 3.3);
-    left: 50%;
-    inline-size: 90%;
-    transform: translate(-50%, -100%);
+	top: calc(100% - var(--line-thickness) * 3.3);
+	left: 50%;
+	inline-size: 90%;
+	transform: translate(-50%, -100%);
 }
 
 .line.short {
-    top: calc(100% - var(--line-thickness) * 0.5);
-    left: 50%;
-    inline-size: 50%;
-    transform: translate(-50%, -100%);
+	top: calc(100% - var(--line-thickness) * 0.5);
+	left: 50%;
+	inline-size: 50%;
+	transform: translate(-50%, -100%);
 }

@@ -1,29 +1,29 @@
 * {
-    margin: 0;
+	margin: 0;
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html,
 body {
-    min-block-size: 100vh;
-    min-block-size: 100dvh;
+	min-block-size: 100vh;
+	min-block-size: 100dvh;
 }
 
 html:focus-within {
-    scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 body {
-    line-height: 1.5;
-    /* stylelint-disable-next-line value-keyword-case */
-    text-rendering: optimizeSpeed;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	line-height: 1.5;
+	/* stylelint-disable-next-line value-keyword-case */
+	text-rendering: optimizeSpeed;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 img,
@@ -31,15 +31,15 @@ picture,
 video,
 canvas,
 svg {
-    display: block;
-    max-width: 100%;
+	display: block;
+	max-width: 100%;
 }
 
 input,
 button,
 textarea,
 select {
-    font: inherit;
+	font: inherit;
 }
 
 p,
@@ -49,17 +49,17 @@ h3,
 h4,
 h5,
 h6 {
-    overflow-wrap: break-word;
+	overflow-wrap: break-word;
 }
 
 p {
-    hyphens: auto;
+	hyphens: auto;
 }
 
 a:not([class]) {
-    text-decoration-skip-ink: auto;
+	text-decoration-skip-ink: auto;
 }
 
 #root {
-    isolation: isolate;
+	isolation: isolate;
 }

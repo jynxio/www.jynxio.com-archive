@@ -311,24 +311,28 @@ function findCulprits(element) {
 
 ## 滚动容器
 
-> 滚动容器就像是一扇通往异次元的大门，在外界看来，它永远都只有那么大，可它里面却可以装下无限多的内容。
+滚动容器就像是一扇通往异次元的大门，在外界看来，它永远都只有那么大，可它里面却可以装下无限多的内容。
 
-滚动容器（scroll container）是指激活了滚动机制的元素，只要把 `overflow-x` 或 `overflow-y` 设置为 `auto | hidden | scroll | overlay` ，那么就可以激活元素的滚动机制。
-
-注意，只要激活了一条轴的滚动机制，那么整个元素都会变成滚动元素，另一条轴的滚动机制也会被自动激活，即 `overflow-*` 自动变为 `auto`。
+滚动容器（scroll container）是指激活了滚动机制的元素，只要把 `overflow-x` 或 `overflow-y` 设置为 `auto | hidden | scroll | overlay` ，那么就可以激活元素的滚动机制。哪怕只激活了一条轴的滚动机制，另一条轴的滚动机制也会被自动激活，比如：
 
 ```css
+/* 说明：x轴的hidden会导致y轴的visible突变为auto */
 .jynxio {
-    overflow-x: auto;   /* ⚠️ 其计算值将自动变为auto */
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 ```
 
-### 关于 Overflow
+仅当下述 3 个条件同时满足时，，`overflow` 才会见效：
 
-当我们将 `overflow` 设置为非 `visible` 时，我们还必须明确的指定元素的宽度和高度，否则 `overflow` 无法生效。
+- `overflow` 非 `visible`；
+- 元素拥有明确的尺寸；
+- 元素的内容将会溢出；
 
-有时，我们还需要使用 `white-space: nowrap`。
+直接为元素指定宽度和高度可以为其赋予一个明确的尺寸，元素也可以通过其他方式来间接的确定自身的尺寸。
+
+> 对于文字内容，有时我们还需用到 `white-space: nowrap` 来禁止文字换行，以迫使它们溢出元素。
+>
 
 ### 关于 Overlay
 

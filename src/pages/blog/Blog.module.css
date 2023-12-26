@@ -1,23 +1,23 @@
 .container {
-    --nav-width: 18rem;
-    --post-width: calc(100% - var(--nav-width));
+	--nav-width: 18rem;
+	--post-width: calc(100% - var(--nav-width));
 
-    display: flex;
-    inline-size: 100vw;
-    inline-size: 100dvw;
-    block-size: 100vh;
-    block-size: 100dvh;
+	display: flex;
+	inline-size: 100vw;
+	inline-size: 100dvw;
+	block-size: 100vh;
+	block-size: 100dvh;
 }
 
 .nav {
-    flex: 0 0 var(--nav-width);
-    order: 1;
-    block-size: 100%;
+	flex: 0 0 var(--nav-width);
+	order: 1;
+	block-size: 100%;
 }
 
 .post {
-    flex: 0 0 var(--post-width);
-    order: 2;
-    block-size: 100%;
-    overflow: hidden;
+	flex: 0 0 var(--post-width);
+	order: 2;
+	block-size: 100%;
+	overflow: hidden;
 }

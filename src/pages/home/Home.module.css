@@ -1,7 +1,7 @@
 .container {
-    inline-size: 100vw;
-    inline-size: 100dvw;
-    block-size: 100vh;
-    block-size: 100dvh;
-    cursor: none;
+	inline-size: 100vw;
+	inline-size: 100dvw;
+	block-size: 100vh;
+	block-size: 100dvh;
+	cursor: none;
 }
