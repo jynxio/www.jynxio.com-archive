@@ -3,10 +3,8 @@
 **/node_modules
 
 # Production
-**/dist
-**/build
-**/dist-ssr
-**/build-ssr
+**/dist*/
+**/build*/
 
 # Markdown
 **/*.md

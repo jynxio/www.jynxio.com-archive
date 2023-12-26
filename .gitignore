@@ -13,10 +13,8 @@ node_modules
 package-lock.json
 
 # Production
-dist
-build
-dist-ssr
-build-ssr
+**/dist*/
+**/build*/
 
 # Editor directories and files
 .idea
