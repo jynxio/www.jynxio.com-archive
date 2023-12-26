@@ -247,7 +247,7 @@ function processListNode(node) {
 	});
 }
 
-function processCodeNode(node, parent) {
+function processCodeNode(node) {
 	const uuid = nanoid();
 	const lightPreString = lightHighlighter.codeToHtml(node.value, { lang: node.lang });
 	const lightCodeString = lightPreString.slice(
