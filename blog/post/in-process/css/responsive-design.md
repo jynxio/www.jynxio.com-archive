@@ -2,23 +2,145 @@
 
 ## 概述
 
-网页会显示在形状各异的各种电子设备上，为了保证网页可以被恰当的展示，我们需要使用一些 CSS 技巧来使我们的网页可以自适应的变化，这便是本文要讨论的话题。
+网页会显示在形状和尺寸各异的各种电子设备的屏幕上，为了保证网页可以被恰当的展示，我们需要使用一些 CSS 技巧来使我们的网页可以自适应的变化，这便是本文要讨论的话题。
 
-如果网页不会自适应的变化，那么就会发生下面这些事情：
+能够自适应变化的网页有什么优点？比如：
 
-- 网页在高分辨率屏幕下缩水；
-- 不会在小尺寸屏幕下溢出或出现丑陋的滚动条
-- 
+- 不会在高分辨率屏幕下缩水；
+- 不会在小尺寸屏幕下溢出或出现丑陋的滚动条；
+- 字号在小尺寸屏幕下适当的缩小以便于展示更多的文字；
+- 段落之间的间隙会在障碍人士的特大字号模式下自动变大以便于不会过于紧凑；
 
-网页需要在「布局」和「排版」两个方面都拥有自适应变化的能力。什么是布局？比如我们希望网页不会在高分辨率屏幕下缩水、不会在小尺寸屏幕下溢出或出现丑陋的滚动条。什么是排版？比如我们希望字号在小尺寸屏幕下适当的缩小以便于展示更多的文字、段落之间的间隙会在障碍人士的特大字号模式下自动变大以便于不会过于紧凑。
+## 布局的类型
 
-## 自适应和响应式布局
+| 名称         | 描述                         | 自适应 | 推荐 |
+| ------------ | ---------------------------- | ------ | ---- |
+| 固定宽度布局 | 采用固定尺寸                 | 🚫      | 🚫    |
+| 自适应布局   | 结合了固定宽度布局和媒体查询 | ✅      | 🚫    |
+| 流体布局     | 采用可变尺寸                 | ✅      | ✅    |
+| 响应式布局   | 结合了流体布局和媒体查询     | ✅      | ✅    |
+
+「固定宽度布局」是指采用固定的尺寸来设计网页的布局。它简单易用，但没有任何自适应变化的能力，请不要用它来设计网页的布局。但它也并非毫无用处，因为我们经常会用它来设计一些尺寸恒定的东西，比如 `hr { block-size: 1px }`。
+
+```css
+article { inline-size: 960px }
+```
+
+「自适应布局」是固定宽度布局的升级版，它要求开发者定义多套固定宽度布局，然后利用 CSS 的媒体查询来为不同尺寸的设备应用不同的布局方案。它简单易懂但不好用，因为有 2 个缺点：1）网页要适配的屏幕种类越多，我们要定义的布局方案就会越多；2）布局方案和布局方案之间的过渡形式是突变。
+
+```css
+article {
+    /* for desktop */
+    inline-size: 960px;
+    
+    /* for laptop */
+    @media (width <= 1500px) {
+        inline-size: 820px;
+    }
+    
+    /* for tablet */
+    @media (width <= 1100px) {
+        inline-size: 680px;
+    }
+    
+    /* for mobile */
+    @media (width <= 550px) {
+        inline-size: 320px;
+    }
+}
+```
+
+「流体布局」是指采用可变的尺寸来设计网页的布局，它通过采用相对单位来为样式赋予自适应变化的能力。并且我推荐使用 `clamp` 函数，因为它可以避免样式在极端尺寸下的变糟，比如 `article` 在宽屏上过分宽，在窄屏上过分细。
+
+```css
+/* 🙅🏻 不要 */
+article { inline-size: 80vw }
+
+/* 💁🏻 推荐 */
+article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
+```
+
+「响应式布局」是流体布局的升级版，它通过 CSS 媒体查询来弥补了流体布局无法控制样式显隐的短板。
+
+```css
+.menu-mobile {
+    display: none;
+    
+    @media (width <= 550px) {
+        display: initial;
+        block-size: clamp(1.8rem, 4vh + 0.5rem, 2.5rem);
+    }
+}
+
+.menu-desktop {
+    inline-size: clamp(12rem, 6vw + 10rem, 15rem);
+    
+    @media (width <= 550px) {
+        display: none;
+    }
+}
+```
+
+## 媒体查询
+
+媒体查询（Media queries）用于根据设备的媒体类型和媒体特性来应用特定的样式。
+
+### 调用方式
+
+我们可以在 html、css、js 文件中使用媒体查询。另外，无论媒体查询的结果是什么，`<link>` 和 `@import` 都会下载资源。
+
+```html
+<style media="screen"></style>
+
+<source src="" media="screen" />
+
+<link rel="stylesheet" src="" media="screen" />
+```
+
+```css
+@media screen {}
+
+@import url("landscape.css") screen;
+```
+
+```js
+const mediaQueryList = globalThis.matchMedia("screen");
+
+// check
+mediaQueryList.matches ? `it's screen` : `it's not`;
+
+// subscribe
+mediaQueryList.addEventListener("change", handleChange);
+mediaQueryList.removeEventListener("change", handleChange);
+
+function handleChange(mediaQueryList) {
+    mediaQueryList.matches ? `it's screen` : `it's not`;
+}
+```
+
+### 媒体类型
+
+媒体类型描述了设备的类型，它只有 3 种值：
+
+| 值       | 描述                               |
+| -------- | ---------------------------------- |
+| `all`    | 任何设备（默认值）                 |
+| `screen` | 屏幕设备                           |
+| `print`  | 打印机、处于打印预览模式的其他设备 |
+
+```css
+@media screen {}
+```
+
+> 根据 [Media Queries 4](https://drafts.csswg.org/mediaqueries/#media-types) 的描述，所有的媒体类型都会在未来被废除掉，因为规范正致力于通过改进媒体特性来使其可以完全区分出不同的设备，届时就不再需要媒体类型。
+
+### 媒体特性
 
 
 
+### 逻辑运算
 
-
-有固定宽度、流体、自适应、响应式 4 种。
+## 容器查询
 
 媒体查询、容器查询、CSS 变量
 
