@@ -138,32 +138,23 @@ function handleChange(mediaQueryList) {
 
 媒体特性（Media Feature）描述了用户代理的各种特征。
 
-| 名称                     | 作用                               |          |
-| ------------------------ | ---------------------------------- | -------- |
-| `hover`｜`any-hover`     | 悬停                               |          |
-|                          |                                    |          |
-|                          |                                    |          |
-|                          |                                    |          |
-|                          |                                    |          |
-|                          |                                    |          |
-| `width`                  | 显示区域的宽度，如视口或页面框。   | 范围特性 |
-| `height`                 | 显示区域的高度。                   | 范围特性 |
-| `aspect-ratio`           | 显示区域的宽高比。                 | 范围特性 |
-| `orientation`            | 设备的方向（纵向或横向）。         | 离散特性 |
-| `resolution`             | 输出设备的分辨率。                 | 范围特性 |
-| `color`                  | 设备的颜色能力。                   | 范围特性 |
-| `color-index`            | 设备的颜色索引能力。               | 范围特性 |
-| `monochrome`             | 设备的单色能力。                   | 范围特性 |
-| `update`                 | 输出设备更新其外观的速度。         | 离散特性 |
-| `hover`                  | 主输入机制是否能悬停在元素上。     | 离散特性 |
-| `pointer`                | 主输入机制的精度。                 | 离散特性 |
-| `prefers-reduced-motion` | 用户是否偏好减少动画。             | 离散特性 |
-| `prefers-color-scheme`   | 用户是否偏好浅色或深色配色方案。   | 离散特性 |
-| `grid`                   | 设备是否使用网格或位图屏幕。       | 离散特性 |
-| `scan`                   | 输出设备的扫描过程（逐行或隔行）。 | 离散特性 |
-| `display-mode`           | 应用程序的显示模式。               | 离散特性 |
-
-### 主要输入机制及其对悬停和指针的支持程度
+| 名称            | 描述                                           |
+| --------------- | ---------------------------------------------- |
+| hover           | 是否至少有一种主要输入机制支持悬停             |
+| any-hover       | 是否至少有一种输入机制支持悬停                 |
+| pointer         | 是否至少有一种主要输入机制支持指针及指针的精度 |
+| any-pointer     | 是否至少有一种输入机制支持指针及指针的精度     |
+| color           | 色深或索引颜色表的位数                         |
+| color-gamut     | 色域                                           |
+| color-index     | 是否使用了索引颜色表及索引颜色表的总条目数     |
+| aspect-ratio    | 视口的宽高比                                   |
+| display-mode    | 网页的展示模式，如标准、全屏、PWA等            |
+| dynamic-range   | 是否支持高动态范围（亮度、色域、色深）         |
+| forced-colors   | 是否启用了强制色彩模式，如色盲或高对比度模式   |
+| grid            | 是否启用了网格屏幕，如点阵显示屏和早年的诺基亚 |
+| width           | 视口的宽度                                     |
+| height          | 视口的高度                                     |
+| inverted-colors | 是否启用了颜色反转                             |
 
 常见设备的主要输入机制如下。
 
@@ -197,120 +188,6 @@ function handleChange(mediaQueryList) {
 | 摇杆     | none  | coarse |
 | 手柄     | none  | coarse |
 | 手势     | none  | coarse |
-
-### hover
-
-```css
-@media (hover: hover) {
-    /* 如果至少有一种主要输入机制支持悬停 */
-}
-
-@media (hover: none) {
-    /* 如果所有的主要输入机制都不支持悬停 */
-}
-```
-
-### any-hover
-
-```css
-@media (any-hover: hover) {
-    /* 如果至少有一种输入机制支持悬停 */
-}
-
-@media (any-hover: none) {
-    /* 如果所有的输入机制都不支持悬停 */
-}
-```
-
-### pointer
-
-```css
-@media (pointer: none) {
-    /* 如果主要输入机制中不包含指针 */
-}
-
-@media (pointer: coarse) {
-    /* 如果主要输入机制中包含指针，且位置精度是粗糙的 */
-}
-
-@media (pointer: fine) {
-    /* 如果主要输入机制中包含指针，且位置精度是精确的 */
-}
-```
-
-### any-pointer
-
-```css
-@media (any-pointer: none) {
-    /* 如果所有输入机制中都不包含指针 */
-}
-
-@media (any-pointer: coarse) {
-    /* 如果至少有一种输入机制是指针，且位置精度是粗糙的 */
-}
-
-@media (any-pointer: fine) {
-    /* 如果至少有一种输入机制是指针，且位置精度是精确的 */
-}
-```
-
-### color
-
-此媒体特性用于测试用户代理的色深，即每个颜色通道的位数，如果不同颜色通道的位数是不一样的，则取最小位数来作为用户代理的色深，如果采用了索引颜色表，则采用最小位数来作为用户代理的色深。
-
-取值：`<integer>`，如果用户代理不支持彩色，则该值为 `0`。
-
-```css
-@media (color: 8) {
-    /* 如果色深为8 */
-}
-
-@media (min-color: 8) {
-    /* 如果色深不小于8 */
-}
-
-@media (max-color: 8) {
-    /* 如果色深不大于8 */
-}
-```
-
-### color-gamut
-
-此媒体特性用于测试用户代理的色域。
-
-```css
-@media (color-gamut: srgb) {
-    /* 如果色域近似于或大于sRGB */
-}
-
-@media (color-gamut: p3) {
-    /* 如果色域近似于或大于Display P3 */
-}
-
-@media (color-gamut: rec2020) {
-    /* 如果色域近似于或大于 ITU-R Recommendation BT.2020 */
-}
-```
-
-### color-index
-
-此媒体特性用于测试用户代理是否使用了索引颜色表以及索引颜色表的总条目数。
-
-取值：`<integer>`，如果用户不使用颜色索引表，则该值为 `0`。
-
-```css
-@media (color-index: 10000) {
-    /* 如果总条目数为10000 */
-}
-
-@media (min-color-index: 10000) {
-    /* 如果总条目数不小于100000 */
-}
-
-@media (max-color-index: 10000) {
-    /* 如果总条目数不大于100000 */
-}
-```
 
 ### 逻辑运算
 
