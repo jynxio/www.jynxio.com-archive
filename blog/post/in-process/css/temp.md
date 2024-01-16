@@ -85,6 +85,18 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 
 媒体查询（Media queries）用于根据设备的媒体类型和媒体特性来应用特定的样式。
 
+### 语法
+
+```css
+@media screen, print {}
+
+@media screen and (width >= 900px) {}
+
+@media (30em <= width <= 50em) {}
+```
+
+
+
 ### 调用方式
 
 我们可以在 html、css、js 文件中使用媒体查询。另外，无论媒体查询的结果是什么，`<link>` 都会下载资源，只不过下载的优先级更低。
@@ -201,6 +213,62 @@ function handleChange(mediaQueryList) {
 | 手势     | none  | coarse |
 
 ### 逻辑运算
+
+not, and, only, `,`
+
+逗号代表或，and 代表且
+
+```
+@media screen and (min-width: 30em) and (orientation: landscape) {
+  /* … */
+}
+
+@media (min-height: 680px), screen and (orientation: portrait) {
+  /* … */
+}
+```
+
+not 一定会反转媒体查询列表中的一个媒体查询而不是这个媒体查询里的一部分
+
+```
+@media not all and (monochrome) {
+  /* … */
+}
+
+等价于
+
+@media not (all and (monochrome)) {
+  /* … */
+}
+
+@media not screen and (color), print and (color) {
+  /* … */
+}
+
+等价于
+
+@media (not (screen and (color))), print and (color) {
+  /* … */
+}
+```
+
+`only` 关键字用于媒体查询（Media Queries），它用来限定样式仅适用于特定类型的设备，而不会被老旧的浏览器（不支持媒体查询的浏览器）应用。这样可以防止在旧版浏览器中出现意外的布局问题。
+
+例如，你可能想要编写一些仅适用于屏幕（而非打印机等其他媒体类型）的样式。在这种情况下，可以使用 `only` 关键字。这里有一个使用 `only screen` 的例子：
+
+```
+@media only screen and (max-width: 600px) {
+    body {
+        background-color: lightblue;
+    }
+}
+```
+
+这段代码的意思是：仅当媒体类型是屏幕且视口宽度不超过 600 像素时，应用这些样式。这里的 `only` 关键字确保了这些样式不会被不支持媒体查询的旧浏览器应用，从而避免了潜在的布局问题。
+
+在现代前端开发中，大多数情况下你可能不需要经常使用 `only`，因为大多数现代浏览器都支持媒体查询。但在某些情况下，特别是需要确保兼容性的场合，使用 `only` 是一个很好的做法。
+
+`or` 关键字的作用也是或，但它的可读性更好，它和 `,` 不同的地方在于，一个媒体查询中似乎不能同时含有 or 和 not，否则会语法错误（我还没有找到权威资料，实践看起来是这样的，又或者是运算符的优先级在干扰）。
 
 ## 容器查询
 
