@@ -87,7 +87,7 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 
 ### 调用方式
 
-我们可以在 html、css、js 文件中使用媒体查询。另外，无论媒体查询的结果是什么，`<link>` 和 `@import` 都会下载资源。
+我们可以在 html、css、js 文件中使用媒体查询。另外，无论媒体查询的结果是什么，`<link>` 都会下载资源，只不过下载的优先级更低。
 
 ```html
 <style media="screen"></style>
@@ -136,27 +136,38 @@ function handleChange(mediaQueryList) {
 
 ### 媒体特性
 
-媒体特性（Media Feature）描述了用户代理的各种特征。
+媒体特性（Media Feature）描述了用户代理的各种特征，下面是所有的媒体特性：
 
-| 名称            | 描述                                           |
-| --------------- | ---------------------------------------------- |
-| hover           | 是否至少有一种主要输入机制支持悬停             |
-| any-hover       | 是否至少有一种输入机制支持悬停                 |
-| pointer         | 是否至少有一种主要输入机制支持指针及指针的精度 |
-| any-pointer     | 是否至少有一种输入机制支持指针及指针的精度     |
-| color           | 色深或索引颜色表的位数                         |
-| color-gamut     | 色域                                           |
-| color-index     | 是否使用了索引颜色表及索引颜色表的总条目数     |
-| aspect-ratio    | 视口的宽高比                                   |
-| display-mode    | 网页的展示模式，如标准、全屏、PWA等            |
-| dynamic-range   | 是否支持高动态范围（亮度、色域、色深）         |
-| forced-colors   | 是否启用了强制色彩模式，如色盲或高对比度模式   |
-| grid            | 是否启用了网格屏幕，如点阵显示屏和早年的诺基亚 |
-| width           | 视口的宽度                                     |
-| height          | 视口的高度                                     |
-| inverted-colors | 是否启用了颜色反转                             |
+| 名称                   | 描述                                           |
+| ---------------------- | ---------------------------------------------- |
+| width                  | 视口宽度                                       |
+| height                 | 视口高度                                       |
+| aspect-ratio           | 视口宽度和高度的比率                           |
+| orientation            | 视口宽度和高度的关系                           |
+| update                 | 屏幕刷新率                                     |
+| resolution             | 屏幕像素分辨率                                 |
+| prefers-color-scheme   | 主题色倾向，如浅色模式、深色模式、自动模式     |
+| prefers-contrast       | 对比度倾向，如低对比度模式、高对比度模式       |
+| prefers-reduced-motion | 是否启用了减少动画模式                         |
+| hover                  | 是否至少有一种主要输入机制支持悬停             |
+| any-hover              | 是否至少有一种输入机制支持悬停                 |
+| pointer                | 是否至少有一种主要输入机制支持指针及指针的精度 |
+| any-pointer            | 是否至少有一种输入机制支持指针及指针的精度     |
+| color                  | 色深或索引颜色表的位数                         |
+| color-gamut            | 色域                                           |
+| color-index            | 是否使用索引颜色表及索引颜色表的总条目数       |
+| forced-colors          | 是否启用了强制色彩模式，如色盲或高对比度模式   |
+| inverted-colors        | 是否启用了颜色反转                             |
+| monochrome             | 是否为单色（黑白）设备及单色帧缓冲区的像素位数 |
+| grid                   | 是否启用了网格屏幕，如点阵显示屏和早年的诺基亚 |
+| display-mode           | 网页的展示模式，如标准、全屏、PWA等            |
+| dynamic-range          | 是否支持高动态范围                             |
+| video-dynamic-range    | 是否支持高动态范围（针对视频）                 |
+| overflow-block         | 初始包含块对块方向上的溢出内容的处理方式       |
+| overflow-inline        | 初始包含块对行内方向上的溢出内容的处理方式     |
+| scripting              | 是否支持 JavaScript                            |
 
-常见设备的主要输入机制如下。
+下面是常见设备的主要输入机制如下，`hover`、`any-hover`、`pointer`、`any-pointer` 需要用到这些信息。
 
 | 设备         | 主要输入机制               |
 | ------------ | -------------------------- |
@@ -173,7 +184,7 @@ function handleChange(mediaQueryList) {
 | 虚拟现实头显 | 手柄、手势                 |
 | 增强现实头显 | 手势、语音输入、触摸屏     |
 
-所有输入机制对悬停和指针的支持情况如下。
+下面是所有输入机制对悬停和指针的支持情况，`hover`、`any-hover`、`pointer`、`any-pointer` 需要用到这些信息。
 
 | 输入机制 | 悬停  | 指针   |
 | -------- | ----- | ------ |
@@ -219,7 +230,9 @@ button {
 }
 ```
 
+### 图像
 
+resolution 媒体特性
 
 ## 图像和排版
 
