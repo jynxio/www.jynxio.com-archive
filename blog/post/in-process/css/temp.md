@@ -88,18 +88,12 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 ### 语法
 
 ```css
-@media screen, print {}
-
-@media screen and (width >= 900px) {}
-
-@media (30em <= width <= 50em) {}
+@media only screen and ((not (aspect-ratio: 1/1)) or (resolution >= 2dppx)) {}
 ```
-
-
 
 ### 调用方式
 
-我们可以在 html、css、js 文件中使用媒体查询。另外，无论媒体查询的结果是什么，`<link>` 都会下载资源，只不过下载的优先级更低。
+我们可以在 html、css、js 文件中使用媒体查询。
 
 ```html
 <style media="screen"></style>
@@ -108,6 +102,8 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 
 <link rel="stylesheet" src="" media="screen" />
 ```
+
+> 无论媒体查询的结果是什么，`<link>` 都会下载资源，只不过下载的优先级更低。
 
 ```css
 @media screen {}
@@ -212,63 +208,50 @@ function handleChange(mediaQueryList) {
 | 手柄     | none  | coarse |
 | 手势     | none  | coarse |
 
+### 关键字
+
+关键字 `only` 用于确保媒体查询语句只会被现代浏览器所应用，它有 2 个硬性要求：
+
+- 写在句首；
+- 其后紧跟媒体类型；
+
+```css
+/* 🙅🏻 不要 */
+@media only (10rem < width < 30rem) {}
+
+/* 🙅🏻 不要 */
+@media all and only (10rem < width < 30rem) {}
+
+/* 💁🏻 推荐 */
+@media only all and (10rem < width < 30rem) {}
+```
+
+旧版浏览器会将 `@media screen and (10rem < width <30rem) {}` 当作 `@media screen {}`，因为旧版浏览器不认识 `(10rem < width < 30rem)`。为了避免这种情况，规范创造了一个新的关键字 `only`，它只被现代浏览器所识别，因此如果把它放在媒体查询语句的句首，那么旧版浏览器就会因为不认识 `only` 关键字而忽略掉整个媒体查询。
+
+我不知道为什么它其后必须紧跟媒体类型，我只知道这是规范的要求。
+
 ### 逻辑运算
 
-not, and, only, `,`
+| 逻辑运算符  | 描述 |
+| ----------- | ---- |
+| `not`       | 非   |
+| `and`       | 与   |
+| `or` 与 `,` | 或   |
 
-逗号代表或，and 代表且
+> `,` 两侧是两个独立的媒体查询，多个媒体查询组合形成媒体查询列表，`not` 只能作用于其中一个媒体查询，而不能作用于媒体查询列表。
 
+最佳实践：
+
+- 使用 `or` 来替代 `,`：因为 `or` 和 `,` 的作用相同且语义更明显；
+- 总是明确的书写 `()`：因为我搞不清楚逻辑运算符的优先级，书写 `()` 可以避免意外；
+
+```css
+/* 🙅🏻 不要 */
+@media screen and not (aspect-ratio: 1/1) or (resolution >= 2ddpx) {}
+
+/* 💁🏻 推荐 */
+@media screen and ((not (aspect-ratio: 1/1)) or (resolution >= 2dppx)) {}
 ```
-@media screen and (min-width: 30em) and (orientation: landscape) {
-  /* … */
-}
-
-@media (min-height: 680px), screen and (orientation: portrait) {
-  /* … */
-}
-```
-
-not 一定会反转媒体查询列表中的一个媒体查询而不是这个媒体查询里的一部分
-
-```
-@media not all and (monochrome) {
-  /* … */
-}
-
-等价于
-
-@media not (all and (monochrome)) {
-  /* … */
-}
-
-@media not screen and (color), print and (color) {
-  /* … */
-}
-
-等价于
-
-@media (not (screen and (color))), print and (color) {
-  /* … */
-}
-```
-
-`only` 关键字用于媒体查询（Media Queries），它用来限定样式仅适用于特定类型的设备，而不会被老旧的浏览器（不支持媒体查询的浏览器）应用。这样可以防止在旧版浏览器中出现意外的布局问题。
-
-例如，你可能想要编写一些仅适用于屏幕（而非打印机等其他媒体类型）的样式。在这种情况下，可以使用 `only` 关键字。这里有一个使用 `only screen` 的例子：
-
-```
-@media only screen and (max-width: 600px) {
-    body {
-        background-color: lightblue;
-    }
-}
-```
-
-这段代码的意思是：仅当媒体类型是屏幕且视口宽度不超过 600 像素时，应用这些样式。这里的 `only` 关键字确保了这些样式不会被不支持媒体查询的旧浏览器应用，从而避免了潜在的布局问题。
-
-在现代前端开发中，大多数情况下你可能不需要经常使用 `only`，因为大多数现代浏览器都支持媒体查询。但在某些情况下，特别是需要确保兼容性的场合，使用 `only` 是一个很好的做法。
-
-`or` 关键字的作用也是或，但它的可读性更好，它和 `,` 不同的地方在于，一个媒体查询中似乎不能同时含有 or 和 not，否则会语法错误（我还没有找到权威资料，实践看起来是这样的，又或者是运算符的优先级在干扰）。
 
 ## 容器查询
 
@@ -301,6 +284,10 @@ button {
 ### 图像
 
 resolution 媒体特性
+
+### 媒体查询
+
+使用 em 或 rem 而不是 px，这样可以响应浏览器文本大小的变化而变化
 
 ## 图像和排版
 
