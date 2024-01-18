@@ -83,7 +83,7 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 
 ## 媒体查询
 
-媒体查询（Media queries）用于根据设备的媒体类型和媒体特性来应用特定的样式。
+媒体查询（Media queries）用于根据用户代理或设备的媒体类型和媒体特性来应用特定的样式。
 
 ### 语法
 
@@ -232,7 +232,7 @@ function handleChange(mediaQueryList) {
 
 ### 逻辑运算
 
-| 逻辑运算符  | 描述 |
+| 运算符      | 描述 |
 | ----------- | ---- |
 | `not`       | 非   |
 | `and`       | 与   |
@@ -243,7 +243,7 @@ function handleChange(mediaQueryList) {
 最佳实践：
 
 - 使用 `or` 来替代 `,`：因为 `or` 和 `,` 的作用相同且语义更明显；
-- 总是明确的书写 `()`：因为我搞不清楚逻辑运算符的优先级，书写 `()` 可以避免意外；
+- 总是明确的书写 `()`：因为逻辑运算符的优先级很混乱，书写 `()` 可以避免意外；
 
 ```css
 /* 🙅🏻 不要 */
@@ -255,7 +255,83 @@ function handleChange(mediaQueryList) {
 
 ## 容器查询
 
-媒体查询、容器查询、CSS 变量
+容器查询（container queries）用于容器元素的容器特性来应用特定的样式。
+
+### 语法
+
+```html
+<section>
+	<div></div>
+</section>
+
+<style>
+    section { container-type: size }
+
+    @container (inline-size<= 10rem) {
+        div {}
+    }
+</style>
+```
+
+TODO:嵌套语法
+
+### 容器特性
+
+| 名称         | 描述                                                         |
+| ------------ | ------------------------------------------------------------ |
+| width        | 容器的 `width`                                               |
+| height       | 容器的 `height`                                              |
+| block-size   | 容器的 `block-size`                                          |
+| inline-size  | 容器的 `inline-size`                                         |
+| orientation  | 物理芳香的宽度大于高度（`landspace`）或高度大于宽度（`portrait`） |
+| aspect-ratio | 容器的物理方向宽高比，如 `1/1`                               |
+
+### 容器上下文
+
+
+
+### 逻辑运算符
+
+| 运算符 | 描述 |
+| ------ | ---- |
+| `and`  | 与   |
+| `not`  | 非   |
+| `or`   | 或   |
+
+注意，一个容器查询只能使用一个 `not`，且 `not` 不可以和 `and` 还有 `or` 混用。
+
+### 容器查询的长度单位
+
+容器查询中的样式表可以使用以下 6 个单位。
+
+| 单位    | 描述                           |
+| ------- | ------------------------------ |
+| `cqw`   | 容器元素的 `width` 的 1%       |
+| `cqh`   | 容器元素的 `height` 的 1%      |
+| `cqi`   | 容器元素的 `inline-size` 的 1% |
+| `cqb`   | 容器元素的 `block-size` 的 1%  |
+| `cqmin` | `cqi` 和 `cqb` 的最小者        |
+| `cqmax` | `cqi` 和 `cqb` 的最大者        |
+
+```css
+@container (inline-size <= 10rem) {
+    .foo { inline-size: 50qmin }
+}
+```
+
+## CSS 变量
+
+媒体查询和容器查询中都可以使用 CSS 变量，这极大扩展了容器查询和媒体查询的能力（真的可以用吗？），比如：
+
+```
+@container style(--accent-color: blue) {
+  /* <stylesheet> */
+}
+
+/* 媒体查询可以写这个吗？其他更简单的css变量的用法呢？ */
+```
+
+
 
 ## 体验优化
 
