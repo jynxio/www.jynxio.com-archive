@@ -85,8 +85,6 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 
 媒体查询（Media queries）用于根据用户代理或设备的媒体类型和媒体特性来应用特定的样式。
 
-### 语法
-
 ```css
 @media only screen and ((not (aspect-ratio: 1/1)) or (resolution >= 2dppx)) {}
 ```
@@ -255,25 +253,71 @@ function handleChange(mediaQueryList) {
 
 ## 容器查询
 
-容器查询（container queries）用于容器元素的容器特性来应用特定的样式。
-
-### 语法
+容器查询（container queries）用于根据查询容器的容器特性来应用特定的样式。
 
 ```html
-<section>
-	<div></div>
+<section class="query-container">
+	<div class="query-executor"></div>
 </section>
 
 <style>
-    section { container-type: size }
+    .query-container { container-type: size }
 
-    @container (inline-size<= 10rem) {
-        div {}
+    @container (block-size <= 10rem) {
+        .query-executor {}
     }
 </style>
 ```
 
-TODO:嵌套语法
+### 查询容器
+
+如果你要使用容器查询，那么就必须先指定至少一个查询容器，因为查询容器是容器查询的参照物。你可以用 `container-type` 来创建查询容器，用 `container-name` 来命名查询容器。
+
+// TODO:
+
+// TODO:
+
+// TODO:
+
+// TODO:
+
+// TODO:
+
+// TODO:
+
+// TODO:
+
+// TODO:
+
+```css
+.query-container {
+    container-type: size;
+    container-name: 
+}
+```
+
+如何创建查询容器？只要令元素的 `container-type` 非 `normal` 即可。
+
+> 查询容器会创建容器上下文和层叠上下文，容器上下文是一个类似于层叠上下文的概念。另外，对于绝对/固定定位元素而言，如果最近的祖先元素是一个查询容器，那么该查询容器的内边距盒将会作为该元素的包含块。
+
+| container-type 取值 | 描述                                   |
+| ------------------- | -------------------------------------- |
+| `normal`            | 不成为查询容器（默认值）               |
+| `size`              | 成为查询容器，仅支持查询行向和块向尺寸 |
+| `inline-size`       | 成为查询容器，仅支持查询行向尺寸       |
+
+查询容器会被施加布局、样式、尺寸隔离（Containment），其中 `container-type: size` 的查询容器的尺寸隔离是行向和块向的，`container-type: inline-size` 的查询容器的尺寸隔离是行向的。
+
+隔离是一种用于将元素的内部环境和外部环境隔离开来的技术，内部环境和外部环境将不再互相影响，CSS 规范一共定义了 5 种隔离方式，分别是布局隔离（layout）、绘制隔离（paint）、样式隔离（style）、尺寸隔离（size 或 inline-size），这些隔离方式的影响包括但不限于：
+
+- 裁剪溢出的内容
+- 元素内部的浮动不会影响外界的文字排版；
+- 将 [counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters) 和 [quotes](https://developer.mozilla.org/en-US/docs/Web/CSS/quotes) 特性的作用域限定在元素内；
+- 无视子元素的行向和块向尺寸（必须为元素指定明确的行向和块向尺寸）；
+
+你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/contain) 了解每一种隔离方式的具体作用。
+
+`container-name` 
 
 ### 容器特性
 
@@ -283,12 +327,8 @@ TODO:嵌套语法
 | height       | 容器的 `height`                                              |
 | block-size   | 容器的 `block-size`                                          |
 | inline-size  | 容器的 `inline-size`                                         |
-| orientation  | 物理芳香的宽度大于高度（`landspace`）或高度大于宽度（`portrait`） |
+| orientation  | 物理芳香的宽度大于高度（`landscape`）或高度大于宽度（`portrait`） |
 | aspect-ratio | 容器的物理方向宽高比，如 `1/1`                               |
-
-### 容器上下文
-
-
 
 ### 逻辑运算符
 
@@ -299,25 +339,6 @@ TODO:嵌套语法
 | `or`   | 或   |
 
 注意，一个容器查询只能使用一个 `not`，且 `not` 不可以和 `and` 还有 `or` 混用。
-
-### 容器查询的长度单位
-
-容器查询中的样式表可以使用以下 6 个单位。
-
-| 单位    | 描述                           |
-| ------- | ------------------------------ |
-| `cqw`   | 容器元素的 `width` 的 1%       |
-| `cqh`   | 容器元素的 `height` 的 1%      |
-| `cqi`   | 容器元素的 `inline-size` 的 1% |
-| `cqb`   | 容器元素的 `block-size` 的 1%  |
-| `cqmin` | `cqi` 和 `cqb` 的最小者        |
-| `cqmax` | `cqi` 和 `cqb` 的最大者        |
-
-```css
-@container (inline-size <= 10rem) {
-    .foo { inline-size: 50qmin }
-}
-```
 
 ## CSS 变量
 
@@ -331,7 +352,49 @@ TODO:嵌套语法
 /* 媒体查询可以写这个吗？其他更简单的css变量的用法呢？ */
 ```
 
+## 长度单位
 
+容器查询的长度单位
+
+| 单位    | 描述                           |
+| ------- | ------------------------------ |
+| `cqw`   | 容器元素的 `width` 的 1%       |
+| `cqh`   | 容器元素的 `height` 的 1%      |
+| `cqi`   | 容器元素的 `inline-size` 的 1% |
+| `cqb`   | 容器元素的 `block-size` 的 1%  |
+| `cqmin` | `cqi` 和 `cqb` 的最小者        |
+| `cqmax` | `cqi` 和 `cqb` 的最大者        |
+
+```html
+<section>
+	<div></div>
+</section>
+
+<style>
+    /* Section 1: Enable container queries */
+    section {
+        width: 100px;
+        
+        > div {
+            width: 1cqw; /* equal to 1vw */
+        }
+    }
+
+    /* Section 2: Disable container queries */
+    section {
+        width: 100px;
+        container-type: inline-size;
+        
+        > div {
+            width: 1cqw; /* equal to (100px * 1%) */
+        }
+    }
+</style>
+```
+
+
+
+## 
 
 ## 体验优化
 
