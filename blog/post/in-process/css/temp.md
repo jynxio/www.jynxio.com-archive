@@ -392,10 +392,6 @@ function handleChange(mediaQueryList) {
 </style>
 ```
 
-
-
-## 
-
 ## 体验优化
 
 ### 点击
@@ -422,7 +418,97 @@ button {
 
 ## 图像 - resolution 媒体特性
 
-## 响应式图像
+## 图像
+
+你的网页会被显示在台式电脑、笔记本电脑、平板、手机等各种尺寸各异的屏幕上，我们应该在小屏设备上渲染分辨率更多的图像以节省带宽
+
+兼顾分辨率与美术设计的响应式方案
+
+```html
+<picture>
+    /* for mobile */
+	<source
+        media="(width <= 550px)"
+        sizes="300px"
+        srcset="mobile-1x.png 300w, mobile-2x.png 600w"
+    />
+    /* for tablet */
+    <source
+        media="(width <= 1100px)"
+        sizes="500px"
+        srcset="tablet-1x.png 500w, tablet-med.png 1000w"
+    />
+    /* for laptop */
+    <source
+		media="(width <= 1500px)"
+		sizes="700px"
+		srcset="laptop-1x.png 700w, laptop-2x.png 1400w"
+    />
+    /* for desktop */
+    <img
+         sizes="900px"
+         srcser="desktop-1x.png 900w, desktop-2x.png 1800w"
+         src="fallback-desktop-2x-png"
+         alt=""
+	/>
+</picture>
+```
+
+只关注分辨率的响应式方案
+
+```html
+/* 已知图像尺寸 */
+<img
+	sizes="(width <= 550px) 300px, (width <= 1100px) 500px, (width <= 1500px) 700px, 900px"
+	srcset="1x.png 400w, 2x.png 800w, 3x.png 1200w, 4x.png 1600w"
+	src="fallback-4x.png"
+	loading="lazy"
+	alt=""
+/>
+```
+
+```html
+/* 不知图像尺寸 */
+<img
+	srcset="1x.png 1x, 2x.png 2x, 3x.png 3x, 4x.png 4x"
+	src="fallback-4x.png"
+	loading="lazy"
+	alt=""
+/>
+
+<style>
+    img {
+		display: block;
+        inline-size: 80%;
+    }
+</style>
+```
+
+```css
+/* 已知背景图像尺寸 */
+img {
+	display: block;
+	inline-size: 300px;
+	background-image: url("1x.png");
+
+	@media (resolution >= 2) { background-image: url("2x.png") }
+	@media (resolution >= 3) { background-image: url("3x.png") }
+	@media (resolution >= 4) { background-image: url("4x.png") }
+}
+
+/* 不知背景图像尺寸 */
+img {
+	display: block;
+	inline-size: 80%;
+	background-image: url("1x.png");
+
+	@media (resolution >= 2) { background-image: url("2x.png") }
+	@media (resolution >= 3) { background-image: url("3x.png") }
+	@media (resolution >= 4) { background-image: url("4x.png") }
+}
+```
+
+
 
 不同形状的屏幕需要不同形状的图像（满足美术设计），不同分辨率的屏幕需要不同分辨率的图像（满足带宽和清晰度），因此就需要响应式图像。
 
