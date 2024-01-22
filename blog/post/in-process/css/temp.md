@@ -420,11 +420,124 @@ button {
 }
 ```
 
-### 图像
+## 图像 - resolution 媒体特性
 
-resolution 媒体特性
+## 响应式图像
 
-### 媒体查询
+不同形状的屏幕需要不同形状的图像（满足美术设计），不同分辨率的屏幕需要不同分辨率的图像（满足带宽和清晰度），因此就需要响应式图像。
+
+我们应该尽可能地使用矢量图形，因为它在任何分辨率下都可以无损的显示，但它无法胜任那些含有大量细节的图像，这时候我们就只能使用位图了，比如 JPEG、PNG。
+
+对于响应式设计来说，CSS 是比 HTML 更好，但是某些情况下你不得不使用 HTML 来创建响应式图像，比如对于网站头部的装饰性图像你当然应该使用 `background-image`，可是对于网站的内容图像（比如商品图像），你当然应该使用 `<img>`。
+
+使用 CSS 来创建响应式图像？
+
+```css
+img {
+    background-image: url('1x.png');
+    @media (resolution >= 2) { background-image: url('2x.png') }
+    @media (resolution >= 3) { background-image: url('3x.png') }
+    /* ... */
+}
+```
+
+使用 HTML 来创建响应式图像？
+
+### 针对尺寸的响应式变化
+
+更大的图像面积应该使用尺寸更大的图像以避免模糊，更小的图像面积应该使用尺寸更小的图像以避免浪费带宽。
+
+最佳实践
+
+> 更详细的语法请看 https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images。
+
+```html
+<img
+     sizes="(width >= 1100px) 960px, (width >= 550px) 680px, 320px"
+     srcset="min.png 400w, median.png 800w, max.png 1200w"
+     src="fallback.png"
+     loading="lazy"
+     alt=""
+/>
+```
+
+浏览器根据 sizes 中的媒体查询来选定图像的宽度（高度则是自动的），然后根据图像宽度与屏幕分辨率来在 srcset 中选择合适的资源，比如当屏幕分辨率为 2，图像宽度为 320px 时，Chrome 会选择 median.png，当屏幕分辨率为 2，图像宽度为 680px 时，则会选择 max.png。
+
+最佳实践里，sizes 和 srcset 一定要一起使用，不要指定 width、height 的 html 或 css 属性。
+
+如果你只是想要调分辨率，那么就更简单了，它会自动根据设备的屏幕分辨率来选择最合适的资源。
+
+```html
+<img
+     sizes="320px"
+     srcset="min.png 200w, median.png 500w, max.png 900w"
+     loading="lazy"
+     alt=""
+/>
+```
+
+另一种方式是：
+
+```html
+<img
+     srcset="1x.png 1x, 1.5x.png 1.5x, 2x.png 2x"
+     loading="lazy"
+     alt=""
+/>
+
+<style>
+    img {
+        display: block;
+        inline-size: 100%;
+    }
+</style>
+```
+
+这可以让图像自动根据屏幕的设备分辨率来选择合适的图像，因为你明确告诉了浏览器为何种屏幕分辨率的屏幕应用何种的图像，这种方式的优点是可以使用动态的尺寸，缺点是最后应用的图像是否合适都需要由你来亲自考虑。
+
+### 针对美术设计的响应式变化
+
+更多细节请看
+
+https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images#art_direction
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+
+```html
+<picture>
+	<source
+        media="(width <= 550px)"
+        sizes="320px"
+        srcset="mobile-min.png 200w, mobile-med.png 400w, mobile-max.png 600w"
+    />
+    <source
+        media="(width > 1100px)"
+        sizes="680px"
+        srcset="desktop-min.png 600w, desktop-med.png 1200w, desktop-max.png 1800w"
+    />
+    <img src="fallback.png" alt="" />
+</picture>
+```
+
+### 为什么不使用 CSS 或 JavaScript 来做响应式
+
+因为浏览器在加载和执行 CSS 和 JS 资源之前就开始下载图像了，`<img>` 元素可能在 CSS 和 JS 就绪之前就已经渲染了原始图像了，等不及了。
+
+### 其它优化
+
+img 还有一些其他属性：
+
+- `loading`
+	- `eager`：立即加载（默认值）
+	- `lazy`：延迟加载，仅当图像接近视口时才被加载（如果网页不支持 JavaScript，则该功能不生效）
+- `fetchpriority`
+	- `high`：高下载优先级
+	- `low`：低下载优先级
+	- `auto`：自动确定下载优先级
+
+TODO：https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Responsive_Design
+
+## 媒体查询
 
 使用 em 或 rem 而不是 px，这样可以响应浏览器文本大小的变化而变化
 
