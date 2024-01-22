@@ -298,7 +298,7 @@ function findCulprits(element) {
 	- 该元素的 `transform` 值为非 `none`；
 	- 该元素的 `perspective` 值为非 `none`；
 	- 该元素的 `container-type` 值为非 `normal`；
-	- 该元素的 `backdrop=filter` 值为非 `none`；
+	- 该元素的 `backdrop-filter` 值为非 `none`；
 	- 该元素的 `will-change` 值为 `transform` 或 `perspective`；
 	- 该元素的 `contain` 值为 `layout`、`paint`、`strict`、`content`；
 	- 该元素的 `filter` 值为非 `none` 或 `will-change` 值为 `filter`（此条仅作用于 Firefox 浏览器）；
