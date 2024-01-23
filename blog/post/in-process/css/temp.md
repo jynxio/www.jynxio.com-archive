@@ -420,93 +420,125 @@ button {
 
 ## 图像
 
-你的网页会被显示在台式电脑、笔记本电脑、平板、手机等各种尺寸各异的屏幕上，我们应该在小屏设备上渲染分辨率更多的图像以节省带宽
+你的网页会被显示在各种尺寸的屏幕上，比如台式电脑、笔记本电脑、平板电脑、智能手机。为了提高图像的加载速度（并节省带宽），我们会在小屏幕上采用分辨率更低的图像，为了增强美术效果，我们会在不同屏幕上采用不同版本的图像，比如：
 
-兼顾分辨率与美术设计的响应式方案
+TODO: 图像
 
-```html
-<picture>
-    /* for mobile */
-	<source
-        media="(width <= 550px)"
-        sizes="300px"
-        srcset="mobile-1x.png 300w, mobile-2x.png 600w"
-    />
-    /* for tablet */
-    <source
-        media="(width <= 1100px)"
-        sizes="500px"
-        srcset="tablet-1x.png 500w, tablet-med.png 1000w"
-    />
-    /* for laptop */
-    <source
-		media="(width <= 1500px)"
-		sizes="700px"
-		srcset="laptop-1x.png 700w, laptop-2x.png 1400w"
-    />
-    /* for desktop */
-    <img
-         sizes="900px"
-         srcser="desktop-1x.png 900w, desktop-2x.png 1800w"
-         src="fallback-desktop-2x-png"
-         alt=""
-	/>
-</picture>
+如果想要渲染高质量的图像，那么：
+
+1. 尽可能使用可缩放矢量图形（SVG）；
+2. 如果使用位图：
+	1. 图像在网页中的宽高比要等于图像本身的宽高比；
+	2. 图像在网页中的物理像素数要等于图像本身的物理像素数；
+
+尤其是第 2 点。假设图像在网页上的尺寸是 100 × 200，如果网页的像素分辨率是 2，那么图像本分的分辨率就必须达到 200 × 400，如果像素分辨率是 3，则为 300 × 600，以此类推。但是我认为没有必要考虑像素分辨率大于 2 的情况，因为对于人眼而言，像素分辨率为 3 时的视觉效果相对像素分辨率为 2 时的视觉效果的提升是微弱的，然而前者的图像体积却会显著增大，这是一种浪费。
+
+### 装饰性图像和内容性图像
+
+网页中的图像可以被分作 2 种类型，一种是仅用作装饰的图像，比如背景图像、背景花纹，另一种是被用作网页内容的图像，比如文章配图、商品图片。对于前者，我们应该采用 CSS 来实现，即 `background-image`；对于后者，我们应该采用 HTML 来实现，如 `<img>`、`<picture>`。之所以如此，是因为：
+
+- CSS 方案提供了开箱即用的装饰能力：比如 `background-repeat`、`background-attachment`；
+- HTML 方案提供了开箱即用的无障碍访问能力：比如 `alt` 属性对于依赖屏幕阅读器的用户而言是必须的，并且它还可以为图像加载失败的情况做降级处理；
+
+另外，HTML 方案下的图像的加载速度会更快，这是因为浏览器在解析到 `<img>` 标签和 `background-image` 属性之后才会开始下载相关资源，而「样式计算」的时机发生在「DOM 构建」之后。而且，`<img>` 的 `loading` 属性还可以实现资源的懒加载，图像仅在即将呈现至视口之前才会被下载，这可以减少首屏所需的图像资源的体积。
+
+> 对于由 React 等工具来创建的网页应用，HTML 元素是由 JavaScript 动态创建的，这会导致所有图像资源的下载时机都被推迟刀 JavaScript 的下载和执行之后。如果你想提升图像的加载速度，那么有 2 种手段：1）使用 SSG 工具，如 Astro、VitePress 等；2）使用 `<link preload />` 来预下载资源；
+
+最后，在所有的实现响应式设计的手段中，通常 CSS 方案是最简单的，但是对于图像的响应式设计而言，HTML 方案才是更简单的。
+
+### 装饰性图像的响应式设计方案
+
+我认为在大多数情况下，装饰性图像在网页中的实际尺寸都，
+
+```css
+.decoration {
+	display: block;
+    aspect-ratio: 3/2;
+	inline-size: 100%;
+
+    /* pixel ratio: 1 */
+	background-image: url("desktop-1x.png");                            /* desktop */
+    @media (width <= 1500px) { background-image: url("laptop-1x.png") } /* laptop  */
+    @media (width <= 1100px) { background-image: url("tablet-1x.png") } /* tablet  */
+    @media (width <= 550px)  { background-image: url("mobile-1x.png") } /* mobile  */
+
+    /* pixel ratio: 2 */
+	@media (resolution >= 2) {
+		background-image: url("desktop-2x.png");                            /* desktop */
+		@media (width <= 1500px) { background-image: url("laptop-2x.png") } /* laptop  */
+		@media (width <= 1100px) { background-image: url("tablet-2x.png") } /* tablet  */
+		@media (width <= 550px)  { background-image: url("mobile-2x.png") } /* mobile  */
+    }
+}
 ```
 
-只关注分辨率的响应式方案
+> 补充：满足媒体查询的图像才会被下载，不满足的则不会被下载。
+
+### 内容性图像的响应式设计方案
 
 ```html
-/* 已知图像尺寸 */
+/* 如果不知图像的尺寸: 兼顾分辨率与美术设计 */
+<picture>
+    /* pixel ratio: 1 */
+	<source media="(resolution < 2) and (width <= 550px)"  srcset="mobile-1x.png"  />
+    <source media="(resolution < 2) and (width <= 1100px)" srcset="tablat-1x.png"  />
+    <source media="(resolution < 2) and (width <= 1500px)" srcset="laptop-1x.png"  />
+    <source media="(resolution < 2) and (width >  1500px)" srcset="desktop-1x.png" />
+    
+    /* pixel ratio: 2 */
+    <source media="(resolution >= 2) and (width <= 550px)"  srcset="mobile-2x.png"  />
+    <source media="(resolution >= 2) and (width <= 1100px)" srcset="tablat-2x.png"  />
+    <source media="(resolution >= 2) and (width <= 1500px)" srcset="laptop-2x.png"  />
+    <source media="(resolution >= 2) and (width >  1500px)" srcset="desktop-2x.png" />
+    
+    /* fallback */
+    <img alt="" src="desktop-2x.png" />
+</picture>
+
+/* 如果不知图像的尺寸: 只关心分辨率 */
+<img
+	srcset="1x.png 1x, 2x.png 2x, 3x.png 3x, 4x.png 4x"
+	loading="lazy"
+	src="4x.png"
+	alt=""
+/>
+
+/* 如果已知图像的尺寸: 兼顾分辨率与美术设计 */
+<picture>
+	<source media="(width <= 550px)" sizes="300px" srcset="mobile-1x.png 300w, mobile-2x.png 600w" />
+    <source media="(width <= 1100px)" sizes="500px" srcset="tablet-1x.png 500w, tablet-2x.png 1000w" />
+    <source media="(width <= 1500px)" sizes="700px" srcset="laptop-1x.png 700w, laptop-2x.png 1400w" />
+    <source media="(width > 1500px)" sizes="900px" srcset="desktop-1x.png 900w, desktop-2x.png 1800w" />
+    <img alt="" src="desktop-2x.png" />
+</picture>
+
+/* 如果已知图像的尺寸: 只关心分辨率 */
 <img
 	sizes="(width <= 550px) 300px, (width <= 1100px) 500px, (width <= 1500px) 700px, 900px"
 	srcset="1x.png 400w, 2x.png 800w, 3x.png 1200w, 4x.png 1600w"
-	src="fallback-4x.png"
 	loading="lazy"
+	src="4x.png"
 	alt=""
 />
 ```
 
-```html
-/* 不知图像尺寸 */
-<img
-	srcset="1x.png 1x, 2x.png 2x, 3x.png 3x, 4x.png 4x"
-	src="fallback-4x.png"
-	loading="lazy"
-	alt=""
-/>
 
-<style>
-    img {
-		display: block;
-        inline-size: 80%;
-    }
-</style>
-```
 
-```css
-/* 已知背景图像尺寸 */
-img {
-	display: block;
-	inline-size: 300px;
-	background-image: url("1x.png");
+---
 
-	@media (resolution >= 2) { background-image: url("2x.png") }
-	@media (resolution >= 3) { background-image: url("3x.png") }
-	@media (resolution >= 4) { background-image: url("4x.png") }
-}
+TODO：
 
-/* 不知背景图像尺寸 */
-img {
-	display: block;
-	inline-size: 80%;
-	background-image: url("1x.png");
+这种方案有一个显著的缺点，即开发者需要主动确保图像的物理像素数等于图像在网页中的物理像素数，比如对于上例而言：
 
-	@media (resolution >= 2) { background-image: url("2x.png") }
-	@media (resolution >= 3) { background-image: url("3x.png") }
-	@media (resolution >= 4) { background-image: url("4x.png") }
-}
-```
+- 如果 `inline-size: 300px`，那么 `?-1x.png` 的分辨率应该为 300 × 200；
+- 如果 `inline-size: clamp(15rem, 8vw + 12rem, 18rem)`，那么 `?-1x.png` 的分辨率应该为 288 × 192；
+- 如果 `inline-size: 80%`，那么 `?-1x.png` 的分辨率应该为 ? × ?；
+
+繁琐的计算让人很恼火，对不对？
+
+---
+
+### 内容性图像
 
 
 
