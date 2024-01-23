@@ -16,7 +16,7 @@
 
 	然后他们说，让我们联合起来，烧纸砖块，并用泥浆将砖块砌在一起。
 
-4. And they said, Go to, let us build us a city and a tower, whose top may reach unto heaven; and let us make us a name, lest we be scattered abroad upon the face of the whole earth.，
+4. And they said, Go to, let us build us a city and a tower, whose top may reach unto heaven; and let us make us a name, lest we be scattered abroad upon the face of the whole earth.
 
 	我们要建造一座城来让我们团聚在一起，还要建造一座通天之塔来让我们名扬天下。
 
