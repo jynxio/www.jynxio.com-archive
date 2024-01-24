@@ -32,16 +32,13 @@ HTML 方案是指使用 `<img>` 和 `picture>` 等 HTML 元素来加载图像的
 
 ## 响应式设计
 
-图像的响应式设计是指图像会在分辨率和美术效果两个方面自动的适应，具体描述如下。
+图像的响应式设计体现在 2 个方面，分别是分辨率和美术设计。
 
-### 关于分辨率
+### 分辨率
 
-网页会被显示在各种尺寸的屏幕上，比如台式电脑、笔记本电脑、平板电脑、智能手机，这意味着图像的尺寸也往往是动态的，如果采用了固定分辨率的图像，那么就无法兼顾清晰度和加载速度，因为：
+网页会被显示在各种尺寸的屏幕上，比如台式电脑、笔记本电脑、平板电脑、智能手机，这意味着图像的尺寸也往往是动态的，如果采用了固定分辨率的图像，那么就无法兼顾清晰度和加载速度，比如：1）虽然高分辨率图像很清晰，但是加载速度慢；2）虽然低分辨率图像加载速度快，但是放大时会显得模糊。
 
-- 对于高分辨率的图像，虽然图像清晰，但是加载速度慢；
-- 对于低分辨率的图像，虽然加载速度快，但是图像会在放大时模糊；
-
-该问题的解决方案是：
+解决这个问题的解决方案是：
 
 1. 尽可能使用 SVG；
 2. 如果使用位图，那么：
@@ -50,40 +47,43 @@ HTML 方案是指使用 `<img>` 和 `picture>` 等 HTML 元素来加载图像的
 
 > 软件比例尺是指图像渲染在网页上时的比例尺，物理比例尺是指图像本身的比例尺，软件分辨率和物理分辨率同理，它们是我根据「软件像素」和「物理像素」来创造的新概念。
 
-关于 2.ii，假设图像的软件分辨率是 100 × 200，如果浏览器的像素分辨率是 1，那么图像的物理分辨率就必须达到 100 × 200，如果像素分辨率为 2，则是 200 × 400，如果像素分辨率为 3，则是 300 × 600。
+关于 2.2，假设图像的软件分辨率是 100 × 200，如果浏览器的像素分辨率是 1，那么图像的物理分辨率就必须达到 100 × 200，如果像素分辨率为 2，则是 200 × 400，如果像素分辨率为 3，则是 300 × 600。
 
-> 我认为没有必要考虑像素分辨率大于 2 的情况，因为对于人眼而言，像素分辨率大于 2 之后所带来的提升效果已经不明显了，但是它却会显著增大图像的体积，这是一种浪费。
+其实，我认为没有必要考虑像素分辨率大于 2 的情况，因为对于人眼而言，像素分辨率大于 2 之后所带来的提升效果已经不明显了，但是它却会显著增大图像的体积，这是一种浪费。
 
-### 关于美术效果
+### 美术设计
 
-有时候，我们不能把大屏设备上的图像直接照搬到小屏设备上去，比如对于一幅 16:9 的图像，它在电脑屏幕上的展示效果很棒，但是在手机屏幕上的展示效果却不好，因为手机屏幕太窄了，图像的细节都看不太清了。为此，我们应该为手机屏幕提供一份不那么宽的图像。
+有时候，我们不能把大屏设备上的图像直接照搬到小屏设备上去，比如对于一幅 16:9 的图像，它在电脑屏幕上的展示效果很棒，但是在手机屏幕上的展示效果却不好，因为手机屏幕太窄了，图像的细节都看不太清了。
 
-TODO：关于宽幅图像在电脑屏幕和手机屏幕上的渲染效果
+这个问题得解决方案是：为不同尺寸的设备加载不同版本的图像。比如对于上面这个问题，我们应该为手机屏幕提供一份不那么宽的图像。
 
-该问题的解决方案是：根据设备的尺寸来加载不同美术效果的图像。
+## 最佳实践 —— 装饰性图像
 
-## 实践的方案
-
-### 关于装饰性图像
+对于背景图像，它们的尺寸往往是未知的，对于背景纹理，它们的
 
 ```css
-div {
-	display: block;
-    aspect-ratio: 3/2;
-	inline-size: 100%;
+element {
+    &.static {
+		background-size: 5px auto;
+    	background-repeat: repeat;
+    }
 
-    /* pixel ratio: 1 */
-	background-image: url("desktop-1x.png");                            /* desktop */
-    @media (width <= 1500px) { background-image: url("laptop-1x.png") } /* laptop  */
-    @media (width <= 1100px) { background-image: url("tablet-1x.png") } /* tablet  */
-    @media (width <= 550px)  { background-image: url("mobile-1x.png") } /* mobile  */
+    &.dynamic {
+		background-size: 100% auto;
+    	background-repeat: no-repeat;
+    }
 
-    /* pixel ratio: 2 */
+	background-image: url("desktop-1x.png");
+    @media (width <= 1500px) { background-image: url("laptop-1x.png") }
+    @media (width <= 1100px) { background-image: url("tablet-1x.png") }
+    @media (width <= 550px)  { background-image: url("mobile-1x.png") }
+
+
 	@media (resolution >= 2) {
-		background-image: url("desktop-2x.png");                            /* desktop */
-		@media (width <= 1500px) { background-image: url("laptop-2x.png") } /* laptop  */
-		@media (width <= 1100px) { background-image: url("tablet-2x.png") } /* tablet  */
-		@media (width <= 550px)  { background-image: url("mobile-2x.png") } /* mobile  */
+		background-image: url("desktop-2x.png");
+		@media (width <= 1500px) { background-image: url("laptop-2x.png") }
+		@media (width <= 1100px) { background-image: url("tablet-2x.png") }
+		@media (width <= 550px)  { background-image: url("mobile-2x.png") }
     }
 }
 ```
