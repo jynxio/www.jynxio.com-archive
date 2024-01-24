@@ -2,17 +2,11 @@
 
 ## 图像的类型
 
-网页中的图像可以被分为 2 种类型，分别是：
-
-- 装饰性图像：仅用作装饰的图像，比如背景和纹理；
-- 内容性图像：被当作内容的图像，比如文章配图和商品图；
+网页中的图像可以被分为 2 种类型，分别是「装饰性图像」和「内容性图像」，前者是指仅用作装饰的图像，比如背景和纹理，后者是指被当作内容的图像，比如文章配图和商品图。
 
 ## 加载的方式
 
-对于图像的加载，我们有 2 种方式，分别是：
-
-- CSS 方案；
-- HTML 方案；
+图像有 2 种加载方式，分别是「CSS 方案」和「HTML 方案」。
 
 CSS 方案是指使用 `background-image` 等 CSS 属性来加载图像的方案，它适用于加载装饰性的图像，这是因为它提供了开箱即用的装饰能力，比如 `background-repeat` 可用于制造重复的纹理背景，`background-attachment` 可用于控制背景图像的滚动行为。
 
@@ -28,7 +22,7 @@ HTML 方案是指使用 `<img>` 和 `picture>` 等 HTML 元素来加载图像的
 - 使用 `fetchpriority="high"` 来提高下载优先级；
 - 使用 `<link preload />` 来预下载图像；
 
-如果你想 提升首屏的渲染速度，那么可以采用 `<img loading="lazy" />` 来懒加载图像，它可以减少首屏的下载负荷。
+如果你想提升首屏的渲染速度，那么可以采用 `<img loading="lazy" />` 来懒加载图像，它可以减少首屏的下载负荷。
 
 ## 响应式设计
 
@@ -57,18 +51,16 @@ HTML 方案是指使用 `<img>` 和 `picture>` 等 HTML 元素来加载图像的
 
 这个问题得解决方案是：为不同尺寸的设备加载不同版本的图像。比如对于上面这个问题，我们应该为手机屏幕提供一份不那么宽的图像。
 
-## 最佳实践 —— 装饰性图像
-
-对于背景图像，它们的尺寸往往是未知的，对于背景纹理，它们的
+## 装饰性图像方案
 
 ```css
 element {
-    &.static {
+    &.static {  /* 假设图像的宽度是确定的，比如波浪纹理背景 */
 		background-size: 5px auto;
     	background-repeat: repeat;
     }
 
-    &.dynamic {
+    &.dynamic { /* 假设图像的宽度是不确定的，比如寻常的风景画背景 */
 		background-size: 100% auto;
     	background-repeat: no-repeat;
     }
@@ -88,66 +80,29 @@ element {
 }
 ```
 
-> 补充：满足媒体查询的图像才会被下载，不满足的则不会被下载。
+> 只有满足媒体查询的图像才会被下载。
 
-### 关于内容性图像
+## 内容性图像方案
 
-我认为在大多数情况下，内容性图像的软件分辨率都不是固定的，并且会被限制在一个区间之内，比如：
-
-```css
-img {
-    display: block;
-    aspect: 1/1;
-    inline-size: clamp(min, formula, max);
-}
-```
-
-如果我们不确定图像的软件分辨率，那么响应式设计的实现方案就如下所示：
+如果图像的尺寸是不确定的，那么一个兼顾分辨率和美术设计的方案如下：
 
 ```html
-/* 如果只关心分辨率 */
 <style>
     img, picture {
+        display: block;
         aspect-ratio: 16/9;
         inline-size: clamp(desktop-min, desktop-formula, desktop-max);
 
         @media (width <= 1500px) {
+            aspect-ratio: 5/3;
             inline-size: clamp(laptop-min, laptop-formula, laptop-max);
         }
         @media (width <= 1100px) {
-        	inline-size: clamp(tablet-min, tablet-formula, tablet-max);
-        }
-        @media (width <=  550px) {
-        	inline-size: clamp(mobile-min, mobile-formula, mobile-max);
-        }
-    }
-</style>
-
-<img
-	srcset="1x.png 1x, 2x.png 2x"
-	loading="lazy"
-	src="2x.png"
-	alt=""
-/>
-```
-
-```html
-/* 如果既关心分辨率，又关心美术效果 */
-<style>
-    img, picture {
-        aspect-ratio: 16/9;
-        inline-size: clamp(desktop-min, desktop-formula, desktop-max);
-
-        @media (width <= 1500px) {
             aspect-ratio: 3/2;
-            inline-size: clamp(laptop-min, laptop-formula, laptop-max);
-        }
-        @media (width <= 1100px) {
-            aspect-ratio: 2/1;
         	inline-size: clamp(tablet-min, tablet-formula, tablet-max);
         }
         @media (width <=  550px) {
-            aspect-ratio: 1/1;
+            aspect-ratio: 2/1;
         	inline-size: clamp(mobile-min, mobile-formula, mobile-max);
         }
     }
@@ -166,11 +121,59 @@ img {
     <source media="(resolution >= 2) and (width <= 1500px)" srcset="laptop-2x.png"  />
     <source media="(resolution >= 2) and (width >  1500px)" srcset="desktop-2x.png" />
     
-    /* fallback */
+    /* fallback: 降级方案应当使用最清晰的图像 */
     <img alt="" src="desktop-2x.png" />
 </picture>
 ```
 
-> 为了保证图像的渲染质量，我们要确保：`物理分辨率 = max(软件分辨率) * 像素分辨率`。比如 mobile-2x.png 的物理分辨率应当等于 `(mobile-max * 2) * (mobile-max * 2)`。
->
-> 该公式亦是该方案的缺点，因为它会带来明显的心智负担。
+如果我们只关注分辨率的话，那么这还有一个更加简洁的实现方案：
+
+```html
+<style>
+    img {
+        aspect-ratio: 16/9;
+        inline-size: clamp(desktop-min, desktop-formula, desktop-max);
+        @media (width <= 1500px) { inline-size: clamp(laptop-min, laptop-formula, laptop-max) }
+        @media (width <= 1100px) { inline-size: clamp(tablet-min, tablet-formula, tablet-max) }
+        @media (width <=  550px) { inline-size: clamp(mobile-min, mobile-formula, mobile-max) }
+    }
+</style>
+
+<img
+	srcset="1x.png 1x, 2x.png 2x"
+	loading="lazy"
+	src="2x.png"
+	alt=""
+/>
+/* 仅当srcset属性失效时，才会使用src的降级方案 */
+```
+
+如果图像的尺寸是确定的，那么一个兼顾分辨率和美术设计的方案如下：
+
+```html
+<picture>
+	<source media="(width <= 550px)"  sizes="300px" srcset="mobile-1x.png 300w, mobile-2x.png 600w" />
+    <source media="(width <= 1100px)" sizes="500px" srcset="tablet-1x.png 500w, tablet-2x.png 1000w" />
+    <source media="(width <= 1500px)" sizes="700px" srcset="laptop-1x.png 700w, laptop-2x.png 1400w" />
+    <source media="(width > 1500px)"  sizes="900px" srcset="desktop-1x.png 900w, desktop-2x.png 1800w" />
+    /* 仅当source标签无效或不满足时，才会使用img的降级方案 */
+    <img alt="" src="desktop-2x.png" />
+</picture>
+```
+
+如果我们只关注分辨率的话，那么这还有一个更加简洁的实现方案：
+
+```html
+<img
+	sizes="(width <= 550px) 300px, (width <= 1100px) 500px, (width <= 1500px) 700px, 900px"
+	srcset="1x.png 300w, 2x.png 600w， 3x.png 900w, 4x.png 1200w, 5x.png 1500w, 6x.png 1800w"
+	loading="lazy"
+	src="2x.png"
+	alt=""
+/>
+/* 仅当srcset属性失效时，才会使用src的降级方案 */
+```
+
+> 为什么需要提供 1x 至 6x 的图像？因为网页对图像的期望的物理宽度的最小值就是 `300w`，最大值就是 `1800w`，前者发生在 `width <= 500px` 且 `resolution = 1` 的情况，后者发生在 `width > 1500px` 且`resolution = 2` 的情况。
+
+对于指定了 `sizes` 属性的方案而言，浏览器会根据其中的媒体查询来为图像应用你所预定义的宽度（高度是自动的），然后再根据图像的软件分辨率和设备的像素分辨率来计算出图像所需的物理分辨率，然后再去 `srcset` 中选择合适的图像。比如，假设视口宽度小于 550px 且设备的像素分辨率为 2，浏览器就会选用 2x.png。
