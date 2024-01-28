@@ -11,6 +11,12 @@
 - 字号在小尺寸屏幕下适当的缩小以便于展示更多的文字；
 - 段落之间的间隙会在障碍人士的特大字号模式下自动变大以便于不会过于紧凑；
 
+## 屏幕的像素
+
+Apple 在很久以前便开始推广使用「视网膜屏幕」，这是一个唬人的营销话术，实际上视网膜屏幕就是像素密度更高的屏幕，通过增加屏幕的像素密度来使人类在正常的观看距离下
+
+现在，许多电子设备的屏幕都采用了「视网膜显示屏」，视网膜显示屏是指像素密度超过某个阈值的屏幕，
+
 ## 布局的类型
 
 | 名称         | 描述                         | 自适应 | 推荐 |
@@ -142,7 +148,7 @@ function handleChange(mediaQueryList) {
 
 ### 媒体特性
 
-媒体特性（Media Feature）描述了用户代理的各种特征，下面是所有的媒体特性：
+媒体特性（Media Feature）是指媒体查询所支持的查询规则，媒体特性都是关于用户代理的各种特征的描述，下面便是所有的媒体特性：
 
 | 名称                   | 描述                                           |
 | ---------------------- | ---------------------------------------------- |
@@ -256,79 +262,101 @@ function handleChange(mediaQueryList) {
 容器查询（container queries）用于根据查询容器的容器特性来应用特定的样式。
 
 ```html
-<section class="query-container">
-	<div class="query-executor"></div>
+<section class="a">
+	<section class="b">
+    	<section class="c"></section>
+    </section>
 </section>
 
 <style>
-    .query-container { container-type: size }
+    .a { container: a / size }
+    .b { container: b / size }
 
-    @container (block-size <= 10rem) {
-        .query-executor {}
+    /* 匿名查询，查询容器为b */
+    @container (inline-size >= 100cqi) {
+        .c {}
+    }
+    
+    /* 具名查询，查询容器为a */
+    @container a (block-size >= 100cqb) {
+        .c {}
+    }
+    
+    /* 嵌套查询，查询容器依次为a和b */
+    @container a (block-size >= 100cqb) {
+        @container b (inline-size >= 100cqi) {
+            .c {}
+        }
     }
 </style>
 ```
 
 ### 查询容器
 
-如果你要使用容器查询，那么就必须先指定至少一个查询容器，因为查询容器是容器查询的参照物。你可以用 `container-type` 来创建查询容器，用 `container-name` 来命名查询容器。
+如果你要使用容器查询，那么就必须先指定至少一个查询容器，因为查询容器是容器查询的参照物。你之所以不需要为媒体查询指定参照物，是因为媒体查询已经将用户代理设作为其参照物了。
 
-// TODO:
-
-// TODO:
-
-// TODO:
-
-// TODO:
-
-// TODO:
-
-// TODO:
-
-// TODO:
-
-// TODO:
+请使用 `container-type` 来创建查询容器，用 `container-name` 来命名查询容器，或直接使用简写属性 `container`，其语法如下：
 
 ```css
-.query-container {
-    container-type: size;
-    container-name: 
+.anonymous-query-container {
+	container-type: size;
+}
+
+.named-query-container {
+	container-type: size;
+    container-name: name-1 name-2;
+}
+
+.named-query-container {
+    container: nam1-1 name-2 / size;
 }
 ```
 
-如何创建查询容器？只要令元素的 `container-type` 非 `normal` 即可。
+如果 `container-type` 非 `normal`，那么当前元素就会变成查询容器，如果为查询容器指定了 `container-name`，那么这就是具名查询容器，否则便是匿名查询容器，`container-name` 支持一至多个名字，你可以用小驼峰命名法、大驼峰命名法、蛇形命名法、烤肉串命名法等方法来命名这些名字。
 
-> 查询容器会创建容器上下文和层叠上下文，容器上下文是一个类似于层叠上下文的概念。另外，对于绝对/固定定位元素而言，如果最近的祖先元素是一个查询容器，那么该查询容器的内边距盒将会作为该元素的包含块。
+```
+container-type: normal | size | inline-size
+container-name: name-1 name-2 name-3 name-4
+```
 
-| container-type 取值 | 描述                                   |
-| ------------------- | -------------------------------------- |
-| `normal`            | 不成为查询容器（默认值）               |
-| `size`              | 成为查询容器，仅支持查询行向和块向尺寸 |
-| `inline-size`       | 成为查询容器，仅支持查询行向尺寸       |
+| 取值          | 描述                                   |
+| ------------- | -------------------------------------- |
+| `normal`      | 不变成查询容器（默认值）               |
+| `size`        | 变成查询容器，支持行向和块向尺寸的查询 |
+| `inline-size` | 变成查询容器，仅支持行向尺寸的查询     |
 
-查询容器会被施加布局、样式、尺寸隔离（Containment），其中 `container-type: size` 的查询容器的尺寸隔离是行向和块向的，`container-type: inline-size` 的查询容器的尺寸隔离是行向的。
+查询容器会产生 4 种副作用，分别是：
 
-隔离是一种用于将元素的内部环境和外部环境隔离开来的技术，内部环境和外部环境将不再互相影响，CSS 规范一共定义了 5 种隔离方式，分别是布局隔离（layout）、绘制隔离（paint）、样式隔离（style）、尺寸隔离（size 或 inline-size），这些隔离方式的影响包括但不限于：
+- 创建层叠上下文；
+- 创建容器上下文；
+- 施加布局、样式、尺寸隔离；
+- 成为绝对和固定定位元素的包含块；
 
-- 裁剪溢出的内容
-- 元素内部的浮动不会影响外界的文字排版；
-- 将 [counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters) 和 [quotes](https://developer.mozilla.org/en-US/docs/Web/CSS/quotes) 特性的作用域限定在元素内；
-- 无视子元素的行向和块向尺寸（必须为元素指定明确的行向和块向尺寸）；
+关于「容器上下文」，这是一种类似于层叠上下文的概念，当某个元素使用匿名的容器查询时，它便会沿着容器上下文的嵌套关系来向上寻找距离自身最近的容器元素来作为参照物，不过你也可以通过使用具名的容器查询来突破这个规则。
 
-你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/contain) 了解每一种隔离方式的具体作用。
+关于「成为绝对和固定定位元素的包含块」，对于绝对和固定定位元素而言，如果最近的祖先元素是一个查询容器，那么查询容器的内边距盒就会成为该定位元素的包含块。
 
-`container-name` 
+关于「施加布局、样式、尺寸隔离」，隔离（Containment）是一种用于将元素的内部环境和外部环境隔离开来的技术，内部环境和外部环境将不再互相影响，CSS 规范一共定义了 5 种隔离方式，分别是布局隔离（layout）、绘制隔离（paint）、样式隔离（style）、尺寸隔离（size 或 inline-size），这些隔离方式的影响包括但不限于：
+
+- 裁剪溢出的内容；
+- 消除元素内部的浮动对外界文字排版的影响；
+- 限定 [counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters) 和 [quotes](https://developer.mozilla.org/en-US/docs/Web/CSS/quotes) 特性的作用域于容器元素之内；
+- 无视子元素的行向和块向尺寸（这意味着必须为元素指定明确的行向和块向尺寸）；
+
+其中，`container-type: size` 的查询容器的尺寸隔离是行向和块向的，`container-type: inline-size` 则是行向的。你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/contain) 了解每一种隔离方式的具体作用。
 
 ### 容器特性
 
-| 名称         | 描述                                                         |
-| ------------ | ------------------------------------------------------------ |
-| width        | 容器的 `width`                                               |
-| height       | 容器的 `height`                                              |
-| block-size   | 容器的 `block-size`                                          |
-| inline-size  | 容器的 `inline-size`                                         |
-| orientation  | 物理芳香的宽度大于高度（`landscape`）或高度大于宽度（`portrait`） |
-| aspect-ratio | 容器的物理方向宽高比，如 `1/1`                               |
+容器特性是指容器查询所支持的查询规则，容器特性要比媒体特性少得多，下面便是所有的容器特性：
+
+| 容器特性     | 取值                      | 描述               |
+| ------------ | ------------------------- | ------------------ |
+| width        | `<length>`                | 容器的宽度         |
+| height       | `<length>`                | 容器的高度         |
+| block-size   | `<length>`                | 容器的块向尺寸     |
+| inline-size  | `<length>`                | 容器的行向尺寸     |
+| orientation  | `landscape` 或 `portrait` | 宽度更大或高度更小 |
+| aspect-ratio | `<ratio>`（如 `1/1`）     | 宽度与高度之比     |
 
 ### 逻辑运算符
 
@@ -338,7 +366,10 @@ function handleChange(mediaQueryList) {
 | `not`  | 非   |
 | `or`   | 或   |
 
-注意，一个容器查询只能使用一个 `not`，且 `not` 不可以和 `and` 还有 `or` 混用。
+容器查询有 2 个特别的禁令：
+
+- 一个容器查询只能使用一个 `not`；
+- `not` 不可以和 `and` 或 `or` 混用；
 
 ## CSS 变量
 
