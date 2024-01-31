@@ -13,40 +13,29 @@
 
 ## 屏幕与视口
 
-### 清晰的画面
+### 像素密度
 
-TODO
+Apple 的「视网膜屏幕」是一个唬人的营销词汇，它其实就是像素密度很高的屏幕，当像素密度越高时，画面就会显得越细腻。
 
-屏幕的清晰度由 2 个因素所决定：
-
-Apple 在很久以前便开始推广使用「视网膜屏幕」了，这是一个唬人的营销话术，视网膜屏幕其实就是像素密度很高的屏幕，屏幕每英寸下的像素数量越多，画面就自然会越细腻。另外，不仅仅是 Apple，现代的许多电子设备都已经采用了类似于视网膜屏幕的高 PPI 屏幕。
-
-我们通常会使用 PPI 这个单位来描述像素密度，比如常用的 4K 屏（24 英寸，4096 × 2160）的像素密度约为 193 ppi，MacBook Pro 14-inch 2021（14.2 英寸，3024 × 1964）的像素密度约为 254 ppi。
+比如流行的 24 英寸 1920 × 1080 的屏幕的像素密度约为 96 ppi，我们可以察觉到屏幕中的像素，而 MacBook Pro 14-inch 2021（14.2 英寸，3024 × 1964）的像素密度约为 254 ppi，它的画面则非常细腻。
 
 > PPI 是指 Pixels Per Inch（每英寸像素数），它是 DPI（Dots Per Inch）在数字屏幕领域的变体。
 
-高 PPI 本身不会对 Web 开发造成影响，而高 PPI 的衍生物「设备像素比」才会对 Web 开发造成影响。设备像素比是指屏幕的物理像素和软件像素之间的比例，高 PPI 屏幕的设备像素比往往会大于 1，比如 MacBook Pro 14-inch 2021 的设备像素比在 100% 缩放率的情况下就是 2，在 125% 缩放率的情况下就是 2.5。
-
-这意味着 1 个软件像素等于 4 个物理像素。
+除了 Apple 的视网膜屏幕之外，许多电子设备的屏幕都配备了很高的 PPI，比如大多数中高端的智能手机。
 
 ### 视口元属性
 
-`<meta name="viewport">` 用于设置视口的元信息。
-
-理想情况下，视口的宽度应当等于网页窗口的宽度，可实际情况下，移动端浏览器不会自动做这件事情，为了解决这个问题，我们需要使用 `<meta name="viewport">` 来设置视口的元信息。
+为了确保网页可以正确的呈现在移动设备上，请将以下元标签添加至 HTML。
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 ```
 
-- `width=device-width`：令视口宽度等于网页窗口宽度；
-- `initial-scale=1.0`：零网页的初始缩放倍率为 1；
+该元标签用于设置视口的属性，其中 `content="width=device-width, initial-scale=1.0"` 是指令视口宽度等于网页窗口的宽度且缩放倍率重制为 1。之所以要这么做，是因为移动端浏览器在默认情况下会将视口的宽度设置的很大以至于溢出画面和产生横向滚动条。
 
 > 视口和网页窗口的宽度都是指以 CSS 像素为单位的宽度。
 
-如果你不设置 `width=device-width`，那么网页在移动端浏览器上就会以更大的宽度来渲染，这会导致网页在一开始就出现横向滚动条，尝试 `width=2000` 也能获得同样的结果。
-
-如果你正在构建诸如网页地图等需要禁用用户的缩放功能的应用（以便于实现自己的捏合手势），那么你可以直接在元标签中禁用掉用户的缩放功能。
+另外，如果我们正在构建诸如网页地图等需要禁用用户的缩放功能的应用（以便于实现自己的捏合手势），那么我们可以直接在元标签中禁用掉缩放功能。
 
 ```html
 <meta name="viewport" content="user-scalable=no">
@@ -54,44 +43,29 @@ Apple 在很久以前便开始推广使用「视网膜屏幕」了，这是一�
 
 ### 设备像素比
 
-「设备像素比」是指屏幕的硬件像素和软件像素之间的比例（CSS 中的 px 就是软件像素），你可以用这个 API 来查看视口的设备像素比。
+屏幕的硬件像素和软件像素之间的比例就叫做「设备像素比」，你可以通过这个 API 来查看视口的设备像素比。
 
 ```js
 globalThis.devicePixelRatio
 ```
 
-如果设备像素比等于 1，那么 1 个软件像素就等于 1 个硬件像素，此时情况是最简单的。然而实际上，许多屏幕的设备像素比都是大于 1 的，比如我的 MacBook 的设备像素比就是 2，此时 1 个软件像素是由 2 × 2 个硬件像素来组成的。造成这种情况的原因是：
+设备像素比到底是什么意思？比如如果设备像素比等于 1，那么 1 个软件像素就对应 1 个硬件像素，如果设备像素比等于 2，那么 1 个软件像素就由 2 × 2 个硬件像素组成。其中，CSS 中的 px 指的就是软件像素。
 
-- 许多高 PPI 的屏幕都主动采用了更高的设备像素比，比如大部分的智能手机和平板电脑；
-- 系统设置和浏览器设置中的缩放倍率都会影响设备像素比，并且 Windows 系统推荐用户将缩放倍率设置为 1.25；
+无论软件像素是多少，显卡都会根据硬件像素来渲染画面，这意味着我们需要根据硬件像素来设置 canvas 和媒体资源的尺寸，否则 canvas 和媒体资源就会不清晰。具体来说，如果设备像素比等于 2，那么显卡就会使用 400 × 400 个像素来渲染一个 CSS 尺寸为 200 × 200 的图像元素，因此我们必须保证图像资源的分辨率至少达到 400 × 400，否则就会因拉伸而变模糊。同样的道理，如果画布元素的 CSS 尺寸为 200 × 200，那么画布元素就必须设置为 `<canvas width="400" height="400">`。
 
-如果设备像素比不等于 1，那么它就会在以下 2 个方面造成显著影响：
+现在，大多数的设备的设备像素比都不等于 1，这是因为：
 
-- canavs 的分辨率；
-- 媒体资源的分辨率；
-
-比如，假设屏幕的设备像素比为 2，如果图像的硬件分辨率和 `<img>` 的 CSS 尺寸都是 200 × 200，那么一张 200 × 200 的图像就会被拉伸到 400 × 400 个像素的区域上，于是图像就变模糊了。同理，如果 `<canvas width="200" height="200">` 的 CSS 尺寸为 200 × 200，那么画布所绘制的内容就会显得模糊，因为画布的硬件分辨率只有 200 × 200。
-
-## TODO
-
-移动端浏览器的顶部导航栏、底部控制栏、虚拟键盘等虚拟 UI 都会影响视口的高度（甚至宽度），进而影响到依赖视口和初始包含快的高度单位（因为视口的尺寸会影响初始包含块的尺寸），详见下表。
-
-设置 meta 标签的 interactive-widget 属性来避免视口和可用视口单位的长度被虚拟 UI 的出现而影响（比如虚拟键盘）
-
-在 iOS 上实测发现，interactive-widget 属性没生效，并且不同浏览器 chrome、safari 对虚拟 UI 的处理也不一样，chrome 把虚拟 UI 都忽略掉了，它会让所有 vh svh lvh dvh 都呈现一样
-
-这里是属性介绍 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Viewport_meta_tag
-
-还有关于高度单位的有意思的推特：https://twitter.com/aaroniker_me/status/1706311305030680598/photo/1
+- 操作系统和浏览器中的缩放倍率都会改变设备像素比，并且 Windows 系统推荐的缩放倍率为 1.25（此时设备像素比也为 1.25）；
+- 中高端的智能手机的设备像素比都至少为 2；
 
 ## 布局的类型
 
-| 名称         | 描述                         | 自适应 | 推荐 |
-| ------------ | ---------------------------- | ------ | ---- |
-| 固定宽度布局 | 采用固定尺寸                 | 🚫      | 🚫    |
-| 自适应布局   | 结合了固定宽度布局和媒体查询 | ✅      | 🚫    |
-| 流体布局     | 采用可变尺寸                 | ✅      | ✅    |
-| 响应式布局   | 结合了流体布局和媒体查询     | ✅      | ✅    |
+| 名称         | 描述                       | 自适应 | 推荐 |
+| ------------ | -------------------------- | ------ | ---- |
+| 固定宽度布局 | 采用固定尺寸               | 🚫      | 🚫    |
+| 自适应布局   | 组合固定宽度布局和媒体查询 | ✅      | 🚫    |
+| 流体布局     | 采用可变尺寸               | ✅      | ✅    |
+| 响应式布局   | 组合流体布局和媒体查询     | ✅      | ✅    |
 
 「固定宽度布局」是指采用固定的尺寸来设计网页的布局。它简单易用，但没有任何自适应变化的能力，请不要用它来设计网页的布局。但它也并非毫无用处，因为我们经常会用它来设计一些尺寸恒定的东西，比如 `hr { block-size: 1px }`。
 
@@ -156,50 +130,85 @@ article { inline-size: clamp(20rem, 40vw + 10rem, 60rem) }
 
 ## 媒体查询
 
-媒体查询（Media queries）用于根据用户代理或设备的媒体类型和媒体特性来应用特定的样式。
+媒体查询（Media queries）用于根据用户代理的硬件特性来选择性的应用不同的 CSS 样式。
 
 ```css
-@media only screen and ((not (aspect-ratio: 1/1)) or (resolution >= 2dppx)) {}
-```
-
-### 调用方式
-
-我们可以在 html、css、js 文件中使用媒体查询。
-
-```html
-<style media="screen"></style>
-
-<source src="" media="screen" />
-
-<link rel="stylesheet" src="" media="screen" />
-```
-
-> 无论媒体查询的结果是什么，`<link>` 都会下载资源，只不过下载的优先级更低。
-
-```css
-@media screen {}
-
-@import url("landscape.css") screen;
-```
-
-```js
-const mediaQueryList = globalThis.matchMedia("screen");
-
-// check
-mediaQueryList.matches ? `it's screen` : `it's not`;
-
-// subscribe
-mediaQueryList.addEventListener("change", handleChange);
-mediaQueryList.removeEventListener("change", handleChange);
-
-function handleChange(mediaQueryList) {
-    mediaQueryList.matches ? `it's screen` : `it's not`;
+@media (prefers-color-scheme: dark) and (resolution >= 2dppx) {
+    header { background-image: url("dark-2x.png") }
 }
 ```
 
+媒体查询和容器查询都不会影响选择器的优先级，于是我们可以这样来编写一个桌面端优先的方案（颠倒过来便是一个移动端优先的方案）。
+
+```css
+.jynxio {
+    inline-size: var(--desktop-size);
+    
+    @media (width <= var(--laptop-breakpoint)) {
+        inline-size: var(--laptop-size);
+    }
+    
+    @media (width <= var(--tablet-breakpoint)) {
+        inline-size: var(--tablet-size);
+    }
+    
+    @media (width <= var(--mobile-breakpoint)) {
+        inline-size: var(--mobile-size);
+    }
+}
+```
+
+我们可以根据 [这里](https://gs.statcounter.com/screen-resolution-stats) 的统计数据来设置合适的尺寸断点，或者直接采纳下面这个适用于当前的结论：1）Mobile：0-550px；2）Tablet：550-1100px；3）Laptop：1100-1500px；4）Desktop：1500+px。
+
+### 关键字
+
+媒体查询有一个关键字 `only`，它用来确保老旧的浏览器不会误用媒体查询语句中的样式。
+
+比如，旧版浏览器不认识 `(width >= 10rem)`，然后它会把 `@media screen and (width >= 10rem)` 当作 `@media screen` 来使用。解决方案就是在媒体查询的句首增加一个旧版浏览器不认识的 `only` 关键字，让旧版浏览器把整个语句都忽略掉。
+
+```css
+@media only screen and (width >= 10rem) {}
+```
+
+根据规范的要求，`only` 关键字有 2 个硬性规定：1）写在句首；2）其后紧跟媒体类型。
+
+```css
+/* 🙅🏻 不要 */
+@media only (10rem < width < 30rem) {}
+
+/* 🙅🏻 不要 */
+@media all and only (10rem < width < 30rem) {}
+
+/* 💁🏻 推荐 */
+@media only all and (10rem < width < 30rem) {}
+```
+
+### 逻辑运算
+
+媒体查询的逻辑运算很混乱，所以最好遵循这份最佳实践：
+
+- 使用 `or`，不用 `,`；
+- 善用 `()` 来明确标记运算的优先级；
+
+```css
+/* 🙅🏻 不要 */
+@media screen and not (aspect-ratio: 1/1) or (resolution >= 2ddpx) {}
+
+/* 💁🏻 推荐 */
+@media screen and ((not (aspect-ratio: 1/1)) or (resolution >= 2dppx)) {}
+```
+
+| 运算符      | 描述 |
+| ----------- | ---- |
+| `not`       | 非   |
+| `and`       | 与   |
+| `or` 与 `,` | 或   |
+
+注意，`,` 的两侧是两个独立的媒体查询，而 `not` 只能作用于其中一个媒体查询。
+
 ### 媒体类型
 
-媒体类型（Media Type）描述了用户代理的类型，它只有 3 种值：
+媒体类型（Media type）是媒体查询的查询条件，它描述了用户代理是一种什么机器。
 
 | 值       | 描述                               |
 | -------- | ---------------------------------- |
@@ -211,11 +220,11 @@ function handleChange(mediaQueryList) {
 @media screen {}
 ```
 
-> 根据 [Media Queries 4](https://drafts.csswg.org/mediaqueries/#media-types) 的描述，所有的媒体类型都会在未来被废除掉，因为规范正致力于通过改进媒体特性来使其可以完全区分出不同的设备，届时就不再需要媒体类型。
+根据 [Media Queries 4](https://drafts.csswg.org/mediaqueries/#media-types) 的描述，所有的媒体类型都会在未来被废除掉，因为规范正致力于通过改进媒体特性来使其可以完全区分出不同的设备，届时就不再需要媒体类型了。
 
 ### 媒体特性
 
-媒体特性（Media Feature）是指媒体查询所支持的查询规则，媒体特性都是关于用户代理的各种特征的描述，下面便是所有的媒体特性：
+媒体特性（Media feature）也是媒体查询的查询条件，它比媒体类型更加详细，可以描述用户代理的更多特征。
 
 | 名称                   | 描述                                           |
 | ---------------------- | ---------------------------------------------- |
@@ -246,7 +255,7 @@ function handleChange(mediaQueryList) {
 | overflow-inline        | 初始包含块对行内方向上的溢出内容的处理方式     |
 | scripting              | 是否支持 JavaScript                            |
 
-下面是常见设备的主要输入机制如下，`hover`、`any-hover`、`pointer`、`any-pointer` 需要用到这些信息。
+下表示常用设备的主要输入机制。
 
 | 设备         | 主要输入机制               |
 | ------------ | -------------------------- |
@@ -263,7 +272,7 @@ function handleChange(mediaQueryList) {
 | 虚拟现实头显 | 手柄、手势                 |
 | 增强现实头显 | 手势、语音输入、触摸屏     |
 
-下面是所有输入机制对悬停和指针的支持情况，`hover`、`any-hover`、`pointer`、`any-pointer` 需要用到这些信息。
+下表是所有的输入机制对悬停和指针的支持情况。
 
 | 输入机制 | 悬停  | 指针   |
 | -------- | ----- | ------ |
@@ -279,54 +288,40 @@ function handleChange(mediaQueryList) {
 | 手柄     | none  | coarse |
 | 手势     | none  | coarse |
 
-### 关键字
+### 其他调用方式
 
-关键字 `only` 用于确保媒体查询语句只会被现代浏览器所应用，它有 2 个硬性要求：
+此处罗列一些除了 CSS 之外的使用媒体查询的方法。
 
-- 写在句首；
-- 其后紧跟媒体类型；
+```shell
+# CSS
+@import url("landscape.css") screen;
 
-```css
-/* 🙅🏻 不要 */
-@media only (10rem < width < 30rem) {}
-
-/* 🙅🏻 不要 */
-@media all and only (10rem < width < 30rem) {}
-
-/* 💁🏻 推荐 */
-@media only all and (10rem < width < 30rem) {}
+# HTML
+<style media="screen"></style>
+<source src="" media="screen" />
+<link rel="stylesheet" src="" media="screen" />
 ```
 
-旧版浏览器会将 `@media screen and (10rem < width <30rem) {}` 当作 `@media screen {}`，因为旧版浏览器不认识 `(10rem < width < 30rem)`。为了避免这种情况，规范创造了一个新的关键字 `only`，它只被现代浏览器所识别，因此如果把它放在媒体查询语句的句首，那么旧版浏览器就会因为不认识 `only` 关键字而忽略掉整个媒体查询。
+> 无论媒体查询的结果是什么，`<link>` 都会下载资源，只不过下载的优先级更低。
 
-我不知道为什么它其后必须紧跟媒体类型，我只知道这是规范的要求。
+```js
+const mediaQueryList = globalThis.matchMedia("screen");
 
-### 逻辑运算
+// check
+mediaQueryList.matches ? `it's screen` : `it's not`;
 
-| 运算符      | 描述 |
-| ----------- | ---- |
-| `not`       | 非   |
-| `and`       | 与   |
-| `or` 与 `,` | 或   |
+// subscribe
+mediaQueryList.addEventListener("change", handleChange);
+mediaQueryList.removeEventListener("change", handleChange);
 
-> `,` 两侧是两个独立的媒体查询，多个媒体查询组合形成媒体查询列表，`not` 只能作用于其中一个媒体查询，而不能作用于媒体查询列表。
-
-最佳实践：
-
-- 使用 `or` 来替代 `,`：因为 `or` 和 `,` 的作用相同且语义更明显；
-- 总是明确的书写 `()`：因为逻辑运算符的优先级很混乱，书写 `()` 可以避免意外；
-
-```css
-/* 🙅🏻 不要 */
-@media screen and not (aspect-ratio: 1/1) or (resolution >= 2ddpx) {}
-
-/* 💁🏻 推荐 */
-@media screen and ((not (aspect-ratio: 1/1)) or (resolution >= 2dppx)) {}
+function handleChange(mediaQueryList) {
+    mediaQueryList.matches ? `it's screen` : `it's not`;
+}
 ```
 
 ## 容器查询
 
-容器查询（container queries）用于根据查询容器的容器特性来应用特定的样式。
+容器查询（Container queries）用于根据祖先元素的特征来选择性的应用不同的 CSS 样式。
 
 ```html
 <section class="a">
@@ -340,29 +335,21 @@ function handleChange(mediaQueryList) {
     .b { container: b / size }
 
     /* 匿名查询，查询容器为b */
-    @container (inline-size >= 100cqi) {
-        .c {}
-    }
+    @container (inline-size >= 100cqi) { .c {} }
     
     /* 具名查询，查询容器为a */
-    @container a (block-size >= 100cqb) {
-        .c {}
-    }
+    @container a (block-size >= 100cqb) { .c {} }
     
     /* 嵌套查询，查询容器依次为a和b */
     @container a (block-size >= 100cqb) {
-        @container b (inline-size >= 100cqi) {
-            .c {}
-        }
+        @container b (inline-size >= 100cqi) { .c {} }
     }
 </style>
 ```
 
 ### 查询容器
 
-如果你要使用容器查询，那么就必须先指定至少一个查询容器，因为查询容器是容器查询的参照物。你之所以不需要为媒体查询指定参照物，是因为媒体查询已经将用户代理设作为其参照物了。
-
-请使用 `container-type` 来创建查询容器，用 `container-name` 来命名查询容器，或直接使用简写属性 `container`，其语法如下：
+查询容器是指被作为查询目标的祖先元素，请使用 `container-type` 来初始化查询容器，用 `container-name` 来命名查询容器，或直接使用它们的简写属性 `container`。
 
 ```css
 .anonymous-query-container {
@@ -379,12 +366,9 @@ function handleChange(mediaQueryList) {
 }
 ```
 
-如果 `container-type` 非 `normal`，那么当前元素就会变成查询容器，如果为查询容器指定了 `container-name`，那么这就是具名查询容器，否则便是匿名查询容器，`container-name` 支持一至多个名字，你可以用小驼峰命名法、大驼峰命名法、蛇形命名法、烤肉串命名法等方法来命名这些名字。
+> `container-name` 支持以空格为分隔符来输入多个名字，名字可以使用各种命名方法，我青睐与烤肉串命名法。
 
-```
-container-type: normal | size | inline-size
-container-name: name-1 name-2 name-3 name-4
-```
+`container-type` 有 3 个值，但是只有 `size` 和 `inline-size` 才能变成查询容器。
 
 | 取值          | 描述                                   |
 | ------------- | -------------------------------------- |
@@ -410,11 +394,11 @@ container-name: name-1 name-2 name-3 name-4
 - 限定 [counters](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters) 和 [quotes](https://developer.mozilla.org/en-US/docs/Web/CSS/quotes) 特性的作用域于容器元素之内；
 - 无视子元素的行向和块向尺寸（这意味着必须为元素指定明确的行向和块向尺寸）；
 
-其中，`container-type: size` 的查询容器的尺寸隔离是行向和块向的，`container-type: inline-size` 则是行向的。你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/contain) 了解每一种隔离方式的具体作用。
+> `container-type: size` 的查询容器的尺寸隔离是行向和块向的，`container-type: inline-size` 则是行向的。你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/contain) 了解每一种隔离方式的具体作用。
 
 ### 容器特性
 
-容器特性是指容器查询所支持的查询规则，容器特性要比媒体特性少得多，下面便是所有的容器特性：
+容器特性（Container feature）是容器查询的查询条件。
 
 | 容器特性     | 取值                      | 描述               |
 | ------------ | ------------------------- | ------------------ |
@@ -425,7 +409,7 @@ container-name: name-1 name-2 name-3 name-4
 | orientation  | `landscape` 或 `portrait` | 宽度更大或高度更小 |
 | aspect-ratio | `<ratio>`（如 `1/1`）     | 宽度与高度之比     |
 
-### 逻辑运算符
+### 逻辑运算
 
 | 运算符 | 描述 |
 | ------ | ---- |
@@ -433,7 +417,7 @@ container-name: name-1 name-2 name-3 name-4
 | `not`  | 非   |
 | `or`   | 或   |
 
-容器查询有 2 个特别的禁令：
+容器查询的逻辑运算和媒体查询的逻辑运算的陷阱是不一样的，请至少记住：
 
 - 一个容器查询只能使用一个 `not`；
 - `not` 不可以和 `and` 或 `or` 混用；
@@ -490,6 +474,22 @@ container-name: name-1 name-2 name-3 name-4
 </style>
 ```
 
+1
+
+## TODO
+
+移动端浏览器的顶部导航栏、底部控制栏、虚拟键盘等虚拟 UI 都会影响视口的高度（甚至宽度），进而影响到依赖视口和初始包含快的高度单位（因为视口的尺寸会影响初始包含块的尺寸），详见下表。
+
+设置 meta 标签的 interactive-widget 属性来避免视口和可用视口单位的长度被虚拟 UI 的出现而影响（比如虚拟键盘）
+
+在 iOS 上实测发现，interactive-widget 属性没生效，并且不同浏览器 chrome、safari 对虚拟 UI 的处理也不一样，chrome 把虚拟 UI 都忽略掉了，它会让所有 vh svh lvh dvh 都呈现一样
+
+这里是属性介绍 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Viewport_meta_tag
+
+还有关于高度单位的有意思的推特：https://twitter.com/aaroniker_me/status/1706311305030680598/photo/1
+
+1
+
 ## 体验优化
 
 ### 点击
@@ -511,6 +511,16 @@ container-name: name-1 name-2 name-3 name-4
 
 button {
     min-block-size: var(--min-block-size);
+}
+```
+
+### 悬停
+
+iOS 和 Android 的浏览器上的点击行为会使可交互元素（如按钮、链接、输入框）进入 hover 状态，直到点击了其他的地方。这是不合理的，解决方案如下。
+
+```css
+@media (hover: hover) and (pointer: fine) {
+    button:hover {}
 }
 ```
 
