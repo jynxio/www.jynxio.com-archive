@@ -347,6 +347,22 @@ function handleChange(mediaQueryList) {
 </style>
 ```
 
+不仅如此，容器查询还支持 [对 CSS 变量进行查询](https://developer.mozilla.org/en-US/docs/Web/CSS/@container#style_container_queries)，下面是一个简单示例，后文还有一个复杂示例，目前该特性的 [支持度很低](https://caniuse.com/mdn-css_at-rules_container_style_queries_for_custom_properties)。
+
+```html
+<section>
+	<div>I'm hotpink</div>
+</section>
+
+<style>
+    section { --user-name: jynxio }
+    
+    @container style(--user-name: jynxio) {
+        div { color: hotpink }
+    }
+</style>
+```
+
 ### 查询容器
 
 查询容器是指被作为查询目标的祖先元素，请使用 `container-type` 来初始化查询容器，用 `container-name` 来命名查询容器，或直接使用它们的简写属性 `container`。
@@ -422,17 +438,49 @@ function handleChange(mediaQueryList) {
 - 一个容器查询只能使用一个 `not`；
 - `not` 不可以和 `and` 或 `or` 混用；
 
+### 变量查询
+
+容器查询还可以用来检查祖先元素的 CSS 变量，并且还不需要初始化容器元素，下面是一个综合示例。
+
+> 注意：`--foo-variable` 会从 `.foo` 元素继承至 `.boo` 元素。
+
+```html
+<section class="foo">
+	<section class="boo">
+    	<div>I'm teal</div>
+        <div>I'm skyblue</div>
+        <div>I'm orangered</div>
+    </section>
+</section>
+
+<style>
+    .foo {
+        --foo-variable: foo;
+        container-name: foo;
+    }
+    
+    .boo {
+        --boo-variable: boo;
+        container-name: boo;
+    }
+    
+    @container foo style(--foo-variable: foo) {
+        div:nth-child(1) { color: teal }
+    }
+
+    @container boo style(--foo-variable: foo) {
+        div:nth-child(2) { color: skyblue }
+    }
+
+    @container style(--foo-variable: foo) and style(--boo-variable: boo) {
+        div:last-child { color: orangered }
+    }
+</style>
+```
+
 ## CSS 变量
 
-媒体查询和容器查询中都可以使用 CSS 变量，这极大扩展了容器查询和媒体查询的能力（真的可以用吗？），比如：
 
-```
-@container style(--accent-color: blue) {
-  /* <stylesheet> */
-}
-
-/* 媒体查询可以写这个吗？其他更简单的css变量的用法呢？ */
-```
 
 ## 长度单位
 
