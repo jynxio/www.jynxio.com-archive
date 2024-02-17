@@ -17,6 +17,7 @@
 		"solid/components-return-once": "off"
 	},
 	"globals": {
-		"NodeJS": true
+		"NodeJS": true,
+		"Bun": true
 	}
 }

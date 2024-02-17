@@ -1,31 +1,26 @@
 import path from 'node:path';
 import sharp from 'sharp';
-import { readdir } from 'node:fs/promises';
-import { emptyDir, ensureDir } from 'fs-extra';
+import * as node from 'fs-extra';
 
-const map = new Map<string, string>(); // <dirent.path, webpDirPath>
-const dirents = await readdir(path.resolve() + '/blog/image', { withFileTypes: true, recursive: true });
+const set = new Set<string>();
+const dirents = await node.readdir(path.resolve() + '/blog/image', { withFileTypes: true, recursive: true });
 
-await emptyDir(path.resolve() + '/public/blog/image');
+await node.emptyDir(path.resolve() + '/public/blog/image');
 
 for (const dirent of dirents) {
 	if (!dirent.isFile()) continue;
-	if (map.get(dirent.path) === undefined) {
-		const webpDirPath = path.resolve() + '/public' + dirent.path.split(path.resolve())[1];
+	if (dirent.name.includes('.DS_Store')) continue;
 
-		map.set(dirent.path, webpDirPath);
-		ensureDir(webpDirPath);
+	const dirPath = path.dirname(dirent.name);
+	const fileName = path.basename(dirent.name).replace(path.extname(dirent.name), '');
+
+	if (!set.has(dirPath)) {
+		set.add(dirPath);
+		node.ensureDir(path.resolve() + '/public/blog/image/' + dirPath);
 	}
 
-	if (dirent.name === '.DS_Store') continue;
+	const originImgPath = path.resolve() + '/blog/image/' + dirent.name;
+	const targetImgPath = path.resolve() + '/public/blog/image/' + dirPath + '/' + fileName + '.webp';
 
-	const inputPath = dirent.path + '/' + dirent.name;
-	const outputPath = map.get(dirent.path) + '/' + dirent.name.slice(0, -4) + '.webp';
-
-	try {
-		await sharp(inputPath).webp({ lossless: true }).toFile(outputPath);
-	} catch (error) {
-		console.log(error);
-		console.log(inputPath);
-	}
+	await sharp(originImgPath).webp({ lossless: true }).toFile(targetImgPath);
 }

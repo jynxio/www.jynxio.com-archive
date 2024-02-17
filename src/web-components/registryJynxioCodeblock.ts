@@ -48,8 +48,8 @@ class JynxioCodeblock extends HTMLElement {
 		 * Copy function
 		 */
 		let isEnabled = true;
-		let handleDelay: NodeJS.Timeout;
-		let handleTimeout: NodeJS.Timeout;
+		let handleDelay: ReturnType<typeof setTimeout> = setTimeout(() => '', 1000);
+		let handleTimeout: ReturnType<typeof setTimeout> = setTimeout(() => '', 1000);
 		let controller = new AbortController();
 
 		const DELAY_TIME = 100;
