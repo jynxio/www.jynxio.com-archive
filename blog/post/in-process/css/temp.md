@@ -480,7 +480,64 @@ function handleChange(mediaQueryList) {
 
 ## CSS 变量
 
+CSS 变量是自定义的 CSS 属性，其名称总是以 `--` 开头，并需通过 `var()` 来调用，CSS 变量有 3 种创建方式。
 
+```
+# 方式一
+div {
+	--width: 100px;
+	width: var(--width, 100px);
+	
+	& * { width: var(--width, 100px) }
+}
+
+# 方式二
+@property --width {
+	syntax: "<length>";
+	inherits: false;
+	initial-value: 100px;
+}
+
+div {
+	width: var(--width, 100px)；
+	transition: --width 1s ease;
+	
+	&:hover { --width: 200px }
+}
+
+# 方式三
+globalThis.CSS.registerProperty({
+	name: "--width",
+	syntax: "<length>",
+	inherits: false,
+	initialValue: "100px",
+});
+
+div {
+	width: var(--width, 100px);
+	transition: --width 1s ease;
+	
+	&:hover { --width: 200px }
+}
+```
+
+第一种方式最简单，CSS 变量只对当前元素及其后代元素有效，并且后代元素会自动继承该 CSS 变量，该 CSS 变量没有初始值。
+
+第二和第三种方式是一样的，只是使用形式不同。它们创建的 CSS 变量是全局的，并且可以像真正的 CSS 属性那样被 `transition` 属性所影响。但是这两种方式在 Firefox 上的兼容性差，Firefox 直到 125 版本才实现它们。
+
+如果你想为 CSS 变量定义更加复杂的值语法，比如接受多种值或关键字，那么就需要采用第二和第三种方式，你可以从 [这里](https://developer.mozilla.org/en-US/docs/Web/CSS/@property#descriptors) 查看更多信息。
+
+CSS 变量的另一个灵活之处在于，你可以用 JavaScript 来在后期修改它，比如：
+
+```javascript
+div.style.setProperty("--width", "200px");
+```
+
+CSS 函数 `var()` 的第二个参数是回退值，当第一个参数（CSS 变量）无效时，该 CSS 函数就会返回回退值。你当然可以使用另一个 CSS 变量来作为回退值，比如：
+
+```css
+div { var(--width, var(--fallback-width, 100px)) }
+```
 
 ## 长度单位
 
@@ -521,8 +578,6 @@ function handleChange(mediaQueryList) {
     }
 </style>
 ```
-
-1
 
 ## TODO
 
