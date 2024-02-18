@@ -321,33 +321,65 @@ function handleChange(mediaQueryList) {
 
 ## 容器查询
 
-容器查询（Container queries）用于根据祖先元素的特征来选择性的应用不同的 CSS 样式。
+容器查询（Container queries）可以让元素基于查询容器的特征来选择性的应用 CSS 样式，而查询容器是 `container-type` 非 `normal` 的祖先元素，详见下文的「查询容器」小节。
 
 ```html
-<section class="a">
-	<section class="b">
-    	<section class="c"></section>
-    </section>
-</section>
+<div id="a">
+    <div id="b">
+        <div id="c">
+        	<div id="d"></div>
+        </div>
+    </div>
+</div>
 
 <style>
-    .a { container: a / size }
-    .b { container: b / size }
-
-    /* 匿名查询，查询容器为b */
-    @container (inline-size >= 100cqi) { .c {} }
+    #a { container: a / size }        /* 行块查询容器 */
+    #b { container: b / inline-size } /* 行查询容器 */
+    #c { container: c / normal }      /* 非查询容器 */
     
-    /* 具名查询，查询容器为a */
-    @container a (block-size >= 100cqb) { .c {} }
+    /* 匿名查询 */
+    @container (block-size >= 10px) {
+        /* 查询容器为a */
+        #d {
+            block-size: 50cqb;  /* a的块向尺寸的50% */
+            inline-size: 50cqi; /* b的行向尺寸的50% */
+        }
+    }
     
-    /* 嵌套查询，查询容器依次为a和b */
-    @container a (block-size >= 100cqb) {
-        @container b (inline-size >= 100cqi) { .c {} }
+    /* 匿名查询 */
+    @container (inline-size >= 10px) {
+        /* 查询容器为b */
+        #d {
+            block-size: 50cqb;  /* a的块向尺寸的50% */
+            inline-size: 50cqi; /* b的行向尺寸的50% */
+        }
+    }
+    
+    /* 具名查询 */
+    @container a (inline-size >= 10px) {
+        /* 查询容器为a */
+        #d {
+            block-size: 50cqb;  /* a的块向尺寸的50% */
+            inline-size: 50cqi; /* b的行向尺寸的50% */
+        }
+    }
+    
+    /* 嵌套查询 */
+    @container a (block-size >= 10px) {
+        @container b (inline-size >= 10px) {
+            /* 查询容器首先是a，然后是b */
+            #d {
+	            block-size: 50cqb;  /* a的块向尺寸的50% */
+    	        inline-size: 50cqi; /* b的行向尺寸的50% */
+            }
+        }
     }
 </style>
 ```
 
-不仅如此，容器查询还支持 [对 CSS 变量进行查询](https://developer.mozilla.org/en-US/docs/Web/CSS/@container#style_container_queries)，下面是一个简单示例，后文还有一个复杂示例，目前该特性的 [支持度很低](https://caniuse.com/mdn-css_at-rules_container_style_queries_for_custom_properties)。
+> 匿名查询会自动寻找距离最近的满足查询条件的祖父元素，比如如果查询条件中涉及了块向尺寸，那么就会匹配距离最近的行块查询容器，而不会匹配行向查询容器。
+
+不仅如此，容器查询还支持 [对 CSS 变量进行查询](https://developer.mozilla.org/en-US/docs/Web/CSS/@container#style_container_queries)，下面是一个简单示例，后文还有一个复杂示例（详见下文的「变量查询」小节），不过目前该特性的 [支持度很低](https://caniuse.com/mdn-css_at-rules_container_style_queries_for_custom_properties)。
 
 ```html
 <section>
@@ -365,7 +397,17 @@ function handleChange(mediaQueryList) {
 
 ### 查询容器
 
-查询容器是指被作为查询目标的祖先元素，请使用 `container-type` 来初始化查询容器，用 `container-name` 来命名查询容器，或直接使用它们的简写属性 `container`。
+查询容器是容器查询中的参考对象，关于「使用了容器查询的元素如何找到它的查询容器」，请参考「查询容器」小节的第一个代码示例。
+
+请使用 `container-type` 来创建查询容器，可选的用 `container-name` 来命名查询容器，或直接使用两者的简写属性 `container`。`container-type` 的取值如下：
+
+| container-type 取值 | 描述                                   |
+| ------------------- | -------------------------------------- |
+| `normal`            | 非查询容器（默认值）                   |
+| `size`              | 行块查询容器，支持行向和块向尺寸的查询 |
+| `inline-size`       | 行向查询容器，仅支持行向尺寸的查询     |
+
+`container-name` 的取值是一至多个字符串，多个名字之间以空格符来分隔，名字可以使用任意命名方法。
 
 ```css
 .anonymous-query-container {
@@ -381,16 +423,6 @@ function handleChange(mediaQueryList) {
     container: nam1-1 name-2 / size;
 }
 ```
-
-> `container-name` 支持以空格为分隔符来输入多个名字，名字可以使用各种命名方法，我青睐与烤肉串命名法。
-
-`container-type` 有 3 个值，但是只有 `size` 和 `inline-size` 才能变成查询容器。
-
-| 取值          | 描述                                   |
-| ------------- | -------------------------------------- |
-| `normal`      | 不变成查询容器（默认值）               |
-| `size`        | 变成查询容器，支持行向和块向尺寸的查询 |
-| `inline-size` | 变成查询容器，仅支持行向尺寸的查询     |
 
 查询容器会产生 4 种副作用，分别是：
 
@@ -442,8 +474,6 @@ function handleChange(mediaQueryList) {
 
 容器查询还可以用来检查祖先元素的 CSS 变量，并且还不需要初始化容器元素，下面是一个综合示例。
 
-> 注意：`--foo-variable` 会从 `.foo` 元素继承至 `.boo` 元素。
-
 ```html
 <section class="foo">
 	<section class="boo">
@@ -474,6 +504,45 @@ function handleChange(mediaQueryList) {
 
     @container style(--foo-variable: foo) and style(--boo-variable: boo) {
         div:last-child { color: orangered }
+    }
+</style>
+```
+
+### 长度单位
+
+CSS 中有 6 个特殊的长度单位，它们是以查询容器来作为参考对象的相对长度单位，如果匹配不到查询容器，那么就会以视口来作为参考对象，此时这 6 个长度单位就等同于 `vw`、`vh`、`vi`、`vb`、`vmin`、`vmax`。
+
+| 单位    | 描述                                 |
+| ------- | ------------------------------------ |
+| `cqw`   | 行向查询容器的 `width` 的 `1%`       |
+| `cqh`   | 行块查询容器的 `height` 的 `1%`      |
+| `cqi`   | 行向查询容器的 `inline-size` 的 `1%` |
+| `cqb`   | 行块查询容器的 `block-size` 的 `1%`  |
+| `cqmin` | `cqi` 和 `cqb` 的较小者              |
+| `cqmax` | `cqi` 和 `cqb` 的较大者              |
+
+> 上表假设了物理宽度的方向就等于行内方向。
+
+对于 `cqmin` 和 `cqmax` 而言，`cqi` 和 `cqb` 可以分别取自两个不同的查询容器，比如 `cqi` 取自最近的行向查询容器，`cqb` 取自最近的行块查询容器。
+
+```html
+<div id="a">
+    <div id="b">
+        <div id="c">
+        	<div id="d"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #a { container-type: size }
+    #b { container-type: inline-size }
+    #c { container-type: normal }
+    
+    #d {
+        block-size: 50cqb;  /* a的块向尺寸的50% */
+        inline-size: 50cqi; /* b的行向尺寸的50% */
+        padding: 5cqmin;   /* min(a的块向尺寸5%, b的行向尺寸5%) */
     }
 </style>
 ```
@@ -541,57 +610,75 @@ div { var(--width, var(--fallback-width, 100px)) }
 
 ## 长度单位
 
-容器查询的长度单位
+### 关于字体的单位
 
-| 单位    | 描述                           |
-| ------- | ------------------------------ |
-| `cqw`   | 容器元素的 `width` 的 1%       |
-| `cqh`   | 容器元素的 `height` 的 1%      |
-| `cqi`   | 容器元素的 `inline-size` 的 1% |
-| `cqb`   | 容器元素的 `block-size` 的 1%  |
-| `cqmin` | `cqi` 和 `cqb` 的最小者        |
-| `cqmax` | `cqi` 和 `cqb` 的最大者        |
+| 名称   | 描述                              |
+| ------ | --------------------------------- |
+| `cap`  | 当前元素的大写字母的高度          |
+| `em`   | 当前元素的 `font-size` 的计算值   |
+| `lh`   | 当前元素的 `line-height` 的计算值 |
+| `ex`   | 当前元素的字形 `x` 的高度         |
+| `ch`   | 当前元素的字形 `0` 的预测尺寸     |
+| `ic`   | 当前元素的字形 `水` 的预测尺寸    |
+| `rcap` | 根元素的 `cap`                    |
+| `rem`  | 根元素的 `em`                     |
+| `rlh`  | 根元素的 `lh`                     |
+| `rex`  | 根元素的 `ex`                     |
+| `rch`  | 根元素的 `ch`                     |
+| `ric`  | 根元素的 `ic`                     |
 
-```html
-<section>
-	<div></div>
-</section>
+> 水平书写模式下的预测尺寸是指宽度，垂直书写模式下的预测尺寸是指高度，关于预测尺寸（advance measure），详见 [此处](https://developer.mozilla.org/en-US/docs/Glossary/Advance_measure)。
+>
+> 另外，如果无法预测字形 `0` 的预测尺寸，那么就会假定字形 `0` 的宽度为 `0.5rem`，高度为 `1rem`。
 
-<style>
-    /* Section 1: Enable container queries */
-    section {
-        width: 100px;
-        
-        > div {
-            width: 1cqw; /* equal to 1vw */
-        }
-    }
+### 关于视口的单位
 
-    /* Section 2: Disable container queries */
-    section {
-        width: 100px;
-        container-type: inline-size;
-        
-        > div {
-            width: 1cqw; /* equal to (100px * 1%) */
-        }
-    }
-</style>
-```
+移动端浏览器的顶部导航栏和底部导航栏会随着手势操作而出现和消失，这些导航栏都会影响视口尺寸，这导致了移动端浏览器上的视口尺寸往往是动态的，所以才会有 `sv*`、`lv*`、`dv*` 这些单位，它们之间的关系大致如下：
 
-## TODO
+> 在 iOS 上实测发现，不同浏览器对视口尺寸的处理是不一样的，比如 chrome 上的 vh、svh、lvh、dvh 都是一样的，仿佛虚拟 UI 都被忽略掉的，而 Safari 则又略有不同。
 
-移动端浏览器的顶部导航栏、底部控制栏、虚拟键盘等虚拟 UI 都会影响视口的高度（甚至宽度），进而影响到依赖视口和初始包含快的高度单位（因为视口的尺寸会影响初始包含块的尺寸），详见下表。
+| 名称    | 描述                          |
+| ------- | ----------------------------- |
+| `vw`    | 视口的 `width` 的 1%          |
+| `svw`   | 视口在小尺寸模式下的 `vw`     |
+| `lvw`   | 视口在大尺寸模式下的 `vw`     |
+| `dvw`   | 视口在动态尺寸模式下的 `vw`   |
+| `vh`    | 视口的 `height` 的 1%         |
+| `svh`   | 略                            |
+| `lvh`   | 略                            |
+| `dvh`   | 略                            |
+| `vi`    | 视口在根元素行向上的尺寸的 1% |
+| `svi`   | 略                            |
+| `lvi`   | 略                            |
+| `dvi`   | 略                            |
+| `vb`    | 视口在根元素块向上的尺寸的 1% |
+| `svb`   | 略                            |
+| `lvb`   | 略                            |
+| `dvb`   | 略                            |
+| `vmin`  | `vw` 和 `vh` 的较小者         |
+| `svmin` | `svw` 和 `svh` 的较小者       |
+| `lvmin` | `lvw` 和 `lvh` 的较小者       |
+| `dvmin` | `dvw` 和 `dvh` 的较小者       |
+| `vmax`  | `vw` 和 `vh` 的较大者         |
+| `svmax` | `svw` 和 `svh` 的较大者       |
+| `lvmax` | `lvw` 和 `lvh` 的较大者       |
+| `dvmax` | `dvw` 和 `dvh` 的较大者       |
 
-设置 meta 标签的 interactive-widget 属性来避免视口和可用视口单位的长度被虚拟 UI 的出现而影响（比如虚拟键盘）
+### 关于物理的单位
 
-在 iOS 上实测发现，interactive-widget 属性没生效，并且不同浏览器 chrome、safari 对虚拟 UI 的处理也不一样，chrome 把虚拟 UI 都忽略掉了，它会让所有 vh svh lvh dvh 都呈现一样
+| 名称 | 描述                   |
+| ---- | ---------------------- |
+| `px` | 一个软件像素           |
+| `cm` | 一厘米                 |
+| `mm` | 一毫米                 |
+| `Q`  | 一毫米的 1/4           |
+| `in` | 一英寸，等于 2.54厘米  |
+| `pc` | 一派卡，等于 1/6 英寸  |
+| `pt` | 一个点，等于 1/72 英寸 |
 
-这里是属性介绍 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Viewport_meta_tag
+### 关于容器查询的单位
 
-还有关于高度单位的有意思的推特：https://twitter.com/aaroniker_me/status/1706311305030680598/photo/1
-
-1
+请参考「容器查询」小节的「长度单位」部分。
 
 ## 体验优化
 
