@@ -2,54 +2,6 @@
 
 四个运算符 `+ - * /`
 
-# 单位
-
-`vw`、`vh`
-
-手机浏览器上的底栏是动态存在的，`vh` 总是代表最大高度，因为 `100vh` 有时候会超出设备的高，一种解决方案是：使用百分比值 `100%`，另一种是：使用 `svh`、`lvh`、`dvh`，分别代表最小视口高度、最大视口高度、动态视口高度。`100dvh` 可以完全替代 `100%`，只不过 `dvh` 的兼容性只有八成以上，所以不妨这么写：
-
-```
-.some-element {
-  height: 100vh; /* 回退 */
-  height: 100dvh;
-}
-```
-
-另外，桌面端的滚动条是会占据元素的空间的（移动端的则不占据，滚动条总是悬浮在内容之上），无论 box-sizeing 是什么，滚动条都会消耗元素的内容盒的空间，滚动条会被夹在padding box 和border box之间。然后这会导致 section 放不下 div 从而发生滚动：
-
-```html
-<section>
-	<div></div>
-</section>
-
-<style>
-    * {
-        padding: 0;
-    }
-    
-    section {
-        overflow: scroll;
-        width: 100vw;
-        height: 100vw;
-    }
-    
-    div {
-        width: 100vw;
-        height: 100vh;
-    }
-</style>
-```
-
-如果你想计算出纵向滚动条的宽度？那么：
-
-```
-const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-```
-
-`window.innerWidth` 指视口宽度；它不关心滚动条，然而， `documentElement.clientWidth` 指的是文档中的可用空间。
-
-`vmin` 和 `vmax` 代表总是取 `vw` 和 `vh` 之间的最小值和最大值，和 `dvh`、`dvw` 等单位没关系。
-
 ## clamp
 
 `clamp()` 是 `width`、`min-width`、`max-width` 的语法糖：
@@ -60,36 +12,7 @@ clamp(min-width, ideal-width, max-width)
 
 另外，还有 `min(v1, v2)` 和 `max(v1, v2)`
 
-## 工具
 
-Discord 的 SSHari 分享了一个用于识别比视口更宽的元素的脚本：
-
-```
-function checkElemWidth(elem) {
-  if (elem.clientWidth > window.innerWidth) {
-    console.info(
-      "The following element has a larger width than " +
-      "the window’s outer width"
-    );
-    console.info(elem);
-    console.info("\n\n");
-  }
-
-  // Recursively check all the children
-  // of the element to find the culprit.
-  [...elem.children].forEach(checkElemWidth);
-}
-
-checkElemWidth(document.body);
-```
-
-# 文本
-
-所有浏览器（所有品牌、所有平台）的默认字体大小都是 16px，这是前辈们为你设定好的最佳的选择了，不要改动它，让文章主体的字就保持 16px 吧。如果你想增大或缩小字体，那么要用百分比，比如 `font-size: 125%`，但是千万不要使用 px 这种绝对尺寸，比如 `font-size: 18px`。
-
-因为浏览器的设置里可以设置字号，这是通过改变所有字体的默认大小来实现的，特小时为 12px，特大时为 24px，如果你设置了 30px，那么无论你怎么设置浏览器，这个元素的字号就永远都是 30px，如果你设置 `125%`，那么字号就是字体的原尺寸乘以 1.25 倍，所以用后者。
-
-rem 代表 html 元素的字号，如果你要改变 1rem 的大小，亦或者想要改变 html 元素的字号，也要用百分比值。
 
 ## 表单
 
