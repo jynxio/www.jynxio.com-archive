@@ -4,7 +4,107 @@ typora-root-url: ./..\..\image
 
 # React 手册
 
-## Not indent-meaning
+## JSX vs HTML
+
+JSX 不是 HTML，它有很多额外的规则。
+
+### 严格闭合
+
+在 HTML 中，哪怕没有正确的关闭标签，浏览器有时也能正确的解析，这是因为浏览器足够聪明，比如：
+
+```html
+<article>
+	<p>该标签是泄露的，但是浏览器会识别出来并为它闭合
+</article>
+```
+
+JSX 的转译算法没有浏览器聪明，它要求我们必须严格的关闭每一个标签，并且像 XML 那样主动关闭单标签：
+
+```jsx
+<article>
+	<p><img /></p>
+</article>
+```
+
+### 保留字
+
+JSX 元素属性 `for` 和 `class` 改名为 `htmlFor` 和 `className`，这是因为 JSX 最后会转译为 JavaScript，而 `for` 和 `class` 是 ECMAScript 的保留字。
+
+```jsx
+/* 转译前: JSX */
+<label class="foo" for="foo" />
+
+/* 转译后: JavaScript */
+React.createElement('label', { class: 'foo', for: 'foo' });
+```
+
+### 区分标签名大小写
+
+HTML 不区分标签大小写，JSX 则区分。
+
+### 小驼峰式元素属性
+
+HTML 元素的属性名是不区分大小写的，而 JSX 不仅区分大小写甚至还要求用小驼峰命名法来命名，共有 4 个属性需要改名：
+
+| HTML 版            | JSX 版            |
+| ------------------ | ----------------- |
+| `onclick`          | `onClick`         |
+| `autoplay`         | `autoPlay`        |
+| `tabindex`         | `tabIndex`        |
+| `stroke-dasharray` | `strokeDasharray` |
+
+例外的是，自定义数据属性（`data-*`）和无障碍富互联网应用属性（`aria-*`）则保持连字符命名法。
+
+```jsx
+const Jsx = _ => (
+	<>
+    	<video autoPlay="true" tabindex="0"/>
+    	<button onclick="" aria-label="play video" />
+    	<svg data-what=""><line strokeDasharray="5, 5" /></svg>
+    <>
+);
+```
+
+### 小驼峰式内联样式属性
+
+DOM 的 `setProperty` API 要求必须使用连字符命名法来描述样式属性，比如：
+
+```javascript
+dom.style.setProperty('fontSize', '16px');  // 无效
+dom.style.setProperty('font-size', '16px'); // 有效
+```
+
+但是 JSX 强制要求必须使用小驼峰来命名内联样式的属性，包括带有供应商前缀的属性（如 `-webkit-font-smoothing`）。
+
+```jsx
+<h1 style={{ fontSize: "24px", "WebkitFontSmoothing": "auto" }} />
+```
+
+### 自动补全内联样式单位
+
+JSX 会为某些 CSS 属性补齐缺失的单位，这是一个隐晦且危险的特性，你应当总是书写完整的属性值。
+
+```jsx
+<p
+    style={{
+        width: 200,    // -> '200px'
+		lineHeight: 20 // -> '20'
+    }}
+/>
+```
+
+### 类型隐式转换
+
+JSX 会对表达式插槽（expression slot）中的内容进行隐式的类型转换，这被称为「Type coercion」。比如 JSX 会把元素属性值都隐式转换为字符串，这是因为 HTML 元素属性的值必须为字符串：
+
+```jsx
+<input required={true} /> /* 转换前 */
+<input required="true" /> /* 转换后 */
+```
+
+> HTML 元素中有 attribute-only 语法，如 `<input required>`，JSX 也实现了该语法，比如 `input required/>` 即是 `<input required={true} />` 的缩写。
+
+### Not indent-meaning
 
 在 JSX 中，行与行之间的空白符和换行符会被忽略，行内的空白符和换行符才会被保留，这叫做「not indent-meaning」。比如对于下述 JSX 而言，在由其生成的 HTML 中，a 与 b 之间没有空格或换行，c 和 d 之间则有一个空格。
 
