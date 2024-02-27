@@ -279,45 +279,19 @@ function Friend({ name, isOnline }) {
 }
 ```
 
-React.createElement 会忽略 undefined 入参，对于 null、false、空字符串呢？是不是只能接受 React.createElement 和字符串来作为 React.createElement 的入参？
-
-```javascript
-React.createElement('p', {}, undefined, "Here's some test");
-```
-
-对于 undefined、null、false 的属性（`children` 也算属性吧！），都会被忽略：还有0、NaN、''、document.all 呢？这些都是 falsy 呀！
-
-> `undefined` 会被当作 `''` 对吗？
+React 的 JSX （无论是属性还是内容）会忽略 `null`、`false`、`true`、`undefined` 值，除非它们被应用于一些特殊的属性，比如 `disabled`、`checked` 属性，而不是给它们设置一个 `""` 空字符串。
 
 ```jsx
-// JSX
-<div className={undefined} id={null}>{false}</div>
-
-// JS
-React.createElement('div', { className: undefined, id: null }, false);
-
-// React元素
-{
-  "type": "div",
-  "key": null,
-  "ref": null,
-  "props": {
-    "className": {
-      "@t": "[[undefined]]",
-      "data": ""
-    },
-    "id": null,
-    "children": false
-  },
-  "_owner": null,
-  "_store": {}
-}
-
-// HTML
-<div></div>
+<ul>
+	<li>true: "{ true }"</li>           // true: ""
+    <li>false: "{ false }"</li>         // false: ""
+    <li>null: "{ null }"</li>           // null: ""
+    <li>undefined: "{ undefined }"</li> // undefined: ""
+    <li>NaN: "{ NaN }"</li>             // NaN: "NaN"
+    <li>Zero: "{ 0 }"</li>              // Zero: "0"
+    <li>Empty string: "{ '' }"</li>     // Empty string: ""
+</ul>
 ```
-
-
 
 ## Fragment
 
@@ -364,6 +338,37 @@ function App () {
     );
 }
 ```
+
+TODO：描述一下
+
+```tsx
+// 😌
+<ul>{ range(10).map((i: number) => <li key={ i } />) }</ul>
+
+// 😬
+<ul>{ Array.from({ length: 10 }).map((i: number) => <li key={ i } />) }</ul>
+
+/*
+ * 创建序列，这是lodash.range的简易实现
+ * @example
+ * f(5);    // [0, 1, 2, 3, 4]
+ * f(2, 7); // [2, 3, 4, 5, 6]
+ */
+function range(start = 0: number, end: number, step = 1: number) {
+    const output: number[] = [];
+    
+    if (end === undefined) {
+        end = start;
+        start = 0;
+    }
+    
+    for (let i = start; i < end; i += step) output.push(i);
+    
+    return output;
+}
+```
+
+
 
 ## UI 树与状态
 
