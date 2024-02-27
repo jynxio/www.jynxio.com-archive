@@ -4,6 +4,21 @@ typora-root-url: ./..\..\image
 
 # React 手册
 
+React 元素是一个 JavaScript 对象，其内存储了一些信息，比如：
+
+```javascript
+{
+    type: 'p',
+	key: null,
+	ref: null,
+	props: { className: 'what' }
+    _owner: null,
+    _store: {},
+}
+```
+
+
+
 ## JSX vs HTML
 
 JSX 不是 HTML，它有很多额外的规则。
@@ -177,6 +192,132 @@ React.createElement('p', { className: 'what', children: '属性传值' }, '标�
     _store: {},
 }
 ```
+
+### key
+
+`key` 是 React 的“保留字“，它不会被作为参数来抛出给组件函数，在 React 元素视角它就是一个用于标记 React 元素的顶层属性。
+
+```jsx
+// JSX
+<ContactCard name="jynxio" email="jinxiaomatrix@gmail.com" key="c82na">
+    Here's some text
+</ContactCard>
+
+// JavaScript
+React.createElement(
+  ContactCard,
+  {
+    key: 'c82na',
+    name: 'jynxio',
+    email: 'jinxiaomatrix@gmail.com',
+  },
+  "Here's some text",
+);
+
+// React元素
+{
+  "type": {
+    "@t": "Function",
+    "data": { "name": "ContactCard", "body": "", "proto": "Function"},
+  },
+  "key": "c82na",
+  "ref": null,
+  "props": {
+    "name": "jynxio",
+    "email": "jinxiaomatrix@gmail.com",
+    "children": "Here's some text"
+  },
+  "_owner": null,
+  "_store": {}
+}
+
+//
+function ContactCard({ name, email, key }) {
+    console.log(key); // undefined
+    
+    return (
+        <>
+        	<dt>{ name }</dt>
+        	<dd>{ email }</dd>
+        </>
+    );
+}
+```
+
+如何在 Fragment 中使用 `key`？这样：`<React.Fragment key="?" />`
+
+`key` 只要在当前数组中是唯一的就好了。
+
+> 为什么使用数组的 `index` 来作为 `key` 会导致性能下降？
+
+### 不能在 jsx 中使用 if 和 for 的原因
+
+```jsx
+// JSX
+function Friend({ name, isOnline }) {
+  return (
+    <li className="friend">
+      {if (isOnline) {
+        <div className="green-dot" />
+      }}
+
+      {name}
+    </li>
+  );
+}
+
+// JS
+function Friend({ name, isOnline }) {
+  return React.createElement(
+    'li',
+    { className: 'friend' },
+    if (isOnline) { // ⚠️
+      React.createElement('div', { className: 'green-dot' });
+    },
+    name
+  );
+}
+```
+
+React.createElement 会忽略 undefined 入参，对于 null、false、空字符串呢？是不是只能接受 React.createElement 和字符串来作为 React.createElement 的入参？
+
+```javascript
+React.createElement('p', {}, undefined, "Here's some test");
+```
+
+对于 undefined、null、false 的属性（`children` 也算属性吧！），都会被忽略：还有0、NaN、''、document.all 呢？这些都是 falsy 呀！
+
+> `undefined` 会被当作 `''` 对吗？
+
+```jsx
+// JSX
+<div className={undefined} id={null}>{false}</div>
+
+// JS
+React.createElement('div', { className: undefined, id: null }, false);
+
+// React元素
+{
+  "type": "div",
+  "key": null,
+  "ref": null,
+  "props": {
+    "className": {
+      "@t": "[[undefined]]",
+      "data": ""
+    },
+    "id": null,
+    "children": false
+  },
+  "_owner": null,
+  "_store": {}
+}
+
+// HTML
+<div></div>
+```
+
+
 
 ## Fragment
 
