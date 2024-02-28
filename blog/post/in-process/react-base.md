@@ -287,6 +287,8 @@ React 的 JSX （无论是属性还是内容）会忽略 `null`、`false`、`tru
 </ul>
 ```
 
+> 虽然 `<Jsx className={false} />` 的类名会被忽略，但是 React 会警告并推荐你使用 `<Jsx className={undefined} />` 来达成你的目的。
+
 ## Fragment
 
 为什么组件只能返回一个 React 元素？因为：
@@ -361,6 +363,10 @@ function range(start = 0: number, end: number, step = 1: number) {
     return output;
 }
 ```
+
+TODO：
+
+如果你纠结于在 `className` 里写多个类名很麻烦，那么用 [clsx](https://www.npmjs.com/package/clsx) 这个库，又小又好用。
 
 ## 事件
 
@@ -501,13 +507,138 @@ function App () {
 
 ## 表单
 
-`<input value="" />` 的 `value` 属性在 React 和 HTML 中是不同的，HTML 中该属性代表输入框的默认值且是可以更改的，但是在 React 中一旦制定了 `value` 属性就会将输入框的内容锁定为 value 的值，并且它还是只读的。
+React 的表单元素很复杂：
+
+- React 表单元素的 `value` 属性等价于 `HTMLInputElement.value`，HTML 表单元素的 `value` 属性只是初始值，React 表单元素的 `defaultValue` 属性才是初始值；
+- 如果指定了 `value`，那么就变成受控组件（controlled），否则就是非受控组件（uncontrolled），受控组件的 `HTMLInputElement.value` 会被 React 接管，你无法通过在浏览器界面上操纵表单组件来改变它的 `HTMLInputElement.value`，你只能通过 React 的更新机制来控制。具体原理：你在 `<input>` 里的输入是有效的，你可以通过原生的 `oninput` 事件的 `event.target.value` 获取到新值，但是 React 随后会迅速的恢复为旧值（通常在浏览器绘制之前就撤回好了，所以你会发现受控组件变成只读的了）。
+- React 表单组件的 `onChange` 和 `onInput` 是差不多的，HTML 里的它们则很不一样，React 的 `onChange` 表现的和 HTML 的 `onInput` 一样。
+- React 表单组件 `defaultValue` 和 `value` 不能共存，前者对应非受控组件，后者对应受控组件，React 会抛出警告；
+- React 表单组件有 `value` 而没有 `onChange` 或 `onInput` 是会被警告的，因为这个组件就是只读的，React 觉得这种用法不对；
+
+> 受控组件：由 React 管理输入的组件
+
+暗坑（footgun）：
 
 ```jsx
-function Input () {
-    const [text, setText] = useState(`Here's some text`);
+function Form () {
+    const [usename, setUsename] = useState();
     
-    return <input value={text} />; // input的值被锁定为"Here's some text"
+    return <input value={usename} onChange={event => setUsername(event.target.value)} />
 }
 ```
 
+第一次输入之后，终端会抛出错误：A component is changing an uncontrolled input to be controlled.
+
+这是因为 username 从 undefined 切换到了字符串，`value={undefined}` 等价于没绑定 `value` 的非受控组件，输入之后组件就从非受控切换到受控去了。所以请总是为它制定一个内容吧！比如：
+
+```jsx
+// 🚫 Incorrect. `username` will flip from `undefined` to a string:
+const [username, setUsername] = React.useState();
+
+// ✅ Correct. `username` will always be a string:
+const [username, setUsername] = React.useState('');
+```
+
+React 社区流行一种非受控组件组成的表单方案，直接用 `FormData` 之类的来管理，听起来不错！
+
+```jsx
+function SignupForm() {
+  function handleSubmit(event) {
+    const formData = new FormData(event.target);
+    const { username } = Object.fromEntries(formData);
+
+    // Do something with `username`, like send it
+    // to the server.
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="username">
+        Select a username:
+      </label>
+
+      <input
+        type="text"
+        id="username"
+        name="username"
+      />
+    </form>
+  );
+}
+```
+
+缺点很明显，如果有些非表单元素需要依赖表单元素的值，那么就很难做到值的同步了。
+
+```jsx
+function SignupForm() {
+  function handleSubmit(event) {
+    const formData = new FormData(event.target);
+    const { username } = Object.fromEntries(formData);
+
+    // Do something with `username`, like send it
+    // to the server.
+  }
+
+  return (
+	<>
+        <form onSubmit={handleSubmit}>
+      <label htmlFor="username">
+        Select a username:
+      </label>
+
+      <input
+        type="text"
+        id="username"
+        name="username"
+      />
+    </form>
+      <p>{username}</p> /* ⚠️ 这个不会同步 */
+    </>
+  );
+}
+```
+
+做任何和表单输入的页面，都把它们包进 `<form>` 里面去，以获得很多良好的体验，比如在输入框回车就能提交，否则你就要自己给 `input` 绑定 `keydown` 事件，太麻烦了！
+
+```jsx
+function Form () {
+    const [email, setEmail] = useState('');
+    
+    /* 🚫 */
+    return (
+    	<div>
+        	<input type="text" value={email} onChange={/* ... */} />
+            <button onClick={/* ... */}>submit</button>
+        </div>
+    );
+    
+    /* ✅: 甚至不用给button搞click事件！（你要好好学习一下所有表单...） */
+    return (
+    	<form onSubmit={event => {
+			event.preventDefault(); /* 必须的！ */
+            request(email); /* 网络请求之类的操作 */
+        }}>
+        	<input type="text" value={email} onChange={/* ... */} />
+            <button>submit</button>
+        </form>
+    );
+}
+```
+
+> 你要正式学一下表单！另外，还有客户端验证是什么东西？比如 `<input type="password" requird={true} minLength={8} />` 这些用来做客户端验证？
+
+> 为什么要给 `onSubmit` 套 `event.preventDefault()`？
+>
+> 在没有 JSON、Fetch、XMLHttpRequest 等之类东西的时代，表单没办法获取数据，而是把用户导航到一个新的网页里去，服务器返回新网页的 HTML 里面也填充了表单想要获取的数据。
+>
+> form 元素保留了这个特点，你不 `preventDefault` 的话，网页就会被导航到新地方去，比如对于 `<form method="post" action="/search" />` 就会被导航到 `/search` 页面去（这块知识要问一下 gpt，具体的地址是怎么计算的），如果没有 action，那么就会导航回原地址，那就是刷新一下网页！
+
+## 事件
+
+React 将所有事件都绑定在挂载元素上，比如 `<div id="root" />`。
+
+你从 `<input onChange={event => {}} />` 里拿到的 event 是人工制造的合成事件（synthetic event），不是真正的 DOM 原生的事件对象（你可以从 `event.nativeEvent` 里获取原生的）。
+
+做合成事件一是为了抹平不同浏览器之间的差距，二是提升开发体验（提供了一些原来没有的属性，方便开发），不过总体还是和原生的事件对象比较接近的，从这里看细节：https://react.dev/reference/react-dom/components/common#react-event-object
+
+> 可是没有 `passive`，另外如果你看到一些关于事件的“事件池”之类的说辞，这个特性其实已经被移除掉了，它以前用来稍微提升性能，我记得是因为它太复杂了且容易搞出 bug，和它的收益不成正比所以才被删掉的，对吗？
