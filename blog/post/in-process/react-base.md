@@ -273,7 +273,7 @@ function Friend({ name, isOnline }) {
 }
 ```
 
-React 的 JSX （无论是属性还是内容）会忽略 `null`、`false`、`true`、`undefined` 值，除非它们被应用于一些特殊的属性，比如 `disabled`、`checked` 属性，而不是给它们设置一个 `""` 空字符串。
+React 的 JSX （无论是属性还是内容）会忽略 `null`、`false`、`true`、`undefined` 值（除非它们被应用于一些特殊的属性，比如 `disabled`、`checked` 属性）而不是给它们设置一个 `""` 空字符串。
 
 ```jsx
 <ul>
@@ -515,7 +515,9 @@ React 的表单元素很复杂：
 - React 表单组件 `defaultValue` 和 `value` 不能共存，前者对应非受控组件，后者对应受控组件，React 会抛出警告；
 - React 表单组件有 `value` 而没有 `onChange` 或 `onInput` 是会被警告的，因为这个组件就是只读的，React 觉得这种用法不对；
 
-> 受控组件：由 React 管理输入的组件
+> 受控组件：由 React 管理输入的组件。
+>
+> TODO：ratio input 也是这个工作流程吗？感觉好像很不一样呢... 整理一下
 
 暗坑（footgun）：
 
@@ -633,6 +635,27 @@ function Form () {
 >
 > form 元素保留了这个特点，你不 `preventDefault` 的话，网页就会被导航到新地方去，比如对于 `<form method="post" action="/search" />` 就会被导航到 `/search` 页面去（这块知识要问一下 gpt，具体的地址是怎么计算的），如果没有 action，那么就会导航回原地址，那就是刷新一下网页！
 
+## 更多表单
+
+除了 input 之外，还有更多表单元素：
+
+- Textareas
+- Radio buttons
+- Checkboxes
+- Selects
+- Ranges
+- Color pickers
+
+这些原生的表单元素的行为方式是很不一致的，不如 textarea 用文本子节点来作为其内容管理而非 value 属性，select 元素使用 selected 属性来管理它的选中值。
+
+React 修改了这一切，React 中的表单元素的行为是一致的，`value` 属性（对于大多数输入控件）和 `checked`（对于 checkbox 和 radio 按钮）会锁定组件使其成为受控组件，我们必须通过 `onChange` 来更新组件（`onInput` 可以吗？）。
+
+这有一个速查表，告诉你各种表单元素在 React 里的写法：https://courses.joshwcomeau.com/joy-of-react/02-state/11-bonus-cheatsheet。你要自己重复一下里面的每个练习，有一些方案其实你是一知半解的。
+
+> ratio 按钮和 select 表单元素的功能是一样的，用谁？如果要看到所有选项那就是 ratio，否则就是 select 元素（对于语言选项来说很重要，选项很多，但是你不想让他们占很多屏幕空间）。你在这里可以看到所有地缘国家的代码：https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
+
+
+
 ## 事件
 
 React 将所有事件都绑定在挂载元素上，比如 `<div id="root" />`。
@@ -642,3 +665,109 @@ React 将所有事件都绑定在挂载元素上，比如 `<div id="root" />`。
 做合成事件一是为了抹平不同浏览器之间的差距，二是提升开发体验（提供了一些原来没有的属性，方便开发），不过总体还是和原生的事件对象比较接近的，从这里看细节：https://react.dev/reference/react-dom/components/common#react-event-object
 
 > 可是没有 `passive`，另外如果你看到一些关于事件的“事件池”之类的说辞，这个特性其实已经被移除掉了，它以前用来稍微提升性能，我记得是因为它太复杂了且容易搞出 bug，和它的收益不成正比所以才被删掉的，对吗？
+
+## 复杂的状态
+
+**But there's a catch:** React state changes have to be *immutable*. When we call `setColors`, we need to provide a *brand new* array. We should never mutate arrays or objects held in state.
+
+React 总是强调「状态应当是不可变的（immutable）」，否则就会引发无尽的隐晦的 bug，这意味着你不能修改你的状态的内部，如果状态是一个对象，那么就不能更改对象的内部，否则就会导致 bug，因为你本次的状态可能是下一个状态的基。
+
+在 JavaScript 中，Assignment（赋值）和 Mutation（变异）的内涵是不一样的，Assignment 指一个变量可以被重新赋值为令一个值，Mutation 指一个值的内部可以发生变异（就像基因突变一样是发生在体内的事情）。
+
+```javascript
+// Assignment
+let a = 1;
+a = 2;
+
+// Mutation
+const jynxio = { age: 18 };
+jynxio.age = 19;
+```
+
+immutable 就是指状态是完全定死的。
+
+JavaScript 中的复杂数据类型是有变异的能力的，简单数据类型（数字值、字符串等）是不能变异的，它们天生就是 immutable 的，它们只能 assignment。如果简单数据类型可以变异，那就意味着：
+
+```javascript
+36 = 37;
+console.log(36); // 37
+```
+
+> 为什么 React 要求状态是不可变的？我是这么理解的：
+>
+> ```jsx
+> function App() {
+>     const [hugeData, setHugeData] = useState({ enabled: true, data: { /* huge guy */ } });
+>     
+>     return <button onClick={() => setHugeData({ ...hugeData, enabled: !hugeData.enabled })}>update</button>
+> }
+> ```
+>
+> 如果你的状态是体积庞大的对象，更新状态时，理想的状态是深度克隆出一个完全全新的对象来作为新的状态，但是这样太占内存和消耗时间了，你不得不要复用旧的体积庞大的对象（但是为了让新旧状态不一样，你必须得把外壳换一换），这时候可能会导致一个组件在很多轮更新中都引用了同一个对象，如果这个对象发生了某些变异，那么就会给你的组件带来不可预料的情况不是吗？所以就强制要求这个作为状态的对象必须是不可变的，这样就不会有这个的弊端的，它用起来就可以个全新的克隆对象一样安全。
+>
+> 并且在 React 的哲学中，一个状态对应一个 UI（f(state) = ui），如果你改变了状态（哪怕是内部），那么这就是一个新的状态，你要绘制新的 ui，你应该通过驱动组件的更新来生产新的 ui。（阿？这个说法好牵强啊...
+
+在 React 的这个要求的驱动下，哪怕修改原始状态也能让程序跑起来，我们也不要这么做，因为这是一个不好的习惯
+
+```jsx
+function handleChange(event) {
+    // 不要
+    colors[index] = event.target.value;
+    setColors([...colors]);
+    
+    // 而要
+    const nextColors = [...colors];
+    
+    nextColors[index] = event.target.value;
+    setColors(nextColors);
+}
+```
+
+## 动态的 key
+
+key 在一个数组内应该是唯一且不变的。
+
+为什么要用 key？「我们需要为每个 React 元素赋予一个唯一的`key`属性，以便 React 知道在渲染之间触发哪些 DOM 操作。」？？？
+
+key 就是为了避免下面这种情况，因为 JavaScript 操作 DOM 是比较消耗性能的。但是为什么非得要 key 才能对比出差异？
+
+```jsx
+// 这种情况下，每次新增item，所有item都会刷新（看控制台就知道了），但是明明那个前面的item是可以不用管的
+function App() {
+  const [count, setCount] = React.useState(5);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>increase</button>
+      {Array.from({ length: count }).map((_, index) => (
+        <div key={Math.random()}>{index}</div>
+      ))}
+    </>
+  );
+}
+```
+
+经常会碰到根本没 key 可用的情况，那就自己搞一些 key 出来，所以动态创建 key 有一些骚操作：
+
+```jsx
+function App() {
+    const [list, setList] = useState([]);
+    
+    return (
+    	<>
+        	<button onClick={() => setList([...list, crypto.randomUUID()])>Increase</button>
+        	{list.map(uuid => <span key={uuid}>{uuid}</span>)}
+        </>
+    );
+}
+```
+
+如果用遍历时的 index 来做key，那么如果 item 的序号一旦发生改变，那么就会出错，比如：1）导致删除一个，后续所有都需要重新渲染；2）删除第一个结果却是删除最后一个（为什么？？？）
+
+而你很难保证序号不被改变，因为你总会不经意的做一些过滤、倒排、中间插入东西、删除等操作。
+
+另外，静态的被写入数据的键是更安全的，动态的键是不被推荐的（react 官方）。
+
+如果每次遍历都要写入多个元素，那么就用 `<React.Fragment>` 来包裹和在其上绑定键。
+
+You might be tempted to use an item’s index in the array as its key. In fact, that’s what React will use if you don’t specify a `key` at all.
