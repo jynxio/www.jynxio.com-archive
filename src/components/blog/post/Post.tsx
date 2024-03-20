@@ -16,8 +16,8 @@ registryJynxioCodeblock();
 
 function Post() {
 	let controller = new AbortController();
-	let handleDelay: NodeJS.Timeout;
-	let handleTimeout: NodeJS.Timeout;
+	let handleDelay: ReturnType<typeof setTimeout>;
+	let handleTimeout: ReturnType<typeof setTimeout>;
 
 	const DELAY_TIME = 100;
 	const TIMEOUT_TIME = 5000;
