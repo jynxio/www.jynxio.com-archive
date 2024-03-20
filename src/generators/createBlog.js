@@ -127,7 +127,10 @@ async function processMast(mast) {
 				break;
 		}
 
-		node.children?.forEach(child => deepTrave(child, node));
+		if (!node.children) return;
+		if (!node.children.length) return;
+
+		for (const child of node.children) await deepTrave(child, node);
 	})(mast);
 
 	// 清除抽象语法树中的空节点
@@ -236,9 +239,7 @@ async function processCodeNode(node) {
 		themes: { light: 'vitesse-light', dark: 'vitesse-dark' },
 		defaultColor: false,
 	});
-
 	const codeString = preString.slice(preString.indexOf('<code>') + 6, preString.lastIndexOf('</code>'));
-
 	const divString =
 		`<jynxio-codeblock data-url=${codeStringPath + '-' + uuid + '.txt'}>` +
 		'<pre slot="codeblock">' +
