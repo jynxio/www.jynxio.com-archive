@@ -47,15 +47,7 @@
 | 逻辑或赋值 | `||=`  | `a ||= b` 等价于 `a || (a = b)` | `a` 最终的值       |
 | 逻辑空赋值 | `??=`  | `a ??= b` 等价于 `a ?? (a = b)` | `a` 最终的值       |
 
-[MDN-运算符优先级](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence) 明确表示：“赋值运算符的返回结果就是赋值运算符右边的那个值”。通过下述例子亦可佐证该观点：
-
-```js
-let a, b;
-
-( a = b ) = 1; // Error: Uncaught SyntaxError: Invalid left-hand side in assignment
-```
-
-因为 `a = b` 的返回值是变量 `b` 的值而不是变量 `b`，所以才会抛出 `Invalid left-hand`。
+[MDN-运算符优先级](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence) 明确表示：“赋值运算符的返回结果就是赋值运算符右边的那个值”。
 
 逻辑与赋值的定义是：若左运算元为 `truthy`，则将右运算元的值赋予左运算元，否则不进行赋值操作。因为逻辑与赋值具有短路计算的特性，因此 `a &&= b` 才会等价于 `a && ( a = b )` ，而不是 `a = a && b`，因为前者才符合短路计算的特性。对于逻辑或赋值、逻辑空赋值也是同理的。
 
