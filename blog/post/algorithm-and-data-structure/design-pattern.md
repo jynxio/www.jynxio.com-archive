@@ -29,16 +29,32 @@ const convert = ([k, v]) => { [k]: v };
 享元模式（Flyweight Pattern）：通过共享相似的内容来降低内存占用和计算负荷。
 
 ```js
-function createBookFactory() {
-    const library = new Map();
-    const createBook = ({ isbn, title, author }) => {
-        if (library.has(isbn)) return library.get(isbn);
+// 💡 树模型是一个拥有几何、颜色、纹理等数据的庞大对象
+import TreeModel from 'somewhere';
 
-        const newBook = { isbn, title, author };
-        return library.set(isbn, newBook).get(isbn);
+const createTreeModel = (function factory() {
+    const cache = new Map();
+    
+    return (x, y, treeName) => {
+        if (!cache.has(treeName)) {
+            const model = new TreeModel(treeName);
+            cache.set(treeName, model);
+        }
+        
+        return { x, y, model: cache.get(treeName) };
     };
+})();
 
-    return createBook;
+const treeModels = [];
+const treeNames = ['oak', 'elm', 'fir', 'ash'];
+
+for (let i = 0; i < 100000; i++) {
+    const x = Math.random() * 1000;
+    const y = Math.random() * 1000;
+    const i = Math.floor(Math.random() * treeNames.length);
+    const treeName = treeNames[i];
+
+    treeModels.push(createTreeModel(x, y, treeName));
 }
 ```
 
