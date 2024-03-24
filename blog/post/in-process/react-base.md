@@ -392,6 +392,17 @@ const [errorMessage, setErrorMessage] = React.useState();
 const [flowerBouquet, setFlowerBouquet] = React.useState();
 ```
 
+There are two “Rules of Hooks” that we should learn, in order to make sure we're always using hooks as React expects.
+
+1. Hooks have to be called within the scope of a React application. We can't call them outside of our React components.
+2. We have to call our hooks at the **top level of the component.** -> The rule states that we're **not allowed to use the hook conditionally.** We're never supposed to put a hook inside an `if` condition, or a `switch` statement, or a `for` loop, or even inside a callback.
+
+关于第一点，浅层的解释是：Hook 是一个用于“钩入”React 系统的函数，React 要求它必须如此被调用才能实现“钩入”。
+
+关于第二点，浅层的解释是：React 依赖 Hook 的执行顺序，如果把 Hook 放进 if、switch、for 这些块语句里面，就无法保证顺序不被改变。
+
+可是深层的解释是什么？
+
 ## useState
 
 ```jsx
@@ -634,6 +645,16 @@ function Form () {
 > 在没有 JSON、Fetch、XMLHttpRequest 等之类东西的时代，表单没办法获取数据，而是把用户导航到一个新的网页里去，服务器返回新网页的 HTML 里面也填充了表单想要获取的数据。
 >
 > form 元素保留了这个特点，你不 `preventDefault` 的话，网页就会被导航到新地方去，比如对于 `<form method="post" action="/search" />` 就会被导航到 `/search` 页面去（这块知识要问一下 gpt，具体的地址是怎么计算的），如果没有 action，那么就会导航回原地址，那就是刷新一下网页！
+
+### 表单的聚焦
+
+```jsx
+function Input() {
+    return <input type="text" ref={dom => dom.focus()} />
+}
+```
+
+为什么不使用 `autofocus` 属性？因为它仅当“元素在页面加载之初时就存在”这种情况才有效，对于此后动态注入的元素是无效的，而 React 总是动态注入每一个元素，除非使用 SSR。所以在 React 中，就只能使用上述方案。
 
 ## 更多表单
 
@@ -924,3 +945,140 @@ App1 会创建组件实例，App2 不会，因为后者没有参与 render。
 - 主要是服务器状态：比如数据分析仪表盘，数据几乎都来自服务器，Redux 之类的就肯定不行了，因为都没有和服务器打交道的功能，react-query、Vercel 的 SWR 之类的会更加合适
 
 > Redux 在搞一个 redux toolkit，它提供一些 react-query 的功能，然后改变了经典的 action 和 reducer 流操作，Josh 不喜欢它（他倒是挺喜欢经典款），因为他觉得虽然经典款样板文件多，但是责任划分很清晰，文件多一点不是大碍。
+
+## useId
+
+根据组件在组件树中的路径来生成一个唯一 id，相比 crypto.randomUUID 等方案，优势有俩：
+
+- 提升性能；
+- 客户端和服务端生成一样的 uuid；
+
+> 仅当服务端和客户端的组件树一致时，两者生成的 id 才是一致的。
+
+关于提升性能，下面的 App 组件每次更新的时候，第一组 label/input 的 dom 不会更新，第二组的则会。
+
+```jsx
+function App() {
+    const uuid1 = useId();
+    const uuid2 = crypto.randomUUID();
+    
+    return (
+		<>
+        	<label htmlFor={uuid1}>Name: </label>
+        	<input id={uuid1} />
+        	<label htmlFor={uuid2}>Age: </label>
+        	<input id={uuid2} />
+        </>
+    );
+}
+```
+
+## ref 属性
+
+JSX 的 ref 属性是一个 escape hatch，它在你在做诸如操纵 canvas 元素的时候非常需要。
+
+```jsx
+const ref = useRef();
+
+<canvsa ref={dom => console.log(dom)} />
+<canvas ref={ref} />
+```
+
+它有 2 种调用方法，传递一个函数，或者传递一个结构为 `{ current }` 的对象。对于函数，每次挂载和更新，都会执行一遍，对于对象，仅在挂载时才会执行一遍赋值，后续更新不会重新赋值，所以用对象更省性能。
+
+不用 `useRef` 也行，反正只要给一个形状为 `{ current }` 的对象就好了。
+
+## side effect
+
+- Making network requests
+- Managing timeouts / intervals
+- Reading/writing from localStorage
+- Listening for global events
+
+React calls all of these things “side effects”，而我们经常需要做这类事，这些「副作用」是跳脱在 React 的管辖范畴之外的，比如 React 从来不管你如何设置文档标题、本地缓存、网络请求之类的事情。
+
+## useState
+
+每次返回的 setter 都是同一个 setter，请查看下面这个例子：
+
+```jsx
+let prevSetter;
+
+function App() {
+    const [num, setNum] = React.useState(random());
+
+    React.useEffect(() => {
+        console.log(prevSetter === setNum); // return true everytime
+        return () => (prevSetter = setNum);
+    });
+
+    return (
+        <>
+            <button onClick={() => setNum(random())}>curr setter</button>
+            <button onClick={() => prevSetter(random())}>prev setter</button>
+            <p>{num}</p>
+        </>
+    );
+}
+```
+
+## useEffect
+
+如果 effect 函数里面注册了一个全局事件，并且持有了 setCount，那么不清理掉它的话，这个 App 的组件实例（component instance）就不会被释放掉，因为这个组件实例的一部分（setCount）被全局事件持有了。
+
+```jsx
+function App() {
+    const [count, setCount] = useState(0);
+    
+    useEffect(
+        () => globalThis.addEventListener('mousemove', () => setCount(random())),
+        []
+    );
+    
+    return <div />;
+}
+```
+
+### 执行时机
+
+cleanup 的执行时机究竟是什么时候？组件的从 dom 卸载之前？整个组件开始更新之前？还是组件的 effect 开始运行之前？测一下！
+
+Josh说是“right before the component unmounts.”
+
+Josh说是：🤔️ 挺清晰的！
+
+- initial render: render -> effect
+- subsequent render(s): render -> cleanup -> effect
+- unmount: cleanup
+
+这个流程来自 [这一节课](https://courses.joshwcomeau.com/joy-of-react/03-hooks/05.06-cleanup)，这最后的两页图太棒了！我想要使用它们。
+
+### 为什么设计成返回函数的函数
+
+Josh 讲了一个比较有趣的事情，为什么 cleanup 函数要被设计成由 effect 函数来返回，这不是很不清晰吗？原因是：cleanup 函数经常需要使用 effect 函数的内容。
+
+```jsx
+useEffect(
+    () => {
+        const handler = () => { /* ... */ };
+        globalThis.addEventListener('click', handler);
+        
+        return () => globalThis.removeEventListener('click', handler);
+    },
+    [],
+);
+```
+
+我以前觉得 Vue 和 Solid 的生命周期函数比 useEffect 清晰多了，然而实际上我其实在很多时候也把他们当成 useEffect 来使用了：
+
+```vue
+<script setup>
+onMounted(() => {
+    const handler = () => { /* ... */ };
+    globalThis.addEventListener('click', handler);
+    
+    onUnmounted(() => globalThis.removeEventListener('click', handler));
+});
+</script>
+```
+
