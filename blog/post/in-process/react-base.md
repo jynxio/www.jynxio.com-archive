@@ -1082,3 +1082,15 @@ onMounted(() => {
 </script>
 ```
 
+## 严格模式
+
+他到底会怎样改变程序？只是简单的所有都运行两遍吗？查看 [这里](https://react.dev/reference/react/StrictMode)
+
+作用：
+
+- 放大潜在问题
+- 有关已弃用 API 的警告
+
+I'll be honest, **I didn't know.** Fortunately, a kind member of the React core team was able to fill me in.
+
+Here's the difference: Strict Mode doesn't *actually* unmount/remount the component. This means that there's a single component instance, and we're calling the effect function twice.
