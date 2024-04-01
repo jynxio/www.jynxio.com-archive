@@ -1041,17 +1041,64 @@ function App() {
 
 ### 执行时机
 
-cleanup 的执行时机究竟是什么时候？组件的从 dom 卸载之前？整个组件开始更新之前？还是组件的 effect 开始运行之前？测一下！
+effect 和 cleanup 的执行时机：（这个流程来自 [这一节课](https://courses.joshwcomeau.com/joy-of-react/03-hooks/05.06-cleanup)，这最后的两页图太棒了！我想要使用它们。）
 
-Josh说是“right before the component unmounts.”
+> layout effect 的执行时机在什么时候？
 
-Josh说是：🤔️ 挺清晰的！
+```
+# 挂载
+- render
+- layout effect
+- effect
 
-- initial render: render -> effect
-- subsequent render(s): render -> cleanup -> effect
-- unmount: cleanup
+# 更新
+- render
+- layout cleanup
+- layout effect
+- cleaup
+- effect
 
-这个流程来自 [这一节课](https://courses.joshwcomeau.com/joy-of-react/03-hooks/05.06-cleanup)，这最后的两页图太棒了！我想要使用它们。
+# 卸载
+- layout cleanup
+- cleanup
+```
+
+验证代码如下：
+
+```jsx
+function App() {
+    const [isOn, setIsOn] = React.useState(false);
+
+    return (
+        <div>
+            <section>
+                <button onClick={() => setIsOn(!isOn)}>toggle</button>
+            </section>
+            <section>{isOn && <Count />}</section>
+        </div>
+    );
+}
+
+function Count() {
+    console.log('%crender', 'color: teal');
+
+    const [count, setCount] = React.useState(0);
+
+    React.useLayoutEffect(() => {
+        console.log('%clayout effect', 'color: hotpink');
+
+        return () => console.log('%clayout cleanup', 'color: hotpink');
+    }, [count]);
+
+    React.useEffect(() => {
+        console.log('%ceffect', 'color: purple');
+
+        return () => console.log('%ccleanup', 'color: purple');
+    }, [count]);
+
+    return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
 
 ### 为什么设计成返回函数的函数
 
@@ -1082,6 +1129,22 @@ onMounted(() => {
 </script>
 ```
 
+### 派生状态的副作用
+
+`state1` 改变时不会触发副作用，`state2` 改变时会影响 `derivedState` 也发生改变，然后 `derivedState` 一改变就会触发副作用。
+
+```jsx
+function App() {
+    const [state1, setState1] = useState(0);
+    const [state2, setCount2] = useState(0);
+    const derivedState = state2 + 1;
+    
+	useEffect(() => console.log('effect'), [derivedState]);
+    
+    return <></>;
+}
+```
+
 ## 严格模式
 
 他到底会怎样改变程序？只是简单的所有都运行两遍吗？查看 [这里](https://react.dev/reference/react/StrictMode)
@@ -1094,3 +1157,216 @@ onMounted(() => {
 I'll be honest, **I didn't know.** Fortunately, a kind member of the React core team was able to fill me in.
 
 Here's the difference: Strict Mode doesn't *actually* unmount/remount the component. This means that there's a single component instance, and we're calling the effect function twice.
+
+## 渲染逻辑
+
+铁律：状态的更新是驱动组件重新渲染的唯一途径，并且当一个组件重新渲染时，它也会重新渲染它的所有后代（哪怕后代的入参没有发生变化）。
+
+> 强调：`props` 和重新渲染没有关系。
+
+既然子组件的入参没有发生变化，父组件又为什么要重新渲染子组件呢？因为 React 无法判断出子组件是否直接或间接的依赖了父组件的状态，为了安全起见，React 选择重新渲染。一个隐秘的案例是：由于 React 无法判断 ref 的更新，所以如果父组件将 ref 作为 prop 传递给子组件的话，该怎么办呢？
+
+## Memoization
+
+用于解决性能问题，因为父组件会无脑更新子组件嘛。
+
+### React.memo
+
+`React.memo` 会增强一个组件，增强后的组件只有在 props 或自身的 state 发生改变之后，才会重新渲染，否则就会返回上一次的渲染结果。比如，对于一个“纯组件”（没有任何入参的组件），可以无脑给他上 memo。
+
+```jsx
+function Footer() {
+    return <p>some website information</p>
+}
+
+export default React.memo(Footer);
+```
+
+> React 为什么不把 memo 作为默认设置？
+>
+> Josh 说：如果一个组件的 prop 很多但计算量特别少的时候，检查 prop 的计算量可能更大，所以 memo 就被做成了按需的了。React 官方也建议“仅在考虑性能优化的时候才使用它，而不是开局就用”。
+
+`memo` 是 `useMemo` 的针对组件的语法糖：
+
+```jsx
+function Guy({ name, age }) {
+    return <p>{name}: {age}</p>
+}
+
+function MemoGuy({ name, age }) {
+    const guy = useMemo(() => <Guy name={name} age={age} />, [name, age])
+    
+    return <>{ guy }</>;
+}
+```
+
+### React.useMemo
+
+它的作用是“通过保持对数据的持久引用来避免重复的计算”，一种比较通常的用法就是直接用来避免重复的计算，另一种用法也类似但是比较隐晦一些，见下面的例子：哪怕 `<People>` 套了 memo，如果 info 不套的话，每一秒 `<MemoPeople>` 都会被重新渲染一次。
+
+```jsx
+const MemoPeople = React.memo(People);
+
+function App() {
+    const time = useTime(); // 每秒刷新一次
+	const info = React.useMemo(() => { name: 'Jynxio', age: 18 }, []);
+    
+    return (
+    	<>
+        	<p>{ time }</p>
+			<MemoPeople info={info} />
+        </>
+    );
+}
+```
+
+### React.useCallback
+
+就是 `useMemo` 针对函数的语法糖：
+
+```js
+// This:
+React.useCallback(function helloWorld(){}, []);
+
+// ...Is functionally equivalent to this:
+React.useMemo(() => function helloWorld(){}, []);
+```
+
+## 如何维护一个可扩展的 React 应用
+
+### props 中使用收集语法时如何处理 children？
+
+```jsx
+function LoggedInBanner(props) {
+    return <Banner {...props} />
+}
+
+<Banner {...props} />
+
+// 等价于
+<Banner type={props.type} children={props.children} />
+
+// 等价于
+<Banner type={props.type}>{ props.children }</Banner>
+
+// 等价于
+React.createElement(
+	Banner,
+    {
+        ...props
+    }
+);
+
+// 等价于
+React.createElement(
+	Banner,
+    {
+    	type: props.type,
+        children: props.children
+    }
+);
+```
+
+### 补充
+
+你把 children 嵌套进去还是作为 props 传进去的效果都是一样的（看一下以前的上文怎么写的）
+
+都会变成 pure js 里面的 props 属性里面的 children 字段，我试了一下，嗯，但是 React 的 ESLint 要求在嵌套里使用 child。
+
+### 转发 ref
+
+自定义组件上的 `key` 和 `ref` 是保留字，调用并向自定义组件传递 `key` 和 `ref`，这两个属性并不会作为 props 传递给组件。
+
+```jsx
+console.log(<Input key="key" ref="ref"  />);
+
+{
+    type: f Input()
+    props: {}, // 👈里面没有key和ref!
+    key: "key",
+    ref: "ref"
+    _owner: null,
+    _store: { /* ... */ }
+    _self: undefined,
+    _source: { /* ... */ }
+}
+```
+
+所以如果你想获得自定义组件里面的某个元素实例的 dom，那么就需要伪造一个 ref：
+
+```jsx
+function App() {
+    const ref = useRef();
+ useEffect(() => ref.current.focus(), []);
+    
+    return <Input fakeRef={ref} />
+}
+
+function Input({ fakeRef }) {
+    return <input ref={fakeRef} />
+}
+```
+
+然后 React 官方就出了个语法糖来解决这个问题，`forwardRef` 可以让自定义组件的第二个参数接收到 ref，就酱
+
+```jsx
+// 📂 App.js
+function App() {
+    const ref = React.useRef();
+    React.useEffect(() => ref.current.focus(), []);
+
+    return <Input ref={ref} />
+}
+
+// 📂 Input.js
+function Input(props, ref) {
+    return <input ref={ref} />
+}
+
+export default forwardRef(Input);
+```
+
+所以 `forwardRef` 和 `memo` 一样都是高阶组件 ，两个一起用怎么办？：
+
+```jsx
+// 下面两者是等价的
+memo(forwardRef(Input));
+forwardRef(memo(Input));
+```
+
+### 动态标签
+
+React 支持动态标签：
+
+```jsx
+function App() {
+    const Tag = Math.random() < 0.5 ? 'a' : 'p';
+    
+    return <Tag className="tag" />;
+}
+```
+
+其原理是：
+
+```jsx
+<Tag className="tag" /> // React.createElement(Tag)
+<tag className="tag" /> // React.createElement('tag')
+
+React.createElement(
+  Tag, // 变量
+  { className: tag },
+  children
+);
+```
+
+把 JSX 转换成 JS 之后就明了了，JSX 的标签本质上是一个变量或字面量，`createElement` 会使用这个变量或字面量来创建 React 元素或自定义元素。需要注意的是，Tag 必须用大写，因为 React 会把所有小写的标签都当作字符串字面量来处理。
+
+这个动态标签特性是 React 的多态（Polymorphism）特性的一种体现。
+
+> 多态是什么？
+>
+> 想象你有一个玩具盒,里面有各种各样的玩具,如汽车、飞机、洋娃娃等。这些玩具都有一个共同的特点,就是可以被"玩"。但是,每个玩具被"玩"的方式都不一样。汽车可以在地上滑行,飞机可以在空中飞翔,洋娃娃可以被抱在怀里。
+>
+> 在这个例子中,"玩具"就是一个抽象的概念,代表了所有的玩具。而"玩"这个行为,对于不同的玩具来说,有不同的表现形式。这就是多态的核心思想。
+>
+> 在编程中,多态指的是不同的对象可以响应相同的命令或消息,但表现出不同的行为。就像玩具盒里的玩具,它们都可以被"玩",但每个玩具被"玩"的方式不同。
