@@ -392,3 +392,109 @@ const freezeCounter = Object.freeze(counter);
 
 export default freezeCounter; // just for safe
 ```
+
+## 复合组件模式
+
+> 这是 React 中的组件设计模式。
+
+复合组件模式（Compound Component Pattern）：是一种关于 React 组件的设计模式，它将一个需求拆分成多个相互关联的父子组件，父子组件之间通过共享状态来实现联动功能，使用者无需关心这些细节，只需要填充内容和组合组件就能实现需求。
+
+比如 React Bootstrap 的 [Dropdown 组件](https://github.com/react-bootstrap/react-bootstrap/blob/master/src/Dropdown.tsx)就采用了这种模式，下面是它的简易实现：父子组件通过 Context 来共享状态，Toggle 组件可以操纵 Content 组件的显隐，而使用者对这一切都是不可感知的，使用者只需要给 Toggle 和 Content 组件填充内容并组合使用它们即可。
+
+```jsx
+//
+const DropdownContext = React.createContext();
+const Dropdown = ({ children }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    return (
+    	<DropdownContext.Provider value={[isOpen, setIsOpen]}>
+            {children}
+        </DropdownContext.Provider>
+    );
+};
+
+const Toggle = ({ children }) => {
+    const [, setIsOpen] = React.useContext(DropdownContext);
+    const handleClick = () => setIsOpen(curr => !curr);
+
+    return <button onClick={handleClick}>{children}</button>;
+};
+
+const Content = ({ children }) => {
+    const [isOpen] = React.useContext(DropdownContext);
+
+    if (isOpen) return <div>{children}</div>;
+};
+
+Object.assign(Dropdown, { Toggle, Content });
+
+//
+<Dropdown>
+    <Dropdown.Toggle>toggle</Dropdown.Toggle>
+    <Dropdown.Content>content</Dropdown.Content>
+</Dropdown>
+```
+
+> 我不喜欢 `Dropdown.Toggle` 这种设计，因为它会破坏 Tree Shaking，不过它很漂亮。
+
+## 插槽模式
+
+> 这是 React 中的组件设计模式。
+
+插槽模式（Slot Pattern）：是一种关于 React 组件的设计模式，组件通过 props 提供一至多个插槽，组件的使用者可以在这些插槽中传递任意内容，比如文本、JSX 和其它组件。组件内部可以通过 props 接收到这些内容，并在适当的位置渲染它们，从而提高组件的灵活性和可重用性。
+
+> 如果一个 React 组件使用了 `children` 参数，那么我们也可以认为它采用了插槽模式。
+
+```jsx
+<Card
+    header={<h2>Welcome</h2>}
+    content={<article>This is the main content</article>}
+    footer={<footer>© 2023 My Company. All rights reserved</footer>}
+/>;
+
+function Card({ header, content, footer }) {
+    return (
+        <div>
+            <section>{header}</section>
+            <section>{content}</section>
+            <section>{footer}</section>
+        </div>
+    );
+}
+```
+
+插槽模式在某些情况下会非常有用。比如我们要创建一个自带标题的图像组件，该组件的内容有可能是一幅图像，也有可能是多幅图像（针对响应式设计），也有可能是一个 SVG，为了适应各种情况，我们就需要使用插槽模式，就像下面这样。
+
+```jsx
+//
+const singleImage = < img alt="" src="desktop-2x.png" />;
+const responsiveImage = (
+ <picture>
+  <source media="(width <= 550px)"  sizes="300px" srcset="mobile-1x.png 300w, mobile-2x.png 600w" />
+     <source media="(width <= 1100px)" sizes="500px" srcset="tablet-1x.png 500w, tablet-2x.png 1000w" />
+     <source media="(width <= 1500px)" sizes="700px" srcset="laptop-1x.png 700w, laptop-2x.png 1400w" />
+     <source media="(width > 1500px)"  sizes="900px" srcset="desktop-1x.png 900w, desktop-2x.png 1800w" />
+     < img alt="" src="desktop-2x.png" />
+ </picture>
+);
+const singleSvg = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M20 6 9 17l-5-5"/>
+    </svg>
+);
+
+//
+function CaptionedImage({ image, caption }) {
+    return (
+     <figure>
+         { image }
+            <figcaption>{ caption }</figcaption>
+        </figure>
+    );
+}
+
+<CaptionedImage image={ singleSvg } caption="single-svg" />
+<CaptionedImage image={ singleImage } caption="single-image" />
+<CaptionedImage image={ responsiveImage } caption="multiple-image" />
+```
