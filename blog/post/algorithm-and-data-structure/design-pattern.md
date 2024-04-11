@@ -393,51 +393,6 @@ const freezeCounter = Object.freeze(counter);
 export default freezeCounter; // just for safe
 ```
 
-## 复合组件模式
-
-> 这是 React 中的组件设计模式。
-
-复合组件模式（Compound Component Pattern）：是一种关于 React 组件的设计模式，它将一个需求拆分成多个相互关联的父子组件，父子组件之间通过共享状态来实现联动功能，使用者无需关心这些细节，只需要填充内容和组合组件就能实现需求。
-
-比如 React Bootstrap 的 [Dropdown 组件](https://github.com/react-bootstrap/react-bootstrap/blob/master/src/Dropdown.tsx)就采用了这种模式，下面是它的简易实现：父子组件通过 Context 来共享状态，Toggle 组件可以操纵 Content 组件的显隐，而使用者对这一切都是不可感知的，使用者只需要给 Toggle 和 Content 组件填充内容并组合使用它们即可。
-
-```jsx
-//
-const DropdownContext = React.createContext();
-const Dropdown = ({ children }) => {
-    const [isOpen, setIsOpen] = React.useState(false);
-
-    return (
-    	<DropdownContext.Provider value={[isOpen, setIsOpen]}>
-            {children}
-        </DropdownContext.Provider>
-    );
-};
-
-const Toggle = ({ children }) => {
-    const [, setIsOpen] = React.useContext(DropdownContext);
-    const handleClick = () => setIsOpen(curr => !curr);
-
-    return <button onClick={handleClick}>{children}</button>;
-};
-
-const Content = ({ children }) => {
-    const [isOpen] = React.useContext(DropdownContext);
-
-    if (isOpen) return <div>{children}</div>;
-};
-
-Object.assign(Dropdown, { Toggle, Content });
-
-//
-<Dropdown>
-    <Dropdown.Toggle>toggle</Dropdown.Toggle>
-    <Dropdown.Content>content</Dropdown.Content>
-</Dropdown>
-```
-
-> 我不喜欢 `Dropdown.Toggle` 这种设计，因为它会破坏 Tree Shaking，不过它很漂亮。
-
 ## 插槽模式
 
 > 这是 React 中的组件设计模式。
@@ -497,4 +452,198 @@ function CaptionedImage({ image, caption }) {
 <CaptionedImage image={ singleSvg } caption="single-svg" />
 <CaptionedImage image={ singleImage } caption="single-image" />
 <CaptionedImage image={ responsiveImage } caption="multiple-image" />
+```
+
+插槽模式还有另一种用处。如下例所示，组件 B 有参数空传问题（即只传递参数但不使用参数），然后我们可以通过提升组件 C 的调用位置来解决该问题，这种方案被称之为「Lifting Content Up」，显然该方案比采用 Context 的方案更加简单易懂。
+
+> 为什么不使用 children 参数？因为 slot 参数的语义性更好，我们可以根据组件 C 的具体作用来修改 slot 参数的名字，比如如果组件 C 被用作为按钮，那么 slot 参数就可以改名为 btn，以此类推。
+
+```jsx
+// Before
+const A = () => (
+	<div>
+        <B value={1} />
+    </div>
+);
+const B = ({ value }) => (
+	<div>
+        <C value={value} />
+    </div>
+);
+const C = ({ value }) => <span>{ value }</span>;
+
+// After
+const A = () => (
+	<div>
+        <B slot={<C value={1} />} />
+    </div>
+);
+const B = ({ slot }) => <div>{ slot }</div>;
+const C = ({ value }) => <span>{ value }</span>;
+```
+
+## 复合组件模式
+
+> 这是 React 中的组件设计模式。
+
+复合组件模式（Compound Component Pattern）：是一种关于 React 组件的设计模式，它将一个需求拆分成多个相互关联的父子组件，父子组件之间通过共享状态来实现联动功能，使用者无需关心这些细节，只需要填充内容和组合组件就能实现需求。
+
+比如 React Bootstrap 的 [Dropdown 组件](https://github.com/react-bootstrap/react-bootstrap/blob/master/src/Dropdown.tsx)就采用了这种模式，下面是它的简易实现：父子组件通过 Context 来共享状态，Toggle 组件可以操纵 Content 组件的显隐，而使用者对这一切都是不可感知的，使用者只需要给 Toggle 和 Content 组件填充内容并组合使用它们即可。
+
+```jsx
+//
+const DropdownContext = React.createContext();
+const Dropdown = ({ children }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    return (
+    	<DropdownContext.Provider value={[isOpen, setIsOpen]}>
+            {children}
+        </DropdownContext.Provider>
+    );
+};
+
+const Toggle = ({ children }) => {
+    const [, setIsOpen] = React.useContext(DropdownContext);
+    const handleClick = () => setIsOpen(curr => !curr);
+
+    return <button onClick={handleClick}>{children}</button>;
+};
+
+const Content = ({ children }) => {
+    const [isOpen] = React.useContext(DropdownContext);
+
+    if (isOpen) return <div>{children}</div>;
+};
+
+Object.assign(Dropdown, { Toggle, Content });
+
+//
+<Dropdown>
+    <Dropdown.Toggle>toggle</Dropdown.Toggle>
+    <Dropdown.Content>content</Dropdown.Content>
+</Dropdown>
+```
+
+> `Dropdown.Toggle` 这种设计很漂亮，不过会破坏 Tree Shaking。
+
+## 提供者组件模式
+
+> 这是 React 中的组件设计模式。
+
+提供者组件模式（Provider Component Pattern）：是一种关于 React 组件的设计模式，它利用 Context API 来实现跨组件的状态共享，但和直接使用 Context API 不同的是，它将状态处理逻辑内聚于 Provider 组件之中，而非分散于各个消费者组件中。
+
+诸如 `SomethingProvider` 之类的组件是提供者组件模式的必然产物，但 `useSomething` 不是。我推荐总是为你的 `SomethingProvider` 封装一个 `useSomething`，因为它的用法简洁而且还允许你在其内部添加更多的处理代码。
+
+```jsx
+const ThemeContext = createContext('light');
+
+function ThemeProvider({ children }) {
+    const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+    const toggle = useCallback(() => {
+        setTheme(curr => curr === 'light' ? 'dark' : 'light');
+    }, []);
+    const value = useMemo(() => ({ theme, toggle }), [theme, toggle]); // 🤯
+
+    useEffect(() => localStorage.setItem('theme', theme), [theme]);
+
+    return (
+        <ThemeContext.Provider value={value}>
+            {children}
+        </ThemeContext.Provider>
+    );
+}
+
+function useTheme() {
+    return useContext(ThemeContext);
+}
+
+export { ThemeProvider, useTheme };
+```
+
+### 请这样做
+
+如果 Provider 的 Context Value 是复杂数据类型，那么请总是为该 Context Value 使用 `useMemo`，就像上例中的 💁🏻 处一样，因为这样可以避免冗余的更新。
+
+请看下面的反面示例：Show 组件就会随着 App 组件的更新而更新，然而这显然违反了我们的期望，因为 Show 组件和 App 组件是无关的。之所以会这样，是因为 App 组件的更新会引发 CountProvider 组件的更新，然后 CountProvider 组件的内部会重新创建一个全新的 Context Value（哪怕内容没有变化）并交付给 Show 组件，于是 Show 组件就被更新了。
+
+```jsx
+// Provider
+const CountContext = createContext(0);
+const CountProvider = ({ children }) => {
+    const [count, setCount] = useState(0);
+    const add = useCallback(() => setCount(curr => curr + 1), []);
+    const sub = useCallback(() => setCount(curr => curr - 1), []);
+    // 🙅🏻
+    const value = { count, add, sub };
+    // 💁🏻
+    // const value = useMemo(() => ({ count, add, sub }), [count, add, sub]);
+
+    return (
+        <CountContext.Provider value={value}>{children}</CountContext.Provider>
+    );
+};
+const useCount = () => useContext(CountContext);
+
+// Consumer
+const Show = memo(() => {
+    const { count, add, sub } = useCount();
+
+    return (
+        <>
+            <p>{count}</p>
+            <button onClick={add}>Add</button>
+            <button onClick={sub}>Sub</button>
+        </>
+    );
+});
+
+const App = () => {
+    const [, setState] = useState(crypto.randomUUID());
+
+    return (
+        <>
+            <button onClick={() => setState(crypto.randomUUID())}>
+                Rerender
+            </button>
+            <CountProvider>
+                <Show />
+            </CountProvider>
+        </>
+    );
+};
+```
+
+### 别这样做
+
+除了使用 `useMemo` 之外，还有一种相似的做法，那便是给 Provider 组件使用 `memo`。请别这样做，因为它是无效的，并且还会引发很多困惑。
+
+比如下面这个示例，虽然 CountProvider 是 Memorize 化的，但是它还是会随着 App 组件的更新而更新，这是因为 App 组件每次更新时都会创建一个全新的 React 元素（`<i />`）给 CountProvider（通过 props.children）。
+
+```jsx
+// Provider
+const CountContext = createContext(0);
+const CountProvider = memo(({ children }) => {
+    const value = { count: 0 };
+
+    return (
+        <CountContext.Provider value={value}>{children}</CountContext.Provider>
+    );
+});
+
+// Consumer
+const App = () => {
+    const [, setState] = useState(crypto.randomUUID());
+
+    return (
+        <>
+            <button onClick={() => setState(crypto.randomUUID())}>
+                Rerender
+            </button>
+            <CountProvider>
+                <i />
+            </CountProvider>
+        </>
+    );
+};
 ```
