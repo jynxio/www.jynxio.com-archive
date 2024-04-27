@@ -873,7 +873,7 @@ function Shop() {
 
 当我们调用 `useState()` 的时候，就会 hook into component instance，然后获取和更新 instance。
 
-分清楚组件、组件示例、dom 元素之间的关系。
+分清楚组件、组件实例、dom 元素之间的关系。
 
 挂载组件就会创建组件实例，同一个组件函数可以创建出多个相似的组件自然就会创建出多个独立的组件实例，比如下面会创建至少一个关于 App 的组件实例，并在 enabled 为 true 时一下子再创建多 3 个互不相关的 Counter 组件实例，enabled 为 false 时就会永久销毁。
 
@@ -1168,6 +1168,8 @@ Here's the difference: Strict Mode doesn't *actually* unmount/remount the compon
 
 ## Memoization
 
+> 不用执着于性能优化，仅在必要时才性能优化，来吧！用 [`<Profiler>`](https://react.dev/reference/react/Profiler) 组件来测量某个组件的耗时，然后就能决定是否有必要 memo 了。
+
 用于解决性能问题，因为父组件会无脑更新子组件嘛。
 
 ### React.memo
@@ -1370,3 +1372,65 @@ React.createElement(
 > 在这个例子中,"玩具"就是一个抽象的概念,代表了所有的玩具。而"玩"这个行为,对于不同的玩具来说,有不同的表现形式。这就是多态的核心思想。
 >
 > 在编程中,多态指的是不同的对象可以响应相同的命令或消息,但表现出不同的行为。就像玩具盒里的玩具,它们都可以被"玩",但每个玩具被"玩"的方式不同。
+
+## Context
+
+什么时候用？
+
+- 全局状态
+- 如果一个组件要传递但不使用某个状态，比如下面的例子
+
+```jsx
+function Provider() {
+    const [user] = useState({ name: 'jynxio' });
+    
+    return <Middleware user={user} />
+}
+
+function Middleware({ user }) { // 💡 建议Context
+    return <Receiver user={user} />
+}
+
+function Receiver({ user }) {
+    return <p>{ user.name }</p>
+}
+```
+
+context 会像 prop 一样触发组件的更新，而不是像 state 一样触发组件的更新，这是给组件加 memo 和给 context value 加 memo 的原理。
+
+## Portal
+
+React 禁止 createRoot(document.body)，因为 React 想要独享它的 root 元素，但显然 body 元素没法给 React 独享，因为其它框架也需要向 body 元素注入某些东西。
+但是 React 却接受 createPortal(elem, document.body)，不仅官方示例这么做了，MaterialUI 也这么做了好几年...
+
+有意思...
+
+## RSC & SSR
+
+RSC 用于在打包/编辑阶段生产 React DOM，RSC 的产物会进入 bundle，但是 RSC 本身的代码则不会进入，因此 RSC 不会在客户端中运行。SSR 用于在打包阶段或水合阶段创建 HTML 字符串.
+
+> Josh 说 RSC 不需要在客户端上水合和渲染，为什么会不需要水合？难道是指可以直接使用创建好的 React DOM 吗？
+
+RSC 被设计成和 SSR 一起使用，因为 RSC 的产物是 SSR 生产 HTML 的流水线上的一环。但是在技术上，RSC 可以脱离 SSR 来单独使用，比如 React 官方的 [RSC Demo](https://github.com/reactjs/server-components-demo) 就这么做了。
+
+> 做一个像 [这个 MDX](https://courses.joshwcomeau.com/joy-of-react/06-full-stack-react/02-server-components) 那样的关于 CRS、SSR、RSC 的流程图吧！太棒了。
+
+SSR 的设计初衷是缓解白屏问题。
+
+RSC: instead of conjuring all of the DOM nodes from scratch, it instead *adopts* the existing HTML. This process is known as *hydration.*
+
+Dan Abramov: *Hydration is like watering the “dry” HTML with the “water” of interactivity and event handlers.*
+
+原来的 React 的工作方式是：Once the JS bundle has been downloaded, React will quickly run through our entire application, building up a virtual sketch of the UI, and “fitting” it to the real DOM, attaching event handlers, firing off any effects, 
+
+然后 React 的 RSC&SSR 是：And so, that's SSR in a nutshell. A server generates the initial HTML so that users don't have to stare at an empty white page while the JS bundles are downloaded and parsed. Client-side React then picks up where server-side React left off, adopting the DOM and sprinkling in the interactivity.
+
+> SSG 其实是 SSR 的变种，Next.js 还推出了另一个变种 ISG。
+
+前置知识：
+
+Each of these flags represents a commonly-used web performance metric. Here's the breakdown:
+
+1. **First Paint** — The user is no longer staring at a blank white screen. The general layout has been rendered, but the content is still missing. This is sometimes called FCP (First Contentful Paint).（比如打开了已经商城页面，但是所有商品图都还在加载）
+2. **Page Interactive** — React has been downloaded, and our application has been rendered/hydrated. Interactive elements are now fully responsive. This is sometimes called TTI (Time To Interactive).
+3. **Content Paint** — The page now includes the stuff the user cares about. We've pulled the data from the database and rendered it in the UI. This is sometimes called LCP (Largest Contentful Paint).
